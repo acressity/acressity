@@ -1,0 +1,26 @@
+{% extends "photologue/root.html" %}
+{% load url from future %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ object.title }}</h1>
+<h2>Published {{ object.date_added|date:"l, F jS, Y" }}</h2>
+{% if object.description %}<p>{{ object.description }}</p>{% endif %}
+<div class="photo-gallery">
+    {% for photo in object.public %}
+	    <div class="gallery-photo">
+	        <a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+	    </div>
+    {% empty %}
+    	<p>There are no photos uploaded for this gallery yet</p>
+    {% endfor %}
+</div>
+{% ifequal request.user object.get_explorer %}
+	<p><a href="/photologue/gallery/{{ object.id }}/edit">Edit this Album</a></p>	
+{% endifequal %}
+
+<p><a href="/{{ object.get_explorer.id }}">Back to {{ object.get_explorer.get_full_name }}'s Journey</a></p>
+
+{% endblock %}

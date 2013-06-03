@@ -1,0 +1,27 @@
+{% extends "explorers/expl_base.html" %}
+
+{% block content %}
+    {% if explorer.cheering_for %}
+        <h2>Explorers for whom you are cheering</h2>
+        <div class="object_list">
+            {% for explorer in explorer.cheering_for %}
+                <div class="explorer_item">
+                    {% if explorer.gallery.featured_photo %}
+                        <img src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="Explorer Portrait" />
+                    {% endif %}
+                    <h3><a href="{% url 'journey' explorer.id %}">{{ explorer.get_full_name }}</a></h3>
+                    <p>
+                        <a href="{% url 'experiences.views.index' explorer.featured_experience.id %}">{{ explorer.featured_experience }}</a>
+                    </p>
+                    {% if explorer.featured_experience.status %}
+                        <p>
+                            {{ explorer.featured_experience.status }}
+                        </p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <em>You aren't currently actively cheering anyone</em>
+    {% endif %}
+{% endblock content %}

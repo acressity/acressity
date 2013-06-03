@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Categorize Your Narratives</h2>
+	<form action="" method="POST">
+		{% csrf_token %}
+		{% for narrative, form in narratives_forms %}
+			<h3>{{ narrative }}</h3>
+			<p><em>{{ narrative.taste }}</em></p>
+			Choose a category for <strong>{{ narrative }}</strong>:
+			<br />
+			{{ form.category }}
+			<input type="hidden" name="narrative_id" value="{{ form.narrative_id }}" />
+			<hr />
+		{% endfor %}
+		<input type="submit" value="Update" />
+	</form>
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends "narratives/narr_base.html" %}
+
+{% block content %}
+	<form action="" method="POST" class="full_width">
+		{% csrf_token %}
+		<h3><label for="id_title">Title</label></h3>
+		{{ form.title }}
+		{% comment %}
+			<h3><label for"id_date_created">Date Created</label></h3>
+			{{ form.date_created }}
+		{% endcomment %}
+		<h3>Narrative</h3>
+		{{ form.narrative }}
+		<h3>Assign this narrative to a category:</h3>
+		{{ form.category }}
+		<br />
+		<input type="hidden" name="narrative_id" value="{{ narrative.id }}" />
+		<input type="hidden" name="experience" value="{{ narrative.experience.id }}"/>
+		<input type="submit" value="Update" />
+	</form>
+{% endblock content %}

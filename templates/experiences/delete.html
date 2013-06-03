@@ -1,0 +1,18 @@
+{% extends "experiences/exp_base.html" %}
+
+{% block content %}
+	<h2>Confirm you wish to delete</h2>
+	<h3 class="experience_item">{{ experience }}</h3>
+	{% if experience.narratives.all.count > 0 %}
+		<h3>And the following narrative{{ experience.narratives.all|pluralize }}</h3>
+		{% for narrative in experience.narratives.all %}
+			<div class="narrative_item">
+				{{ narrative }}
+			</div>
+		{% endfor %}
+	{% endif %}
+	<form action="" method="POST">
+		{% csrf_token %}
+		<input type="submit" value="Confirm" name="confirm" />
+	</form>
+{% endblock content %}

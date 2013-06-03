@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block head_insert %}
+	{# Load the image for the featured experience since this is generic #}
+	{% if user.featured_experience.gallery.featured_photo %}
+		<style type="text/css">
+			html {
+				background-image: url({{ user.featured_experience.gallery.featured_photo.image.url }});
+			}
+		</style>
+	{% else %}
+		{{ block.super }}
+	{% endif %}
+{% endblock head_insert %}
+
+{% block content %}
+	<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
+		{% csrf_token %}
+		<h2>New narrative for</h2>
+		{{ form.experience }}
+		{# {{ form.date_created }} #}
+		<h3><label for="id_narrative">Narrative</label></h3>
+		{{ form.narrative }}
+		<h3><label for="id_title">Title (optional)</label></h3>
+		{{ form.title }}
+		<h3><label for="id_category">Categorize (optional)</label></h3>
+		{{ form.category }}
+		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
+		<br />
+		<input type="submit" value="Add narrative" />
+	</form>
+{% endblock content %}

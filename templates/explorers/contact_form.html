@@ -1,0 +1,13 @@
+{% extends "explorers/expl_base.html" %}
+
+{% block content %}
+    <div id="contact_errors"></div>
+    <form action="" method="post" id="contact_form" accept-charset="utf-8">{% csrf_token %}
+        <table>
+            {{form}}
+        </table>
+        <p>
+            <input value="Send Message" id="send_msg" onclick="send_message();" type="button" />
+        </p>
+    </form>
+{% endblock content %}

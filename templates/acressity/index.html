@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<img src="{{ STATIC_URL }}img/outset.jpg" class="full_width" />
+	<blockquote id="welcome">
+		<h2>
+			Expand your life's domain by journeying outside your limit in pursuit of experiences of which you dream. Allow this website to be a tool for your venture past your comfort zone, sharing the experiences of your journey with others.
+		</h2>
+	</blockquote>
+	<hr />
+	<p>
+		{% if request.user.is_authenticated %}
+			<form action="/experiences/create/" method="POST" class="full_width">
+				{% csrf_token %}
+				<label for="id_experience"><h3>Add an experience to your journey</h3></label>
+				{{ form.experience }}
+				<input type="hidden" name="explorer_id" value="{{ request.user.id }}" />
+		{% else %}
+			<form action="{% url 'step_two' %} " method="POST" class="full_width" onsubmit="return validateFirstExperience(this);">
+				{% csrf_token %}
+				<label for="id_experience"><h3>Write down an experience you wish to pursue, and let's begin your journey...</h3></label>
+				<input type="hidden" name="initial" />
+				{{ form.experience }}
+		{% endif %}
+		<input type="submit" value="Shout it!" />
+	</form>
+	Or <a href="{% url 'about' %}">learn more</a>
+	</p>
+{% endblock content %}
+
+{% block right_content %}
+	<h3>Other Featured Experiences:</h3>
+	{% for explorer, experience in explorer_experience %}
+		<div class="object_item experience_item">
+			{% if experience.gallery.featured_photo %}
+				<img src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+			{% endif %}
+			<a href="/experiences/{{ experience.id }}"><h3>{{ experience }}</h3></a> by {{ explorer.get_full_name }}
+		</div>
+	{% endfor %}	
+{% endblock right_content %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h2>Visit a Journey</h2>
+	{% for explorer in random_explorers %}
+        <div class="explorer_item">
+            {% if explorer.gallery.featured_photo %}
+                <div class="gallery-photo">
+                    <a href="{{ explorer.gallery.get_absolute_url }}"><img src="{{ explorer.gallery.featured_photo.get_icon_url }}" alt="Alt text"/></a>
+                </div>
+            {% endif %}
+            <a href="{% url 'journey' explorer.id %}"><h3>{{ explorer.get_full_name }}</h3></a>
+            <p>
+                Featured experience: <a href="{% url 'experiences.views.index' explorer.featured_experience.id %}">{{ explorer.featured_experience }}</a>
+            </p>
+    	</div>
+	{% endfor %}
+{% endblock content %}

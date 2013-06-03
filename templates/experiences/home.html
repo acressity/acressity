@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Explorer Other Experiences</h2>
+	<a href="/experiences/featured/"><h3>Featured Experiences</h3></a>
+	<hr />
+	<a href=""><h3>Freshest Experiences (Not active)</h3></a>
+	<hr />
+	<a href=""><h3>Random Experiences (Not active)</h3></a>
+{% endblock content %}
+
+{% block right_content %}
+	<h2>Experience Home</h2>
+	{% if experiences %}
+		<h3>Your Experiences</h3>
+		{% for experience in experiences %}
+			{{ experience|escape }}
+			<hr />
+		{% endfor %}
+	{% endif %}
+{% endblock right_content %}

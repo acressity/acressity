@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Welcome to the HTML source code for the acressity project. The Django Web Framework was used for this project, and I hold the development team and support community in high regard. Feel free to take a look at the code, use any of it you'd like, and send me a little feedback if you notice anything lacking in efficiency or if you have any suggestions.
+	Thanks,
+	Andrew Gaines 
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head profile="http://www.w3.org/2005/10/profile">
+		<title>Acressity {% block title %}{% endblock %}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="description" content="{% block meta_description %}This is a social application to be a tool with which to chart your journey into new experiences{% endblock %}" />
+		<meta name="keywords" content="{% block meta_keywords %}experiences, dreams, trials, tribulations, missions{% endblock %}" />
+		<meta name="author" content="Andrew Gaines" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/style.css" />
+		<link rel="icon" type="image/ico" href="{{ STATIC_URL }}img/favicon.ico" />
+		<!--<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" />-->
+		{# <link href='http://fonts.googleapis.com/css?family=Arbutus+Slab' rel='stylesheet' type='text/css'> #}
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.3.1.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/verify.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/functions.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/dropdownPlain.js"></script>
+		{% block head_insert %}{% endblock head_insert %}
+	</head>
+	<body>
+		<div id="wrapper">
+			{% if messages %}
+				<div id="messages">
+					{% for message in messages %}
+						<p>{{ message }}</p>
+					{% endfor %}
+					<div id="messages_note">
+						<em>Click to remove</em>
+					</div>
+				</div>
+			{% endif %}
+			<div id="top_bar">
+				<a href="/"><span id="logo">
+					<strong>Acressity</strong>&nbsp;&nbsp;<em>Expand Your Experience</em>
+				</span></a>
+				<ul class="dropdown">
+		        	<li><a href="{% url 'about' %}">About</a>
+		        		<ul class="sub_menu">
+		        			 <li><a href="{% url 'about' %}">About Site</a></li>
+		        			 <li><a href="{% url 'creator_note' %}">Creator's Note</a></li>
+		        			 <li><a href="{% url 'glossary' %}">Glossary</a></li>
+		        		</ul>
+		        	</li>
+					{% if request.user.is_authenticated %}
+			        	<li><a href="{% if request.user.is_authenticated %}{% url 'journey' request.user.id %}{% endif %}">Journey</a>
+			        		<ul class="sub_menu">
+
+			        			<li><a href="{% url 'journey' request.user.id %}">Your Journey</a></li>
+
+			        			{% if request.user.cheering_for %}
+			        				<li><a href="{% url 'explorers.views.cheering_for' request.user.id %}">Cheering</a></li>
+			        			{% endif %}
+
+			        			<li><a href="{% url 'all_explorers' %}">All Journeys</a></li>
+
+			        			<li><a href="{% url 'explorers.views.random' %}">Random Journeys</a></li>
+			        		</ul>
+			        	</li>
+					{% endif %}
+		        	<li>
+		        		{% if request.user.is_authenticated %}
+		        			<a href="{% url 'journey' request.user.id %}">
+		        		{% else %}
+		        			<a href="{% url 'experiences.views.featured' %}">
+		        		{% endif %}Experiences</a>
+		        		<ul class="sub_menu">
+
+							<li><a href="{% url 'all_experiences' %}">All Experiences</a></li>
+
+							<li><a href="{% url 'experiences.views.featured' %}">Featured Experiences</a></li>
+
+							{% if request.user.is_authenticated %}
+								{% for experience in request.user.top_five %}
+			        				<li><a href="{% url 'experiences.views.index' experience.id %}">
+			        					{% if experience.gallery.featured_photo %}
+			        						<img class="float_left" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+			        						<br />
+			        					{% endif %}
+			        				{{ experience }}</a></li>
+			        			{% endfor %}
+							{% endif %}
+		        		</ul>
+		        	</li>
+			    </ul>
+		        <div id="login_out">
+					{% block login_header %}
+						{% if request.user.is_authenticated %}
+							<ul class="dropdown">
+								<li><a href="{% url 'journey' request.user.id %}">{{ request.user.get_full_name }}</a>
+									<ul class="sub_menu">
+										<li>
+											<a href="{% url 'journey' request.user.id %}">Your Journey</a>
+										</li>
+										<li>
+											<a href="{% url 'explorers.views.board' request.user.id %}">Bulletin Board</a>
+										</li>
+										<li>
+							        		<a href="{% url 'story' request.user.id %}">Your Story</a>
+							        	</li>
+					        			<li><a href="/explorers/logout/">Log Out</a></li>
+			        				</ul>
+								</li>
+							</ul>
+						{% else %}
+							<form action="/explorers/login/?next=/explorers/journey" method="POST">
+								{% csrf_token %}
+								<div class="float_left">
+									Trailname:
+									<input type="text" name="username" id="username" size="10" />
+								</div>
+								<div class="float_left">
+									Password:
+									<input type="password" name="password" id="password" size="10" />
+								</div>
+								<div class="float_left">
+									<input type="submit" value="Log In" />
+								</div>
+							</form>
+							<form action="{% url 'step_two' %}" method="POST" onsubmit="return validateFirstExperience(this);">
+								{% csrf_token %}
+								<div class="float_right">
+									<input type="text" name="experience" value="Start with new experience..." onclick="setUp(this);" title="Submit your first experience to get started" />
+									<input type="submit" value="Sign Up" />
+								</div>
+							</form>
+						{% endif %}
+					{% endblock login_header %}
+				</div>
+		    </div>
+			<div id="main">
+				{% block main %}
+					<div id="content">
+						{% block content %}{% endblock content %}
+					</div>
+					<div id="right_content">
+						{% block right_content %}
+							{% if request.user.is_authenticated %}
+								<div class="explorer_item">
+									<div class="photo_feature">
+										{% if request.user.gallery.featured_photo %}
+											<a href="{% url 'pl-gallery' request.user.gallery.id %}"><img src="{{ request.user.gallery.featured_photo.get_thumbnail_url }}" /></a>
+										{% else %}
+											<a href="/photologue/gallery/{{ request.user.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/user-icon.png" title="Upload photo for your story" /></a>
+										{% endif %}
+									</div>
+									{% if request.user.featured_experience %}
+										<div>
+											<a href="{% url 'experience' request.user.featured_experience.id %}" title="Work on your featured experience"><h3>{{ request.user.featured_experience }}</h3></a>
+											{% if request.user.featured_experience.status %}
+												{{ request.user.featured_experience.status }}
+											{% endif %}
+											<div class="option_list">
+												<a href="{% url 'narratives.views.create' request.user.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Write a new narrative for {{ request.user.featured_experience }}" class="option_icon" /></a>
+												<a href="{% url 'experiences.views.edit' request.user.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit your featured experience" class="option_icon" /></a>
+												<a href="/photologue/gallery/{{ request.user.featured_experience.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
+												<a href="{% url 'story' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="Your story" class="option_icon" /></a>
+												<a href="{% url 'explorers.views.board' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="View your Bulletin Board" class="option_icon" /></a>
+											</div>
+										</div>
+									{% endif %}
+								</div>
+							{% else %}
+								<div id="no_dash">
+									<blockquote>
+										<p>
+											Build of your imaginings a bower in the wilderness ere you build a house within the city walls.
+										</p>
+										<p>
+											For even as you have home-comings in your twilight, so has the wanderer in you, the ever distant and alone.
+										</p>
+										<p>
+											Verily the lust for comfort murders the passion of the soul, and then walks grinning in the funeral.
+										</p>
+										<p>
+											Forget not that the earth delights to feel your bare feet and the winds long to play with your hair.
+										</p>
+										<p>
+											But you, children of space, you restless in rest, you shall not be trapped nor tamed.
+										</p>
+										<span class="author">-Khalil Gibran</span>
+									</blockquote>
+								</div>
+							{% endif %}
+						{% endblock right_content %}
+					</div>
+				{% endblock main %}
+			</div>
+		</div> <!--end of wrapper div-->
+		<!--
+		<div id="footer">
+			
+		</div>
+		-->
+	</body>
+</html>

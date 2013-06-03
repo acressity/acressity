@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% if freshest_experiences %}
+		<h2>Freshest Experiences:</h2>
+		<ul>
+			{% for experience in freshest_experiences %}
+				<li>{{ experience }}</li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<h2>No Experiences Exist</h2>
+	{% endif %}
+{% endblock content %}

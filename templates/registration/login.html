@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Log in:</h2>
+	<br />
+	{% if form.errors %}
+		<p class="error">Whoops, looks like there's an error with either username or password</p>
+	{% endif %}
+
+	<form action="" method="POST">
+		{% csrf_token %}
+		<label for="username">Trailname:</label>
+		<br />
+		<input type="text" name="username" value="" id="username" />
+		<br />
+		<label for="password">Password:</label>
+		<br />
+		<input type="password" name="password" value="" id="password" />
+		<br />
+		<input type="submit" value="Log In" />
+		<input type="hidden" name="next" value="{% url 'my_journey' %}" />
+	</form>
+{% endblock content %}

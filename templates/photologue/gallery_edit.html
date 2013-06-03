@@ -1,0 +1,78 @@
+{% extends "photologue/root.html" %}
+{% load url from future %}
+
+{% block title %} - Edit: {{ object.title }}{% endblock %}
+
+{% block content %}
+	<div class="object_item">
+		<form action="" method="POST">
+			{% csrf_token %}
+			<h2>Album name: {{ form.title }}</h2>
+			<h3>Published {{ form.date_added }}</h3>
+			<label for="id_description">Description:</label>
+			<p>
+				{{ form.description }}
+			</p>
+			Select photo to feature:
+			{{ form.featured_photo }}
+			<br />
+			<input type="submit" value="Update" />
+		</form>
+	</div>
+	<div class="photo-gallery">
+	    {% for photo, form in photos_forms %}
+		    <div class="gallery_photo_item">
+		    	<div class="left">
+		        	<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+		        </div>
+		        <div class="right">
+			        {% ifequal request.user photo.author %}
+				        <form action="/photologue/photo/{{ photo.id }}/edit_photo/" method="POST">
+				        	{% csrf_token %}
+				    		<h3>Title: {{ form.title }}</h3>
+				    		Photo Description:
+				    		{{ form.caption }}
+				    		<input type="submit" value="Update" />
+						</form>
+						<form action="{% url 'photologue.views.delete_photo' photo.id %}" method="POST">
+							{% csrf_token %}
+							<input type="submit" value="Delete" class="delete-button" onclick="return confirm('Delete this photo?');" />
+						</form>
+					{% else %}
+						This photo can only be edited by {{ photo.author }}
+					{% endifequal %}
+				</div>
+		    </div>
+		    <hr />
+	    {% empty %}
+	    	<p>There are no photos uploaded for this gallery yet</p>
+	    {% endfor %}
+	    {% if object.children_photos %}
+			<table class="thirds_table">
+				{% ifequal object.content_type.model 'explorer' %}
+					<h3>Photos from explorer's experiences and narratives</h3>
+				{% else %}
+					{% ifequal object.content_type.model 'experience' %}
+						<h3>Photos from the narratives</h3>
+					{% endifequal %}
+				{% endifequal %}
+			    {% for photo in object.children_photos %}
+					<td>
+					    <div class="object_item thirds_item">
+					        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+					        <div>
+					        	<h4>{{ photo.title }}</h4>
+					        </div>
+					    </div>
+					</td>
+					{% if forloop.counter|divisibleby:'3' %}
+						{% if not forloop.last %}
+							</tr>
+							<tr>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</table>
+		{% endif %}
+	</div>
+{% endblock content %}

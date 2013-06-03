@@ -1,0 +1,18 @@
+{% extends "experiences/exp_base.html" %}
+
+{% block content %}
+	{% if experience.brief %}
+		<h2>About <em>{{ experience }}</em></h2>
+		{{ experience.brief }}
+	{% else %}
+		<h1>Experience Brief</h1>
+		<h3>Write a little about your thoughts on this experience</h3>
+		<p>or <a href="{% url 'experiences.views.index' experience.id %}">begin writing a narrative!</a></p>
+		<form action="" method="POST">
+			{% csrf_token %}
+			{{ form.brief }}
+			<input type="hidden" name="explorer_id" value="{{ experience.explorer_id }}" />
+			<input type="submit" value="Submit" />
+		</form>
+	{% endif %}
+{% endblock content %}

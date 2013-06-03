@@ -1,0 +1,61 @@
+{% extends "narratives/narr_base.html" %}
+
+{% load comments %}
+
+{% block content %}
+	<div class="narrative_detail">
+		<h2>{{ narrative.title }}</h2>
+		<div class="option_list">
+			<a href="{% url 'experiences.views.index' narrative.experience.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Back to the experience page" class="option_icon" /></a>
+			{% if narrative.gallery %}
+				<a href="{% url 'pl-gallery' narrative.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ narrative }}" /></a>
+			{% endif %}
+			{% if author %}
+				<a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this narrative" class="option_icon" /></a>
+				<a href="/narratives/{{ narrative.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
+				<a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this narrative" class="option_icon" /></a>
+			{% endif %}
+		</div>
+		{% if narrative.gallery.photos %}
+			<div class="images_right">
+				{% for photo in narrative.gallery.photos.all %}
+					<div class="narrative_photo">
+						<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" title="{{ photo.title }}" /></a>
+						{% if photo.caption %}
+							<div class="photo_caption">
+								{{ photo.caption }}
+							</div>
+						{% endif %}
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+		<p>{{ narrative.date_created }}</p>
+		<p>
+			{{ narrative.narrative|escape|linebreaks }}
+		</p>
+		<div class="clear_both"> </div>
+	</div>
+	<div class="next_previous">
+		{% if narrative.get_previous_narrative %}
+			<a href="{% url 'narratives.views.index' narrative.get_previous_narrative.id %}" title="{{ narrative.get_previous_narrative }}"><img src="{{ STATIC_URL }}img/icons/previous-icon.png" class="float_right" title="Previous narrative" /></a>
+		{% endif %}
+		{% if narrative.get_next_narrative %}
+			<a href="{% url 'narratives.views.index' narrative.get_next_narrative.id %}" title="{{ narrative.get_next_narrative }}"><img src="{{ STATIC_URL }}img/icons/next-icon.png" class="float_left" title="Next narrative" /></a>
+		{% endif %}
+	</div>
+	{% get_comment_count for narrative as narr_comment_count %}
+	{% if narr_comment_count > 0 %}
+		<h4 title="Click to see comments" onclick="toggle_div('narr_comment_list');">{{ narr_comment_count }} note{{ narr_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narr_comment_list_toggle_icon" /></h4>
+		<div class="comment_list" id="narr_comment_list" style="display: none;">
+			{% get_comment_list for narrative as narr_comment_list %}
+			{% for comment in narr_comment_list reversed %}
+				<div class="narrative_note">
+					<a href="{% url 'journey' comment.user.id %}" title="Visit journey for {{ comment.user.get_full_name }}">{{ comment.user.get_full_name }}</a> commented:
+					<br />
+					<em>{{ comment.comment|escape }}</em>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endblock content %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>New Experience: <em>{{ experience }}</em></h2>
+	<p>
+		Create a personal journey of your own to track and share your progress with with your experiences.
+	</p>
+	{{ form.non_field_errors }}
+	<form action="" method="POST">
+		{% csrf_token %}
+		<div id="register_first_name">
+			<label for="id_first_name">Your first name:</label>
+			<br />
+			{{ form.first_name }}
+			{% if form.first_name.errors %}
+				<br />
+				<span class="error">First name is required</span>
+			{% endif %}
+		</div>
+		<div id="register_last_name">
+			<label for="id_last_name">Lastname:</label>
+			<br />
+			{{ form.last_name }}
+			{% if form.last_name.errors %}
+				<br />
+				<span class="error">Last name is required</span>
+			{% endif %}
+		</div>
+		<div id="register_email">
+			<label for="id_email">Email Address (optional):</label>
+			<br />
+			{{ form.email }}
+			{% if form.email.errors %}
+				<br />
+				<span class="error">Please enter valid email</span>
+			{% endif %}
+		</div>
+		<div id="register_trailname">	
+			<label for="id_trailname">Compose a <abbr title="Similar to username">trailname</abbr> for your journey:</label>
+			<br />
+			{{ form.trailname }}
+			{% if form.trailname.errors %}
+				<br />
+				<span class="error">
+					Trailname is required
+					<br />
+					Short description of your journey
+				</span>
+			{% endif %}
+		</div>
+		<div id="register_password1">
+			<label for="id_password1">Password:</label>
+			<br />
+			{{ form.password1 }}
+			{{ form.password1.errors }}
+		</div>
+		<div id="register_password2">
+			<label for="id_password2">Verify password:</label>
+			<br />
+			{{ form.password2 }}
+			{{ form.password2.errors }}
+		</div>
+		<div id="register_submit">
+			<input type="submit" value="Register" />
+		</div>
+		<input type="hidden" name="experience" id="id_experience" value="{{ experience }}" />
+		
+	</form>
+{% endblock content %}

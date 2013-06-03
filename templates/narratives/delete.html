@@ -1,0 +1,13 @@
+{% extends "narratives/narr_base.html" %}
+
+{% block content %}
+	<h2>Confirm you want to delete your narrative:</h2>
+	<em><h3>{{ narrative.title }}</h3></em>
+	<p>
+		{{ narrative.taste }}
+	</p>
+	<form action="" method="POST">
+		{% csrf_token %}
+		<input type="submit" value="Confirm" name="confirm" />
+	</form>
+{% endblock content %}

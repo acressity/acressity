@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>You have begun a new chapter of your journey</h2>
+	<h2><em>{{ experience }}</h2></em>
+	<div class="photo_feature">
+		<img src="{{ STATIC_URL }}img/taking_off.jpg" alt="Taking Off" title="Taking Off" />
+		<br />
+		<span class="photo_caption">Taking off on your journey</span>
+	</div>
+	<p>
+		Allow your new experience "{{ experience }}" to be an inspiration for filling your journey with new experiences. Strive towards those experiences in life that make living more than just surviving.
+	</p>
+	<p>
+		Be it the conquest of a fear, achievement of a dream, creation of an art, or any number of other motivators, set out on your experience with the understanding of travel into a previously untouched domain of life being it's own reward.
+	</p>
+	<form action="/explorers/new_explorer/" method="POST">
+		{% csrf_token %}
+		<input type="hidden" name="experience" id="experience" value="{{ experience }}" />
+		<input type="hidden" name="initial" />
+		<input type="submit" value="Proceed" class="expand-button" />
+	</form>
+{% endblock content %}
