@@ -2,9 +2,9 @@
 
 {% block content %}
 	<img src="{{ STATIC_URL }}img/outset.jpg" class="full_width" />
-	<blockquote id="welcome">
+	<blockquote id="welcome_quote">
 		<h2>
-			Expand your life's domain by journeying outside your limit in pursuit of experiences of which you dream. Allow this website to be a tool for your venture past your comfort zone, sharing the experiences of your journey with others.
+			Expand your life's domain by journeying in pursuit of experiences of which you dream. Allow this website to be a tool with which to chart your venture, sharing the experiences of your journey with others.
 		</h2>
 	</blockquote>
 	<hr />
@@ -18,7 +18,7 @@
 		{% else %}
 			<form action="{% url 'step_two' %} " method="POST" class="full_width" onsubmit="return validateFirstExperience(this);">
 				{% csrf_token %}
-				<label for="id_experience"><h3>Write down an experience you wish to pursue, and let's begin your journey...</h3></label>
+				<label for="id_experience"><h3>Write down an experience you wish to pursue to begin your journey...</h3></label>
 				<input type="hidden" name="initial" />
 				{{ form.experience }}
 		{% endif %}

@@ -16,7 +16,7 @@
 			{% endif %}
 		</div>
 	{% endif %}
-	<h3>Explorers</h3>
+	<h3>Explorer{{ experience.explorers.count|pluralize }}</h3>
 	<table class="thirds_table">
 		<tr>
 			{% for explorer in experience.explorers.all %}
@@ -83,7 +83,7 @@
 								{% endif %}
 								{{ narrative.date_created|timesince }}
 								<p>
-									Written by <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a>
+									By <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a>
 								</p>
 								{% if user.is_authenticated %}
 									{% ifequal narrative.author request.user %}
