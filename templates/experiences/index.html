@@ -85,30 +85,29 @@
 								<p>
 									Written by <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a>
 								</p>
-								<div class="object_item_interaction">
-									{% if user.is_authenticated %}
-										{% ifequal narrative.author request.user %}
-											<div class="option_list">
-												<a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this narrative" class="option_icon" /></a>
-												<a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this narrative" class="option_icon" /></a>
-											</div>
-										{% else %}
-											{% get_comment_form for narrative as narr_comment_form %}
-											<form action="{% comment_form_target %}" method="POST">
-												{% csrf_token %}
-												{{ narr_comment_form.comment }}
-												{{ narr_comment_form.honeypot }}
-												{{ narr_comment_form.object_pk }}
-												{{ narr_comment_form.content_type }}
-											    {{ narr_comment_form.timestamp }}
-											    {{ narr_comment_form.security_hash }}
-												<br />
-												<input type="hidden" name="next" value="{% url 'narratives.views.index' narrative.id %}">
-												<input type="submit" value="Submit Note" />
-											</form>	
-										{% endifequal %}
-									{% endif %}
-								</div>
+								{% if user.is_authenticated %}
+									{% ifequal narrative.author request.user %}
+										<div class="option_list">
+											<a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this narrative" class="option_icon" /></a>
+											<a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this narrative" class="option_icon" /></a>
+										</div>
+									{% endifequal %}
+									{% get_comment_form for narrative as narr_comment_form %}
+									<div class="comment">
+										<form action="{% comment_form_target %}" method="POST">
+											{% csrf_token %}
+											{{ narr_comment_form.comment }}
+											{{ narr_comment_form.honeypot }}
+											{{ narr_comment_form.object_pk }}
+											{{ narr_comment_form.content_type }}
+										    {{ narr_comment_form.timestamp }}
+										    {{ narr_comment_form.security_hash }}
+											<br />
+											<input type="hidden" name="next" value="{% url 'narratives.views.index' narrative.id %}">
+											<input type="submit" value="Submit Note" />
+										</form>
+									</div>
+								{% endif %}
 							</div>
 						</td>
 						{% if forloop.counter|divisibleby:'3' %}
@@ -152,5 +151,20 @@
 				</div>
 			{% endfor %}
 		</div>
+	{% endif %}
+	{% if user.is_authenticated %}
+		{% get_comment_form for experience as exp_comment_form %}
+		<form action="{% comment_form_target %}" method="POST">
+			{% csrf_token %}
+			{{ exp_comment_form.comment }}
+			{{ exp_comment_form.honeypot }}
+			{{ exp_comment_form.object_pk }}
+			{{ exp_comment_form.content_type }}
+		    {{ exp_comment_form.timestamp }}
+		    {{ exp_comment_form.security_hash }}
+			<br />
+			<input type="hidden" name="next" value="/experiences/{{ experience.id }}/">
+			<input type="submit" value="Submit Note" />
+		</form>
 	{% endif %}
 {% endblock content %}

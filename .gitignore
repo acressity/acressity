@@ -2,3 +2,4 @@ settings.py
 *.pyc
 static/
 checklist.txt
+.sass_cache/

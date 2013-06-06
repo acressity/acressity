@@ -6,9 +6,6 @@ from django.contrib.auth.views import login
 from acressity.views import journey, journey_by_trailname
 admin.autodiscover()
 
-from dajaxice.core import dajaxice_autodiscover, dajaxice_config
-dajaxice_autodiscover()
-
 urlpatterns = patterns(
     'acressity.views',
     # url matches id of user, calls journey view, now deprecated!!
@@ -27,7 +24,6 @@ urlpatterns = patterns(
     url(r'^welcome/$', TemplateView.as_view(template_name='acressity/welcome.html'), name='welcome'),
     url(r'^creator_note/$', TemplateView.as_view(template_name='acressity/creator_note.html'), name='creator_note'),
     url(r'^glossary/$', TemplateView.as_view(template_name='acressity/glossary.html'), name='glossary'),
-    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     # Patching to work with Django logout...
     url(r'^accounts/login/', login),
     # url matching a string, calling view which checks if == trailname (nickname), and returns the url for the matching explorer_id

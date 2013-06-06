@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>About This Site</h1>
+	<h1>Acressity: <em>the quality or state of being at the peak of existence</em>.</h1>
 	<div class="photo_feature">
 		<img src="{{ STATIC_URL }}img/seek_limit.jpg" title="Seek your limit" />
 	</div>
 	<blockquote>
 		<h2>This site is built to be a tool with which to chart your journey into new experiences</h2>
 	</blockquote>
-	<h3>Acressity means <em>the quality or state of being at the peak of existence</em>.</h3>
 	<p>
 		This site aims to encourage a fulfillment of your yearnings for exploration and exposing yourself to new experiences. Share those experiences upon which you periodically envision yourself following through on your personal
 		{% if request.user.is_authenticated %}

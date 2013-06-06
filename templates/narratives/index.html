@@ -58,4 +58,21 @@
 			{% endfor %}
 		</div>
 	{% endif %}
+	{% if user.is_authenticated %}
+		{% get_comment_form for narrative as narr_comment_form %}
+		<div class="comment">
+			<form action="{% comment_form_target %}" method="POST">
+				{% csrf_token %}
+				{{ narr_comment_form.comment }}
+				{{ narr_comment_form.honeypot }}
+				{{ narr_comment_form.object_pk }}
+				{{ narr_comment_form.content_type }}
+			    {{ narr_comment_form.timestamp }}
+			    {{ narr_comment_form.security_hash }}
+				<br />
+				<input type="hidden" name="next" value="{% url 'narratives.views.index' narrative.id %}">
+				<input type="submit" value="Submit Note" />
+			</form>
+		</div>
+	{% endif %}
 {% endblock content %}
