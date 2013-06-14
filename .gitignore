@@ -3,3 +3,4 @@ settings.py
 static/
 checklist.txt
 .sass_cache/
+manage.py

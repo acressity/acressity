@@ -24,6 +24,7 @@ urlpatterns = patterns(
     url(r'^welcome/$', TemplateView.as_view(template_name='acressity/welcome.html'), name='welcome'),
     url(r'^creator_note/$', TemplateView.as_view(template_name='acressity/creator_note.html'), name='creator_note'),
     url(r'^glossary/$', TemplateView.as_view(template_name='acressity/glossary.html'), name='glossary'),
+    # url(r'^openid/', include('django_openid_auth.urls')),
     # Patching to work with Django logout...
     url(r'^accounts/login/', login),
     # url matching a string, calling view which checks if == trailname (nickname), and returns the url for the matching explorer_id
