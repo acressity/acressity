@@ -124,7 +124,7 @@ anything lacking in efficiency or if you have any suggestions.
 									<input type="submit" value="Log In" />
 								</div>
 							</form>
-							<form action="{% url 'step_two' %}" method="POST" onsubmit="var a = verify('Add as an experience:', this.experience); return a;">
+							<form action="{% url 'step_two' %}" method="POST" onsubmit="return validateFirstExperience(this) && verify('Add as an experience:', this.experience);">
 								{% csrf_token %}
 								<div class="float_right">
 									<input type="text" name="experience" value="Start with new experience..." onclick="setUp(this);" title="Submit your first experience to get started" />
