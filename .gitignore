@@ -4,3 +4,4 @@ static/
 checklist.txt
 .sass_cache/
 manage.py
+deployment_procedures.txt
