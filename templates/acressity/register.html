@@ -3,67 +3,113 @@
 {% block content %}
 	<h2>New Experience: <em>{{ experience }}</em></h2>
 	<p>
-		Create a personal journey of your own to track and share your progress with with your experiences.
+		<h3>Create a personal journey of your own to track and share your progress with your experiences.</h3>
 	</p>
 	{{ form.non_field_errors }}
 	<form action="" method="POST">
 		{% csrf_token %}
 		<div id="register_first_name">
-			<label for="id_first_name">Your first name:</label>
-			<br />
-			{{ form.first_name }}
+			<p>
+				<label for="id_first_name">Your first name:</label>
+			</p>
+			<p>	
+				{{ form.first_name }}
+			</p>
 			{% if form.first_name.errors %}
-				<br />
-				<span class="error">First name is required</span>
+				<p>
+					<span class="error">First name is required</span>
+				</p>
 			{% endif %}
 		</div>
 		<div id="register_last_name">
-			<label for="id_last_name">Lastname:</label>
-			<br />
-			{{ form.last_name }}
+			<p>
+				<label for="id_last_name">Last name:</label>
+			</p>
+			<p>
+				{{ form.last_name }}
+			</p>
 			{% if form.last_name.errors %}
-				<br />
-				<span class="error">Last name is required</span>
+				<p>
+					<span class="error">Last name is required</span>
+				</p>
 			{% endif %}
 		</div>
 		<div id="register_email">
-			<label for="id_email">Email Address (optional):</label>
-			<br />
-			{{ form.email }}
+			<p>
+				<label for="id_email">Email Address:</label>
+			</p>
+			<p>
+				{{ form.email }}
+			</p>
+			<div class="smaller_font">
+				<p id="expand_about_email" onclick="toggle_div('about_email');" title="Click to toggle information concerining collection of email addresses">
+					<strong>Concerning email</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_email_toggle_icon" />
+				</p>
+				<div id="about_email" style="display: none;">
+					Email adresses are used for nothing more than activating your account and resetting passwords. That's it.
+				</div>
+			</div>
 			{% if form.email.errors %}
-				<br />
-				<span class="error">Please enter valid email</span>
+				<p>
+					<span class="error">Please enter valid email</span>
+				</p>
 			{% endif %}
 		</div>
 		<div id="register_trailname">	
-			<label for="id_trailname">Compose a <abbr title="Similar to username">trailname</abbr> for your journey:</label>
-			<br />
-			{{ form.trailname }}
+			<p>
+				<label for="id_trailname">Compose a <abbr title="Creative username to describe your journey">trailname</abbr> for your journey:</label>
+			</p>
+			<p>
+				{{ form.trailname }}
+			</p>
+			<div class="smaller_font">
+				<p id="expand_about_trailname" onclick="toggle_div('about_trailname');" title="Click to toggle description of trailname">
+					<strong>About trailname</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" />
+				</p>
+				<div id="about_trailname" class="toggle_div" style="display: none;">
+					<p>
+						Your trailname a short username designed to describe an aspect of your journey at the moment. Able to be changed. The word trailname is taken from a naming tradition for through-hikers on the American Appalachian Trail.
+					</p>
+					<p>
+						Allows others to find your journey directly by searching:
+						<br />
+						<tt>acressity.com/<em>your_trailname</em></tt>
+					</p>
+				</div>
+			</div>
 			{% if form.trailname.errors %}
-				<br />
-				<span class="error">
-					Trailname is required
-					<br />
-					Short description of your journey
-				</span>
+				<p>
+					<span class="error">
+						A trailname is required
+					</span>
+				</p>
 			{% endif %}
 		</div>
 		<div id="register_password1">
-			<label for="id_password1">Password:</label>
-			<br />
-			{{ form.password1 }}
-			{{ form.password1.errors }}
+			<p>
+				<label for="id_password1">Password:</label>
+			</p>
+			<p>
+				{{ form.password1 }}
+			</p>
+			<p>
+				{{ form.password1.errors }}
+			</p>
 		</div>
 		<div id="register_password2">
-			<label for="id_password2">Verify password:</label>
-			<br />
-			{{ form.password2 }}
-			{{ form.password2.errors }}
+			<p>
+				<label for="id_password2">Verify password:</label>
+			</p>
+			<p>
+				{{ form.password2 }}
+			</p>
+			<p>
+				{{ form.password2.errors }}
+			</p>
 		</div>
 		<div id="register_submit">
-			<input type="submit" value="Register" />
+			<input class="expand-button" type="submit" value="Register" />
 		</div>
 		<input type="hidden" name="experience" id="id_experience" value="{{ experience }}" />
-		
 	</form>
 {% endblock content %}

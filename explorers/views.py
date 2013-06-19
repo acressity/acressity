@@ -136,7 +136,7 @@ def explorer_journey(request):
 
 
 def new_explorer(request):
-    if request.method == 'POST' and not 'initial' in request.POST:
+    if request.method == 'POST' and 'initial' not in request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
             # The person correctly filled out the form. Register them

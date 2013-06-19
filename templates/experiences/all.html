@@ -2,6 +2,7 @@
 
 {% block content %}
 	<h2>All Experiences</h2>
+	<h3>There are {{ all_experiences.count }} experiences at the moment</h3>
 	{% for experience in all_experiences %}
 		<div class="experience_dash">
 			<div class="left">

@@ -9,13 +9,13 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Changing field 'Gallery.title'
-        db.alter_column(u'photologue_gallery', 'title', self.gf('django.db.models.fields.CharField')(max_length=75))
+        # Changing field 'Hurrah.object_pk'
+        db.alter_column(u'support_hurrah', 'object_pk', self.gf('django.db.models.fields.TextField')(null=True))
 
     def backwards(self, orm):
 
-        # Changing field 'Gallery.title'
-        db.alter_column(u'photologue_gallery', 'title', self.gf('django.db.models.fields.CharField')(max_length=70))
+        # User chose to not deal with backwards NULL issues for 'Hurrah.object_pk'
+        raise RuntimeError("Cannot reverse this migration. 'Hurrah.object_pk' and its values cannot be restored.")
 
     models = {
         u'contenttypes.contenttype': {
@@ -30,7 +30,7 @@ class Migration(SchemaMigration):
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'authored_experiences'", 'to': u"orm['explorers.Explorer']"}),
             'brief': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'experience': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'experience': ('django.db.models.fields.CharField', [], {'max_length': '210'}),
             'gallery': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['photologue.Gallery']", 'unique': 'True', 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'max_length': '25', 'null': 'True', 'blank': 'True'})
@@ -50,7 +50,7 @@ class Migration(SchemaMigration):
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'trailname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'})
         },
@@ -66,19 +66,8 @@ class Migration(SchemaMigration):
             'object_pk': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'photos': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'galleries'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['photologue.Photo']"}),
             'tags': ('photologue.models.TagField', [], {'max_length': '255', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '75'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
             'title_slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
-        },
-        u'photologue.galleryupload': {
-            'Meta': {'object_name': 'GalleryUpload'},
-            'caption': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'gallery': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['photologue.Gallery']", 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'tags': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'zip_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
         },
         u'photologue.photo': {
             'Meta': {'ordering': "['-date_added']", 'object_name': 'Photo'},
@@ -111,29 +100,20 @@ class Migration(SchemaMigration):
             'sharpness': ('django.db.models.fields.FloatField', [], {'default': '1.0'}),
             'transpose_method': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'})
         },
-        u'photologue.photosize': {
-            'Meta': {'ordering': "['width', 'height']", 'object_name': 'PhotoSize'},
-            'crop': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'photo_sizes'", 'null': 'True', 'to': u"orm['photologue.PhotoEffect']"}),
-            'height': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'increment_count': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'}),
-            'pre_cache': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'quality': ('django.db.models.fields.PositiveIntegerField', [], {'default': '70'}),
-            'upscale': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'watermark': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'photo_sizes'", 'null': 'True', 'to': u"orm['photologue.Watermark']"}),
-            'width': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+        u'support.cheer': {
+            'Meta': {'object_name': 'Cheer'},
+            'cheerer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cheers_from'", 'to': u"orm['explorers.Explorer']"}),
+            'date_cheered': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'explorer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cheers_for'", 'to': u"orm['explorers.Explorer']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        u'photologue.watermark': {
-            'Meta': {'object_name': 'Watermark'},
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+        u'support.hurrah': {
+            'Meta': {'object_name': 'Hurrah'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'content_type_set_for_hurrah'", 'to': u"orm['contenttypes.ContentType']"}),
+            'explorer': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['explorers.Explorer']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'}),
-            'opacity': ('django.db.models.fields.FloatField', [], {'default': '1'}),
-            'style': ('django.db.models.fields.CharField', [], {'default': "'scale'", 'max_length': '5'})
+            'object_pk': ('django.db.models.fields.TextField', [], {'null': 'True'})
         }
     }
 
-    complete_apps = ['photologue']
+    complete_apps = ['support']

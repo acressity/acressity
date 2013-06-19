@@ -32,11 +32,12 @@ class Explorer(AbstractBaseUser):
     from the Django User model.
     '''
     first_name = models.CharField(max_length=50, null=False)
-    last_name = models.CharField(max_length=50, null=False)
+    last_name = models.CharField(max_length=60, null=False)
     trailname = models.CharField(max_length=50, unique=True, db_index=True, help_text='The nickname given to each explorer of this website, inspired by the tradition common with Appalachian Trail hikers. Explorers are encouraged to create a trailname that describes an aspect of their journey at the moment.')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
     brief = models.TextField(null=True, blank=True)
-    email = models.EmailField(max_length=254, null=True, blank=True)
+    # Damn, I was really hoping I wouldn't have to ask for email... But I do need means for resetting passwords and verification; single sign on services aren't all that impressive to me at the moment
+    email = models.EmailField(max_length=254, null=False, blank=False)
     birthdate = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(default=datetime.now)
     is_active = models.BooleanField(default=True)

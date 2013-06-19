@@ -138,7 +138,7 @@ IMAGE_FILTERS_HELP_TEXT = _('Chain multiple filters using the following pattern 
 
 class Gallery(models.Model):
     date_added = models.DateTimeField(_('date published'), default=datetime.now)
-    title = models.CharField(_('title'), max_length=80, unique=False)
+    title = models.CharField(_('title'), max_length=75, unique=False)
     title_slug = models.SlugField(_('title slug'), unique=False,
                                   help_text=_('A "slug" is a unique URL-friendly title for an object.'))
     description = models.TextField(_('description'), blank=True)
