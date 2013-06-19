@@ -191,3 +191,21 @@ def farewell(request):
     featured_experience = request.user.featured_experience
     logout(request)
     return render(request, 'explorers/farewell.html', {'featured_experience': featured_experience})
+
+@login_required
+def change_password(request):
+    from explorers.forms import PasswordChangeForm
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.POST, request=request)
+        if form.is_valid():
+            if request.user.check_password(form.cleaned_data.get('current_password')):
+                # return HttpResponse(form.cleaned_data.__dict__)
+                request.user.set_password(form.cleaned_data.get('new_password1'))  # For some reason unable to set to new_password2 because variable currently returning None. Kinda pissed/confused and wantig to move on...
+                request.user.save()
+                messages.success(request, 'You have successfully changed your password')
+            else:
+                messages.success(request, 'Your attempt to change your password failed...')
+            return redirect(reverse('journey', args=(request.user.id,)))
+    else:
+        form = PasswordChangeForm
+    return render(request, 'explorers/change_password.html', {'form': form})

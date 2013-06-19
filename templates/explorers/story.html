@@ -1,4 +1,4 @@
-{% extends 'explorers/expl_base.html' %}
+{% extends "explorers/base.html" %}
 
 {% load comments %}
 
@@ -23,32 +23,35 @@
 		</form>
 	{% endif %}
 	{% if owner %}
+		<p>
+			<a href="{% url 'change_password' %}">Change your password</a>
+		</p>
 		<form method="POST">
 			{% csrf_token %}
-			<p>
-				<label>First name: {{ form.first_name }}</label>
-			</p>
-			<p>
-				<label>Last name: {{ form.last_name }}</label>
-			</p>
-			<p>
-				<label>Trailname: {{ form.trailname }}</label> <em>Allows others to find you via http://acressity.com/trailname</em>
-			</p>
-			<p>
-				<label>Featured experience: {{ form.featured_experience }}</label>
-			</p>
-			<p>
+			<div class="formatted_input">
+				<label>First name<br />{{ form.first_name }}</label>
+			</div>
+			<div class="formatted_input">
+				<label>Last name<br />{{ form.last_name }}</label>
+			</div>
+			<div class="formatted_input">
+				<label>Trailname<br />{{ form.trailname }}</label> <span class="smaller_font">Allows others to find you via <tt>acressity.com/your_trailname</tt></span>
+			</div>
+			<div class="formatted_input">
+				<label>Featured experience<br />{{ form.featured_experience }}</label>
+			</div>
+			<div class="formatted_input">
 				<label>Brief:
 				<br />
 				{{ form.brief }}
 				</label>
-			</p>
-			<p>
+			</div>
+			<div class="formatted_input">
 				<label>Email: {{ form.email }}</label>
-			</p>
-			<p>
+			</div>
+			<div class="formatted_input">
 				Birthdate: {{ form.birthdate }}
-			</p>
+			</div>
 			<input type="submit" value="Save" />
 		</form>
 	{% else %}

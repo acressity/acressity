@@ -5,3 +5,8 @@ checklist.txt
 .sass_cache/
 manage.py
 deployment_procedures.txt
+explorers/migrations/
+experiences/migrations/
+photologue/migrations/
+support/migrations/
+narratives/migrations/

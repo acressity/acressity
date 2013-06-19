@@ -1,9 +1,11 @@
+from django import forms
+from django.forms import ModelForm, extras
+from django.conf import settings
+from django.contrib import auth
+
 from datetime import datetime
 from explorers.models import Explorer
 from experiences.models import Experience
-
-from django import forms
-from django.forms import ModelForm, extras
 
 
 class RegistrationForm(ModelForm):
@@ -14,9 +16,11 @@ class RegistrationForm(ModelForm):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
         if not password2:
-            raise forms.ValidationError("You must confirm your password")
+            raise forms.ValidationError('You must confirm your password')
         if password1 != password2:
-            raise forms.ValidationError("Your passwords do not match")
+            raise forms.ValidationError('Your passwords do not match')
+        if len(password2) < settings.MIN_PASSWORD_LEN:
+            raise forms.ValidationError('Password must be at least {0} characters'.format(settings.MIN_PASSWORD_LEN))
         return password2
 
     class Meta:
@@ -40,3 +44,21 @@ class ContactForm(forms.Form):
     email = forms.EmailField(label='Your Email')
     subject = forms.CharField()
     message = forms.CharField(widget=forms.Textarea)
+
+
+class PasswordChangeForm(forms.Form):
+    current_password = forms.CharField(widget=forms.PasswordInput())
+    new_password1 = forms.CharField(widget=forms.PasswordInput())
+    new_password2 = forms.CharField(widget=forms.PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        new_password2 = self.cleaned_data.get('new_password2')
+        new_password1 = self.cleaned_data.get('new_password1')
+        if len(new_password2) < settings.MIN_PASSWORD_LEN:
+            raise forms.ValidationError('Password must be at least {0} characters'.format(settings.MIN_PASSWORD_LEN))
+        if new_password2 != new_password1:
+            raise forms.ValidationError('Your newly chosen passwords did not match')
