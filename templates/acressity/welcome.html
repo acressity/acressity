@@ -3,13 +3,13 @@
 {% block content %}
     <h1>Welcome, {{ request.user.get_full_name }}</h1>
     <p>
-        This application encourages you to follow through on your own adventure. With each experience you create being comparable to the chapter titles of a favorite book, you're encouraged to fill them with as many narratives, photos, and invite as many fellow explorers to each experience as you please.
+        This application encourages you to follow through on the experiences you add to your journey. With each experience you create being comparable to the chapter titles of a favorite book, you're encouraged to fill them with as many narratives and photos, and invite as many fellow explorers to each experience as you please.
     </p>
     <p>
-        On the right is your personal Dash. It displays the picture you choose to be recognized by, and gives you easy access to your featured experience&#8212;currently <strong>{{ request.user.featured_experience }}</strong>.
+        On the right is your dash information. It displays the picture you choose to be recognized by, and gives you easy access to your featured experience&#8212;currently <strong>{{ request.user.featured_experience }}</strong>.
     </p>
     <p>
-        Estimated Time of Departure is now! Get started with the following options:
+        You can get started with the following options:
     </p>
     <div class="option_list">
         <a href="{% url 'narratives.views.create' request.user.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Creating your first narrative for '{{ request.user.featured_experience }}'" class="option_icon" /></a>
