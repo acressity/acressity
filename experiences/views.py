@@ -1,3 +1,13 @@
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
+
 from experiences.models import Experience, FeaturedExperience
 from narratives.models import Narrative
 from experiences.forms import ExperienceForm, ExperienceBriefForm
@@ -5,38 +15,34 @@ from narratives.forms import NarrativeForm
 from photologue.models import Gallery
 from explorers.models import Explorer, Request
 
-from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.contrib import messages
-from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.models import ContentType
 
-
+@login_required
 def create(request):
     if request.method == 'POST':
-        form = ExperienceForm(request.POST)
+        form = ExperienceForm(request.POST, request=request)
         if form.is_valid():
             form.save(commit=False)
             form.instance.author = request.user
-            form.save()
+            new_experience = form.save()
             form.instance.explorers.add(request.user)
             if form.cleaned_data['make_feature']:
                 request.user.featured_experience = form.instance
                 request.user.save()
                 messages.success(request, 'Your featured experience is now {0}'.format(form.instance.experience))
             messages.success(request, 'Experience successfully added')
-            if not form.instance.brief:
-                return redirect('/experiences/{0}/brief/'.format(form.instance.id))
+            return redirect(reverse('experience', args=(new_experience.id,)))
         else:
-            messages.error(request, 'Form was not properly filled out')
-            return redirect('/{0}/'.format(request.user.id), {'form': form})
-        return redirect('/experiences/{0}/'.format(form.instance.id))
+            messages.error(request, 'There was an error in saving your new experience')
+    else:
+        form = ExperienceForm()
+    return render(request, 'experiences/create.html', {'form': form})
 
 
 def index(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
+    if experience.is_public == False:
+        if request.user not in experience.explorers.all():
+            raise PermissionDenied
     if experience.is_comrade(request):
         comrade = True
     else:
@@ -58,12 +64,15 @@ def edit(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if experience.is_comrade(request):
         if request.method == 'POST':
-            form = ExperienceForm(request.POST, instance=experience)
+            form = ExperienceForm(request.POST, instance=experience, request=request)
             if form.is_valid():
                 if form.cleaned_data['make_feature']:
                     request.user.featured_experience = form.instance
                     request.user.save()
                     messages.success(request, 'Your featured experience is now {0}'.format(form.instance))
+                if 'is_public' in request.POST:
+                    if experience.author != request.user:
+                        raise PermissionDenied
                 form.save()
                 messages.success(request, 'Experience has been successfully edited')
                 return redirect(reverse('journey', args=(request.user.id,)))

@@ -1,0 +1,35 @@
+{% extends "experiences/base.html" %}
+
+{% block content %}
+    <h1>New Experience</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="formatted_input">
+            Title
+            <br />
+            {{ form.experience }}
+        </div>
+        <div class="formatted_input">
+            Brief (optional)
+            <br />
+            {{ form.brief }}
+        </div>
+        <div class="formatted_input">
+            Status (optional)
+            <br />
+            {{ form.status }}
+        </div>
+        <div class="formatted_input">
+            Make this your featured experience?
+            {{ form.make_feature }}
+            <br />
+            <span class="smaller_font">{{ form.make_feature.help_text }}</span>
+        </div>
+        <div class="formatted_input">
+            Public? {{ form.is_public }}
+            <br />
+            <span class="smaller_font">{{ form.is_public.help_text}}</span>
+        </div>
+        <input type="submit" value="Save" />
+    </form>
+{% endblock content %}

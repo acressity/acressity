@@ -18,4 +18,5 @@ urlpatterns = patterns(
     url(r'^(?P<experience_id>\d+)/gallery/$', 'gallery', name='exp-gallery-list'),
     url(r'^(?P<experience_id>\d+)/upload_photo/$', 'upload_photo'),
     url(r'^all/$', ListView.as_view(queryset=Experience.objects.all(), context_object_name='all_experiences', template_name='experiences/all.html'), name="all_experiences"),
+    url(r'^create_experience/$', 'create', name='create_experience'),
 )

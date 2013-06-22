@@ -1,11 +1,3 @@
-from explorers.forms import RegistrationForm, ExplorerForm
-from explorers.models import Request
-from experiences.models import Experience, FeaturedExperience
-from photologue.models import Gallery, Photo
-from experiences.forms import ExperienceForm
-from narratives.models import Narrative
-from support.models import Cheer
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -18,23 +10,30 @@ from django.contrib.auth import logout
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 
-# Dajaxice tutorial:
-
-from explorers.forms import ContactForm
-
-
-def contact_form(request):
-    return render(request, "explorers/contact_form.html", {'form': ContactForm()})
+from explorers.forms import RegistrationForm, ExplorerForm
+from explorers.models import Request
+from experiences.models import Experience, FeaturedExperience
+from photologue.models import Gallery, Photo
+from experiences.forms import ExperienceForm
+from narratives.models import Narrative
+from support.models import Cheer
 
 
 def journey(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     owner = explorer == request.user
     if owner:
-        form = ExperienceForm()
+        experiences = explorer.ordered_experiences()
     else:
-        form = None
-    return render(request, 'explorers/index.html', {'explorer': explorer, 'owner': owner, 'form': form})
+        # Damn, this is hacky...
+        # To start fixing this ugliness, must first have ordered_experiences() return a queryset instead of list
+        experiences = []
+        for experience in explorer.ordered_experiences():
+            if experience.is_public:
+                experiences += [experience]
+            elif request.user.is_authenticated() and experience in request.user.experiences.all():
+                experiences += [experience]
+    return render(request, 'explorers/index.html', {'explorer': explorer, 'experiences': experiences, 'owner': owner})
 
 
 @login_required

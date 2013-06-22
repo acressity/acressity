@@ -30,6 +30,7 @@ class Experience(models.Model):
     brief = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=25, null=True, blank=True)
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)
+    is_public = models.BooleanField(default=True, help_text='Public experiences will be displayed in the default views. Private ones are only seen by yourself and anyone you invite to be a comrade.')
 
     objects = ExperienceManager()
 

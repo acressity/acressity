@@ -58,7 +58,8 @@ class Explorer(AbstractBaseUser):
         return self.__class__.__name__
 
     def ordered_experiences(self):
-        return sorted(self.experiences.exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
+        # Edit this to only run if the explorer has not yet manually selected order (when implemented)
+        return [self.featured_experience] + sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
@@ -72,6 +73,13 @@ class Explorer(AbstractBaseUser):
     def cheerers(self):
         return [c.cheerer for c in self.cheers_for.all()]
 
+    def public_experiences(self):
+        return self.experiences.filter(is_public=True)
+
+    def private_experiences(self):
+        return self.experiences.filter(is_public=False)
+
+    # Don't think this is currently being used...phasing it out in favor of returning all experiences in a sorted fashion
     def shelved_experiences(self):
         return sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 

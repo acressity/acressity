@@ -1,29 +1,46 @@
-{% extends "experiences/exp_base.html" %}
+{% extends "experiences/base.html" %}
 
 {% block content %}
 	<h2>Editing <em>{{ experience }}</em></h2>
 	<form action="" method="POST" class="full_width">
 		{% csrf_token %}
-		<label for="id_experience">
-			<h3>Name</h3>
-		</label>
-		<input type="text" value="{{ experience|escape }}" name="experience" id="id_experience" class="larger" />
-		<p>{{ form.featured_photo }}</p>
-		<label for="id_brief">
-			<span title="About the experience"><h3>Brief</h3></span>
-		</label>
-		{{ form.brief|escape }}
-		<label for="id_status">
-			<h3>Status</h3>
-		</label>
-		{{ form.status|escape }}
-		{% if not experience.is_feature %}
-			<label for="id_make_feature">
-				<p><strong>Feature this experience?</strong>
+		<div class="formatted_input">
+			<label for="id_experience">
+				<h3>Title</h3>
 			</label>
-			{{ form.make_feature }}
-			</p>
-		{% endif %}
+			{{ form.experience }}
+		</div>
+		<p>{{ form.featured_photo }}</p>
+		<div class="formatted_input">
+			<label for="id_brief">
+				<span title="About the experience"><h3>Brief</h3></span>
+			</label>
+			{{ form.brief|escape }}
+		</div>
+		<div class="formatted_input">
+			<label for="id_status">
+				<h3>Status</h3>
+			</label>
+			{{ form.status|escape }}
+		</div>
+		{% ifnotequal experience user.featured_experience %}
+			<div class="formatted_input">
+				<label for="id_make_feature">
+					<strong>Make this your featured experience?</strong>
+				</label>
+				{{ form.make_feature }}
+				<br />
+				<span class="smaller_font">{{ form.make_feature.help_text }}</span>
+			</div>
+		{% endifnotequal %}
+		{% ifequal user experience.author %}
+			{# Will need to be more secure... Easy to change POST information #}
+			<div class="formatted_input">
+				Public? {{ form.is_public }}
+				<br />
+				<span class="smaller_font">{{ form.is_public.help_text }}</span>
+			</div>
+		{% endifequal %}
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
 		<input type="hidden" name="explorer_id" value="{{ experience.explorer.id }}"/>
 		<input type="submit" value="Update" />
