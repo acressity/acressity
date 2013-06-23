@@ -2,13 +2,14 @@
 
 {% block content %}
 	<h2>All Experiences</h2>
-	<h3>There are {{ all_experiences.count }} experiences at the moment</h3>
-	{% for experience in all_experiences %}
+	<h3>There are {{ all_public_experiences.count }} public experiences at the moment</h3>
+	{% for experience in all_public_experiences %}
 		<div class="experience_dash">
 			<div class="left">
 				{% if experience.gallery.featured_photo %}
-					<a href="{{ experience.gallery.featured_photo.get_absolute_url }}" title="{{ experience.gallery.featured_photo.title }}"><img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="{{ experience.gallery.featured_photo.title }}"/></a>
-					<br />
+					<div class="featured_photo">
+						<a href="{{ experience.gallery.featured_photo.get_absolute_url }}" title="{{ experience.gallery.featured_photo.title }}"><img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="{{ experience.gallery.featured_photo.title }}"/></a>
+					</div>
 				{% endif %}
 				<a href="{% url 'experiences.views.index' experience.id %}" title="Explore this Experience"><h3>{{ experience.experience|escape }}</h3></a>
 				{% if experience.author.gallery.featured_photo %}

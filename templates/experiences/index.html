@@ -5,7 +5,7 @@
 {% block content %}
 	<h2>{{ experience|escape }}</h2>
 	{% if experience.gallery.featured_photo %}
-		<div class="photo_feature">
+		<div class="featured_photo">
 			<a href="{% url 'pl-gallery' experience.gallery.id %}">
 				<img src="{{ experience.gallery.featured_photo.get_display_url }}" />
 			</a>

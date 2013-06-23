@@ -33,7 +33,9 @@
 	{% for explorer, experience in explorer_experience %}
 		<div class="object_item experience_item">
 			{% if experience.gallery.featured_photo %}
-				<img src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+				<div class="featured_photo">
+					<img src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+				</div>
 			{% endif %}
 			<a href="/experiences/{{ experience.id }}"><h3>{{ experience }}</h3></a> by {{ explorer.get_full_name }}
 		</div>

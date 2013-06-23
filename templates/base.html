@@ -146,7 +146,9 @@ anything lacking in efficiency or if you have any suggestions.
 								<div class="explorer_item">
 									<div class="photo_feature">
 										{% if request.user.gallery.featured_photo %}
-											<a href="{% url 'pl-gallery' request.user.gallery.id %}"><img src="{{ request.user.gallery.featured_photo.get_thumbnail_url }}" /></a>
+											<div class="featured_photo">	
+												<a href="{% url 'pl-gallery' request.user.gallery.id %}"><img src="{{ request.user.gallery.featured_photo.get_thumbnail_url }}" /></a>
+											</div>
 										{% else %}
 											<a href="/photologue/gallery/{{ request.user.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/user-icon.png" title="Upload photo for your story" /></a>
 										{% endif %}
