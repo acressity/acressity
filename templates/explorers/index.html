@@ -1,6 +1,5 @@
 {% extends "explorers/base.html" %}
 
-{% load comments %}
 {% load explorers_extras %}
 
 {% block content %}
@@ -31,89 +30,7 @@
 				<h2>Experiences</h2>
 			{% endifequal %}
 		{% endif %}
-		<div class="experience_dash">
-			<div class="left">
-				<a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
-					{% if experience.gallery.latest_photo %}
-						<div class="featured_photo">
-							<img src="{{ experience.gallery.latest_photo.get_thumbnail_url }}" title="Most recent photo - {{ experience.gallery.latest_photo.title }}" />
-						</div>
-					{% endif %}
-					<h3>{{ experience|escape }}</h3>
-				</a>
-				{% if experience.status %}
-					<p>
-						{{ experience.status }}
-					</p>
-				{% endif %}
-				{% if not experience.is_public %}
-					<h3 class="smaller_font">Private experience</h3>
-				{% endif %}
-
-				{# Options for experiences only available to those who are logged in #}
-				{% if user.is_authenticated %}
-					<div class="option_list">
-						{% if user.is_authenticated %}
-							{% if user in experience.explorers.all %}
-								<a href="/experiences/{{ experience.id }}/narratives/create/"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
-								<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
-								<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
-								{% if experience.gallery %}
-									<a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
-								{% endif %}
-								{% ifequal user experience.author %}
-									<a href="{% url 'experiences.views.invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
-									<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
-								{% endifequal %}
-							{% endif %}
-							<div class="comment">
-								{% get_comment_form for experience as exp_comment_form %}
-								<form action="{% comment_form_target %}" method="POST">
-									{% csrf_token %}
-									{{ exp_comment_form.comment }}
-									{{ exp_comment_form.honeypot }}
-									{{ exp_comment_form.object_pk }}
-									{{ exp_comment_form.content_type }}
-								    {{ exp_comment_form.timestamp }}
-								    {{ exp_comment_form.security_hash }}
-									<br />
-									<input type="hidden" name="next" value="/experiences/{{ experience.id }}/">
-									<input type="submit" value="Submit Note" />
-								</form>
-							</div>
-						{% endif %}
-					</div>
-				{% endif %}
-			</div>
-			<div class="right">
-				{# Section for latest activity #}
-				{% if experience.latest_narrative %}
-					{% with experience.latest_narrative as latest %}
-						<h4 id="expand_explorer_latest_narrative" title="Click to expand/contract narrative" onclick="toggle_div('experience_{{ experience.id }}_latest_narrative');">
-							Latest Narrative 
-							<img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="experience_{{ experience.id }}_latest_narrative_toggle_icon" />
-						</h4>
-						<div class="latest_narrative" id="experience_{{ experience.id }}_latest_narrative">
-							<strong>{{ latest }}</strong>
-							<p>
-						    	{{ latest.narrative|linebreaks|escape }}
-						    </p>
-						    <p>
-						    	By {{ latest.author }}
-						    </p>
-						    <p>
-						    	{{ latest.date_created|timesince }} ago
-						    </p>
-						    {% ifequal latest.author user %} 
-						    	<div class="option_list">
-						    		<a href="{% url 'narratives.views.edit' latest.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" class="option_icon" title="Edit this narrative" /></a>
-						    	</div>
-						    {% endifequal %}
-						</div>
-					{% endwith %}
-				{% endif %}
-			</div>
-		</div>
+		{% include "experiences/dash_snippet.html" %}
 		{% if forloop.first %}
 			{% if not forloop.last %}
 				{% ifequal experience explorer.featured_experience %}

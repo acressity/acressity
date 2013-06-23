@@ -169,12 +169,12 @@ def invite(request, experience_id):
 
 
 def featured(request):
-    explorer_experience = []
+    # explorer_experience = []
     featured_experiences = FeaturedExperience.objects.get_random(5)
-    for experience in featured_experiences:
-        explorer = experience.experience.author
-        explorer_experience.append((explorer, experience))
-    return render(request, 'experiences/featured.html', {'explorer_experience': explorer_experience})
+    # for experience in featured_experiences:
+    #     explorer = experience.experience.author
+    #     explorer_experience.append((explorer, experience))
+    return render(request, 'experiences/featured.html', {'featured_experiences': featured_experiences})
 
 
 def gallery(request, experience_id):

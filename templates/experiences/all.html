@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>All Experiences</h2>
-	<h3>There are {{ all_public_experiences.count }} public experiences at the moment</h3>
+	<h2>All Public Experiences &#8212; {{ all_public_experiences.count }} at the moment</h2>
 	{% for experience in all_public_experiences %}
+		{% include "experiences/dash_snippet.html" %}
+		{% comment %}
 		<div class="experience_dash">
 			<div class="left">
 				{% if experience.gallery.featured_photo %}
@@ -19,15 +20,8 @@
 				By: <a href="{% url 'explorers.views.story' experience.author.id %}" title="View this explorer's page">{{ experience.author.get_full_name }}</a>
 			</div>
 			<div class="right">
-				{% comment %}
-				{% if user.is_authenticated and user not in experience.explorers.all %}
-					<div id="hurrah_{{ experience.id }}_errors">
-						{# Place for errors returned from ajax callback function #}
-					</div>
-					<input type="button" name="hurrah_button" id="hurrah_{{ experience.id }}_button" value="Hurrah!" onclick="hurrah({{ experience.id }});" />
-				{% endif %}
-				{% endcomment %}
 			</div>
 		</div>
+		{% endcomment %}
 	{% endfor %}
 {% endblock content %}

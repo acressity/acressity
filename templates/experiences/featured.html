@@ -2,14 +2,22 @@
 
 {% block content %}
 	<h2>Featured Experiences by Explorer:</h2>
-	{% for explorer, experience in explorer_experience %}
-        <div class="experience_item">
-            {% if experience.experience.gallery.featured_photo %}
-                <img src="{{ experience.experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.experience.gallery.featured_photo.title }}"/>
-            {% endif %}
-    		<a href="{% url 'experiences.views.index' experience.experience.id %}"><h3>{{ experience }}</h3></a>
-    		<br />
-    		By <a href="{% url 'journey' explorer.id %}">{{ explorer.get_full_name }}</a>
+	{% for experience in featured_experiences %}
+        {% comment %}
+            I would like to include the experience dash html snippet here, but the {{ experience }} tag being used wouldn't apply 
+        {% endcomment %}
+        <div class="experience_dash">
+            <div class="left">
+                {% if experience.gallery.featured_photo %}
+                    <img src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+                {% endif %}
+        		<a href="{% url 'experiences.views.index' experience.experience.id %}"><h3>{{ experience }}</h3></a>
+        		<br />
+        		By <a href="{% url 'journey' experience.experience.author.id %}">{{ experience.experience.author.get_full_name }}</a>
+            </div>
+            <div class="right">
+                {{ experience.experience.latest_narrative.taste }}
+            </div>
         </div>
 	{% endfor %}
 {% endblock content %}

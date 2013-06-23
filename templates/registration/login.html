@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Log in:</h2>
-	<br />
+	<h1>Log in</h1>
 	{% if form.errors %}
-		<p class="error">Whoops, looks like there's an error with either trailname or password</p>
+		<p class="error">Whoops, looks like there's an error with either your trailname or password</p>
 	{% endif %}
-
 	<form action="" method="POST">
 		{% csrf_token %}
 		<label for="username">Trailname:</label>
@@ -20,4 +18,5 @@
 		<input type="submit" value="Log In" />
 		<input type="hidden" name="next" value="{% url 'my_journey' %}" />
 	</form>
+	<a href="{% url 'reset_password' %}">Forgot password?</a>
 {% endblock content %}
