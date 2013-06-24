@@ -3,7 +3,7 @@
 {% block content %}
 	<blockquote>
 		<p>
-			This site was originally launched as an individual project named <a href="http://www.interpopulus.com" title="Visit the ancestral website" target="blank">Interpopulus</a> by <a href="/explorers/1" title="Visit Andrew's current Journey">me</a>. Feeling the urge to set out upon broadening my understanding of the world and expand my comfort zone by embracing a variety of diverse life experiences, I composed a short list of experiences.
+			This site was originally launched as an individual project named <a href="http://www.interpopulus.com" title="Visit the ancestral website" target="blank">Interpopulus</a> by <a href="{% url 'journey' 1 %}" title="Visit Andrew's current Journey">me</a>. Feeling the urge to set out upon broadening my understanding of the world and expand my comfort zone by embracing a variety of diverse life experiences, I composed a short list of experiences.
 		</p>
 		<p>
 			Specifically, Interpopulus began as an experiment to see how publicizing certain aspirations, hopes, and dreams online could facilitate the experience.
@@ -14,6 +14,6 @@
 		<p>
 			My hope is that you find this web application useful in facilitating your pursuits. I wish you the best with your journey, whether or not you immortalize any of your experiences within these pages.
 		</p>
-		<span class="author">-Andrew Gaines</span2>
+		<span class="author">-<a href="{% url 'journey' 1 %}">Andrew Gaines</a></span2>
 	</blockquote>
 {% endblock content %}

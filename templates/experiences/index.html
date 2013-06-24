@@ -81,7 +81,7 @@
 								{% if narrative.category %}
 									<p>{{ narrative.category }}</p>
 								{% endif %}
-								{{ narrative.date_created|timesince }}
+								{{ narrative.date_created|timesince }} ago
 								<p>
 									By <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a>
 								</p>

@@ -16,17 +16,24 @@
 {% block content %}
 	<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
 		{% csrf_token %}
-		<h2>New narrative for</h2>
-		{{ form.experience }}
+		<div class="formatted_input">
+			<h2>New narrative for</h2>
+			{{ form.experience }}
+		</div>
 		{# {{ form.date_created }} #}
-		<h3><label for="id_narrative">Narrative</label></h3>
-		{{ form.narrative }}
-		<h3><label for="id_title">Title (optional)</label></h3>
-		{{ form.title }}
-		<h3><label for="id_category">Categorize (optional)</label></h3>
-		{{ form.category }}
+		<div class="formatted_input">
+			<h3><label for="id_narrative">Narrative</label></h3>
+			{{ form.narrative }}
+		</div>
+		<div class="formatted_input">
+			<h3><label for="id_title">Title (optional)</label></h3>
+			{{ form.title }}
+		</div>
+		<div class="formatted_input">
+			<h3><label for="id_category">Categorize (optional)</label></h3>
+			{{ form.category }}
+		</div>
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
-		<br />
 		<input type="submit" value="Add narrative" />
 	</form>
 {% endblock content %}
