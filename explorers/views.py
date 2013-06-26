@@ -128,6 +128,12 @@ def cheerers(request, explorer_id):
     return render(request, 'explorers/cheerers.html', {'explorer': explorer})
 
 
+# I'm going to get a generic view serving this sometime...
+def tracking_experiences(request, explorer_id):
+    tracking_experiences = request.user.tracking_experiences.all()
+    return render(request, 'explorers/tracking_experiences.html', {'tracking_experiences': tracking_experiences})
+
+
 # This is to redirect user to their journey if the generic '/journey' url is called
 @login_required
 def explorer_journey(request):

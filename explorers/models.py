@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class ExplorerManager(BaseUserManager):
+    # Following is currently not being used
     def create_user(self, first_name, last_name, trailname, password):
         if not trailname:
             # Make unique trailname, as close to the user's real name as possible
@@ -44,6 +45,7 @@ class Explorer(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
+    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers')
     featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience')  # Consider altering this to keep from having no experience featured...?
 
     objects = ExplorerManager()

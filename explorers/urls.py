@@ -19,6 +19,7 @@ urlpatterns = patterns(
     url(r'^(?P<explorer_id>\d+)/cheer/$', 'cheer'),
     url(r'^(?P<explorer_id>\d+)/cheering_for/$', 'cheering_for'),
     url(r'^(?P<explorer_id>\d+)/cheerers/$', 'cheerers'),
+    url(r'^(?P<explorer_id>\d+)/tracking_experiences/$', 'tracking_experiences', name='tracking_experiences'),
     # Private functions, doesn't need explorer_id in url for others to see. More secure this way, I believe
     url(r'^change_password/$', 'change_password', name='change_password'),
 )

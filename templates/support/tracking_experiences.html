@@ -1,0 +1,11 @@
+{% extends "explorers/base.html" %}
+
+{% block content %}
+    <h1>Experiences {{ user }} is Tracking</h1>
+    {% for experience in tracking_experiences %}
+        {% include "experiences/dash_snippet.html" %}
+        <form action="{% url 'untrack_experience' experience.id %}" method="POST">
+            <input type="submit" value="Untrack" title="Untrack {{ experience }}" />
+        </form>
+    {% endfor %}
+{% endblock content %}

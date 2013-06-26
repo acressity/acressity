@@ -169,7 +169,7 @@ def invite(request, experience_id):
 
 
 def featured(request):
-    # explorer_experience = []
+    # I should export this to a generic view...
     featured_experiences = FeaturedExperience.objects.get_random(5)
     # for experience in featured_experiences:
     #     explorer = experience.experience.author

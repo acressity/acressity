@@ -139,13 +139,10 @@ IMAGE_FILTERS_HELP_TEXT = _('Chain multiple filters using the following pattern 
 class Gallery(models.Model):
     date_added = models.DateTimeField(_('date published'), default=datetime.now)
     title = models.CharField(_('title'), max_length=75, unique=False)
-    title_slug = models.SlugField(_('title slug'), unique=False,
-                                  help_text=_('A "slug" is a unique URL-friendly title for an object.'))
+    title_slug = models.SlugField(_('title slug'), unique=False, help_text=_('A "slug" is a unique URL-friendly title for an object.'))
     description = models.TextField(_('description'), blank=True)
-    is_public = models.BooleanField(_('is public'), default=True,
-                                    help_text=_('Public galleries will be displayed in the default views.'))
-    photos = models.ManyToManyField('Photo', related_name='galleries', verbose_name=_('photos'),
-                                    null=True, blank=True)
+    is_public = models.BooleanField(_('is public'), default=True, help_text=_('Public galleries will be displayed in the default views.'))
+    photos = models.ManyToManyField('Photo', related_name='galleries', verbose_name=_('photos'), null=True, blank=True)
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))
     # Every gallery is owned by an explorer.
     # For purposes of universal photo upload script

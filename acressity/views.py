@@ -34,7 +34,3 @@ def journey_by_trailname(request, trailname):
     # Pathetically primitive search algorithm...of sorts
     explorer = get_object_or_404(get_user_model(), trailname=trailname)
     return redirect(reverse('journey', args=(explorer.id,)))
-
-
-def journey(request, explorer_id):
-    return HttpResponse('This form of linking to explorer has been deprecated')

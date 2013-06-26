@@ -78,6 +78,9 @@ anything lacking in efficiency or if you have any suggestions.
 							<li><a href="{% url 'experiences.views.featured' %}">Featured Experiences</a></li>
 
 							{% if request.user.is_authenticated %}
+
+								<li><a href="{% url 'tracking_experiences' user.id %}">Tracking Experiences</a></li>
+
 								{% for experience in request.user.top_five %}
 			        				<li><a href="{% url 'experiences.views.index' experience.id %}">
 			        					{% if experience.gallery.featured_photo %}
@@ -100,10 +103,10 @@ anything lacking in efficiency or if you have any suggestions.
 											<a href="{% url 'journey' request.user.id %}">Your Journey</a>
 										</li>
 										<li>
-											<a href="{% url 'explorers.views.board' request.user.id %}">Bulletin Board</a>
+											<a href="{% url 'explorers.views.board' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" /> Bulletin Board</a>
 										</li>
 										<li>
-							        		<a href="{% url 'story' request.user.id %}">Your Story</a>
+							        		<a href="{% url 'story' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" /> Your Story</a>
 							        	</li>
 					        			<li><a href="/explorers/logout/">Log Out</a></li>
 			        				</ul>
