@@ -1,0 +1,16 @@
+{# Assumes there is a comment object passed in with name `note` #}
+
+{% with note.content_type.model as model %}
+    <div class="{{ model }}_note">
+        <p>{{ note.comment }}</p>
+        <div class="smaller_font">
+            <p><a href="{% url 'story' note.user_id %}">{{ note.user_name }}</a></p>
+            {% ifnotequal model 'explorer'  %}
+                <p>
+                     Regarding <a href="{% url note.content_type.model note.content_object.id %}">{{ note.content_object }}</a>
+                </p>
+            {% endifnotequal %}
+            {{ note.submit_date|timesince }} ago
+        </div>
+    </div>
+{% endwith %}

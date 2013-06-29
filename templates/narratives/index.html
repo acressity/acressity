@@ -49,12 +49,8 @@
 		<h4 title="Click to see comments" onclick="toggle_div('narr_comment_list');">{{ narr_comment_count }} note{{ narr_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narr_comment_list_toggle_icon" /></h4>
 		<div class="comment_list" id="narr_comment_list" style="display: none;">
 			{% get_comment_list for narrative as narr_comment_list %}
-			{% for comment in narr_comment_list reversed %}
-				<div class="narrative_note">
-					<a href="{% url 'journey' comment.user.id %}" title="Visit journey for {{ comment.user.get_full_name }}">{{ comment.user.get_full_name }}</a> commented:
-					<br />
-					<em>{{ comment.comment|escape }}</em>
-				</div>
+			{% for note in narr_comment_list reversed %}
+				{% include "support/comment_snippet.html" %}
 			{% endfor %}
 		</div>
 	{% endif %}

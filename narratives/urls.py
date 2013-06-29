@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns(
     'narratives.views',
     url(r'^$', 'index', name='experience_homepage'),
-    url(r'^(?P<narrative_id>\d+)/$', 'index'),
+    url(r'^(?P<narrative_id>\d+)/$', 'index', name='narrative'),
     url(r'^create/$', 'create'),
     url(r'^edit/(?P<narrative_id>\d+)/$', 'edit'),
     url(r'^(?P<narrative_id>\d+)/delete/$', 'delete'),

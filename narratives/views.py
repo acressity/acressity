@@ -1,13 +1,12 @@
-from narratives.models import Narrative
-from narratives.forms import NarrativeForm
-from experiences.models import Experience
-from photologue.models import Gallery
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 
+from narratives.models import Narrative
+from narratives.forms import NarrativeForm
+from experiences.models import Experience
+from photologue.models import Gallery
 
 def index(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)

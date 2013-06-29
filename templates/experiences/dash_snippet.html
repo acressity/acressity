@@ -68,25 +68,25 @@
     <div class="right">
         {# Section for latest activity #}
         {% if experience.latest_narrative %}
-            {% with experience.latest_narrative as latest %}
+            {% with experience.latest_narrative as latest_narrative %}
                 <h4 id="expand_explorer_latest_narrative" title="Click to toggle latest narrative" onclick="toggle_div('experience_{{ experience.id }}_latest_narrative');">
                     Latest Narrative 
                     <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="experience_{{ experience.id }}_latest_narrative_toggle_icon" />
                 </h4>
                 <div class="latest_narrative" id="experience_{{ experience.id }}_latest_narrative">
-                    <strong>{{ latest }}</strong>
+                    <a href="{% url 'narrative' latest_narrative.id %}"><strong>{{ latest_narrative }}</strong></a>
                     <p>
-                        {{ latest.narrative|linebreaks|escape }}
+                        {{ latest_narrative.narrative|linebreaks|escape }}
                     </p>
                     <p>
-                        By {{ latest.author }}
+                        By {{ latest_narrative.author }}
                     </p>
                     <p>
-                        {{ latest.date_created|timesince }} ago
+                        {{ latest_narrative.date_created|timesince }} ago
                     </p>
-                    {% ifequal latest.author user %} 
+                    {% ifequal latest_narrative.author user %} 
                         <div class="option_list">
-                            <a href="{% url 'narratives.views.edit' latest.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" class="option_icon" title="Edit this narrative" /></a>
+                            <a href="{% url 'narratives.views.edit' latest_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" class="option_icon" title="Edit this narrative" /></a>
                         </div>
                     {% endifequal %}
                 </div>

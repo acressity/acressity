@@ -11,7 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 
 from explorers.forms import RegistrationForm, ExplorerForm
-from explorers.models import Request
+from support.models import Request
 from experiences.models import Experience, FeaturedExperience
 from photologue.models import Gallery, Photo
 from experiences.forms import ExperienceForm

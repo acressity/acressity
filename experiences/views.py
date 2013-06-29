@@ -13,7 +13,8 @@ from narratives.models import Narrative
 from experiences.forms import ExperienceForm, ExperienceBriefForm
 from narratives.forms import NarrativeForm
 from photologue.models import Gallery
-from explorers.models import Explorer, Request
+from explorers.models import Explorer
+from support.models import Request
 
 
 @login_required

@@ -38,3 +38,14 @@ class Hurrah(models.Model):
 
     def __unicode__(self):
         return 'hurrah'
+
+
+# To be modified to a class that will be neutral to whether the request is by
+# the current owner/author and the recruit
+class Request(models.Model):
+    author = models.ForeignKey(get_user_model(), related_name='experience_author')
+    recruit = models.ForeignKey(get_user_model(), related_name='experience_recruit')
+    experience = models.ForeignKey(Experience)
+
+    def __unicode__(self):
+        return '{0} invitation'.format(self.experience)

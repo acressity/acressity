@@ -91,14 +91,3 @@ class Explorer(AbstractBaseUser):
     def latest_narrative(self):
         if self.narratives.exists():
             return self.narratives.latest('date_created')
-
-
-# To be modified to a class that will be neutral to whether the request is by
-# the current owner/author and the recruit
-class Request(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_author')
-    recruit = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_recruit')
-    experience = models.ForeignKey(Experience)
-
-    def __unicode__(self):
-        return '{0} invitation'.format(self.experience)

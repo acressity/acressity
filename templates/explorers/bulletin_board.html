@@ -29,37 +29,21 @@
 			{% endfor %}
 		{% endif %}
 		{% if eo_notes %}
-			<h2>Your Personal Notes:</h2>
-			{% for eo_note in eo_notes %}
-				<div class="explorer_note">
-					<p><em>{{ eo_note.comment }}</em></p>
-					-<a href="{% url 'story' eo_note.user_id %}">{{ eo_note.user_name }}</a>
-					<p>{{ eo_note.submit_date }}</p>
-				</div>
+			<h2>Your Personal Notes</h2>
+			{% for note in eo_notes %}
+				{% include "support/comment_snippet.html" %}
 			{% endfor %}
 		{% endif %}
 		{% if ei_notes %}
-			<h2>Experience Notes:</h2>
-			{% for ei_note in ei_notes %}
-				<div class="experience_note">
-					<p><a href="{% url 'story' ei_note.user_id %}">{{ ei_note.user_name }}</a>:</p>
-					<p>{{ ei_note.comment }}</p>
-					Regarding <a href="{% url 'experiences.views.index' ei_note.content_object.id %}">{{ ei_note.content_object }}</a>
-					<br />
-					{{ ei_note.submit_date }}
-				</div>
+			<h2>Experience Notes</h2>
+			{% for note in ei_notes %}
+				{% include "support/comment_snippet.html" %}
 			{% endfor %}
 		{% endif %}
 		{% if nr_notes %}
-			<h2>Narrative Notes:</h2>
-			{% for nr_note in nr_notes %}
-				<div class="narrative_note">
-					<p><a href="{% url 'story' nr_note.user_id %}">{{ nr_note.user_name }}</a>:</p>
-					<p>{{ nr_note.comment }}</p>
-					Regarding <a href="{% url 'narratives.views.index' nr_note.content_object.id %}">{{ nr_note.content_object }}</a>
-					<br />
-					{{ nr_note.submit_date }}
-				</div>
+			<h2>Narrative Notes</h2>
+			{% for note in nr_notes %}
+				{% include "support/comment_snippet.html" %}
 			{% endfor %}
 		{% endif %}
 	</div>
