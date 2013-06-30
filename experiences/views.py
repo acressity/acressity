@@ -157,7 +157,7 @@ def invite(request, experience_id):
             recruit = Explorer.objects.get(pk=int(request.POST.get('explorer_id')))
             experience_request = Request(author=request.user, recruit=recruit, experience=experience)
             experience_request.save()
-            messages.success(request, 'You have invited {0} to be a part of {1}. How nice.'.format(recruit.get_full_name(), experience))
+            messages.success(request, 'You have invited {0} to be a part of {1}.'.format(recruit.get_full_name(), experience))
         elif 'email' in request.POST:
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')

@@ -95,8 +95,10 @@ def board(request, explorer_id):
             invitation_request.experience.explorers.add(explorer)
             invitation_request.experience.gallery.explorers.add(explorer)
             invitation_request.delete()
+            messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos. Enjoy!'.format(invitation_request.experience))
             return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
         elif 'decline' in request.POST:
+            messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
             invitation_request.delete()
     return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'owner': owner})
 

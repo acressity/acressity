@@ -1,4 +1,6 @@
 from django.forms import ModelForm, extras
+from django.contrib.contenttypes.models import ContentType
+
 from photologue.models import Photo, Gallery
 from django import forms
 
@@ -15,7 +17,10 @@ class GalleryForm(ModelForm):
     def __init__(self, gallery, *args, **kwargs):
         # initial = {'experience': ''}
         super(GalleryForm, self).__init__(*args, **kwargs)
-        self.fields['featured_photo'].queryset = gallery.children_photos()
+        if self.instance.content_type == ContentType.objects.get(name='Narrative'):
+            self.fields['featured_photo'].queryset = gallery.photos.all()
+        else:
+            self.fields['featured_photo'].queryset = gallery.children_photos() | gallery.photos.all()
 
     class Meta:
         model = Gallery

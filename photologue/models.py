@@ -205,7 +205,8 @@ class Gallery(models.Model):
 
     def children_photos(self):
         def experience_photos(ei):
-            photo_queryset = self.photos.all()
+            # photo_queryset = self.photos.all()
+            photo_queryset = self.photos.none()
             for narrative in ei.narratives.all():
                 if narrative.gallery:
                     photo_queryset = photo_queryset | narrative.gallery.photos.all()
@@ -223,8 +224,6 @@ class Gallery(models.Model):
             for experience in explorer.experiences.all():
                 if experience.gallery:
                     photo_queryset = photo_queryset | experience.gallery.photos.all()
-                # if experience_photos(experience):
-                #     photos += experience_photos(experience)
             return photo_queryset
 
     def photo_count(self, public=True):
