@@ -8,9 +8,9 @@
 <div class="experience_dash">
     <div class="left">
         <a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
-            {% if experience.gallery.latest_photo %}
+            {% if experience.gallery.featured_photo %}
                 <div class="featured_photo">
-                    <img src="{{ experience.gallery.latest_photo.get_thumbnail_url }}" title="Most recent photo - {{ experience.gallery.latest_photo.title }}" />
+                    <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
                 </div>
             {% endif %}
             <h3>{{ experience|escape }}</h3>
@@ -74,12 +74,17 @@
                     <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="experience_{{ experience.id }}_latest_narrative_toggle_icon" />
                 </h4>
                 <div class="latest_narrative" id="experience_{{ experience.id }}_latest_narrative">
+                    {% if latest_narrative.gallery.featured_photo %}
+                        <div class="featured_photo">
+                            <img src="{{ latest_narrative.gallery.featured_photo.get_thumbnail_url }}" />
+                        </div>
+                    {% endif %}
                     <a href="{% url 'narrative' latest_narrative.id %}"><strong>{{ latest_narrative }}</strong></a>
                     <p>
                         {{ latest_narrative.narrative|linebreaks|escape }}
                     </p>
                     <p>
-                        By {{ latest_narrative.author }}
+                        by {{ latest_narrative.author }}
                     </p>
                     <p>
                         {{ latest_narrative.date_created|timesince }} ago
