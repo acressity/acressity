@@ -36,7 +36,7 @@
 		{% ifequal user experience.author %}
 			{# Will need to be more secure... Easy to change POST information #}
 			<div class="formatted_input">
-				Public? {{ form.is_public }}
+				<strong>Public?</strong> {{ form.is_public }}
 				<br />
 				<span class="smaller_font">{{ form.is_public.help_text }}</span>
 			</div>

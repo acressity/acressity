@@ -8,7 +8,7 @@ from explorers.models import Explorer
 
 
 class ExperienceForm(ModelForm):
-    experience = forms.CharField(widget=forms.TextInput(attrs={'onclick': 'setUp(this);', 'class': 'larger'}), max_length=200)
+    experience = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger'}), max_length=200)
     make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     # explorers = forms.ModelMultipleChoiceField(queryset=Explorer.objects.all())
 
