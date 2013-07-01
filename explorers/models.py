@@ -61,7 +61,7 @@ class Explorer(AbstractBaseUser):
 
     def ordered_experiences(self):
         # Edit this to only run if the explorer has not yet manually selected order (when implemented)
-        return [self.featured_experience] + sorted(self.experiences.exclude(experience=self.featured_experience), key=lambda a: a.latest_narrative().date_created, reverse=True)  # + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
+        return [self.featured_experience] + sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
