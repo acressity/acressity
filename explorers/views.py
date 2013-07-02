@@ -156,7 +156,7 @@ def new_explorer(request):
             explorer = authenticate(username=form.cleaned_data['trailname'], password=form.cleaned_data['password1'])
             # Log them in
             login(request, explorer)
-            if request.POST['experience']:
+            if request.POST.get('experience'):
                 # Save their experience
                 first_experience = Experience(experience=request.POST['experience'], author=explorer)
                 first_experience.save()
@@ -172,7 +172,8 @@ def new_explorer(request):
             explorer.save()
             # Send them on introductory tour
             return redirect(reverse('welcome'))
-
+        else:
+            return HttpResponse(form.errors)
             # Welcome the new explorer
             # messages.success(request, 'Go on, your journey awaits!')
     else:

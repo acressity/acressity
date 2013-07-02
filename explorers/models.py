@@ -45,7 +45,7 @@ class Explorer(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
-    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers')
+    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers', blank=True, null=True)
     featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience')  # Consider altering this to keep from having no experience featured...?
 
     objects = ExplorerManager()
