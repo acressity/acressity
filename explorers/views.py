@@ -173,7 +173,7 @@ def new_explorer(request):
             # Send them on introductory tour
             return redirect(reverse('welcome'))
         else:
-            return HttpResponse(form.errors)
+            messages.error(request, 'There was an issue processing your registration... The issue will be resolved soon.')
             # Welcome the new explorer
             # messages.success(request, 'Go on, your journey awaits!')
     else:
