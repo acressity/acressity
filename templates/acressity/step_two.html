@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>You have begun a new chapter of your journey by adding the experience</h2>
-	<h1><em>{{ experience }}</em></h1>
+	<h2>New experience added to your journey</h2>
+	<h1 class="align_center"><em>{{ experience }}</em></h1>
 	<div class="featured_photo">
 		<img src="{{ STATIC_URL }}img/taking_off.jpg" alt="Taking Off" title="Taking Off" />
 		<br />
 		<span class="photo_caption">Spread your wings</span>
 	</div>
 	<h3>
-		Be it the conquest of a fear, achievement of a dream, creation of an art, or any number of other motivators, set out on your experience with the understanding of travel into a previously untouched domain of life being it's own reward.
+		You have added a new chapter of a book which has its pages written upon this site, personally for you. Create narratives to track your movement within this experience, publish photos regarding the experience, and share it with others or make it a private venture for yourself.
 	</h3>
-	<form action="/explorers/new_explorer/" method="POST">
+	<form action="{% url 'register' %}" method="POST">
 		{% csrf_token %}
 		<input type="hidden" name="experience" id="experience" value="{{ experience }}" />
 		<input type="hidden" name="initial" />

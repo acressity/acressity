@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>New Experience: <em>{{ experience }}</em></h2>
+	<h2><em>{{ experience }}</em></h2>
 	<p>
-		<h3>Create a personal journey of your own to track and share your progress with your experiences.</h3>
+		<h3>Provide some initial information for the initialization of your journey</h3>
 	</p>
 	{{ form.non_field_errors }}
 	<form action="" method="POST">
@@ -42,11 +42,11 @@
 				{{ form.email }}
 			</p>
 			<div class="smaller_font">
-				<p id="expand_about_email" onclick="toggle_div('about_email');" title="Click to toggle information concerining collection of email addresses">
+				<p id="expand_about_email" onclick="toggle_div('about_email');" title="Click to toggle information concerning collection of email addresses">
 					<strong>Concerning email</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_email_toggle_icon" />
 				</p>
 				<div id="about_email" style="display: none;">
-					Email adresses are used for nothing more than activating your account and resetting passwords. That's it.
+					{{ form.email.help_text }}
 				</div>
 			</div>
 			{% if form.email.errors %}
@@ -67,14 +67,7 @@
 					<strong>About trailname</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" />
 				</p>
 				<div id="about_trailname" class="toggle_div" style="display: none;">
-					<p>
-						Your trailname a short username designed to describe an aspect of your journey at the moment. Able to be changed. The word trailname is taken from a naming tradition for through-hikers on the American Appalachian Trail.
-					</p>
-					<p>
-						Allows others to find your journey directly by searching:
-						<br />
-						<tt>acressity.com/<em>your_trailname</em></tt>
-					</p>
+					{{ form.trailname.help_text }}
 				</div>
 			</div>
 			{% if form.trailname.errors %}

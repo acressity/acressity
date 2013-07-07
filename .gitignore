@@ -1,10 +1,10 @@
 settings.py
 *.pyc
 static/
-checklist.txt
+TODO
 .sass_cache/
 manage.py
-deployment_procedures.txt
+DEPLOY
 explorers/migrations/
 experiences/migrations/
 photologue/migrations/
