@@ -37,7 +37,6 @@ class Explorer(AbstractBaseUser):
     trailname = models.CharField(max_length=50, unique=True, db_index=True, help_text='A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, each explorer is encouraged to create a trailname that describes an aspect of their journey at the moment. It also allows others to find them by typing acressity.com/`trailname`')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
     brief = models.TextField(null=True, blank=True)
-    # Damn, I was really hoping I wouldn't have to ask for email... But I do need means for resetting passwords and verification; single sign on services aren't all that impressive to me at the moment
     email = models.EmailField(max_length=254, null=False, blank=False, help_text='Email adresses are used for nothing more than resetting passwords. That\'s it. They won\'t even be used for activating accounts unless this is abused.')
     birthdate = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(default=datetime.now)
@@ -46,7 +45,7 @@ class Explorer(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
     tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers', blank=True, null=True)
-    featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience')  # Consider altering this to keep from having no experience featured...?
+    featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience')
 
     objects = ExplorerManager()
 
@@ -61,10 +60,14 @@ class Explorer(AbstractBaseUser):
 
     def ordered_experiences(self):
         from itertools import chain
-        return list(chain(self.experiences.filter(experience=self.featured_experience), self.experiences.exclude(experience=self.featured_experience).order_by('-date_created')))
 
-        # Edit this to only run if the explorer has not yet manually selected order (when implemented)
-        # return [self.featured_experience] + sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
+        def sort_experience(experience):
+            if experience.latest_narrative():
+                return experience.latest_narrative().date_created
+            else:
+                return experience.date_created
+
+        return list(chain(self.experiences.filter(experience=self.featured_experience), sorted(self.experiences.exclude(experience=self.featured_experience).order_by('-date_created'), key=sort_experience, reverse=True)))
 
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
