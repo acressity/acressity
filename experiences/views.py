@@ -190,7 +190,7 @@ def upload_photo(request, experience_id):
         if experience.gallery:
             gallery = experience.gallery
         else:
-            gallery = Gallery(title=experience, content_type=ContentType.objects.get(model='experience'), object_pk=experience.id)
+            gallery = Gallery(title=experience, content_type=ContentType.objects.get(model='experience'), object_pk=experience.id, is_public=experience.is_public)
             gallery.save()
             for explorer in experience.explorers.all():
                 gallery.explorers.add(explorer)
