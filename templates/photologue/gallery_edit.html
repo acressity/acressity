@@ -22,7 +22,7 @@
 	<div class="photo-gallery">
 	    {% for photo, form in photos_forms %}
 		    <div class="gallery_photo_item">
-		    	<div class="left">
+		    	<div class="left featured_photo">
 		        	<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
 		        </div>
 		        <div class="right">
@@ -58,8 +58,8 @@
 				{% endifequal %}
 			    {% for photo in object.children_photos %}
 					<td>
-					    <div class="object_item thirds_item">
-					        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+					    <div class="object_item thirds_item featured_photo">
+					        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" /></a>
 					        <div>
 					        	<h4>{{ photo.title }}</h4>
 					        </div>

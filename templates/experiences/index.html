@@ -32,9 +32,6 @@
 		</tr>
 	</table>
 	<div class="option_list">
-		{% if author %}
-			<a href="{% url 'experiences.views.invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
-		{% endif %}
 		{% if comrade %}
 			<a href="/experiences/{{ experience.id }}/narratives/create/"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
 			<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
@@ -56,6 +53,10 @@
 		{% endif %}
 		{% if experience.gallery %}
 			<a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
+		{% endif %}
+		{% if author %}
+			<a href="{% url 'experiences.views.invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
+			<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
 		{% endif %}
 	</div>
 	{% if experience.brief %}

@@ -22,13 +22,17 @@
         <div class="formatted_input">
             Make this your featured experience?
             {{ form.make_feature }}
-            <br />
-            <span class="smaller_font">{{ form.make_feature.help_text }}</span>
+            <p onclick="toggle_div('about_featured_experience');" class="smaller_font">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_featured_experience_toggle_icon" /></p>
+            <div id="about_featured_experience" style="display: none;">
+                <span class="smaller_font">{{ form.make_feature.help_text }}</span>
+            </div>
         </div>
         <div class="formatted_input">
             Public? {{ form.is_public }}
-            <br />
-            <span class="smaller_font">{{ form.is_public.help_text}}</span>
+            <p onclick="toggle_div('about_public_experiences');" class="smaller_font">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" /></p>
+            <div id="about_public_experiences" style="display: none;">
+                <span class="smaller_font">{{ form.is_public.help_text}}</span>
+            </div>
         </div>
         <input type="submit" value="Save" />
     </form>

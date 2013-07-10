@@ -13,6 +13,8 @@ from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 
 def upload_photo(request, gallery_id):
@@ -25,21 +27,6 @@ def upload_photo(request, gallery_id):
             photo.title_slug = slugify(photo.title)
             photo.is_public = True
             photo.save()
-            # Following was implemented to add photos recursively to parent galleries... Being phased out in favor of Gallery "children_photos()" method
-            #  content_type = ContentType.objects.get(pk=gallery.content_type_id)
-             # if content_type.model == 'narrative':
-            #     for explorer in gallery.narrative.experience.explorers.all():
-            #         explorer.gallery.photos.add(photo)
-            #     gallery.photos.add(photo)
-            #     gallery.narrative.experience.gallery.photos.add(photo)
-            #     gallery.photos.add(photo)
-            # elif content_type.model == 'experience':
-            #     for explorer in gallery.experience.explorers.all():
-            #         explorer.gallery.photos.add(photo)
-            #     gallery.photos.add(photo)
-            # elif content_type.model == 'explorer':
-            #     for explorer in gallery.explorers.all():
-            #         explorer.gallery.photos.add(photo)
             if 'feature' in request.POST.keys():
                 gallery.featured_photo = photo
                 gallery.save()
@@ -51,6 +38,7 @@ def upload_photo(request, gallery_id):
     return render(request, 'photologue/upload_photo.html', {'form': form, 'gallery': gallery})
 
 
+@login_required
 def edit_photo(request, photo_id):
     # return HttpResponse('Thought this wasn\'t needed')
     photo = get_object_or_404(Photo, pk=photo_id)
@@ -65,10 +53,11 @@ def edit_photo(request, photo_id):
     return render(request, 'photologue/gallery_edit.html', {'form': form})
 
 
+@login_required
 def delete_photo(request, photo_id):
     photo = get_object_or_404(Photo, pk=photo_id)
     galleries = [g for g in photo.public_galleries()]
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user == photo.author:
         photo.delete()
     return redirect(reverse('pl-gallery', args=(galleries[0].id,)))
 
@@ -109,13 +98,17 @@ class PhotoYearArchiveView(PhotoDateView, YearArchiveView):
     pass
 
 
-#gallery Views
+# Gallery views
 def gallery_view(request, pk):
     gallery = get_object_or_404(Gallery, pk=pk)
+    if not gallery.is_public:
+        if request.user not in gallery.explorers.all():
+            raise PermissionDenied
     children_photos = gallery.children_photos()
     return render(request, 'photologue/gallery_detail.html', {'children_photos': children_photos, 'object': gallery})
 
 
+@login_required
 def gallery_edit(request, gallery_id):
     gallery = get_object_or_404(Gallery, pk=gallery_id)
     if request.user in gallery.explorers.all():
@@ -138,13 +131,6 @@ def gallery_edit(request, gallery_id):
     else:
         messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
         return render(request, 'acressity/message.html')
-
-
-# def edit_gallery(request, gallery_id):
-#     gallery = get_object_or_404(Gallery, pk=gallery_id)
-#     else:
-#         form = GalleryForm(instance=gallery)
-#     return render(request, 'photologue/gallery_edit.html', {'form': form})
 
 
 class GalleryView(object):

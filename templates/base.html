@@ -51,22 +51,30 @@ anything lacking in efficiency or if you have any suggestions.
 			        			 <li><a href="{% url 'glossary' %}">Glossary</a></li>
 			        		</ul>
 			        	</li>
-						{% if request.user.is_authenticated %}
-				        	<li><a href="{% if request.user.is_authenticated %}{% url 'journey' request.user.id %}{% endif %}">Journey</a>
-				        		<ul class="sub_menu">
 
-				        			<li><a href="{% url 'journey' request.user.id %}">Your Journey</a></li>
+			        	<li>
+			        		{# Syntax highlighting for following a little screwy, but does the job properly #}
+			        		<a
+				        		{% if user.is_authenticated %}
+				        			href="{% url 'journey' user.id %}"
+				        		{% endif %}
+			        		>Journey</a>
+			        		<ul class="sub_menu">
 
-				        			{% if request.user.cheering_for %}
+			        			{% if user.is_authenticated %}
+				        			<li><a href="{% url 'journey' user.id %}">Your Journey</a></li>
+
+				        			{% if user.cheering_for %}
 				        				<li><a href="{% url 'explorers.views.cheering_for' request.user.id %}">Cheering</a></li>
 				        			{% endif %}
+				        		{% endif %}
 
-				        			<li><a href="{% url 'all_explorers' %}">All Journeys</a></li>
+			        			<li><a href="{% url 'all_explorers' %}">All Journeys</a></li>
 
-				        			<li><a href="{% url 'explorers.views.random' %}">Random Journeys</a></li>
-				        		</ul>
-				        	</li>
-						{% endif %}
+			        			<li><a href="{% url 'explorers.views.random' %}">Random Journeys</a></li>
+			        		</ul>
+			        	</li>
+
 			        	<li>
 			        		{% if request.user.is_authenticated %}
 			        			<a href="{% url 'journey' request.user.id %}">

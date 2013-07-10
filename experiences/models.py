@@ -86,6 +86,16 @@ class Experience(models.Model):
         if self.narratives.exists():
             return self.narratives.latest('date_created')
 
+    def save(self, *args, **kw):
+        # Feature for toggling the experience gallery being public with the toggling of experience is_public
+        if self.pk is not None:
+            orig = Experience.objects.get(pk=self.pk)
+            if orig.is_public != self.is_public:
+                if self.gallery:
+                    self.gallery.is_public = self.is_public
+                    self.gallery.save()
+        super(Experience, self).save(*args, **kw)
+
 
 class FeaturedExperience(models.Model):
     experience = models.ForeignKey(Experience)

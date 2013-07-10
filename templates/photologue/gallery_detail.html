@@ -7,7 +7,7 @@
 	<h2>Published {{ object.date_added|date:"l, F jS, Y" }}</h2>
 	<div class="option_list">
 		{% if request.user in object.explorers.all %}
-			<a href="{% url 'photologue.views.upload_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload photo for {{ object.title }}" class="float_left" /></a>
+			<a href="{% url 'photologue.views.upload_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload photo for {{ object.title }}" class="option_icon" /></a>
 			<a href="{% url 'pl-gallery-edit' object.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this Album" class="option_icon" /></a>
 		{% endif %}
 		{% ifequal object.content_type.model 'experience' %}
@@ -29,9 +29,10 @@
 			    {% for photo in object.photos.all %}
 			    	<td>
 					    <div class="object_item thirds_item">
-					    	<div class="photo_feature">
+					    	<div class="featured_photo">
 					        	<a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" /></a>
 					        	{% if photo.title %}
+					        		<br />
 					        		<span class="caption">{{ photo.title }}</span>
 					        	{% endif %}
 					        </div>
