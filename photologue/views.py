@@ -25,7 +25,7 @@ def upload_photo(request, gallery_id):
             photo.author = request.user
             photo.title_slug = slugify(photo.title)
             photo.is_public = True
-            photo.gallery_id = gallery_id
+            photo.gallery = gallery
             photo.save()
             if 'feature' in request.POST.keys():
                 gallery.featured_photo = photo

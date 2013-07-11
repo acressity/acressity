@@ -22,7 +22,7 @@
 		{{ form.caption }}
 		<br />
 		<label for="id_feature">Make this photo the album feature?</label>
-		<input type="checkbox" {% if gallery.photos.all.count < 1 %}checked="checked"{% endif %} name="feature" id="id_feature" />
+		<input type="checkbox" {% if gallery.photos.count < 1 %}checked="checked"{% endif %} name="feature" id="id_feature" />
 		<br />
 		<input type="hidden" name="gallery_id" id="id_gallery_id" value="{{ gallery.id }}" />
 		<input type="submit" value="Upload" />

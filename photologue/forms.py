@@ -8,7 +8,7 @@ from django import forms
 class GalleryPhotoForm(ModelForm):
     class Meta:
         model = Photo
-        exclude = ('title_slug', 'author')
+        exclude = ('title_slug', 'author', 'gallery')
 
 
 class GalleryForm(ModelForm):
