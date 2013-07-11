@@ -17,7 +17,9 @@
             </a>
         {% endif %}
         <div class="gallery_photo">
-            <a href="{{ object.image.url }}"><img src="{{ object.get_display_url }}" alt="{{ object.title }}"/></a>
+            <a href="{{ object.image.url }}">
+                <img src="{{ object.get_display_url }}" alt="{{ object.title }}"/>
+            </a>
             {% if object.caption %}<p>{{ object.caption }}</p>{% endif %}
         </div>
         {% if object.get_previous_in_gallery %}

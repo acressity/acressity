@@ -60,7 +60,7 @@
 				{% endifequal %}
 			    {% for photo in children_photos %}
 					<td>
-					    <div class="object_item thirds_item">
+					    <div class="object_item thirds_item featured_photo">
 					        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
 					    </div>
 					</td>

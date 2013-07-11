@@ -205,7 +205,7 @@ class Gallery(models.Model):
 
     def children_photos(self):
         def experience_photos(ei):
-            # photo_queryset = self.photos.all()
+            # Initialize queryset
             photo_queryset = self.photos.none()
             for narrative in ei.narratives.all():
                 if narrative.gallery:
@@ -219,8 +219,8 @@ class Gallery(models.Model):
             return(experience_photos(experience))
         if self.content_type == ContentType.objects.get(name='Explorer'):
             explorer = ContentType.objects.get(name='Explorer').get_object_for_this_type(pk=self.object_pk)
-
-            photo_queryset = self.photos.all()
+            # Initialize queryset
+            photo_queryset = self.photos.none()
             for experience in explorer.experiences.all():
                 if experience.gallery:
                     photo_queryset = photo_queryset | experience.gallery.photos.all()
