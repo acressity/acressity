@@ -7,7 +7,8 @@ class GalleryAdmin(admin.ModelAdmin):
     list_filter = ['date_added', 'is_public']
     date_hierarchy = 'date_added'
     prepopulated_fields = {'title_slug': ('title',)}
-    filter_horizontal = ('photos',)
+    # Following was causing problems. Not using admin interface atm, so take it out!
+    # filter_horizontal = ('photos',)
 
 
 class PhotoAdmin(admin.ModelAdmin):

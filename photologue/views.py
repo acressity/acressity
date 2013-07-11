@@ -12,7 +12,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
@@ -62,8 +61,16 @@ def delete_photo(request, photo_id):
     return redirect(reverse('pl-gallery', args=(galleries[0].id,)))
 
 
+def photo_view(request, pk):
+    photo = get_object_or_404(Photo, pk=pk)
+    # I'm not sure this is the best thing...
+    if not photo.gallery.is_public:
+        if request.user not in photo.gallery.explorers.all():
+            raise PermissionDenied
+    return render(request, 'photologue/photo_detail.html', {'object': photo})
+
 class PhotoView(object):
-    queryset = Photo.objects.all()  # filter(is_public=True)
+    queryset = Photo.objects.filter(is_public=True)
 
 
 class PhotoListView(PhotoView, ListView):

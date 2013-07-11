@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
 
 from narratives.models import Narrative
 from narratives.forms import NarrativeForm
@@ -10,6 +11,9 @@ from photologue.models import Gallery
 
 def index(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
+    if not narrative.experience.is_public:
+        if request.user not in narrative.experience.explorers.all():
+            raise PermissionDenied
     return render(request, 'narratives/index.html', {'narrative': narrative, 'author': narrative.is_author(request)})
 
 
@@ -66,7 +70,7 @@ def upload_photo(request, narrative_id):
         if narrative.gallery:
             gallery = narrative.gallery
         else:
-            gallery = Gallery(title=narrative.title[:50], content_type=ContentType.objects.get(model='narrative'), object_pk=narrative.id)
+            gallery = Gallery(title=narrative.title[:50], content_type=ContentType.objects.get(model='narrative'), object_pk=narrative.id, is_public=narrative.experience.is_public)
             gallery.save()
             gallery.explorers.add(request.user)
             narrative.gallery = gallery

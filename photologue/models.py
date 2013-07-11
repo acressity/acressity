@@ -75,7 +75,7 @@ IMAGE_FIELD_MAX_LENGTH = getattr(settings, 'PHOTOLOGUE_IMAGE_FIELD_MAX_LENGTH', 
 SAMPLE_IMAGE_PATH = getattr(settings, 'SAMPLE_IMAGE_PATH', os.path.join(os.path.dirname(__file__), 'res', 'sample.jpg'))  # os.path.join(settings.PROJECT_PATH, 'photologue', 'res', 'sample.jpg'
 
 # Modify image file buffer size.
-ImageFile.MAXBLOCK = getattr(settings, 'PHOTOLOGUE_MAXBLOCK', 256 * 2 ** 10)
+ImageFile.MAXBLOCK = getattr(settings, 'PHOTOLOGUE_MAXBLOCK', 512 * 2 ** 10)
 
 # Photologue image path relative to media root
 PHOTOLOGUE_DIR = getattr(settings, 'PHOTOLOGUE_DIR', 'photologue')
@@ -141,14 +141,14 @@ class Gallery(models.Model):
     title = models.CharField(_('title'), max_length=75, unique=False)
     title_slug = models.SlugField(_('title slug'), unique=False, help_text=_('A "slug" is a unique URL-friendly title for an object.'))
     description = models.TextField(_('description'), blank=True)
-    is_public = models.BooleanField(_('is public'), default=True, help_text=_('Public galleries will be displayed in the default views.'))
-    photos = models.ManyToManyField('Photo', related_name='galleries', verbose_name=_('photos'), null=True, blank=True)
+    is_public = models.BooleanField(_('is public'), default=True)
+    # photos = models.ManyToManyField('Photo', related_name='galleries', verbose_name=_('photos'), null=True, blank=True)
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))
     # Every gallery is owned by an explorer.
     # For purposes of universal photo upload script
     # explorer = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='owner')
     explorers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='galleries')
-    featured_photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL)
+    featured_photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL, related_name='gallery_')
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField(_('object ID'), null=True)
 
@@ -553,6 +553,7 @@ class Photo(ImageModel):
                                   help_text=('A "slug" is a unique URL-friendly title for an object.'), blank=True)
     caption = models.TextField(_('caption'), blank=True, null=True)
     date_added = models.DateTimeField(_('date added'), default=datetime.now, editable=False)
+    gallery = models.ForeignKey(Gallery, blank=False, null=False, related_name='photos')
     is_public = models.BooleanField(_('is public'), default=True, help_text=_('Public photographs will be displayed in the default views.'))
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
@@ -579,21 +580,20 @@ class Photo(ImageModel):
     def get_absolute_url(self):
         return reverse('pl-photo', args=[self.id])
 
-    def public_galleries(self):
-        """Return the public galleries to which this photo belongs."""
-        return self.galleries.filter(is_public=True)
+    # Phasing this out, photo no longer in many-to-many relationship
+    # def public_galleries(self):
+    #     """Return the public galleries to which this photo belongs."""
+    #     return self.galleries.filter(is_public=True)
 
     def get_previous_in_gallery(self):
         try:
-            return self.get_previous_by_date_added(galleries__exact=self.galleries.latest(),
-                                                   is_public=True)
+            return self.get_previous_by_date_added(gallery__exact=self.gallery)
         except Photo.DoesNotExist:
             return None
 
     def get_next_in_gallery(self):
         try:
-            return self.get_next_by_date_added(galleries__exact=self.galleries.latest(),
-                                               is_public=True)
+            return self.get_next_by_date_added(gallery__exact=self.gallery)
         except Photo.DoesNotExist:
             return None
 

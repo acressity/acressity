@@ -23,7 +23,6 @@ urlpatterns = patterns(
         GalleryArchiveIndexView.as_view(),
         name='pl-gallery-archive'),
     url(r'^gallery/(?P<gallery_id>\d+)/gallery_edit/$', 'photologue.views.gallery_edit', name='pl-gallery-edit'),
-    # url(r'^gallery/(?P<gallery_id>\d+)/edit_gallery/$', 'photologue.views.edit_gallery'),
     url(r'^gallery/(?P<gallery_id>\d+)/upload_photo/$', 'photologue.views.upload_photo'),
     # Following was photologue written url:
     # url(r'^gallery/(?P<pk>[\-\d\w]+)/$', GalleryDetailView.as_view(), name='pl-gallery'),
@@ -51,9 +50,13 @@ urlpatterns = patterns(
     url(r'^photo/$',
         PhotoArchiveIndexView.as_view(),
         name='pl-photo-archive'),
-
+    # Photologue original
+    # url(r'^photo/(?P<pk>[\-\d\w]+)/$',
+    #     PhotoDetailView.as_view(),
+    #     name='pl-photo'),
+    # User generate to alter behavior
     url(r'^photo/(?P<pk>[\-\d\w]+)/$',
-        PhotoDetailView.as_view(),
+        'photologue.views.photo_view',
         name='pl-photo'),
     url(r'^photo/page/(?P<page>[0-9]+)/$',
         PhotoListView.as_view(),

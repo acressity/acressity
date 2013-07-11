@@ -1,19 +1,12 @@
 {% extends "photologue/root.html" %}
 
 {% load photologue_tags %}
-{% load url from future %}
 
 {% block title %} - {{ object.title }}{% endblock %}
 
 {% block content %}
     <h1>{{ object.title }}</h1>
-    <h2>From Galler{{ object.public_galleries|pluralize:"y,ies" }}
-        {% for gallery in object.public_galleries %}
-            {% if not forloop.last %}
-                <br />
-            {% endif %}
-            <a href="{% url 'pl-gallery' gallery.id %}">{{ gallery.title }}</a>
-        {% endfor %}
+    <h2>From Gallery <a href="{% url 'pl-gallery' object.gallery.id %}">{{ object.gallery.title }}</a>
     </h2>
     <div class="gallery_photo_container">
         {% if object.get_next_in_gallery %}
@@ -36,13 +29,11 @@
         {% endif %}
     </div>
     <div class="option_list">
-        {% if object.galleries %}
-        	{% for gallery in object.public_galleries %}
-                <a href="{{ gallery.get_absolute_url }}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title=" Back to {{ gallery.title }} Gallery" class="option_icon" /></a>
-                {% ifequal request.user object.author %} 
-                    <a href="{% url 'photologue.views.gallery_edit' gallery.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this photo's album" class="option_icon" /></a>
-                {% endifequal %}
-        	{% endfor %}
+        {% if object.gallery %}
+            <a href="{{ object.gallery.get_absolute_url }}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title=" Back to {{ object.gallery.title }} Gallery" class="option_icon" /></a>
+            {% ifequal request.user object.author %} 
+                <a href="{% url 'photologue.views.gallery_edit' object.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this photo's album" class="option_icon" /></a>
+            {% endifequal %}
         {% endif %}
     </div>
 {% endblock %}
