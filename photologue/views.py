@@ -25,11 +25,11 @@ def upload_photo(request, gallery_id):
             photo.author = request.user
             photo.title_slug = slugify(photo.title)
             photo.is_public = True
+            photo.gallery_id = gallery_id
             photo.save()
             if 'feature' in request.POST.keys():
                 gallery.featured_photo = photo
                 gallery.save()
-            gallery.photos.add(photo)
             messages.success(request, 'Your photo was successfully uploaded')
             return HttpResponseRedirect('/photologue/gallery/{0}/'.format(gallery.id))
     else:
