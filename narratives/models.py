@@ -67,3 +67,33 @@ class Narrative(models.Model):
         except Narrative.DoesNotExist:
             narrative = None
         return narrative
+
+    def parse_for_embed(self):
+        '''
+        Build in progress.
+        Attempts to take the narrative.narrative attribute and check for significant strings.
+        Specific uses:
+            -embedding video via YouTube API if youtube.com exists
+            -link to external websites if explorer submits string for link
+            -Possibly display an image from the gallery with simple code
+
+        Extremely primitive, but that's fine at the moment.
+        '''
+
+        import re
+        from urlparse import urlparse
+
+        # Seems so incredibly inefficient at the moment...
+        if re.search('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', self.narrative):
+            urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', self.narrative)
+            for url in urls:
+                parsed_url = urlparse(url)
+                if 'youtube' in parsed_url.netloc.lower():
+                    if 'v=' in parsed_url.query.lower():
+                        code_start = re.search('v=', parsed_url.query).end()
+                        if '&' in parsed_url.query:
+                            code_end = parsed_url.query.find('&', re.search('v=', parsed_url.query).end())
+                        else:
+                            code_end = None
+                        code = parsed_url.query[code_start:code_end]
+                        return '<iframe width="560" height="315" src="http://www.youtube.com/embed/{0}" frameborder="0" allowfullscreen></iframe>'.format(code)

@@ -31,6 +31,9 @@
 			</div>
 		{% endif %}
 		<p>{{ narrative.date_created }}</p>
+		{% if narrative.parse_for_embed %}
+			<p>{{ narrative.parse_for_embed|safe }}</p>
+		{% endif %}
 		<p>
 			{{ narrative.narrative|escape|linebreaks }}
 		</p>
