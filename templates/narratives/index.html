@@ -5,6 +5,7 @@
 {% block content %}
 	<div class="narrative_detail">
 		<h2>{{ narrative.title }}</h2>
+		<p>from experience <a href="{% url 'experience' narrative.experience.id %}">{{ narrative.experience }}</p>
 		<div class="option_list">
 			<a href="{% url 'experiences.views.index' narrative.experience.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Back to the experience page" class="option_icon" /></a>
 			{% if narrative.gallery %}

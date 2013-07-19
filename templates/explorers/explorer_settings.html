@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+	Eventually this will allow you ({{ explorer }}) to modify settings...
+	<form action="" method="POST">
+		{% csrf_token %}
+		<p>
+			<label for="favorite_color">Your favorite color:</label>
+			<br />
+			<select name="favorite_color" id="favorite_color">
+				<option name="blue" id="blue">blue</option>
+				<option name="yellow" id="yellow">yellow</option>
+				<option name="green" id="green">green</option>
+				<option name="red" id="red">red</option>
+				<option name="pink" id="pink">pink</option>
+				<option name="purple" id="purple">purple</option>
+				<option name="magenta" id="magenta">magenta</option>
+				<option name="indigo" id="indigo">indigo</option>
+				<option name="orange" id="orange">orange</option>
+				<option name="indigo" id="indigo">indigo</option>
+				<option name="teal" id="teal">teal</option>
+			</select>
+		</p>
+		<p>
+			Age:
+			<br />
+			10-15:
+			<input type="radio" name="age" value="10-15" />
+			<br />
+			16-20:
+			<input type="radio" name="age" value="16-20" />
+			<br />
+			21-25:
+			<input type="radio" name="age" value="21-25" />
+			<br />
+			26-30:
+			<input type="radio" name="age" value="26-30" />
+			<br />
+			31-35:
+			<input type="radio" name="age" value="31-35" />
+			<br />
+			36-40:
+			<input type="radio" name="age" value="36-40" />
+			<br />
+			41-45:
+			<input type="radio" name="age" value="41-45" />
+			<br />
+			46-50:
+			<input type="radio" name="age" value="46-50" />
+		</p>
+		<input type="submit" value="This does nothing..." />
+	</form>
+{% endblock content %}

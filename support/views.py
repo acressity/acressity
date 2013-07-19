@@ -3,6 +3,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.contrib.comments import Comment
 
 from experiences.models import Experience
 
@@ -24,6 +27,7 @@ def track_experience(request, experience_id):
     return redirect(reverse('tracking_experiences', args=(request.user.id,)))
 
 
+@login_required
 def untrack_experience(request, experience_id):
     if request.method == 'POST':
         experience = get_object_or_404(Experience, pk=experience_id)
@@ -34,3 +38,14 @@ def untrack_experience(request, experience_id):
             else:
                 messages.error(request, 'You were not tracking that experience')
     return redirect(reverse('journey', args=(request.user.id,)))
+
+
+@login_required
+def remove_note(request, note_id):
+    note = get_object_or_404(Comment, pk=note_id)
+    if request.user == note.user:
+        note.delete()
+        messages.success(request, 'Note removed')
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        raise PermissionDenied

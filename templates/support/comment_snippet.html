@@ -11,6 +11,12 @@
                 </p>
             {% endifnotequal %}
             {{ note.submit_date|timesince }} ago
+            {% ifequal user note.user %} 
+                <form action="{% url 'remove_note' note.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="delete-button" value="Remove" />
+                </form>
+            {% endifequal %}
         </div>
     </div>
 {% endwith %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>New experience added to your journey</h2>
+	<h1 class="align_center"><em>{{ experience }}</em></h1>
+	<div class="featured_photo">
+		<img src="{{ STATIC_URL }}img/taking_off.jpg" alt="Taking Off" title="Taking Off" />
+		<br />
+		<span class="photo_caption">Spread your wings</span>
+	</div>
+	<h3>
+		You have added a new chapter of a book which has its pages written upon this site, personally for you. Create narratives to track your movement within this experience, publish photos regarding the experience, and share it with others or make it a private venture for yourself.
+	</h3>
+	<form action="{% url 'register' %}" method="POST">
+		{% csrf_token %}
+		<input type="hidden" name="experience" id="experience" value="{{ experience }}" />
+		<input type="hidden" name="initial" />
+		<input type="submit" value="Proceed" class="expand-button" />
+	</form>
+{% endblock content %}

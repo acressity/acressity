@@ -9,6 +9,7 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth import logout
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
+from django.conf import settings
 
 from explorers.forms import RegistrationForm, ExplorerForm
 from support.models import Request
@@ -178,15 +179,15 @@ def new_explorer(request):
             # messages.success(request, 'Go on, your journey awaits!')
     else:
         form = RegistrationForm()
-    return render(request, 'acressity/register.html', {'form': form, 'experience': request.POST['experience']})
+    return render(request, 'registration/register.html', {'form': form, 'experience': request.POST['experience'], 'min_password_len': settings.MIN_PASSWORD_LEN})
 
 
 # Settings page for the explorer
 @login_required
-def settings(request, explorer_id):
+def explorer_settings(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.user == explorer:
-        return render(request, 'explorers/settings.html', {'explorer': explorer})
+        return render(request, 'explorers/explorer_settings.html', {'explorer': explorer})
 
 
 def random(request):

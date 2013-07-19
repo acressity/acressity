@@ -12,7 +12,7 @@ urlpatterns = patterns(
     url(r'^logout/$', 'farewell', name='farewell'),
     url(r'^journey/$', 'explorer_journey'),
     url(r'^new_explorer/$', 'new_explorer', name='register'),
-    url(r'^(?P<explorer_id>\d+)/settings/$', 'settings'),
+    url(r'^(?P<explorer_id>\d+)/explorer_settings/$', 'explorer_settings', name='explorer_settings'),
     url(r'^(?P<explorer_id>\d+)/board/$', 'board', name='board'),
     url(r'^random/$', 'random'),
     url(r'^all/$', ListView.as_view(queryset=get_user_model().objects.all(), context_object_name='all_explorers', template_name='explorers/all.html'), name="all_explorers"),

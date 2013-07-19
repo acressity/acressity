@@ -27,7 +27,7 @@ def step_two(request):
         if form.is_valid():
             experience = form.cleaned_data['experience']
             form = RegistrationForm()
-            return render(request, 'acressity/step_two.html', {'experience': experience, 'form': form})
+            return render(request, 'registration/step_two.html', {'experience': experience, 'form': form})
 
 
 def journey_by_trailname(request, trailname):

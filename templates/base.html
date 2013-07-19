@@ -13,7 +13,7 @@ anything lacking in efficiency or if you have any suggestions.
 		<title>Acressity {% block title %}{% endblock %}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<meta name="description" content="{% block meta_description %}This social application is designed to be a tool with which to chart your journey into new experiences{% endblock %}" />
-		<meta name="keywords" content="{% block meta_keywords %}new experience, experiences, , trials, tribulations, missions{% endblock %}" />
+		<meta name="keywords" content="{% block meta_keywords %}new experience, experiences, trials, tribulations, missions{% endblock %}" />
 		<meta name="author" content="Andrew Gaines" />
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/style.css" />
 		<link rel="icon" type="image/ico" href="{{ STATIC_URL }}img/favicon.ico" />
@@ -121,7 +121,7 @@ anything lacking in efficiency or if you have any suggestions.
 											<li>
 								        		<a href="{% url 'story' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" /> Your Story</a>
 								        	</li>
-						        			<li><a href="/explorers/logout/"><img src="{{ STATIC_URL }}img/icons/logout-icon.png" /> Log Out</a></li>
+						        			<li><a href="{% url 'farewell' %}"><img src="{{ STATIC_URL }}img/icons/logout-icon.png" /> Log Out</a></li>
 				        				</ul>
 									</li>
 								</ul>
@@ -162,13 +162,11 @@ anything lacking in efficiency or if you have any suggestions.
 						{% block right_content %}
 							{% if request.user.is_authenticated %}
 								<div class="explorer_item">
-									<div class="photo_feature">
+									<div class="featured_photo">
 										{% if request.user.gallery.featured_photo %}
-											<div class="featured_photo">	
-												<a href="{% url 'pl-gallery' request.user.gallery.id %}"><img src="{{ request.user.gallery.featured_photo.get_thumbnail_url }}" /></a>
-											</div>
+											<a href="{% url 'pl-gallery' request.user.gallery.id %}"><img src="{{ request.user.gallery.featured_photo.get_thumbnail_url }}" /></a>
 										{% else %}
-											<a href="/photologue/gallery/{{ request.user.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/user-icon.png" title="Upload photo for your story" /></a>
+											<a href="/photologue/gallery/{{ request.user.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/explorer-icon.png" title="Upload photo for your story" /></a>
 										{% endif %}
 									</div>
 									{% if request.user.featured_experience %}

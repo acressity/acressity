@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block head_insert %}
+	<script>
+		function say_hello()
+		{
+			first_name = document.getElementById("id_first_name").value;
+			if (first_name)
+			{
+				$("#first_name_feedback").text("Hello " + first_name);
+			}
+		}
+
+		function check_password1()
+		{
+			password1 = document.getElementById("id_password1").value;
+			if (password1 && password1.length < {{ min_password_len }})
+			{
+				$("#password1_feedback").html("Your password needs to be at least {{ min_password_len }} characters long");
+			}
+			else
+			{
+				$("#password1_feedback").html("");
+			}
+		}
+
+		function check_password2()
+		{
+			password1 = document.getElementById("id_password1").value;
+			password2 = document.getElementById("id_password2").value;
+			if (password2 && password1 !== password2)
+			{
+				$("#password2_feedback").html("Your passwords don't match");
+			}
+			else
+			{
+				$("#password2_feedback").html("Passwords match");
+			}
+		}
+	</script>
+{% endblock head_insert %}
+
+{% block content %}
+	<h2><em>{{ experience }}</em></h2>
+	<p>
+		<h3>Please provide the following in order to build your journey</h3>
+	</p>
+	{{ form.non_field_errors }}
+	<form action="" method="POST">
+		{% csrf_token %}
+		<div id="register_first_name">
+			<p>
+				<label for="id_first_name">Your first name:</label>
+			</p>
+			<p>
+				{# Following activates `say_hello()` when onblur() event occurs. Defined in explorer form #}
+				{{ form.first_name }}
+				<div id="first_name_feedback"></div>
+			</p>
+			{% if form.first_name.errors %}
+				<p>
+					<span class="error">First name is required</span>
+				</p>
+			{% endif %}
+		</div>
+		<div id="register_last_name">
+			<p>
+				<label for="id_last_name">Last name:</label>
+			</p>
+			<p>
+				{{ form.last_name }}
+			</p>
+			{% if form.last_name.errors %}
+				<p>
+					<span class="error">Last name is required</span>
+				</p>
+			{% endif %}
+		</div>
+		<div id="register_email">
+			<p>
+				<label for="id_email">Email Address:</label>
+			</p>
+			<p>
+				{{ form.email }}
+			</p>
+			<div class="smaller_font">
+				<p id="expand_about_email" onclick="toggle_div('about_email');" title="Click to toggle information concerning collection of email addresses">
+					<strong>Concerning email</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_email_toggle_icon" />
+				</p>
+				<div id="about_email" style="display: none;">
+					{{ form.email.help_text }}
+				</div>
+			</div>
+			{% if form.email.errors %}
+				<p>
+					<span class="error">Please enter valid email</span>
+				</p>
+			{% endif %}
+		</div>
+		<div id="register_trailname">	
+			<p>
+				<label for="id_trailname">Compose a <abbr title="Creative username to describe your journey">trailname</abbr> for your journey:</label>
+			</p>
+			<p>
+				{{ form.trailname }}
+			</p>
+			<div class="smaller_font">
+				<p id="expand_about_trailname" onclick="toggle_div('about_trailname');" title="Click to toggle description of trailname">
+					<strong>About trailname</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" />
+				</p>
+				<div id="about_trailname" class="toggle_div" style="display: none;">
+					{{ form.trailname.help_text }}
+				</div>
+			</div>
+			{% if form.trailname.errors %}
+				<p>
+					<span class="error">
+						A trailname is required
+					</span>
+				</p>
+			{% endif %}
+		</div>
+		<div id="register_password1">
+			<p>
+				<label for="id_password1">Password:</label>
+			</p>
+			<p>
+				{{ form.password1 }}
+				<div id="password1_feedback"></div>
+			</p>
+			<p>
+				{{ form.password1.errors }}
+			</p>
+		</div>
+		<div id="register_password2">
+			<p>
+				<label for="id_password2">Verify password:</label>
+			</p>
+			<p>
+				{{ form.password2 }}
+				<div id="password2_feedback"></div>
+			</p>
+			<p>
+				{{ form.password2.errors }}
+			</p>
+		</div>
+		<div id="register_submit">
+			<input class="expand-button" type="submit" value="Register" />
+		</div>
+		<input type="hidden" name="experience" id="id_experience" value="{{ experience }}" />
+	</form>
+{% endblock content %}
