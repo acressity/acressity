@@ -21,7 +21,7 @@ class Narrative(models.Model):
     title = models.CharField(max_length=200, blank=True, null=True)
     experience = models.ForeignKey(Experience, related_name='narratives')
     author = models.ForeignKey(get_user_model(), related_name='narratives')
-    date_created = models.DateTimeField(default=datetime.now, null=False)
+    date_created = models.DateTimeField(default=datetime.now, null=False, blank=True)
     date_modified = models.DateTimeField(auto_now=True)  # Will update every time object saved
     category = models.CharField(max_length=25, null=True, blank=True)
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)

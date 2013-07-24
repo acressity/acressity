@@ -14,6 +14,9 @@
 {% endblock head_insert %}
 
 {% block content %}
+	{% for error in form.errors %}
+		{{ error }}
+	{% endfor %}
 	<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
 		{% csrf_token %}
 		<div class="formatted_input">
@@ -24,6 +27,10 @@
 		<div class="formatted_input">
 			<h3><label for="id_narrative">Narrative</label></h3>
 			{{ form.narrative }}
+		</div>
+		<div class="formatted_input">
+			<h3>Date Created</h3>
+			{{ form.date_created }}
 		</div>
 		<div class="formatted_input">
 			<h3><label for="id_title">Title (optional)</label></h3>
