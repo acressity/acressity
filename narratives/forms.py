@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class NarrativeForm(ModelForm):
-    date_created = forms.DateField(widget=forms.extras.widgets.SelectDateWidget())
+    date_created = forms.DateField(widget=forms.extras.widgets.SelectDateWidget(years=range(datetime.now().year, datetime.now().year-110)))
 
     def __init__(self, explorer, *args, **kwargs):
         super(NarrativeForm, self).__init__(*args, **kwargs)
