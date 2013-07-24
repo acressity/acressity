@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class NarrativeForm(ModelForm):
-    # date_created = forms.DateField(widget=forms.extras.widgets.SelectDateWidget(), initial=timezone.now)
+    date_created = forms.DateField(widget=forms.extras.widgets.SelectDateWidget())
 
     def __init__(self, explorer, *args, **kwargs):
         super(NarrativeForm, self).__init__(*args, **kwargs)
@@ -14,4 +14,6 @@ class NarrativeForm(ModelForm):
 
     class Meta:
         model = Narrative
-        exclude = ('gallery', 'author', 'date_created')
+        exclude = ('gallery', 'author')
+
+

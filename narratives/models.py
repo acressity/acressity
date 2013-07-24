@@ -22,8 +22,13 @@ class Narrative(models.Model):
     experience = models.ForeignKey(Experience, related_name='narratives')
     author = models.ForeignKey(get_user_model(), related_name='narratives')
     date_created = models.DateTimeField(default=datetime.now, null=False)
+    date_modified = models.DateTimeField(auto_now=True)  # Will update every time object saved
     category = models.CharField(max_length=25, null=True, blank=True)
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        #ordering = ['category']
+        get_latest_by = 'date_created'
 
     def __unicode__(self):
         return self.title
@@ -51,7 +56,7 @@ class Narrative(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.title:
-            self.title = self.narrative[:20]
+            self.title = datetime.now().strftime('%B %d, %Y')
         super(Narrative, self).save(*args, **kwargs)
 
     def get_next_narrative(self):
