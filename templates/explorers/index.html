@@ -3,6 +3,8 @@
 {% load explorers_extras %}
 
 {% block content %}
+	
+	{% comment %}
 	<div class="explorer_item">
 		<h1>{{ explorer.get_full_name|possessive }} Journey</h1>
 		{% if explorer.gallery.featured_photo %}
@@ -16,11 +18,12 @@
 		<div class="option_list">
 			<a href="{% url 'story' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="{{ explorer.first_name|possessive }} Story" class="option_icon" /></a>
 			<a href="{% url 'board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="Check out the Bulletin Board" class="option_icon" /></a>
-			{% if owner %}
-				<a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" alt="Add new experience" title="Add new experience" /></a>
-			{% endif %}
+			
 		</div>
 	</div>
+	{% endcomment %}
+
+	{% include "explorers/dash_snippet.html" %}
 
 	{% for experience in experiences %}
 		{% if forloop.first %}

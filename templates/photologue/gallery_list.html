@@ -4,44 +4,42 @@
 {% block title %}- All Galleries{% endblock %}
 
 {% block content %}
+    <h1>All Galleries</h1>
 
-<h1>All Galleries</h1>
-
-{% if object_list %}
-    {% for gallery in object_list %}
-        {% if gallery.sample %}
-            <div class="photo-gallery">
-                <h2><a href="{{ gallery.get_absolute_url }}">{{ gallery.title }}</a></h2>
-                <table id="thirds_table">
-                    <tr>
-                        {% for photo in gallery.sample %}
-                            <td>
-                                <div class="object_item thirds_item">
-                                    <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
-                                </div>
-                            </td>
-                            {% if forloop.counter|divisibleby:'3' %}
-                                {% if not forloop.last %}
-                                    </tr>
-                                    <tr>
+    {% if object_list %}
+        {% for gallery in object_list %}
+            {% if gallery.sample %}
+                <div class="photo-gallery">
+                    <h2><a href="{{ gallery.get_absolute_url }}">{{ gallery.title }}</a></h2>
+                    <table id="thirds_table">
+                        <tr>
+                            {% for photo in gallery.sample %}
+                                <td>
+                                    <div class="object_item thirds_item">
+                                        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+                                    </div>
+                                </td>
+                                {% if forloop.counter|divisibleby:'3' %}
+                                    {% if not forloop.last %}
+                                        </tr>
+                                        <tr>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                </table>
-            </div>
-        {% endif %}
-        
-    {% endfor %}
-{% else %}
-    <p>No galleries were found.</p>
-{% endif %}
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>No galleries were found.</p>
+    {% endif %}
 
-{% if is_paginated %}
-<p>{{ hits }} galleries total.</p>
-<div id="page_controls">
-    <p>{% if has_previous %}<a href="{% url 'pl-gallery-list' previous %}">Previous</a> | {% endif %} page {{ page }} of {{ pages }} {% if has_next %}| <a href="{% url 'pl-gallery-list' next %}">Next</a>{% endif %}</p>
-</div>
-{% endif %}
+    {% if is_paginated %}
+    <p>{{ hits }} galleries total.</p>
+    <div id="page_controls">
+        <p>{% if has_previous %}<a href="{% url 'pl-gallery-list' previous %}">Previous</a> | {% endif %} page {{ page }} of {{ pages }} {% if has_next %}| <a href="{% url 'pl-gallery-list' next %}">Next</a>{% endif %}</p>
+    </div>
+    {% endif %}
 
 {% endblock %}

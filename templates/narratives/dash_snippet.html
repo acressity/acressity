@@ -6,7 +6,7 @@
 {% endcomment %}
 
 <div class="thirds_item narrative_dash">
-    <h3><a href="/narratives/{{ narrative.id }}/">{{ narrative.title|escape }}</a></h3>
+    <h3><a href="/narratives/{{ narrative.id }}/">{{ narrative.title }}</a></h3>
     {% if narrative.gallery.featured_photo %}
         <div class="featured_photo">
             <a href="{{ narrative.gallery.featured_photo.get_absolute_url }}"><img src="{{ narrative.gallery.featured_photo.get_thumbnail_url }}" title="View this photo" /></a>
@@ -14,7 +14,7 @@
     {% endif %}
     <h4 onclick="toggle_div('narrative_{{ narrative.id }}_taste');" title="Click to toggle narrative taste">Short Taste <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narrative_{{ narrative.id }}_taste_toggle_icon" /></h4>
     <div id="narrative_{{ narrative.id }}_taste" class="narrative_taste">
-        {{ narrative.taste|escape|linebreaks }}
+        {{ narrative.taste|linebreaks }}
     </div>
     {% if narrative.category %}
         <p>{{ narrative.category }}</p>

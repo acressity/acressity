@@ -4,7 +4,7 @@
 	<h2>Message for you!</h2>
     {% if messages %}
         {% for message in messages %}
-            <p>{{ message }}</p>
+            <p>{{ message|safe }}</p>
         {% endfor %}
     {% endif %}
 {% endblock content %}

@@ -1,0 +1,53 @@
+{# Expects user object passed in as explorer #}
+{# Referring template must convert accordingly (with-as statement) #}
+
+{% load explorers_extras %}
+
+{% comment %}
+    <div class="explorer_item">
+        <h1>{{ explorer.get_full_name|possessive }} Journey</h1>
+        {% if explorer.gallery.featured_photo %}
+            <div>
+                <a href="{% url 'pl-gallery' explorer.gallery.id %}">
+                    <img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" title="{{ explorer.get_full_name }}" />
+                </a>
+            </div>
+        {% endif %}
+        <h3 title="Trailname">Trailname: {{ explorer.trailname }}</h3>
+        <div class="option_list">
+            <a href="{% url 'story' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="{{ explorer.first_name|possessive }} Story" class="option_icon" /></a>
+            <a href="{% url 'board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="Check out the Bulletin Board" class="option_icon" /></a>
+            
+        </div>
+    </div>
+{% endcomment %}
+
+<div class="explorer_item">
+    <div class="featured_photo">
+        {% if explorer.gallery.featured_photo %}
+            <a href="{% url 'pl-gallery' explorer.gallery.id %}"><img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" /></a>
+        {% else %}
+            {% ifequal explorer user %}
+                <a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/explorer-icon.png" title="Upload photo for your story" /></a>
+            {% endifequal %}
+        {% endif %}
+    </div>
+    {% if explorer.featured_experience %}
+        <div>
+            <a href="{% url 'experience' explorer.featured_experience.id %}" title="{% ifequal explorer user %}Work on your featured experience{% else %}View featured experience{% endifequal %}"><h3>{{ explorer.featured_experience }}</h3></a>
+            {% if explorer.featured_experience.status %}
+                Status: {{ explorer.featured_experience.status }}
+            {% endif %}
+            <div class="option_list">
+                <a href="{% url 'story' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="View {% ifequal explorer user %}Your story{% else %}{{ explorer.get_full_name|possessive }} story{% endifequal %}" class="option_icon" /></a>
+                <a href="{% url 'explorers.views.board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} Bulletin Board" class="option_icon" /></a>
+                {% ifequal explorer user %}
+                    <a href="{% url 'narratives.views.create' explorer.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Write a new narrative for {{ explorer.featured_experience }}" class="option_icon" /></a>
+                    <a href="{% url 'experiences.views.edit' explorer.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit your featured experience" class="option_icon" /></a>
+                    <a href="/photologue/gallery/{{ explorer.featured_experience.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
+                    <a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" alt="Add new experience" title="Add new experience" /></a>
+                {% endifequal %}
+            </div>
+        </div>
+    {% endif %}
+</div>

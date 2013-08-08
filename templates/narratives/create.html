@@ -2,10 +2,10 @@
 
 {% block head_insert %}
 	{# Load the image for the featured experience since this is generic #}
-	{% if user.featured_experience.gallery.featured_photo %}
+	{% if experience.gallery.featured_photo %}
 		<style type="text/css">
 			html {
-				background-image: url({{ user.featured_experience.gallery.featured_photo.image.url }});
+				background-image: url({{ experience.gallery.featured_photo.image.url }});
 			}
 		</style>
 	{% else %}
@@ -29,7 +29,7 @@
 			{{ form.narrative }}
 		</div>
 		<div class="formatted_input">
-			<h3>Date Created</h3>
+			<h3>Date Created (leave blank for today)</h3>
 			{{ form.date_created }}
 		</div>
 		<div class="formatted_input">

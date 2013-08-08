@@ -31,12 +31,12 @@
 				{% endfor %}
 			</div>
 		{% endif %}
-		<p>{{ narrative.date_created }}</p>
+		<p>{{ narrative.date_created|date:"F j, Y" }}</p>
 		{% if narrative.parse_for_embed %}
 			<p>{{ narrative.parse_for_embed|safe }}</p>
 		{% endif %}
 		<p>
-			{{ narrative.narrative|escape|linebreaks }}
+			{{ narrative.narrative|linebreaks }}
 		</p>
 		<div class="clear_both"> </div>
 	</div>
@@ -54,7 +54,7 @@
 		<div class="comment_list" id="narr_comment_list" style="display: none;">
 			{% get_comment_list for narrative as narr_comment_list %}
 			{% for note in narr_comment_list reversed %}
-				{% include "support/comment_snippet.html" %}
+				{% include "support/note_snippet.html" %}
 			{% endfor %}
 		</div>
 	{% endif %}

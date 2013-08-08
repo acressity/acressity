@@ -65,7 +65,7 @@
 			Birthday: {{ explorer.birthdate }}
 		{% endif %}
 		{% get_comment_form for explorer as expl_comment_form %}
-		<form action="{% comment_form_target %}" method="POST">
+		<form action="{% comment_form_target %}" method="POST" class="note_form">
 			{% csrf_token %}
 			{{ expl_comment_form.comment }}
 			{{ expl_comment_form.honeypot }}

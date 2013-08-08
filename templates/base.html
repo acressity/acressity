@@ -160,31 +160,10 @@ anything lacking in efficiency or if you have any suggestions.
 					</div>
 					<div id="right_content">
 						{% block right_content %}
-							{% if request.user.is_authenticated %}
-								<div class="explorer_item">
-									<div class="featured_photo">
-										{% if request.user.gallery.featured_photo %}
-											<a href="{% url 'pl-gallery' request.user.gallery.id %}"><img src="{{ request.user.gallery.featured_photo.get_thumbnail_url }}" /></a>
-										{% else %}
-											<a href="/photologue/gallery/{{ request.user.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/explorer-icon.png" title="Upload photo for your story" /></a>
-										{% endif %}
-									</div>
-									{% if request.user.featured_experience %}
-										<div>
-											<a href="{% url 'experience' request.user.featured_experience.id %}" title="Work on your featured experience"><h3>{{ request.user.featured_experience }}</h3></a>
-											{% if request.user.featured_experience.status %}
-												{{ request.user.featured_experience.status }}
-											{% endif %}
-											<div class="option_list">
-												<a href="{% url 'narratives.views.create' request.user.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Write a new narrative for {{ request.user.featured_experience }}" class="option_icon" /></a>
-												<a href="{% url 'experiences.views.edit' request.user.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit your featured experience" class="option_icon" /></a>
-												<a href="/photologue/gallery/{{ request.user.featured_experience.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
-												<a href="{% url 'story' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="Your story" class="option_icon" /></a>
-												<a href="{% url 'explorers.views.board' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="View your Bulletin Board" class="option_icon" /></a>
-											</div>
-										</div>
-									{% endif %}
-								</div>
+							{% if user.is_authenticated %}
+								{% with user as explorer %}
+								    {% include "explorers/dash_snippet.html" %}
+								{% endwith %}
 							{% else %}
 								<div id="no_dash">
 									<blockquote>

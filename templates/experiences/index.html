@@ -3,7 +3,7 @@
 {% load comments %}
 
 {% block content %}
-	<h2>{{ experience|escape }}</h2>
+	<h2>{{ experience }}</h2>
 	{% if experience.gallery.featured_photo %}
 		<div class="featured_photo">
 			<a href="{% url 'pl-gallery' experience.gallery.id %}">
@@ -62,7 +62,7 @@
 	{% if experience.brief %}
 		<div class="experience_item">
 			<h3>Experience Brief</h3>
-			{{ experience.brief|escape|linebreaks }}
+			{{ experience.brief|linebreaks }}
 		</div>
 	{% else %}
 		{% if comrade %}
@@ -120,23 +120,17 @@
 		<div class="comment_list" id="exp_comment_list">
 			{% get_comment_list for experience as exp_comment_list %}
 			{% for note in exp_comment_list reversed %}
-				{% include "support/comment_snippet.html" %}
+				{% include "support/note_snippet.html" %}
 			{% endfor %}
 		</div>
 	{% endif %}
 	{% if user.is_authenticated %}
 		{% get_comment_form for experience as exp_comment_form %}
-		<form action="{% comment_form_target %}" method="POST">
-			{% csrf_token %}
-			{{ exp_comment_form.comment }}
-			{{ exp_comment_form.honeypot }}
-			{{ exp_comment_form.object_pk }}
-			{{ exp_comment_form.content_type }}
-		    {{ exp_comment_form.timestamp }}
-		    {{ exp_comment_form.security_hash }}
-			<br />
-			<input type="hidden" name="next" value="/experiences/{{ experience.id }}/">
-			<input type="submit" value="Submit Note" />
-		</form>
+		{# Create context for html snippet #}
+		{% with exp_comment_form as comment_form %}
+			{% with next_url_name='experience' next_url_pk=experience.id %}
+			    {% include "support/note_form.html" %}
+			{% endwith %}
+		{% endwith %}
 	{% endif %}
 {% endblock content %}
