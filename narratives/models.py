@@ -17,13 +17,13 @@ class Narrative(models.Model):
     Examples of narratives include an update, thought, plan,
     itinerary, journal entry, publication, ad infinitum...
     '''
-    narrative = models.TextField()
-    title = models.CharField(max_length=200, blank=True, null=True)
+    narrative = models.TextField(help_text='The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.')
+    title = models.CharField(max_length=200, blank=True, null=True, help_text='Title of the narrative. If none given, defaults to date created.')
     experience = models.ForeignKey(Experience, related_name='narratives')
     author = models.ForeignKey(get_user_model(), related_name='narratives')
     date_created = models.DateTimeField(default=datetime.now, null=False, blank=True)
-    date_modified = models.DateTimeField(auto_now=True)  # Will update every time object saved
-    category = models.CharField(max_length=25, null=True, blank=True)
+    date_modified = models.DateTimeField(auto_now=True, help_text='Updated every time object saved')
+    category = models.CharField(max_length=50, null=True, blank=True, help_text='Optional information used to classify and order the narratives within the experience.')
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)
 
     class Meta:

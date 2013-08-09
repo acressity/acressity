@@ -7,11 +7,12 @@ from django.utils.translation import ugettext_lazy as _
 
 from experiences.models import Experience
 
-
-# Model for 'following' function
 # I'm not satisfied with this at the moment. I want to have a model that encompasses the ability to cheer (track) an arbitrary object (such as explorer or experience). Yet I don't want to have disorganized data in the db...
 # Perhaps simply rename this to CheerExplorer to reduce ambiguity, and have experience 'support' be coordinated via TrackExperience model
 class Cheer(models.Model):
+    '''
+    Model for 'following' function
+    '''
     cheerer = models.ForeignKey(get_user_model(), related_name='cheers_from')
     explorer = models.ForeignKey(get_user_model(), related_name='cheers_for')
     date_cheered = models.DateTimeField(default=datetime.now)
@@ -30,8 +31,10 @@ class Cheer(models.Model):
 #         return self.experience.experience
 
 
-# Model for 'appreciating' function
 class Hurrah(models.Model):
+    '''
+    Model for 'appreciating' function
+    '''
     explorer = models.ForeignKey(get_user_model())
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField(_('object ID'), null=False)

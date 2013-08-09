@@ -187,6 +187,29 @@ anything lacking in efficiency or if you have any suggestions.
 								</div>
 							{% endif %}
 						{% endblock right_content %}
+						<div>
+							<h4 onclick="toggle_div('comment_to_creator_form');">Comments for website creator <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="comment_to_creator_form_toggle_icon" /></h4>
+							<div id="comment_to_creator_form" style="display: none;" class="smaller_font object_item">
+								<p>
+									This information will be sent directly to the creator of this site, and will be used to improve the website experience.
+								</p>
+								<p>
+									Include any suggestions, notices, errors, or just a feature you'd like to see!
+								</p>
+								<p>
+									<em>Thank you,</em>
+									<br />
+									<a href="{% url 'journey' 1 %}" target="_blank">Andrew Gaines</a>
+								</p>
+								<form method="POST" action="{% url 'comment_to_creator' %}">
+									{% csrf_token %}
+									<textarea name="comment_to_creator"></textarea>
+									{# Following is a honeypot. If filled (most likely by a bot) have appropriate response #}
+									<input type="text" name="poohbear" style="display: none;" />
+									<input type="submit" value="Submit" />
+								</form>
+							</div>
+						</div>
 					</div>
 				{% endblock main %}
 			</div>

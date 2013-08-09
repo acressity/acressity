@@ -24,11 +24,11 @@ class Experience(models.Model):
     a book about your journey.
     '''
 
-    experience = models.CharField(max_length=200)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences')
+    experience = models.CharField(max_length=200, help_text='Title of the experience.')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text='Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.')
     date_created = models.DateTimeField(default=datetime.now)
-    brief = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=25, null=True, blank=True)
+    brief = models.TextField(blank=True, null=True, help_text='Written description of the experience to provide a little insight.')
+    status = models.CharField(max_length=160, null=True, blank=True, help_text='Optional short state of the experience at the moment.')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)
     is_public = models.BooleanField(default=True, help_text='Public experiences will be displayed in the default views. Private ones are only seen by yourself and anyone you invite to be a comrade.')
 

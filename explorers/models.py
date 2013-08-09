@@ -44,8 +44,8 @@ class Explorer(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
-    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers', blank=True, null=True)
-    featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience')
+    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers', blank=True, null=True, help_text='Experiences that the explorer has chosen to track.')
+    featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience', help_text='The experience that an explorer is currently featuring. Will be displayed on explorer\'s dash for easy accessibility and will be shown alongside explorer information for others to see.')
 
     objects = ExplorerManager()
 

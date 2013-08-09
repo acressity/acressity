@@ -1,11 +1,13 @@
-# All functions related to the relationship between an explorer and another object will be placed here. 
+# All functions related to the relationship between an explorer and another object will be placed here.
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.core.exceptions import PermissionDenied
 from django.contrib.comments import Comment
+from django.http import HttpResponse
 
 from experiences.models import Experience
 
@@ -49,3 +51,17 @@ def remove_note(request, note_id):
         return redirect(request.META.get('HTTP_REFERER'))
     else:
         raise PermissionDenied
+
+
+def comment_to_creator(request):
+    if request.method == 'POST':
+        comment = request.POST.get('comment_to_creator')
+        poobear = request.POST.get('poobear')
+        if len(comment) >= 5:
+            message = comment
+            if poohbear:
+                message += '\n\nAnd a poohbear: {0}'.format(poohbear)
+            send_mail('Comments from Users', message, 'acressity@acressity.com', ['andrew.s.gaines@gmail.com'])
+            messages.success(request, 'Thank you for your comment! It will be used to improve the site.')
+    return redirect(request.META.get('HTTP_REFERER'))
+        
