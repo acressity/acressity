@@ -9,23 +9,26 @@
 		{% if requests %}
 			<h3>Requests:</h3>
 			{% for request in requests %}
-				{% if owner %}You have{% else %}{{ explorer.get_full_name}} has{% endif %} been invited to be a part of
-				<h3>
-					<a href="{% url 'experiences.views.index' request.experience.id %}">{{ request }}</a>
-				</h3>
-				by {{ request.author.get_full_name }}
-				{% if owner %}
-					<p>
-						<form action="" name="invite_respond" method="POST">
-							{% csrf_token %}
-							<input type="hidden" name="from_explorer_id" value="{{ request.from_explorer.id }}" />
-							<input type="hidden" name="to_explorer_id" value="{{ request.to_explorer.id }}" />
-							<input type="hidden" name="experience_id" value="{{ request.experience.id }}" />
-							<input type="submit" name="accept" value="Accept" />
-							<input type="submit" name="decline" value="Decline" />
-						</form>
-					</p>
-				{% endif %}
+				<div class="request_dash">
+					{% if owner %}You have{% else %}{{ explorer.get_full_name}} has{% endif %} been invited to be a part of
+					<h3>
+						<a href="{% url 'experiences.views.index' request.experience.id %}">{{ request }}</a>
+					</h3>
+					by {{ request.author.get_full_name }}
+					{% if owner %}
+						<p>
+							<form action="" name="invite_respond" method="POST">
+								{% csrf_token %}
+								<input type="hidden" name="from_explorer_id" value="{{ request.from_explorer.id }}" />
+								<input type="hidden" name="to_explorer_id" value="{{ request.to_explorer.id }}" />
+								<input type="hidden" name="experience_id" value="{{ request.experience.id }}" />
+								<input type="hidden" name="invitation_request_id" value="{{ request.id }}" />
+								<input type="submit" name="accept" value="Accept" />
+								<input type="submit" name="decline" value="Decline" />
+							</form>
+						</p>
+					{% endif %}
+				</div>
 			{% endfor %}
 		{% endif %}
 		{% if eo_notes %}

@@ -99,7 +99,7 @@
 		</div>
 		<div id="register_trailname">	
 			<p>
-				<label for="id_trailname">Compose a <abbr title="Creative username to describe your journey">trailname</abbr> for your journey:</label>
+				<label for="id_trailname">Create a <abbr title="Creative username to describe your journey">trailname</abbr> for your journey:</label>
 			</p>
 			<p>
 				{{ form.trailname }}
@@ -109,7 +109,7 @@
 					<strong>About trailname</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" />
 				</p>
 				<div id="about_trailname" class="toggle_div" style="display: none;">
-					{{ form.trailname.help_text }}
+					{{ form.trailname.help_text|safe }}
 				</div>
 			</div>
 			{% if form.trailname.errors %}

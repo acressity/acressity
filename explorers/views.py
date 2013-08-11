@@ -75,6 +75,7 @@ def board(request, explorer_id):
     else:
         eo_notes = []
     # Get the notes pertaining to all experiences
+    # What was I thinking? This will become about the most inefficient thing imagineable as (if) more experiences notes are added
     experience_notes = Comment.objects.filter(content_type__model='experience')
     # Filter the results down for just the experiences pertaining to explorer
     ei_notes = []
@@ -91,16 +92,11 @@ def board(request, explorer_id):
     # Any requests pertaining to the explorer
     requests = Request.objects.filter(recruit=explorer)
     if request.method == 'POST' and request.user == explorer:
-        invitation_request = requests.get(experience_id=request.POST.get('experience_id'))
+        invitation_request_id = request.POST.get('invitation_request_id')
         if 'accept' in request.POST:
-            invitation_request.experience.explorers.add(explorer)
-            invitation_request.experience.gallery.explorers.add(explorer)
-            invitation_request.delete()
-            messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos. Enjoy!'.format(invitation_request.experience))
-            return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
+            return redirect(reverse('accept_invitation_request', args=(request.user.id, invitation_request_id)))
         elif 'decline' in request.POST:
-            messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
-            invitation_request.delete()
+            return redirect(reverse('decline_invitation_request', args=(request.user.id, invitation_request_id)))
     return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'owner': owner})
 
 

@@ -7,9 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.exceptions import PermissionDenied
 from django.contrib.comments import Comment
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 
 from experiences.models import Experience
+from support.models import Request
 
 
 def track_experience(request, experience_id):
@@ -56,7 +58,7 @@ def remove_note(request, note_id):
 def comment_to_creator(request):
     if request.method == 'POST':
         comment = request.POST.get('comment_to_creator')
-        poobear = request.POST.get('poobear')
+        poohbear = request.POST.get('poohbear')
         if len(comment) >= 5:
             message = comment
             if poohbear:
@@ -64,4 +66,28 @@ def comment_to_creator(request):
             send_mail('Comments from Users', message, 'acressity@acressity.com', ['andrew.s.gaines@gmail.com'])
             messages.success(request, 'Thank you for your comment! It will be used to improve the site.')
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def accept_invitation_request(request, explorer_id, invitation_request_id):
+    explorer = get_object_or_404(get_user_model(), pk=explorer_id)
+    invitation_request = get_object_or_404(Request, pk=invitation_request_id)
+    if request.user == explorer:
+        invitation_request.experience.explorers.add(explorer)
+        if invitation_request.experience.gallery:
+            invitation_request.experience.gallery.explorers.add(explorer)
+        messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos. Enjoy!'.format(invitation_request.experience))
+        invitation_request.delete()
+        return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
+
+
+@login_required
+def decline_invitation_request(request, explorer_id, invitation_request_id):
+    explorer = get_object_or_404(get_user_model(), pk=explorer_id)
+    invitation_request = get_object_or_404(Request, pk=invitation_request_id)
+    if request.user == explorer:
+        messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
+        invitation_request.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    
         

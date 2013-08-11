@@ -34,7 +34,7 @@ class Explorer(AbstractBaseUser):
     '''
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=60, null=False)
-    trailname = models.CharField(max_length=50, unique=True, db_index=True, help_text='A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, each explorer is encouraged to create a trailname that describes an aspect of their journey at the moment. It also allows others to find them by typing acressity.com/`trailname`')
+    trailname = models.CharField(max_length=50, unique=True, db_index=True, help_text='A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you are encouraged to create a trailname that describes an aspect of your journey at the moment. It also allows others to find you by typing acressity.com/<em>trailname</em>')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
     brief = models.TextField(null=True, blank=True)
     email = models.EmailField(max_length=254, null=False, blank=False, help_text='Email adresses are used for nothing more than resetting passwords. That\'s it. They won\'t even be used for activating accounts unless this is abused.')
