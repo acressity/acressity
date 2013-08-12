@@ -3,6 +3,13 @@
       {# url name with variable next_url_name #}
       {# url pk with variable next_url_pk #}
 
+{% comment %}
+      Example:
+      {% with next_url_name='experience' next_url_pk=experience.id %}
+            {% include "support/note_form.html" %}
+      {% endwith %}
+{% endcomment %}
+
 {% load comments %}
 
 <form action="{% comment_form_target %}" method="POST" class="note_form">
@@ -19,4 +26,4 @@
       <p>
             <input type="submit" value="Submit Note" />
       </p>      
-  </form>
+</form>

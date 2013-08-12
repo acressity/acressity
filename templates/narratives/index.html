@@ -59,20 +59,12 @@
 		</div>
 	{% endif %}
 	{% if user.is_authenticated %}
-		{% get_comment_form for narrative as narr_comment_form %}
-		<div class="comment">
-			<form action="{% comment_form_target %}" method="POST">
-				{% csrf_token %}
-				{{ narr_comment_form.comment }}
-				{{ narr_comment_form.honeypot }}
-				{{ narr_comment_form.object_pk }}
-				{{ narr_comment_form.content_type }}
-			    {{ narr_comment_form.timestamp }}
-			    {{ narr_comment_form.security_hash }}
-				<br />
-				<input type="hidden" name="next" value="{% url 'narratives.views.index' narrative.id %}">
-				<input type="submit" value="Submit Note" />
-			</form>
+		{% get_comment_form for narrative as comment_form %}
+		<h4 onclick="toggle_div('{{ narrative.id }}_note')";>Leave a Note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ narrative.id }}_note_toggle_icon" /></h4>
+		<div id="{{ narrative.id }}_note" class="comment" style="display: none;">
+			{% with next_url_name='narrative' next_url_pk=narrative.id %}
+			    {% include "support/note_form.html" %}
+			{% endwith %}
 		</div>
 	{% endif %}
 {% endblock content %}

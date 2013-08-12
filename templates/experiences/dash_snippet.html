@@ -47,19 +47,9 @@
                     {% endif %}
                     <h4 onclick="toggle_div('{{ experience.id }}_comment');" title="Click to toggle the note form">Leave a Note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ experience.id }}_comment_toggle_icon" /></h4>
                     <div id="{{ experience.id }}_comment" class="comment" style="display: none;">
-                        {% get_comment_form for experience as exp_comment_form %}
-                        <form action="{% comment_form_target %}" method="POST" class="note_form">
-                            {% csrf_token %}
-                            {{ exp_comment_form.comment }}
-                            {{ exp_comment_form.honeypot }}
-                            {{ exp_comment_form.object_pk }}
-                            {{ exp_comment_form.content_type }}
-                            {{ exp_comment_form.timestamp }}
-                            {{ exp_comment_form.security_hash }}
-                            <br />
-                            <input type="hidden" name="next" value="/experiences/{{ experience.id }}/">
-                            <input type="submit" value="Submit Note" />
-                        </form>
+                        {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
+                            {% include "support/note_form.html" %}
+                        {% endwith %}
                     </div>
                 {% endif %}
             </div>
