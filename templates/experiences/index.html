@@ -101,7 +101,7 @@
 	</div>
 	{% if comrade %}
 		<h3 title="Click for a new narrative" onclick="toggle_div('new_narrative_form');">Add New Narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="new_narrative_form_toggle_icon" /></h3>
-		<div id="new_narrative_form">
+		<div id="new_narrative_form" class="narrative_item">
 			<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
 				{% csrf_token %}
 				{{ form.narrative }}
