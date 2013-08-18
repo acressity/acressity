@@ -1,7 +1,7 @@
 {% extends "experiences/base.html" %}
 
 {% block content %}
-	<h2>Editing <em>{{ experience }}</em></h2>
+	<h2>Editing Experience <em>{{ experience }}</em></h2>
 	<form action="" method="POST" class="full_width">
 		{% csrf_token %}
 		<div class="formatted_input">
@@ -11,6 +11,10 @@
 			{{ form.experience }}
 		</div>
 		<p>{{ form.featured_photo }}</p>
+		<div class="formatted_input">	
+			<h3>Date Created</h3>
+			{{ form.date_created }}
+		</div>
 		<div class="formatted_input">
 			<label for="id_brief">
 				<span title="About the experience"><h3>Brief</h3></span>
@@ -25,33 +29,41 @@
 		</div>
 		{% ifnotequal experience user.featured_experience %}
 			<div class="formatted_input">
-				<label for="id_make_feature">
-					<strong>Make this your featured experience?</strong>
-				</label>
-				{{ form.make_feature }}
-				<br />
-				<span class="smaller_font">{{ form.make_feature.help_text }}</span>
+				<strong>Make this your featured experience?</strong> {{ form.make_feature }}
+				<p onclick="toggle_div('make_feature_help_text');">
+					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="make_feature_help_text_toggle_icon" />
+				</p>
+				<div class="toggle_div smaller_font" id="make_feature_help_text">
+					{{ form.make_feature.help_text }}
+				</div>
 			</div>
 		{% endifnotequal %}
 		{% ifequal user experience.author %}
 			{# Will need to be more secure... Easy to change POST information #}
 			<div class="formatted_input">
 				<strong>Public?</strong> {{ form.is_public }}
-				<br />
-				<span class="smaller_font">{{ form.is_public.help_text }}</span>
+				<p onclick="toggle_div('is_public_help_text');">
+					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" />
+				</p>
+				<div class="toggle_div smaller_font" id="is_public_help_text">
+					{{ form.is_public.help_text }}
+				</div>
 			</div>
 		{% endifequal %}
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
 		<input type="hidden" name="explorer_id" value="{{ experience.explorer.id }}"/>
 		<input type="submit" value="Update" />
 	</form>
-	<div class="option_list">
-		<a href="{% url 'narratives.views.create' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create new narrative for {{ experience }}" class="option_icon" /></a>
-		<a href="/experiences/{{ experience.id }}/categorize/"><img src="{{ STATIC_URL }}img/icons/categorize-icon.png" title="Categorize the narratives in this experience" class="option_icon" /></a>
-		<a href="{% url 'experiences.views.index' experience.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Go back to experience page" class="option_icon" /></a>
-		<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload image" class="option_icon" /></a>
-		{% if experience.gallery %}
-			<a href="/photologue/gallery/{{ experience.gallery.id }}/"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option_icon" /></a>
-		{% endif %}
-	</div>
+	{% comment %}
+		{# Phasing this out in favor of having a less cluttered page #}
+		<div class="option_list">
+			<a href="{% url 'narratives.views.create' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create new narrative for {{ experience }}" class="option_icon" /></a>
+			<a href="/experiences/{{ experience.id }}/categorize/"><img src="{{ STATIC_URL }}img/icons/categorize-icon.png" title="Categorize the narratives in this experience" class="option_icon" /></a>
+			<a href="{% url 'experiences.views.index' experience.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Go back to experience page" class="option_icon" /></a>
+			<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload image" class="option_icon" /></a>
+			{% if experience.gallery %}
+				<a href="/photologue/gallery/{{ experience.gallery.id }}/"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option_icon" /></a>
+			{% endif %}
+		</div>
+	{% endcomment %}
 {% endblock content %}

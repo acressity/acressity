@@ -4,7 +4,7 @@ urlpatterns = patterns(
     'narratives.views',
     url(r'^$', 'index', name='experience_homepage'),
     url(r'^(?P<narrative_id>\d+)/$', 'index', name='narrative'),
-    url(r'^create/$', 'create'),
+    url(r'^create/$', 'create', name='create_narrative'),
     url(r'^edit/(?P<narrative_id>\d+)/$', 'edit'),
     url(r'^(?P<narrative_id>\d+)/delete/$', 'delete'),
     url(r'^(?P<narrative_id>\d+)/upload_photo/$', 'upload_photo'),

@@ -9,6 +9,7 @@ from narratives.forms import NarrativeForm
 from experiences.models import Experience
 from photologue.models import Gallery
 
+
 def index(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
     if not narrative.experience.is_public:

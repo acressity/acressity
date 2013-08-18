@@ -33,7 +33,7 @@
 	</table>
 	<div class="option_list">
 		{% if comrade %}
-			<a href="/experiences/{{ experience.id }}/narratives/create/"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
+			<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
 			<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
 			<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
 		{% else %}
@@ -100,6 +100,9 @@
 		{% endif %}
 	</div>
 	{% if comrade %}
+		<a href="{% url 'create_narrative' experience.id %}"><h3>Add a narrative <img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" /></h3></a>
+		{% comment %}
+		{# Following being phased out for a couple reasons: clutters the page, and formatting screwy when expanding with jQuery #}
 		<h3 title="Click for a new narrative" onclick="toggle_div('new_narrative_form');">Add New Narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="new_narrative_form_toggle_icon" /></h3>
 		<div id="new_narrative_form" class="narrative_item">
 			<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
@@ -113,6 +116,7 @@
 				<input type="submit" value="Add Narrative" />
 			</form>
 		</div>
+		{% endcomment %}
 	{% endif %}
 	{% get_comment_count for experience as exp_comment_count %}
 	{% if exp_comment_count > 0 %}

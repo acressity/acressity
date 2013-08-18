@@ -9,21 +9,25 @@
 	{% endif %}
 	<form action="" method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
-		<label for="id_image">Select image:</label>
-		<br />
-		{{ form.image }}
-		<br />
-		<label for="id_title">Title</label>
-		<br />
-		{{ form.title }}
-		<br />
-		<label for="id_caption">Caption:</label>
-		<br />
-		{{ form.caption }}
-		<br />
-		<label for="id_feature">Make this photo the album feature?</label>
-		<input type="checkbox" {% if gallery.photos.count < 1 %}checked="checked"{% endif %} name="feature" id="id_feature" />
-		<br />
+		<div class="formatted_input">
+			<label for="id_image">Select image:</label>
+			<br />
+			{{ form.image }}
+		</div>
+		<div class="formatted_input">
+			<label for="id_title">Title</label>
+			<br />
+			{{ form.title }}
+		</div>
+		<div class="formatted_input">
+			<label for="id_caption">Caption:</label>
+			<br />
+			{{ form.caption }}
+		</div>
+		<div class="formatted_input">
+			<label for="id_feature">Make this photo the album feature?</label>
+			<input type="checkbox" {% if gallery.photos.count < 1 %}checked="checked"{% endif %} name="feature" id="id_feature" />
+		</div>
 		<input type="hidden" name="gallery_id" id="id_gallery_id" value="{{ gallery.id }}" />
 		<input type="submit" value="Upload" />
 	</form>

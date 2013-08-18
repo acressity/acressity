@@ -1,14 +1,19 @@
 {% extends "narratives/base.html" %}
 
 {% block content %}
+	<h2>Editing Narrative <em>{{ narrative }}</em></h2>
 	<form action="" method="POST" class="full_width">
 		{% csrf_token %}
 		<div class="formatted_input">
 			<h3><label for="id_title">Title</label></h3>
 			{{ form.title }}
 		</div>
+		<div class="formatted_input">
+			<h3>From experience</h3>
+			{{ form.experience }}
+		</div>
 		<div class="formatted_input">	
-			<h3><label for"id_date_created">Date Created</label></h3>
+			<h3>Date Created</h3>
 			{{ form.date_created }}
 		</div>
 		<div class="formatted_input">

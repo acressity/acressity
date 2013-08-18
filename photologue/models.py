@@ -36,13 +36,16 @@ except ImportError:
         from PIL import ImageFilter
         from PIL import ImageEnhance
     except ImportError:
-        raise ImportError('Photologue was unable to import the Python Imaging Library. Please confirm it`s installed and available on your current Python path.')
+        raise ImportError('Photologue was unable to import the Python \
+            Imaging Library. Please confirm it`s installed and available \
+            on your current Python path.')
 
 # attempt to load the django-tagging TagField from default location,
 # otherwise we substitude a dummy TagField.
 try:
     from tagging.fields import TagField
-    tagfield_help_text = _('Separate tags with spaces, put quotes around multiple-word tags.')
+    tagfield_help_text = _('Separate tags with spaces, \
+        put quotes around multiple-word tags.')
 except ImportError:
     class TagField(models.CharField):
         def __init__(self, **kwargs):
@@ -52,7 +55,8 @@ except ImportError:
 
         def get_internal_type(self):
             return 'CharField'
-    tagfield_help_text = _('Django-tagging was not found, tags will be treated as plain text.')
+    tagfield_help_text = _('Django-tagging was not found, \
+        tags will be treated as plain text.')
 
     # Tell South how to handle this custom field.
     from south.modelsinspector import add_introspection_rules
@@ -69,10 +73,16 @@ LATEST_LIMIT = getattr(settings, 'PHOTOLOGUE_GALLERY_LATEST_LIMIT', None)
 SAMPLE_SIZE = getattr(settings, 'GALLERY_SAMPLE_SIZE', 3)
 
 # max_length setting for the ImageModel ImageField
-IMAGE_FIELD_MAX_LENGTH = getattr(settings, 'PHOTOLOGUE_IMAGE_FIELD_MAX_LENGTH', 100)
+IMAGE_FIELD_MAX_LENGTH = getattr(settings,
+                                 'PHOTOLOGUE_IMAGE_FIELD_MAX_LENGTH',
+                                 100)
 
 # Path to sample image
-SAMPLE_IMAGE_PATH = getattr(settings, 'SAMPLE_IMAGE_PATH', os.path.join(os.path.dirname(__file__), 'res', 'sample.jpg'))  # os.path.join(settings.PROJECT_PATH, 'photologue', 'res', 'sample.jpg'
+SAMPLE_IMAGE_PATH = getattr(settings,
+                            'SAMPLE_IMAGE_PATH',
+                            os.path.join(os.path.dirname(__file__),
+                                         'res',
+                                         'sample.jpg'))
 
 # Modify image file buffer size.
 ImageFile.MAXBLOCK = getattr(settings, 'PHOTOLOGUE_MAXBLOCK', 512 * 2 ** 10)
@@ -131,25 +141,48 @@ WATERMARK_STYLE_CHOICES = (
 filter_names = []
 for n in dir(ImageFilter):
     klass = getattr(ImageFilter, n)
-    if isclass(klass) and issubclass(klass, ImageFilter.BuiltinFilter) and hasattr(klass, 'name'):
-            filter_names.append(klass.__name__)
-IMAGE_FILTERS_HELP_TEXT = _('Chain multiple filters using the following pattern "FILTER_ONE->FILTER_TWO->FILTER_THREE". Image filters will be applied in order. The following filters are available: %s.' % (', '.join(filter_names)))
+    if (isclass(klass) and
+        issubclass(klass, ImageFilter.BuiltinFilter) and
+            hasattr(klass, 'name')):
+        filter_names.append(klass.__name__)
+IMAGE_FILTERS_HELP_TEXT = _('Chain multiple filters using the following \
+    pattern "FILTER_ONE->FILTER_TWO->FILTER_THREE". Image filters will \
+    be applied in order. The following filters are available: \
+    %s.' % (', '.join(filter_names)))
 
 
 class Gallery(models.Model):
-    date_added = models.DateTimeField(_('date published'), default=datetime.now)
+    date_added = models.DateTimeField(_('date published'),
+                                      default=datetime.now)
     title = models.CharField(_('title'), max_length=75, unique=False)
-    title_slug = models.SlugField(_('title slug'), unique=False, help_text=_('A "slug" is a unique URL-friendly title for an object.'))
+    title_slug = models.SlugField(_('title slug'),
+                                  unique=False,
+                                  help_text=_('A "slug" is a unique URL-\
+                                    friendly title for an object.'))
     description = models.TextField(_('description'), blank=True)
     is_public = models.BooleanField(_('is public'), default=True)
-    # photos = models.ManyToManyField('Photo', related_name='galleries', verbose_name=_('photos'), null=True, blank=True)
+    # photos = models.ManyToManyField('Photo',
+    #                                  related_name='galleries',
+    #                                  verbose_name=_('photos'),
+    #                                  null=True,
+    #                                  blank=True)
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))
     # Every gallery is owned by an explorer.
     # For purposes of universal photo upload script
-    # explorer = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='owner')
-    explorers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='galleries')
-    featured_photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL, related_name='gallery_')
-    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
+    # explorer = models.ForeignKey(settings.AUTH_USER_MODEL,
+    #                              blank=True,
+    #                              null=True,
+    #                              related_name='owner')
+    explorers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                       related_name='galleries')
+    featured_photo = models.ForeignKey('Photo',
+                                       blank=True,
+                                       null=True,
+                                       on_delete=models.SET_NULL,
+                                       related_name='gallery_')
+    content_type = models.ForeignKey(ContentType,
+                                     verbose_name=_('content type'),
+                                     related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField(_('object ID'), null=True)
 
     class Meta:
@@ -165,7 +198,8 @@ class Gallery(models.Model):
         return self.__unicode__()
 
     def object(self):
-        return ContentType.objects.get(pk=self.content_type_id).get_object_for_this_type(pk=self.object_pk)
+        return ContentType.objects.get(pk=self.content_type_id)\
+            .get_object_for_this_type(pk=self.object_pk)
 
     def save(self, *args, **kwargs):
         if self.title_slug is None:
@@ -209,21 +243,25 @@ class Gallery(models.Model):
             photo_queryset = self.photos.none()
             for narrative in ei.narratives.all():
                 if narrative.gallery:
-                    photo_queryset = photo_queryset | narrative.gallery.photos.all()
+                    photo_queryset = photo_queryset | \
+                        narrative.gallery.photos.all()
             return photo_queryset
 
         if self.content_type == ContentType.objects.get(name='Narrative'):
             return
         if self.content_type == ContentType.objects.get(name='Experience'):
-            experience = ContentType.objects.get(name='Experience').get_object_for_this_type(pk=self.object_pk)
+            experience = ContentType.objects.get(name='Experience')\
+                .get_object_for_this_type(pk=self.object_pk)
             return(experience_photos(experience))
         if self.content_type == ContentType.objects.get(name='Explorer'):
-            explorer = ContentType.objects.get(name='Explorer').get_object_for_this_type(pk=self.object_pk)
+            explorer = ContentType.objects.get(name='Explorer')\
+                .get_object_for_this_type(pk=self.object_pk)
             # Initialize queryset
             photo_queryset = self.photos.none()
             for experience in explorer.experiences.all():
                 if experience.gallery:
-                    photo_queryset = photo_queryset | experience.gallery.photos.all()
+                    photo_queryset = photo_queryset | \
+                        experience.gallery.photos.all()
             return photo_queryset
 
     def photo_count(self, public=True):
