@@ -34,7 +34,7 @@ urlpatterns = patterns(
     # url(r'^gallery/page/(?P<page>[0-9]+)/$', GalleryListView.as_view(), name='pl-gallery-list'),
 
     url(r'^photo/(?P<photo_id>\d+)/edit_photo/$', 'photologue.views.edit_photo'),
-    url(r'^photo/(?P<photo_id>\d+)/delete_photo/$', 'photologue.views.delete_photo'),
+    url(r'^photo/(?P<photo_id>\d+)/delete_photo/$', 'photologue.views.delete_photo', name='delete_photo'),
     url(r'^photo/(?P<year>\d{4})/(?P<month>[a-z]{3})/(?P<day>\w{1,2})/(?P<slug>[\-\d\w]+)/$',
         PhotoDateDetailView.as_view(),
         name='pl-photo-detail'),

@@ -55,10 +55,12 @@ def edit_photo(request, photo_id):
 @login_required
 def delete_photo(request, photo_id):
     photo = get_object_or_404(Photo, pk=photo_id)
-    galleries = [g for g in photo.public_galleries()]
-    if request.method == 'POST' and request.user == photo.author:
+    if request.user == photo.author:
         photo.delete()
-    return redirect(reverse('pl-gallery', args=(galleries[0].id,)))
+        messages.success(request, 'Photo was successfully deleted')
+    else:
+        raise PermissionDenied
+    return redirect(reverse('pl-gallery', args=(photo.gallery.id,)))
 
 
 def photo_view(request, pk):
@@ -68,6 +70,7 @@ def photo_view(request, pk):
         if request.user not in photo.gallery.explorers.all():
             raise PermissionDenied
     return render(request, 'photologue/photo_detail.html', {'object': photo})
+
 
 class PhotoView(object):
     queryset = Photo.objects.filter(is_public=True)

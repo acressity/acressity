@@ -2,31 +2,37 @@
 
 {% block content %}
 	<h2>Upload photo for {{ gallery.title }}</h2>
-	{% if form.errors %}
-		{% for error in form.errors %}
-			{{ error }}
-		{% endfor %}
-	{% endif %}
-	<form action="" method="POST" enctype="multipart/form-data">
+	<form action="" method="POST" enctype="multipart/form-data" class="full_width">
 		{% csrf_token %}
 		<div class="formatted_input">
-			<label for="id_image">Select image:</label>
-			<br />
+			<label for="id_image">
+				<h3>Select image</h3>
+			</label>
+			{{ form.image.errors }}
 			{{ form.image }}
 		</div>
 		<div class="formatted_input">
-			<label for="id_title">Title</label>
-			<br />
+			<label for="id_title">
+				<h3>Title</h3>
+			</label>
+			{{ form.title.errors }}
 			{{ form.title }}
 		</div>
 		<div class="formatted_input">
-			<label for="id_caption">Caption:</label>
-			<br />
+			<label for="id_caption">
+				<h3>Caption</h3>
+			</label>
+			{{ form.caption.errors }}
 			{{ form.caption }}
 		</div>
 		<div class="formatted_input">
-			<label for="id_feature">Make this photo the album feature?</label>
-			<input type="checkbox" {% if gallery.photos.count < 1 %}checked="checked"{% endif %} name="feature" id="id_feature" />
+			<label for="id_feature">
+				<h3>Make this photo the album feature? <input type="checkbox" {% if gallery.photos.count < 1 %}checked="checked"{% endif %} name="feature" id="id_feature" /></h3>
+			</label>
+			<h4 onclick="toggle_div('about_featured_photo');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_featured_photo_toggle_icon" /></h4>
+			<div id="about_featured_photo" class="smaller_font" style="display: none;">
+				The featured photo is used to represent the gallery and is displayed first in the gallery.
+			</div>
 		</div>
 		<input type="hidden" name="gallery_id" id="id_gallery_id" value="{{ gallery.id }}" />
 		<input type="submit" value="Upload" />

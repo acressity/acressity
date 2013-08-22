@@ -5,30 +5,34 @@
     <form action="" method="POST">
         {% csrf_token %}
         <div class="formatted_input">
-            Title
-            <br />
+            <h3>Title</h3>
+            {{ form.experience.errors }}
             {{ form.experience }}
         </div>
         <div class="formatted_input">
-            Brief (optional)
-            <br />
+            <h3>Date Created (Leave blank for today)</h3>
+            {{ form.date_created.errors }}
+            {{ form.date_created }}
+        </div>
+        <div class="formatted_input">
+            <h3>Brief (optional)</h3>
+            {{ form.brief.errors }}
             {{ form.brief }}
         </div>
         <div class="formatted_input">
-            Status (optional)
-            <br />
+            <h3>Status (optional)</h3>
+            {{ form.status.errors }}
             {{ form.status }}
         </div>
         <div class="formatted_input">
-            Make this your featured experience?
-            {{ form.make_feature }}
+            <h3>Make this your featured experience? {{ form.make_feature }}</h3>
             <p onclick="toggle_div('about_featured_experience');" class="smaller_font">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_featured_experience_toggle_icon" /></p>
             <div id="about_featured_experience" style="display: none;">
                 <span class="smaller_font">{{ form.make_feature.help_text }}</span>
             </div>
         </div>
         <div class="formatted_input">
-            Public? {{ form.is_public }}
+            <h3>Public? {{ form.is_public }}</h3> 
             <p onclick="toggle_div('about_public_experiences');" class="smaller_font">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" /></p>
             <div id="about_public_experiences" style="display: none;">
                 <span class="smaller_font">{{ form.is_public.help_text}}</span>

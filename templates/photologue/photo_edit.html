@@ -10,11 +10,20 @@
 		<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
         <form action="/photologue/photo/{{ photo.id }}/edit_photo/" method="POST">
         	{% csrf_token %}
-    		<h3>Title: {{ form.title }}</h3>
-    		Photo Description:
-    		<br />
-    		{{ form.caption }}
-    		<br />
+            <div class="formatted_input">
+                <label for="id_title">
+                    <h3>Title</h3>
+                </label>
+                {{ form.title.errors }}
+                {{ form.title }}
+            </div>
+            <div class="formatted_input">
+                <label for="id_caption">
+                    <h3>Photo Description</h3>
+                </label>
+                {{ form.caption.errors }}
+        		{{ form.caption }}
+    		</div>
     		<input type="submit" value="Update Photo" />
 		</form>
     </div>

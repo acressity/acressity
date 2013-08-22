@@ -179,7 +179,8 @@ class Gallery(models.Model):
                                        blank=True,
                                        null=True,
                                        on_delete=models.SET_NULL,
-                                       related_name='gallery_')
+                                       related_name='gallery_',
+                                       help_text='The featured photo is the symbol for the gallery.')
     content_type = models.ForeignKey(ContentType,
                                      verbose_name=_('content type'),
                                      related_name="content_type_set_for_%(class)s")
@@ -243,25 +244,21 @@ class Gallery(models.Model):
             photo_queryset = self.photos.none()
             for narrative in ei.narratives.all():
                 if narrative.gallery:
-                    photo_queryset = photo_queryset | \
-                        narrative.gallery.photos.all()
+                    photo_queryset = photo_queryset | narrative.gallery.photos.all()
             return photo_queryset
 
         if self.content_type == ContentType.objects.get(name='Narrative'):
             return
         if self.content_type == ContentType.objects.get(name='Experience'):
-            experience = ContentType.objects.get(name='Experience')\
-                .get_object_for_this_type(pk=self.object_pk)
+            experience = ContentType.objects.get(name='Experience').get_object_for_this_type(pk=self.object_pk)
             return(experience_photos(experience))
         if self.content_type == ContentType.objects.get(name='Explorer'):
-            explorer = ContentType.objects.get(name='Explorer')\
-                .get_object_for_this_type(pk=self.object_pk)
+            explorer = ContentType.objects.get(name='Explorer').get_object_for_this_type(pk=self.object_pk)
             # Initialize queryset
             photo_queryset = self.photos.none()
-            for experience in explorer.experiences.all():
+            for experience in explorer.experiences.filter(is_public=True):
                 if experience.gallery:
-                    photo_queryset = photo_queryset | \
-                        experience.gallery.photos.all()
+                    photo_queryset = photo_queryset | experience.gallery.photos.all()
             return photo_queryset
 
     def photo_count(self, public=True):

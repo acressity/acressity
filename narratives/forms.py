@@ -15,16 +15,17 @@ class NarrativeForm(ModelForm):
         super(NarrativeForm, self).__init__(*args, **kwargs)
         self.fields['experience'].queryset = explorer.experiences.all()
 
-    # def clean_narrative(self):
-    #     narrative = self.cleaned_data.get('narrative')
-    #     if not narrative:
-    #         raise forms.ValidationError('Narrative field can\'t be empty')
-
     def clean_date_created(self):
         date_created = self.cleaned_data.get('date_created')
         if not date_created:
             date_created = datetime.now()
         return date_created
+
+    def clean_narrative(self):
+        narrative = self.cleaned_data.get('narrative')
+        if len(narrative) < 3:
+            raise forms.ValidationError('Narrative needs a little more extrapolation')
+        return narrative
 
     class Meta:
         model = Narrative

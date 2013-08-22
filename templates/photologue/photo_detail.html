@@ -33,8 +33,9 @@
     <div class="option_list">
         {% if object.gallery %}
             <a href="{{ object.gallery.get_absolute_url }}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title=" Back to {{ object.gallery.title }} Gallery" class="option_icon" /></a>
-            {% ifequal request.user object.author %} 
+            {% ifequal user object.author %} 
                 <a href="{% url 'photologue.views.gallery_edit' object.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this photo's album" class="option_icon" /></a>
+                <a href="{% url 'delete_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" onclick="return confirm('Delete this photo?');" /></a>
             {% endifequal %}
         {% endif %}
     </div>

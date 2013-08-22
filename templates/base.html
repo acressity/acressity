@@ -54,11 +54,11 @@ anything lacking in efficiency or if you have any suggestions.
 
 			        	<li>
 			        		{# Syntax highlighting for following a little screwy, but does the job properly #}
-			        		<a
 				        		{% if user.is_authenticated %}
-				        			href="{% url 'journey' user.id %}"
-				        		{% endif %}
-			        		>Journey</a>
+				        			<a href="{% url 'journey' user.id %}">
+				        		{% else %}
+				        			<a href="{% url 'featured_experiences' %}">
+				        		{% endif %}Journey</a>
 			        		<ul class="sub_menu">
 
 			        			{% if user.is_authenticated %}
@@ -83,23 +83,24 @@ anything lacking in efficiency or if you have any suggestions.
 			        		{% endif %}Experiences</a>
 			        		<ul class="sub_menu">
 
-								<li><a href="{% url 'all_experiences' %}">All Experiences</a></li>
-
-								<li><a href="{% url 'experiences.views.featured' %}">Featured Experiences</a></li>
-
 								{% if request.user.is_authenticated %}
-
-									<li><a href="{% url 'tracking_experiences' user.id %}">Tracking Experiences</a></li>
 
 									{% for experience in request.user.top_five %}
 				        				<li><a href="{% url 'experiences.views.index' experience.id %}">
 				        					{% if experience.gallery.featured_photo %}
-				        						<img class="float_left" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
-				        						<br />
+				        						<img class="float_left" style="vertical-align: middle;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
 				        					{% endif %}
 				        				{{ experience }}</a></li>
 				        			{% endfor %}
+
+				        			<li><a href="{% url 'tracking_experiences' user.id %}">Your Tracking Experiences</a></li>
+
 								{% endif %}
+
+								<li><a href="{% url 'experiences.views.featured' %}">Featured Experiences</a></li>
+
+								<li><a href="{% url 'all_experiences' %}">All Site Experiences</a></li>
+
 			        		</ul>
 			        	</li>
 				    </ul>
@@ -126,7 +127,7 @@ anything lacking in efficiency or if you have any suggestions.
 									</li>
 								</ul>
 							{% else %}
-								<form id="top_bar_login" action="/explorers/login/?next=/explorers/journey" method="POST">
+								<form id="top_bar_login" action="/explorers/login/?next=/explorers/journey" method="POST" class="no_styling">
 									{% csrf_token %}
 									<div class="float_left">
 										Trailname:
@@ -140,7 +141,7 @@ anything lacking in efficiency or if you have any suggestions.
 										<input type="submit" class="expand-button" value="Log In" />
 									</div>
 								</form>
-								<form id="top_bar_signup" action="{% url 'step_two' %}" method="POST" onsubmit="return validateFirstExperience(this) && verify('Add as an experience:', this.experience);">
+								<form id="top_bar_signup" action="{% url 'step_two' %}" method="POST" onsubmit="return validateFirstExperience(this) && verify('Add as an experience:', this.experience);" class="no_styling">
 									{% csrf_token %}
 									<div class="float_right">
 										<input type="text" name="experience" value="Start with new experience..." onclick="setUp(this);" title="Submit your first experience to get started" />
@@ -187,7 +188,7 @@ anything lacking in efficiency or if you have any suggestions.
 								</div>
 							{% endif %}
 						{% endblock right_content %}
-						<div>
+						<div style="background-color: #5986A7;">
 							<h4 onclick="toggle_div('comment_to_creator_form');">Comments for website creator <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="comment_to_creator_form_toggle_icon" /></h4>
 							<div id="comment_to_creator_form" style="display: none;" class="smaller_font object_item">
 								<p>

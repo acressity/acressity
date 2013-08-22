@@ -60,7 +60,7 @@ def comment_to_creator(request):
         comment = request.POST.get('comment_to_creator')
         poohbear = request.POST.get('poohbear')
         if len(comment) >= 5:
-            message = comment
+            message = comment + '\n\n{0}'.format(request.META.get('HTTP_REFERER'))
             if poohbear:
                 message += '\n\nAnd a poohbear: {0}'.format(poohbear)
             send_mail('Comments from Users', message, 'acressity@acressity.com', ['andrew.s.gaines@gmail.com'])

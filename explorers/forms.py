@@ -24,6 +24,12 @@ class RegistrationForm(ModelForm):
             raise forms.ValidationError('Password must be at least {0} characters'.format(settings.MIN_PASSWORD_LEN))
         return password2
 
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if len(first_name) < 2:
+            raise forms.ValidationError('I think your name is just a tad bit longer')
+        return first_name
+
     class Meta:
         model = Explorer
         exclude = ('experiences', 'last_login', 'date_joined', 'password')

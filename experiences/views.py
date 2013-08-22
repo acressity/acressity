@@ -32,8 +32,8 @@ def create(request):
                 messages.success(request, 'Your featured experience is now {0}'.format(form.instance.experience))
             messages.success(request, 'Experience successfully added')
             return redirect(reverse('experience', args=(new_experience.id,)))
-        else:
-            messages.error(request, 'There was an error in saving your new experience')
+        # else:
+        #     messages.error(request, 'There was an error in saving your new experience')
     else:
         form = ExperienceForm()
     return render(request, 'experiences/create.html', {'form': form})

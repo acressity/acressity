@@ -21,12 +21,15 @@
 		<tr>
 			{% for explorer in experience.explorers.all %}
 				<td>
-					<div class="object_item thirds_item explorer_item dash_item">
-						{% if explorer.gallery.featured_photo %}
-							<img src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer.get_full_name }}" />
-						{% endif %}
-						<a href="{% url 'journey' explorer.id %}"><h3>{{ explorer.get_full_name }}</h3></a>
-					</div>
+					{% include "explorers/dash_snippet.html" %}
+					{% comment %}
+						<div class="object_item thirds_item explorer_item dash_item">
+							{% if explorer.gallery.featured_photo %}
+								<img src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer.get_full_name }}" />
+							{% endif %}
+							<a href="{% url 'journey' explorer.id %}"><h3>{{ explorer.get_full_name }}</h3></a>
+						</div>
+					{% endcomment %}
 				</td>
 			{% endfor %}
 		</tr>
@@ -100,7 +103,7 @@
 		{% endif %}
 	</div>
 	{% if comrade %}
-		<a href="{% url 'create_narrative' experience.id %}"><h3>Add a narrative <img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" /></h3></a>
+		<a href="{% url 'create_narrative' experience.id %}"><h3><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" style="vertical-align: middle;" /> Create new narrative</h3></a>
 		{% comment %}
 		{# Following being phased out for a couple reasons: clutters the page, and formatting screwy when expanding with jQuery #}
 		<h3 title="Click for a new narrative" onclick="toggle_div('new_narrative_form');">Add New Narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="new_narrative_form_toggle_icon" /></h3>

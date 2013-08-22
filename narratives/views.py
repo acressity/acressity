@@ -29,7 +29,7 @@ def create(request, experience_id):
             messages.success(request, 'Your narrative has been added')
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
-        form = NarrativeForm(request.user, {'experience': experience.id})
+        form = NarrativeForm(request.user, initial={'experience': experience.id})
     return render(request, 'narratives/create.html', {'form': form, 'experience': experience})
 
 
@@ -41,9 +41,7 @@ def edit(request, narrative_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Narrative successfully updated')
-            else:
-                messages.error(request, 'There was a problem saving your information')
-            return redirect('/narratives/{0}'.format(narrative.id))
+                return redirect('/narratives/{0}'.format(narrative.id))
         else:
             form = NarrativeForm(narrative.author, instance=narrative)
         return render(request, 'narratives/edit.html', {'form': form, 'narrative': narrative})

@@ -3,25 +3,6 @@
 
 {% load explorers_extras %}
 
-{% comment %}
-    <div class="explorer_item">
-        <h1>{{ explorer.get_full_name|possessive }} Journey</h1>
-        {% if explorer.gallery.featured_photo %}
-            <div>
-                <a href="{% url 'pl-gallery' explorer.gallery.id %}">
-                    <img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" title="{{ explorer.get_full_name }}" />
-                </a>
-            </div>
-        {% endif %}
-        <h3 title="Trailname">Trailname: {{ explorer.trailname }}</h3>
-        <div class="option_list">
-            <a href="{% url 'story' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="{{ explorer.first_name|possessive }} Story" class="option_icon" /></a>
-            <a href="{% url 'board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="Check out the Bulletin Board" class="option_icon" /></a>
-            
-        </div>
-    </div>
-{% endcomment %}
-
 <div class="explorer_item">
     <div class="featured_photo">
         {% if explorer.gallery.featured_photo %}
@@ -32,6 +13,9 @@
             {% endifequal %}
         {% endif %}
     </div>
+    <a href="{% url 'journey' explorer.id %}" title="View {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} journey">
+        <h3 class="align_center">{{ explorer.get_full_name }}</h3>
+    </a>
     {% if explorer.featured_experience %}
         <div>
             <a href="{% url 'experience' explorer.featured_experience.id %}" title="{% ifequal explorer user %}Work on your featured experience{% else %}View featured experience{% endifequal %}"><h3>{{ explorer.featured_experience }}</h3></a>

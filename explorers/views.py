@@ -167,12 +167,9 @@ def new_explorer(request):
             gallery.explorers.add(explorer)
             explorer.gallery = gallery
             explorer.save()
-            # Send them on introductory tour
+            # Welcome and send them on introductory tour?
+            messages.success(request, 'Welcome aboard, {0}'.format(explorer.get_full_name()))
             return redirect(reverse('welcome'))
-        else:
-            messages.error(request, 'There was an issue processing your registration... The issue will be resolved soon.')
-            # Welcome the new explorer
-            # messages.success(request, 'Go on, your journey awaits!')
     else:
         form = RegistrationForm()
     return render(request, 'registration/register.html', {'form': form, 'experience': request.POST['experience'], 'min_password_len': settings.MIN_PASSWORD_LEN})

@@ -31,13 +31,13 @@
 	</p>
 	<h2>In Summation</h2>
 	<p>
-		Chart your thoughts, status, and progress into new experiences with written narratives and uploaded photos. Use this application as a free-standing online journal for expression of experiences of your own, invite comrades to becoming involved in a shared experience, or read about the journeys of other explorers.
+		Use this web application as a tool to chart your thoughts, status, and progress into new experiences with written narratives and uploaded photos. Use it as a free-standing online journal for expression of experiences of your own, invite others to become involved in a shared experience, or read about the journeys of other explorers.
 	</p>
 	{% if not user.is_authenticated %}
 		<form action="{% url 'step_two' %}" method="POST" class="full_width">
 			{% csrf_token %}
-			<input type="text" name="experience" id="id_experience" value="Start your journey by jotting down your first experience here" onclick="setUp(this);" class="larger" />
-			<input type="submit" value="Create Journey" />
+			<input type="text" name="experience" id="id_experience" value="Start your journey by creating your first experience here" onclick="setUp(this);" class="larger" />
+			<input type="submit" value="Create experience" />
 			<input type="hidden" name="initial" />
 		</form>
 	{% endif %}
