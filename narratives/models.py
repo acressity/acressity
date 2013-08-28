@@ -25,6 +25,7 @@ class Narrative(models.Model):
     date_modified = models.DateTimeField(auto_now=True, help_text='Updated every time object saved')
     category = models.CharField(max_length=50, null=True, blank=True, help_text='Optional information used to classify and order the narratives within the experience.')
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)
+    is_public = models.BooleanField(default=True, help_text='Public narratives will be displayed in the default views. Private ones are only seen by yourself.')
 
     class Meta:
         #ordering = ['category']

@@ -16,24 +16,6 @@
 			{% endif %}
 		</div>
 	{% endif %}
-	<h3>Explorer{{ experience.explorers.count|pluralize }}</h3>
-	<table class="thirds_table">
-		<tr>
-			{% for explorer in experience.explorers.all %}
-				<td>
-					{% include "explorers/dash_snippet.html" %}
-					{% comment %}
-						<div class="object_item thirds_item explorer_item dash_item">
-							{% if explorer.gallery.featured_photo %}
-								<img src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer.get_full_name }}" />
-							{% endif %}
-							<a href="{% url 'journey' explorer.id %}"><h3>{{ explorer.get_full_name }}</h3></a>
-						</div>
-					{% endcomment %}
-				</td>
-			{% endfor %}
-		</tr>
-	</table>
 	<div class="option_list">
 		{% if comrade %}
 			<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
@@ -58,18 +40,36 @@
 			<a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
 		{% endif %}
 		{% if author %}
-			<a href="{% url 'experiences.views.invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
+			<a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
 			<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
 		{% endif %}
 	</div>
+	<h3>Explorer{{ experience.explorers.count|pluralize }}</h3>
+	<table class="thirds_table">
+		<tr>
+			{% for explorer in experience.explorers.all %}
+				<td>
+					{% include "explorers/dash_snippet.html" %}
+					{% comment %}
+						<div class="object_item thirds_item explorer_item dash_item">
+							{% if explorer.gallery.featured_photo %}
+								<img src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer.get_full_name }}" />
+							{% endif %}
+							<a href="{% url 'journey' explorer.id %}"><h3>{{ explorer.get_full_name }}</h3></a>
+						</div>
+					{% endcomment %}
+				</td>
+			{% endfor %}
+		</tr>
+	</table>
 	{% if experience.brief %}
 		<div class="experience_item">
-			<h3>Experience Brief</h3>
+			<h3>Experience brief</h3>
 			{{ experience.brief|linebreaks }}
 		</div>
 	{% else %}
 		{% if comrade %}
-			<h3>Write a Brief</h3>
+			<h3>Write a brief</h3>
 			<form action="{% url 'experiences.views.brief' experience.id %}" method="POST">
 				{% csrf_token %}
 				{{ experience_brief_form.brief }}
@@ -79,6 +79,25 @@
 		{% else %}
 			{{ block.super }}
 		{% endif %}
+	{% endif %}
+	{% if comrade %}
+		<a href="{% url 'create_narrative' experience.id %}"><h3><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" style="vertical-align: middle;" /> Create new narrative</h3></a>
+		{% comment %}
+		{# Following being phased out for a couple reasons: clutters the page, and formatting screwy when expanding with jQuery #}
+		<h3 title="Click for a new narrative" onclick="toggle_div('new_narrative_form');">Add New Narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="new_narrative_form_toggle_icon" /></h3>
+		<div id="new_narrative_form" class="narrative_item">
+			<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
+				{% csrf_token %}
+				{{ form.narrative }}
+				<label for="id_title"><h3>Title <em>(optional)</em></h3></label>
+				{{ form.title }}
+				<label for="id_category"><h3>Category <em>(optional)</em></h3></label>
+				{{ form.category }}
+				<input type="hidden" name="experience" value="{{ experience.id }}" />
+				<input type="submit" value="Add Narrative" />
+			</form>
+		</div>
+		{% endcomment %}
 	{% endif %}
 	<div class="object_item_list">
 		{% if experience.narratives.count > 0 %}
@@ -99,28 +118,9 @@
 				</tr>
 			</table>
 		{% else %}
-				No narratives yet...
+			No narratives yet...
 		{% endif %}
 	</div>
-	{% if comrade %}
-		<a href="{% url 'create_narrative' experience.id %}"><h3><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" style="vertical-align: middle;" /> Create new narrative</h3></a>
-		{% comment %}
-		{# Following being phased out for a couple reasons: clutters the page, and formatting screwy when expanding with jQuery #}
-		<h3 title="Click for a new narrative" onclick="toggle_div('new_narrative_form');">Add New Narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="new_narrative_form_toggle_icon" /></h3>
-		<div id="new_narrative_form" class="narrative_item">
-			<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
-				{% csrf_token %}
-				{{ form.narrative }}
-				<label for="id_title"><h3>Title <em>(optional)</em></h3></label>
-				{{ form.title }}
-				<label for="id_category"><h3>Category <em>(optional)</em></h3></label>
-				{{ form.category }}
-				<input type="hidden" name="experience" value="{{ experience.id }}" />
-				<input type="submit" value="Add Narrative" />
-			</form>
-		</div>
-		{% endcomment %}
-	{% endif %}
 	{% get_comment_count for experience as exp_comment_count %}
 	{% if exp_comment_count > 0 %}
 		<h4 title="Click to expand" onclick="toggle_div('exp_comment_list');">{{ exp_comment_count }} Note{{ exp_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="exp_comment_list_toggle_icon" /></h4>

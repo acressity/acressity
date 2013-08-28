@@ -41,7 +41,7 @@ anything lacking in efficiency or if you have any suggestions.
 
 				<div id="top_bar_left">
 					<a href="/"><span id="logo">
-						<strong>Acressity</strong>&nbsp;&nbsp;<em>Expand Your Experience</em>
+						<strong>Acressity</strong>&nbsp;&nbsp;<em>Explore New Experiences</em>
 					</span></a>
 					<ul class="dropdown">
 			        	<li><a href="{% url 'about' %}">About</a>
@@ -204,7 +204,9 @@ anything lacking in efficiency or if you have any suggestions.
 								</p>
 								<form method="POST" action="{% url 'comment_to_creator' %}">
 									{% csrf_token %}
-									<textarea name="comment_to_creator"></textarea>
+									<div class="formatted_input">
+										<textarea name="comment_to_creator"></textarea>
+									</div>
 									{# Following is a honeypot. If filled (most likely by a bot) have appropriate response #}
 									<input type="text" name="poohbear" style="display: none;" />
 									<input type="submit" value="Submit" />

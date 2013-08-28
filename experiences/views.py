@@ -146,29 +146,6 @@ def categorize(request, experience_id):
         return render(request, 'acressity/message.html')
 
 
-def invite(request, experience_id):
-    experience = get_object_or_404(Experience, pk=experience_id)
-    if request.user != experience.author:
-        messages.error(request, 'Sorry, you do not have the ability of inviting others to this experience')
-        return render(request, 'acressity/message.html')
-    explorers = Explorer.objects.exclude(experiences=experience).exclude(experience_recruit__experience=experience)  # Remove those who are already a part of the experience and those who have an outstanding request
-    if request.method == 'POST':
-        if 'invite' in request.POST:
-            recruit = Explorer.objects.get(pk=int(request.POST.get('explorer_id')))
-            experience_request = Request(author=request.user, recruit=recruit, experience=experience)
-            experience_request.save()
-            messages.success(request, 'You have invited {0} to be a part of {1}.'.format(recruit.get_full_name(), experience))
-        elif 'email' in request.POST:
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            email = request.POST.get('email')
-            if first_name and last_name and email:
-                send_mail('Invitation from {0}'.format(request.user.get_full_name()), 'You have been invited to participate in the experience of {0}'.format(experience), 'acressity@acressity.com', [email])
-                messages.success(request, 'You have successfully invited {0} {1}'.format(first_name, last_name))
-        return redirect(reverse('experience', args=(experience.id,)))
-    return render(request, 'experiences/invite.html', {'experience': experience, 'explorers': explorers})
-
-
 def featured(request):
     # I should export this to a generic view...
     featured_experiences = FeaturedExperience.objects.get_random(5)

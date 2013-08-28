@@ -6,7 +6,7 @@
 {% endcomment %}
 
 <div class="experience_dash">
-    <div class="left">
+    <div>
         <a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
             {% if experience.gallery.featured_photo %}
                 <div class="featured_photo">
@@ -35,7 +35,7 @@
                             <a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
                         {% endif %}
                         {% ifequal user experience.author %}
-                            <a href="{% url 'experiences.views.invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
+                            <a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
                             <a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
                         {% endifequal %}
                     {% endif %}
@@ -45,7 +45,11 @@
                             <input type="submit" value="Track" />
                         </form>
                     {% endif %}
-                    <h4 onclick="toggle_div('{{ experience.id }}_comment');" title="Click to toggle the note form">Leave a Note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ experience.id }}_comment_toggle_icon" /></h4>
+                    <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle the note form">
+                        <strong>
+                            Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ experience.id }}_comment_toggle_icon" />
+                        </strong>
+                    </div>
                     <div id="{{ experience.id }}_comment" class="comment" style="display: none;">
                         {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
                             {% include "support/note_form.html" %}
@@ -55,14 +59,22 @@
             </div>
         {% endif %}
     </div>
-    <div class="right">
+    <div>
         {# Section for latest activity #}
         {% if experience.latest_narrative %}
-            {% with experience.latest_narrative as latest_narrative %}
-                <h4 id="expand_explorer_latest_narrative" title="Click to toggle latest narrative" onclick="toggle_div('experience_{{ experience.id }}_latest_narrative');">
-                    Latest Narrative 
-                    <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="experience_{{ experience.id }}_latest_narrative_toggle_icon" />
-                </h4>
+            {% with experience.latest_narrative as narrative %}
+                <div onclick="toggle_div(this.nextElementSibling);">
+                    <strong>Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" /></strong>
+                </div>
+                <div class="toggle_div">
+                    {% include "narratives/dash_snippet.html" %}
+                </div>
+                {% comment %}
+                <div id="expand_explorer_latest_narrative" title="Click to toggle latest narrative" onclick="toggle_div(this.nextElementSibling);">
+                    <strong>
+                        Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="experience_{{ experience.id }}_latest_narrative_toggle_icon" />
+                    </strong>
+                </div>
                 <div class="latest_narrative" id="experience_{{ experience.id }}_latest_narrative">
                     {% if latest_narrative.gallery.featured_photo %}
                         <div class="featured_photo">
@@ -85,6 +97,7 @@
                         </div>
                     {% endifequal %}
                 </div>
+                {% endcomment %}
             {% endwith %}
         {% endif %}
     </div>

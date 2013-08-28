@@ -2,15 +2,32 @@
 
 {% block content %}
 	<h2>Confirm you wish to delete</h2>
-	<h3 class="experience_item">{{ experience }}</h3>
+	<h3 class="experience_item">
+		{{ experience }}
+	</h3>
 	{% if experience.narratives.all.count > 0 %}
 		<h3>And the following narrative{{ experience.narratives.all|pluralize }}</h3>
-		{% for narrative in experience.narratives.all %}
-			<div class="narrative_item">
-				{{ narrative }}
-			</div>
-		{% endfor %}
+		<table class="thirds_table">
+			<tr>
+				{% for narrative in experience.ordered_narratives %}
+					<td>
+						{% include "narratives/dash_snippet.html" %}
+					</td>
+					{% if forloop.counter|divisibleby:'3' %}
+						{% if not forloop.last %}
+							</tr>
+							<tr>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</tr>
+		</table>
 	{% endif %}
+	<h3>
+		Deleting experience includes deleting the associated photos
+		<br />
+		This action cannot be undone
+	</h3>
 	<form action="" method="POST">
 		{% csrf_token %}
 		<input type="submit" value="Confirm" name="confirm" />

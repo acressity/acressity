@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from experiences.models import Experience
 
+
 # I'm not satisfied with this at the moment. I want to have a model that encompasses the ability to cheer (track) an arbitrary object (such as explorer or experience). Yet I don't want to have disorganized data in the db...
 # Perhaps simply rename this to CheerExplorer to reduce ambiguity, and have experience 'support' be coordinated via TrackExperience model
 class Cheer(models.Model):
@@ -52,3 +53,17 @@ class Request(models.Model):
 
     def __unicode__(self):
         return '{0} invitation'.format(self.experience)
+
+
+class InvitedExplorer(models.Model):
+    '''
+    Model to represent a person being invited to be a part of an experience. Should be deleted based on reply or a timeout
+    '''
+    first_name = models.CharField(max_length=30, null=False, blank=False)
+    last_name = models.CharField(max_length=30, null=False, blank=False)
+    email = models.EmailField(max_length=254, null=False, blank=False, help_text='This information is used responsibly. It will only be used to send an invitation request.')
+    experience = models.ForeignKey(Experience, null=False, blank=True)
+    code = models.CharField(max_length=25, null=False, blank=True, help_text='Code sent with the email in the url, used to confirm the uniqueness and identity of the invited explorer.')
+
+    def __unicode__(self):
+        return '{0} {1} invited to {2}'.format(self.first_name, self.last_name, self.experience)

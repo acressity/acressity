@@ -1,0 +1,74 @@
+{% extends "experiences/base.html" %}
+
+{% block content %}
+	<h2>Invite a comrade to {{ experience }}</h2>
+	{% comment %}
+	<form action="" method="POST">
+		{% csrf_token %}
+		<table class="thirds_table">
+			<td class="formatted_input">
+				<label for="id_first_name">
+					<h3>First name of comrade</h3>
+				</label>
+				{{ form.first_name.errors }}
+				{{ form.first_name }}
+			</td>
+			<td class="formatted_input">
+				<label for="id_last_name">
+					<h3>Last name of comrade</h3>
+				</label>
+				{{ form.last_name.errors }}
+				{{ form.last_name }}
+			</td>
+		</table>
+		<div class="formatted_input">
+			<label for="id_email">
+				<h3>Email address of person you wish to invite to this experience</h3>
+			</label>
+			{{ form.email.errors }}
+			{{ form.email }}
+		</div>
+		<div class="formatted_input">
+			{{ form.experience.errors }}
+			{{ form.experience }}
+		</div>
+		<p><em>This information is used responsibly. It will only be used to send an invitation request.</em></p>
+		<input type="submit" value="Invite" name="invite" class="invite-button" />
+	</form>
+	<h3>Or select from registered explorers</h3>
+	{% endcomment %}
+	{% for explorer in explorers %}
+		<div class="explorer_item">
+			{% include "explorers/dash_snippet.html" %}
+			<form action="" method="POST">
+				{% csrf_token %}
+				<input type="submit" value="Invite {{ explorer.first_name }}" class="invite-button" />
+				<input type="hidden" name="explorer_id" value="{{ explorer.id }}">
+				{# <input type="hidden" value="invite_existing_explorer" /> #}
+			</form>
+		</div>
+	{% endfor %}
+	{% comment %}
+	<form action="" method="POST">
+		{% csrf_token %}
+		<strong>/*Following function not yet working:*/</strong>
+		<h3>Invite someone not yet on this site</h3>
+		<p>
+			<label for="id_first_name">First name:</label>
+			<br />
+			<input type="text" name="first_name" id="id_first_name" />
+		</p>
+		<p>
+			<label for="id_last_name">Last name:</label>
+			<br />
+			<input type="text" name="last_name" id="id_first_name" />
+		</p>
+		<p>
+			<label for="id_email">Email address:</label>
+			<br />
+			<input type="text" name="email" id="id_email" />
+		</p>
+		<input type="submit" value="Invite">
+	</form>
+	{% endcomment %}
+{% endblock content %}
