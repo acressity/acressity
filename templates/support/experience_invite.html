@@ -2,7 +2,6 @@
 
 {% block content %}
 	<h2>Invite a comrade to {{ experience }}</h2>
-	{% comment %}
 	<form action="" method="POST">
 		{% csrf_token %}
 		<table class="thirds_table">
@@ -23,20 +22,15 @@
 		</table>
 		<div class="formatted_input">
 			<label for="id_email">
-				<h3>Email address of person you wish to invite to this experience</h3>
+				<h3>Email address of comrade you wish to invite to this experience</h3>
 			</label>
 			{{ form.email.errors }}
 			{{ form.email }}
 		</div>
-		<div class="formatted_input">
-			{{ form.experience.errors }}
-			{{ form.experience }}
-		</div>
-		<p><em>This information is used responsibly. It will only be used to send an invitation request.</em></p>
+		<p><em>This information is used responsibly. It will only be used for the invitation request.</em></p>
 		<input type="submit" value="Invite" name="invite" class="invite-button" />
 	</form>
 	<h3>Or select from registered explorers</h3>
-	{% endcomment %}
 	{% for explorer in explorers %}
 		<div class="explorer_item">
 			{% include "explorers/dash_snippet.html" %}
@@ -44,7 +38,7 @@
 				{% csrf_token %}
 				<input type="submit" value="Invite {{ explorer.first_name }}" class="invite-button" />
 				<input type="hidden" name="explorer_id" value="{{ explorer.id }}">
-				{# <input type="hidden" value="invite_existing_explorer" /> #}
+				<input type="hidden" name="existing_explorer" />
 			</form>
 		</div>
 	{% endfor %}

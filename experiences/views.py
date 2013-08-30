@@ -14,7 +14,7 @@ from experiences.forms import ExperienceForm, ExperienceBriefForm
 from narratives.forms import NarrativeForm
 from photologue.models import Gallery
 from explorers.models import Explorer
-from support.models import Request
+from support.models import InvitationRequest
 
 
 @login_required

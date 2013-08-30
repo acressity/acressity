@@ -34,7 +34,7 @@ class Cheer(models.Model):
 
 class Hurrah(models.Model):
     '''
-    Model for 'appreciating' function
+    Model for 'appreciating' function. No functionality atm
     '''
     explorer = models.ForeignKey(get_user_model())
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
@@ -44,26 +44,32 @@ class Hurrah(models.Model):
         return 'hurrah'
 
 
-# To be modified to a class that will be neutral to whether the request is by
-# the current owner/author and the recruit
-class Request(models.Model):
-    author = models.ForeignKey(get_user_model(), related_name='experience_author')
-    recruit = models.ForeignKey(get_user_model(), related_name='experience_recruit')
-    experience = models.ForeignKey(Experience)
+class InvitationRequest(models.Model):
+    '''
+    Model attempting to be fairly universal for the potential new relationship between two people. Author refers to the explorer who created the experience. Recruit is an existing explorer, and potential_explorer is a person not yet registered, but nonetheless with some sort of interest in the experience.
+    '''
+    author = models.ForeignKey(get_user_model(), related_name='experience_author', null=False, help_text='The author of the experience. Able to be the explorer who invited the recruit or potential explorer, or the person who an existing explorer is contacting to become a part of the experience.')
+    recruit = models.ForeignKey(get_user_model(), related_name='experience_recruit', null=True, blank=True, help_text='References an existing explorer potentially being added to experience.')
+    potential_explorer = models.ForeignKey('PotentialExplorer', null=True, blank=True, help_text='References potential new user with little information for registration provided by invitation author.', related_name='invitation_request')
+    date_created = models.DateTimeField(default=datetime.now)
+    experience = models.ForeignKey(Experience, null=False)
+    code = models.CharField(max_length=25, null=True, blank=True, help_text='Random code sent with the email in the url, used to confirm the uniqueness and identity of the invited explorer.')
 
     def __unicode__(self):
         return '{0} invitation'.format(self.experience)
 
 
-class InvitedExplorer(models.Model):
+class PotentialExplorer(models.Model):
     '''
     Model to represent a person being invited to be a part of an experience. Should be deleted based on reply or a timeout
     '''
     first_name = models.CharField(max_length=30, null=False, blank=False)
     last_name = models.CharField(max_length=30, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False, help_text='This information is used responsibly. It will only be used to send an invitation request.')
-    experience = models.ForeignKey(Experience, null=False, blank=True)
-    code = models.CharField(max_length=25, null=False, blank=True, help_text='Code sent with the email in the url, used to confirm the uniqueness and identity of the invited explorer.')
 
     def __unicode__(self):
-        return '{0} {1} invited to {2}'.format(self.first_name, self.last_name, self.experience)
+        return '{0} {1}: potential new explorer'.format(self.first_name, self.last_name)
+
+    # def save():
+    #     'Transform this model instance into new explorer, with related experience as current feature'
+    #     pass

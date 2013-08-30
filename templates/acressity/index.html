@@ -5,27 +5,31 @@
 	<blockquote id="welcome_quote">
 		<h1>Acressity</h1>
 		<h2>
-			A tool for the exploration, and a canvas for the
+			An application for the exploration and
 			<br />
-			expression, of your experiences leading to
+			expression of your experiences leading
 			<br />
-			the peak of existence
+			to the peak of existence
 		</h2>
 	</blockquote>
 	<p>
 		{% if request.user.is_authenticated %}
 			<form action="/experiences/create/" method="POST" class="full_width">
 				{% csrf_token %}
-				<input type="text" id="id_experience" name="experience" class="larger" value="Add an experience to your journey" onfocus="setUp(this);" />
+				<div class="formatted_input">
+					<input type="text" id="id_experience" name="experience" class="larger" value="Add an experience to your journey" onfocus="setUp(this);" />
+				</div>
 				<input type="hidden" name="explorer_id" value="{{ request.user.id }}" />
+				<input type="submit" value="Add experience" />
 		{% else %}
 			<form action="{% url 'step_two' %} " method="POST" class="full_width" onsubmit="return validateFirstExperience(this);">
 				{% csrf_token %}
-				<h3></h3>
 				<input type="hidden" name="initial" />
-				<input type="text" id="id_experience" name="experience" class="larger" value="To begin your journey, create your first experience here" onfocus="setUp(this);" />
+				<div class="formatted_input">
+					<input type="text" id="id_experience" name="experience" class="larger" value="To begin your journey, create your first experience here" onfocus="setUp(this);" />
+				</div>
+				<input type="submit" value="Create experience" />
 		{% endif %}
-		<input type="submit" value="Create experience" />
 	</form>
 	Or <a href="{% url 'about' %}">learn more</a>
 	</p>

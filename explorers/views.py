@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.conf import settings
 
 from explorers.forms import RegistrationForm, ExplorerForm
-from support.models import Request
+from support.models import InvitationRequest
 from experiences.models import Experience, FeaturedExperience
 from photologue.models import Gallery, Photo
 from experiences.forms import ExperienceForm
@@ -90,7 +90,7 @@ def board(request, explorer_id):
         if explorer == nr_note.content_object.author:
             nr_notes.append(nr_note)
     # Any requests pertaining to the explorer
-    requests = Request.objects.filter(recruit=explorer)
+    requests = InvitationRequest.objects.filter(recruit=explorer)
     if request.method == 'POST' and request.user == explorer:
         invitation_request_id = request.POST.get('invitation_request_id')
         if 'accept' in request.POST:
