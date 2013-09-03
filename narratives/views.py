@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
 from narratives.models import Narrative
 from narratives.forms import NarrativeForm
@@ -12,12 +14,13 @@ from photologue.models import Gallery
 
 def index(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
-    if not narrative.experience.is_public:
+    if not narrative.is_public or not narrative.experience.is_public:
         if request.user not in narrative.experience.explorers.all():
             raise PermissionDenied
     return render(request, 'narratives/index.html', {'narrative': narrative, 'author': narrative.is_author(request)})
 
 
+@login_required
 def create(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if request.method == 'POST' and experience.is_comrade(request):
@@ -33,6 +36,7 @@ def create(request, experience_id):
     return render(request, 'narratives/create.html', {'form': form, 'experience': experience})
 
 
+@login_required
 def edit(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
     if narrative.author == request.user:
@@ -50,17 +54,18 @@ def edit(request, narrative_id):
         return render(request, 'acressity/message.html')
 
 
+@login_required
 def delete(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
-    experience = get_object_or_404(Experience, pk=narrative.experience_id)
     if request.method == 'POST' and 'confirm' in request.POST and narrative.author == request.user:
         narrative.delete()
         messages.success(request, 'Your narrative was deleted')
-        return redirect('/experiences/{0}'.format(experience.id))
+        return redirect(reverse('experience', args=(narrative.experience.id,)))
     else:
         return render(request, 'narratives/delete.html', {'narrative': narrative})
 
 
+@login_required
 def upload_photo(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
     if request.user == narrative.author:

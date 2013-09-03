@@ -6,6 +6,9 @@
 {% endcomment %}
 
 <div class="narrative_dash">
+    {% if not narrative.is_public %}
+        <strong>Private narrative</strong>
+    {% endif %}
     <h3><a href="/narratives/{{ narrative.id }}/">{{ narrative.title }}</a></h3>
     {% if narrative.gallery.featured_photo %}
         <div class="featured_photo">
@@ -34,8 +37,10 @@
             </div>
         {% endifequal %}
         {% get_comment_form for narrative as comment_form %}
-        <h4 onclick="toggle_div('{{ narrative.id }}_comment');" title="Click to toggle the note form">Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ narrative.id }}_comment_toggle_icon" /></h4>
-        <div class="comment" id="{{ narrative.id }}_comment" style="display: none;">
+        <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle the note form">
+            <strong>Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" /></strong>
+        </div>
+        <div class="comment toggle_div">
             {% with next_url_name='narrative' next_url_pk=narrative.id %}
                 {% include "support/note_form.html" %}
             {% endwith %}

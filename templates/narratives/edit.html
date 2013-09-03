@@ -29,6 +29,16 @@
 			{{ form.category.errors }}
 			{{ form.category }}
 		</div>
+		<div class="formatted_input">
+			<strong>Public?</strong> {{ form.is_public }}
+			{{ form.is_public.errors }}
+			<p onclick="toggle_div(this.nextElementSibling);">
+				<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+			</p>
+			<div class="toggle_div smaller_font" id="is_public_help_text">
+				{{ form.is_public.help_text }}
+			</div>
+		</div>
 		<input type="hidden" name="narrative_id" value="{{ narrative.id }}" />
 		<input type="hidden" name="experience" value="{{ narrative.experience.id }}"/>
 		<input type="submit" value="Update" />

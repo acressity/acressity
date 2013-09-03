@@ -3,6 +3,7 @@ from datetime import datetime
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
 from django.forms import ModelForm
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from experiences.models import Experience
@@ -32,6 +33,13 @@ class ExperienceForm(ModelForm):
         if len(experience) < 3:
             raise forms.ValidationError('Extrapolate a little more with the name of the experience')
         return experience
+
+    # Following will set all narratives private if experience is changed from being is_public == True to False
+    # def clean_is_public(self):
+    #     is_public = self.cleaned_data.get('is_public')
+    #     if not is_public:
+    #         for narrative in self.narratives.all():
+
 
     class Meta:
         model = Experience

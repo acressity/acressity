@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.contrib import messages
 
 
 class Narrative(models.Model):
@@ -25,7 +26,13 @@ class Narrative(models.Model):
     date_modified = models.DateTimeField(auto_now=True, help_text='Updated every time object saved')
     category = models.CharField(max_length=50, null=True, blank=True, help_text='Optional information used to classify and order the narratives within the experience.')
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)
-    is_public = models.BooleanField(default=True, help_text='Public narratives will be displayed in the default views. Private ones are only seen by yourself.')
+    is_public = models.BooleanField(null=False, default=True, help_text='Public narratives will be displayed in the default views. Private ones are only seen by yourself and the other explorers in the narrative\'s experience. Changing the status of the narrative also changes the status of the photo gallery.')
+
+    def __init__(self, *args, **kwargs):
+        # Allows the quicker check of whether or not a particular field has changed
+        # Considering using this in the method controlling status of is_public
+        super(Narrative, self).__init__(*args, **kwargs)
+        self.__original_is_public = self.is_public
 
     class Meta:
         #ordering = ['category']
@@ -58,6 +65,10 @@ class Narrative(models.Model):
     def save(self, *args, **kwargs):
         if not self.title:
             self.title = datetime.now().strftime('%B %d, %Y')
+        if self.__original_is_public != self.is_public:
+            if self.gallery:
+                self.gallery.is_public = self.is_public
+                self.gallery.save()
         super(Narrative, self).save(*args, **kwargs)
 
     def get_next_narrative(self):
@@ -85,7 +96,6 @@ class Narrative(models.Model):
 
         Extremely primitive, but that's fine at the moment.
         '''
-
         import re
         from urlparse import urlparse
 

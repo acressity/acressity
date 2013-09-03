@@ -1,10 +1,12 @@
 from datetime import datetime
-from photologue.models import Photo, Gallery
 
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django.contrib.contenttypes.models import ContentType
+
+from photologue.models import Photo, Gallery
 
 # @receiver(m2m_changed, sender=Narrative)
 # def experience_handler(sender, **kwargs):
@@ -31,9 +33,15 @@ class Experience(models.Model):
     brief = models.TextField(blank=True, null=True, help_text='Written description of the experience to provide a little insight.')
     status = models.CharField(max_length=160, null=True, blank=True, help_text='Optional short state of the experience at the moment.')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)
-    is_public = models.BooleanField(default=True, help_text='Public experiences will be displayed in the default views. Private ones are only seen by yourself and anyone you invite to be a comrade.')
+    is_public = models.BooleanField(default=True, help_text='Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. If the experience is changed from public to private, all of its narratives are changed to private. However, private narratives do not become public when the experience is changed from private to public.')
 
     objects = ExperienceManager()
+
+    def __init__(self, *args, **kwargs):
+        # Allows the quicker check of whether or not a particular field has changed
+        # Considering using this in the method controlling status of is_public
+        super(Experience, self).__init__(*args, **kwargs)
+        self.__original_is_public = self.is_public
 
     def __unicode__(self):
         return self.experience
@@ -74,6 +82,11 @@ class Experience(models.Model):
     def ordered_narratives(self):
         return self.narratives.order_by('-date_created')
 
+    def create_gallery(self):
+        gallery = Gallery(title=self.experience, content_type=ContentType.objects.get(model='experience'), object_pk=self.id, is_public=self.is_public)
+        gallery.save()
+        return gallery
+
     def get_galleries(self):
         object_list = []
         for narrative in self.narratives.all():
@@ -84,19 +97,25 @@ class Experience(models.Model):
         return object_list
 
     def latest_narrative(self):
-        if self.narratives.exists():
-            return self.narratives.latest('date_created')
+        if self.narratives.exists() and self.narratives.filter(is_public=True):
+            return self.public_narratives().latest('date_created')
 
-    def save(self, *args, **kw):
+    def public_narratives(self):
+        'Return an ordered queryset of all the public narratives in this experience'
+        return self.ordered_narratives().filter(is_public=True)
+
+    def save(self, *args, **kwargs):
         # Feature for toggling the experience gallery being public
         # with the toggling of experience is_public
-        if self.pk is not None:
-            orig = Experience.objects.get(pk=self.pk)
-            if orig.is_public != self.is_public:
-                if self.gallery:
-                    self.gallery.is_public = self.is_public
-                    self.gallery.save()
-        super(Experience, self).save(*args, **kw)
+        if self.__original_is_public != self.is_public:
+            if not self.is_public:
+                for narrative in self.narratives.filter(is_public=True):
+                    narrative.is_public = False
+                    narrative.save()
+            if self.gallery:
+                self.gallery.is_public = self.is_public
+                self.gallery.save()
+        super(Experience, self).save(*args, **kwargs)
 
 
 class FeaturedExperience(models.Model):

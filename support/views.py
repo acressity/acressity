@@ -81,9 +81,9 @@ def accept_invitation_request(request, explorer_id, invitation_request_id):
         invitation_request.experience.explorers.add(explorer)
         if invitation_request.experience.gallery:
             invitation_request.experience.gallery.explorers.add(explorer)
-        messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos. Enjoy!'.format(invitation_request.experience))
+        messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos.'.format(invitation_request.experience))
         invitation_request.delete()
-        return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
+    return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
 
 
 @login_required
@@ -93,7 +93,7 @@ def decline_invitation_request(request, explorer_id, invitation_request_id):
     if request.user == explorer:
         messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
         invitation_request.delete()
-        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def experience_invite(request, experience_id):
@@ -117,7 +117,7 @@ def experience_invite(request, experience_id):
                 invitation_request.save()
                 send_mail(
                     'Invitation from {0}'.format(request.user.get_full_name()), 'Hello {3} {4},\nYou\'ve been invited by {0} to participate in the experience "{1}"\n\nTo view this invitation, go to http://acressity.com/support/view_invitation/{2}\n\nIf you do not know this person, or believe this email was sent in error, please ignore or respond to acressity@acressity.com'.format(request.user.get_full_name(), experience, invitation_request.code, form.instance.first_name, form.instance.last_name), 'acressity@acressity.com', [form.cleaned_data['email']])
-                messages.success(request, 'You have successfully invited {0} {1}'.format(form.cleaned_data['first_name'], form.cleaned_data['last_name']))
+                messages.success(request, 'You\'ve invited {0} {1} to {2}. They will be sent an invitation email'.format(form.cleaned_data['first_name'], form.cleaned_data['last_name']), experience)
                 return redirect(reverse('experience', args=(experience.id,)))
     else:
         form = PotentialExplorerForm()

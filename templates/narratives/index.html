@@ -5,7 +5,10 @@
 {% block content %}
 	<div class="narrative_detail">
 		<h2>{{ narrative.title }}</h2>
-		<p>from experience <a href="{% url 'experience' narrative.experience.id %}">{{ narrative.experience }}</p>
+		<p>from experience <a href="{% url 'experience' narrative.experience.id %}">{{ narrative.experience }}</p></a>
+		{% if not narrative.is_public %}
+			<strong>This is a private narrative. It can only be viewed by the explorers of the narrative's experience.</strong>
+		{% endif %}
 		<div class="option_list">
 			<a href="{% url 'experiences.views.index' narrative.experience.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Back to the experience page" class="option_icon" /></a>
 			{% if narrative.gallery %}

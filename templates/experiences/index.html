@@ -104,17 +104,31 @@
 			<h3>Narratives</h3>
 			<table class="thirds_table">
 				<tr>
-					{% for narrative in experience.ordered_narratives %}
-						<td>
-							{% include "narratives/dash_snippet.html" %}
-						</td>
-						{% if forloop.counter|divisibleby:'3' %}
-							{% if not forloop.last %}
-								</tr>
-								<tr>
+					{% if user in experience.explorers.all %}
+						{% for narrative in experience.ordered_narratives %}
+							<td>
+								{% include "narratives/dash_snippet.html" %}
+							</td>
+							{% if forloop.counter|divisibleby:'3' %}
+								{% if not forloop.last %}
+									</tr>
+									<tr>
+								{% endif %}
 							{% endif %}
-						{% endif %}
-					{% endfor %}
+						{% endfor %}
+					{% else %}
+						{% for narrative in experience.public_narratives %}
+							<td>
+								{% include "narratives/dash_snippet.html" %}
+							</td>
+							{% if forloop.counter|divisibleby:'3' %}
+								{% if not forloop.last %}
+									</tr>
+									<tr>
+								{% endif %}
+							{% endif %}
+						{% endfor %}
+					{% endif %}
 				</tr>
 			</table>
 		{% else %}

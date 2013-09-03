@@ -17,20 +17,14 @@
 	<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
 		{% csrf_token %}
 		<div class="formatted_input">
-			<h2>New narrative for</h2>
+			<h2>New narrative for experience</h2>
 			{{ form.experience.errors }}
 			{{ form.experience }}
 		</div>
-		{# {{ form.date_created }} #}
 		<div class="formatted_input">
 			<h3><label for="id_narrative">Narrative</label></h3>
 			{{ form.narrative.errors }}
 			{{ form.narrative }}
-		</div>
-		<div class="formatted_input">
-			<h3>Date Created (leave blank for today)</h3>
-			{{ form.date_created.errors }}
-			{{ form.date_created }}
 		</div>
 		<div class="formatted_input">
 			<h3><label for="id_title">Title (optional)</label></h3>
@@ -38,9 +32,24 @@
 			{{ form.title }}
 		</div>
 		<div class="formatted_input">
+			<h3>Date Created (leave blank for today)</h3>
+			{{ form.date_created.errors }}
+			{{ form.date_created }}
+		</div>
+		<div class="formatted_input">
 			<h3><label for="id_category">Categorize (optional)</label></h3>
 			{{ form.category.errors }}
 			{{ form.category }}
+		</div>
+		<div class="formatted_input">
+			<h3>Public? {{ form.is_public }}</h3>
+			{{ form.is_public.errors }}
+			<div onclick="toggle_div(this.nextElementSibling);">
+				<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+			</div>
+			<div class="toggle_div smaller_font" id="is_public_help_text">
+				{{ form.is_public.help_text }}
+			</div>
 		</div>
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
 		<input type="submit" value="Add narrative" />

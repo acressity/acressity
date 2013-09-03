@@ -41,7 +41,7 @@ def create(request):
 
 def index(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if experience.is_public == False:
+    if experience.is_public is False:
         if request.user not in experience.explorers.all():
             raise PermissionDenied
     if experience.is_comrade(request):
@@ -167,8 +167,9 @@ def upload_photo(request, experience_id):
         if experience.gallery:
             gallery = experience.gallery
         else:
-            gallery = Gallery(title=experience, content_type=ContentType.objects.get(model='experience'), object_pk=experience.id, is_public=experience.is_public)
-            gallery.save()
+            gallery = experience.create_gallery()
+            # gallery = Gallery(title=experience, content_type=ContentType.objects.get(model='experience'), object_pk=experience.id, is_public=experience.is_public)
+            # gallery.save()
             for explorer in experience.explorers.all():
                 gallery.explorers.add(explorer)
             experience.gallery = gallery

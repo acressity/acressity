@@ -48,9 +48,9 @@
 			<div class="formatted_input">
 				<strong>Public?</strong> {{ form.is_public }}
 				{{ form.is_public.errors }}
-				<p onclick="toggle_div('is_public_help_text');">
-					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" />
-				</p>
+				<div onclick="toggle_div(this.nextElementSibling);">
+					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+				</div>
 				<div class="toggle_div smaller_font" id="is_public_help_text">
 					{{ form.is_public.help_text }}
 				</div>
