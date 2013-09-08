@@ -32,7 +32,7 @@ def create(request, experience_id):
             messages.success(request, 'Your narrative has been added')
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
-        form = NarrativeForm(request.user, initial={'experience': experience.id})
+        form = NarrativeForm(request.user, initial={'experience': experience.id, 'is_public': experience.is_public})
     return render(request, 'narratives/create.html', {'form': form, 'experience': experience})
 
 
