@@ -6,6 +6,7 @@
 	<div class="narrative_detail">
 		<h2>{{ narrative.title }}</h2>
 		<p>from experience <a href="{% url 'experience' narrative.experience.id %}">{{ narrative.experience }}</p></a>
+		<p>by <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a></p>
 		{% if not narrative.is_public %}
 			<strong>This is a private narrative. It can only be viewed by the explorers of the narrative's experience.</strong>
 		{% endif %}

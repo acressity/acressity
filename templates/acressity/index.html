@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<img src="{{ STATIC_URL }}img/here_and_there.jpg" class="full_width" style="height: 500px;" />
+	<img src="{{ STATIC_URL }}img/here_and_there.jpg" alt="Experience" title="Experience" class="full_width" style="height: 500px;" />
 	<blockquote id="welcome_quote">
 		<h1>Acressity</h1>
 		<h2>
 			An application for the exploration and
 			<br />
-			expression of your experiences leading
+			expression of new experiences with an
 			<br />
-			to the peak of existence
+			emphasis on the journey
 		</h2>
 	</blockquote>
 	<p>
@@ -52,7 +52,7 @@
 					<div class="object_item experience_item">
 						{% if experience.gallery.featured_photo %}
 							<div class="featured_photo left">
-								<img src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+								<img src="{{ experience.gallery.featured_photo.get_icon_url }}" alt="Featured photo" title="{{ experience.gallery.featured_photo.title }}"/>
 							</div>
 						{% endif %}
 						<a href="/experiences/{{ experience.id }}"><h3>{{ experience }}</h3></a> by {{ explorer.get_full_name }}

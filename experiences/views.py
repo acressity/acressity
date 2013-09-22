@@ -76,7 +76,7 @@ def edit(request, experience_id):
                         raise PermissionDenied
                 form.save()
                 messages.success(request, 'Experience has been successfully edited')
-                return redirect(reverse('journey', args=(request.user.id,)))
+                return redirect(reverse('experience', args=(experience.id,)))
             else:
                 return HttpResponse(form.errors)
         else:

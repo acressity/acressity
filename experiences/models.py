@@ -4,7 +4,9 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.hashers import make_password
 
 from photologue.models import Photo, Gallery
 
@@ -26,7 +28,7 @@ class Experience(models.Model):
     a book about your journey.
     '''
 
-    experience = models.CharField(max_length=200, help_text='Title of the experience.')
+    experience = models.CharField(max_length=200, help_text='Title of the experience.')  # Add null=False
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text='Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.')
     date_created = models.DateTimeField(default=datetime.now, null=False, blank=True)
     date_modified = models.DateTimeField(auto_now=True, help_text='Updated every time object saved', null=True, blank=True)
@@ -34,6 +36,7 @@ class Experience(models.Model):
     status = models.CharField(max_length=160, null=True, blank=True, help_text='Optional short state of the experience at the moment.')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)
     is_public = models.BooleanField(default=True, help_text='Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. If the experience is changed from public to private, all of its narratives are changed to private. However, private narratives do not become public when the experience is changed from private to public.')
+    password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text='Private experiences can be accessed by providing this password. Allows focused distribution of private content.')
 
     objects = ExperienceManager()
 
@@ -103,6 +106,9 @@ class Experience(models.Model):
     def public_narratives(self):
         'Return an ordered queryset of all the public narratives in this experience'
         return self.ordered_narratives().filter(is_public=True)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
 
     def save(self, *args, **kwargs):
         # Feature for toggling the experience gallery being public

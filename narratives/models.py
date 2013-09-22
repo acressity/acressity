@@ -18,7 +18,7 @@ class Narrative(models.Model):
     Examples of narratives include an update, thought, plan,
     itinerary, journal entry, publication, ad infinitum...
     '''
-    narrative = models.TextField(help_text='The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.')
+    narrative = models.TextField(help_text='The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.', null=False)
     title = models.CharField(max_length=200, blank=True, null=True, help_text='Title of the narrative. If none given, defaults to date created.')
     experience = models.ForeignKey(Experience, related_name='narratives')
     author = models.ForeignKey(get_user_model(), related_name='narratives', null=False)

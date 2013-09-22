@@ -11,12 +11,14 @@ class Migration(SchemaMigration):
         # Adding model 'Experience'
         db.create_table(u'experiences_experience', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('experience', self.gf('django.db.models.fields.CharField')(max_length=210)),
+            ('experience', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('author', self.gf('django.db.models.fields.related.ForeignKey')(related_name='authored_experiences', to=orm['explorers.Explorer'])),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now, blank=True)),
+            ('date_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
             ('brief', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('status', self.gf('django.db.models.fields.CharField')(max_length=25, null=True, blank=True)),
+            ('status', self.gf('django.db.models.fields.CharField')(max_length=160, null=True, blank=True)),
             ('gallery', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['photologue.Gallery'], unique=True, null=True, on_delete=models.SET_NULL, blank=True)),
+            ('is_public', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
         db.send_create_signal(u'experiences', ['Experience'])
 
@@ -49,11 +51,13 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Experience'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'authored_experiences'", 'to': u"orm['explorers.Explorer']"}),
             'brief': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'experience': ('django.db.models.fields.CharField', [], {'max_length': '210'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'blank': 'True'}),
+            'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
+            'experience': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'gallery': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['photologue.Gallery']", 'unique': 'True', 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'status': ('django.db.models.fields.CharField', [], {'max_length': '25', 'null': 'True', 'blank': 'True'})
+            'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'status': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'})
         },
         u'experiences.featuredexperience': {
             'Meta': {'object_name': 'FeaturedExperience'},
@@ -78,6 +82,7 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'tracking_experiences': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'tracking_explorers'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['experiences.Experience']"}),
             'trailname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'})
         },
         u'photologue.gallery': {
@@ -86,23 +91,23 @@ class Migration(SchemaMigration):
             'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'explorers': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'galleries'", 'symmetrical': 'False', 'to': u"orm['explorers.Explorer']"}),
-            'featured_photo': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['photologue.Photo']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
+            'featured_photo': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'gallery_'", 'null': 'True', 'on_delete': 'models.SET_NULL', 'to': u"orm['photologue.Photo']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'object_pk': ('django.db.models.fields.TextField', [], {'null': 'True'}),
-            'photos': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'galleries'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['photologue.Photo']"}),
             'tags': ('photologue.models.TagField', [], {'max_length': '255', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '75'}),
             'title_slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         },
         u'photologue.photo': {
-            'Meta': {'ordering': "['-date_added']", 'object_name': 'Photo'},
+            'Meta': {'ordering': "['date_added']", 'object_name': 'Photo'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['explorers.Explorer']", 'null': 'True'}),
             'caption': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'crop_from': ('django.db.models.fields.CharField', [], {'default': "'center'", 'max_length': '10', 'blank': 'True'}),
             'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'date_taken': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'effect': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'photo_related'", 'null': 'True', 'to': u"orm['photologue.PhotoEffect']"}),
+            'gallery': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'photos'", 'to': u"orm['photologue.Gallery']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),

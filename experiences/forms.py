@@ -18,6 +18,10 @@ class ExperienceForm(ModelForm):
                                       help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     date_created = forms.DateField(widget=SelectDateWidget(years=range(datetime.now().year, datetime.now().year-110, -1)), required=False)
 
+    class Meta:
+        model = Experience
+        exclude = ('author', 'gallery', 'make_feature')
+
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ExperienceForm, self).__init__(*args, **kwargs)
@@ -31,19 +35,8 @@ class ExperienceForm(ModelForm):
     def clean_experience(self):
         experience = self.cleaned_data.get('experience')
         if len(experience) < 3:
-            raise forms.ValidationError('Extrapolate a little more with the name of the experience')
+            raise forms.ValidationError('Make the experience name a little more descriptive')
         return experience
-
-    # Following will set all narratives private if experience is changed from being is_public == True to False
-    # def clean_is_public(self):
-    #     is_public = self.cleaned_data.get('is_public')
-    #     if not is_public:
-    #         for narrative in self.narratives.all():
-
-
-    class Meta:
-        model = Experience
-        exclude = ('author', 'gallery', 'make_feature')
 
 
 class ExperienceBriefForm(ModelForm):

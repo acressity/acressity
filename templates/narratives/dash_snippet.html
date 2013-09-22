@@ -25,7 +25,7 @@
         <strong>Narrative category</strong>
         <p>{{ narrative.category }}</p>
     {% endif %}
-    <p>Written {{ narrative.date_created|timesince }} ago</p>
+    <p>{{ narrative.date_created|timesince }} ago</p>
     <p>
         By <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a>
     </p>

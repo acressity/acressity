@@ -47,12 +47,29 @@
 			{# Will need to be more secure... Easy to change POST information #}
 			<div class="formatted_input">
 				<strong>Public?</strong> {{ form.is_public }}
+				<script type="text/javascript">
+					e = document.getElementById("id_is_public");
+					e.onclick = function(){
+						toggle_div("password_div");
+					};
+				</script>
 				{{ form.is_public.errors }}
 				<div onclick="toggle_div(this.nextElementSibling);">
 					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
 				</div>
 				<div class="toggle_div smaller_font" id="is_public_help_text">
 					{{ form.is_public.help_text }}
+				</div>
+			</div>
+			<div id="password_div" class="formatted_input">
+				<strong>Password</strong>
+				{{ form.password.errors }}
+				{{ form.password }}
+				<div onclick="toggle_div(this.nextElementSibling);">
+					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
+				</div>
+				<div class="toggle_div smaller_font" id="password_help_text">
+					{{ form.password.help_text }}
 				</div>
 			</div>
 		{% endifequal %}

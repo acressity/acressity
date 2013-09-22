@@ -96,18 +96,20 @@
 		{% if explorer.birthdate %}
 			Birthday: {{ explorer.birthdate }}
 		{% endif %}
-		{% get_comment_form for explorer as expl_comment_form %}
-		<form action="{% comment_form_target %}" method="POST" class="note_form">
-			{% csrf_token %}
-			{{ expl_comment_form.comment }}
-			{{ expl_comment_form.honeypot }}
-			{{ expl_comment_form.object_pk }}
-			{{ expl_comment_form.content_type }}
-		    {{ expl_comment_form.timestamp }}
-		    {{ expl_comment_form.security_hash }}
-			<br />
-			<input type="hidden" name="next" value="{% url 'story' explorer.id %}">
-			<input type="submit" value="Submit comment" />
-		</form>	
+		{% if user.is_authenticated %}
+			{% get_comment_form for explorer as expl_comment_form %}
+			<form action="{% comment_form_target %}" method="POST" class="note_form">
+				{% csrf_token %}
+				{{ expl_comment_form.comment }}
+				{{ expl_comment_form.honeypot }}
+				{{ expl_comment_form.object_pk }}
+				{{ expl_comment_form.content_type }}
+			    {{ expl_comment_form.timestamp }}
+			    {{ expl_comment_form.security_hash }}
+				<br />
+				<input type="hidden" name="next" value="{% url 'story' explorer.id %}">
+				<input type="submit" value="Submit comment" />
+			</form>
+		{% endif %}
 	{% endif %}
 {% endblock content %}
