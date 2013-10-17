@@ -65,7 +65,7 @@
 	{% if experience.brief %}
 		<div class="experience_item">
 			<h3>Experience brief</h3>
-			{{ experience.brief|linebreaks }}
+			{{ experience.embedded_brief|safe|linebreaks }}
 		</div>
 	{% else %}
 		{% if comrade %}

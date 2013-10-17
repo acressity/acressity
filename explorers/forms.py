@@ -10,7 +10,7 @@ from experiences.models import Experience
 
 class RegistrationForm(ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password1()'}), label='password1')
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password2()'}), label='password2')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'onkeyup': 'check_password2()'}), label='password2')
     first_name = forms.CharField(widget=forms.TextInput(attrs={'onblur': 'say_hello();'}))
 
     def clean_password2(self):
@@ -29,6 +29,9 @@ class RegistrationForm(ModelForm):
         if len(first_name) < 2:
             raise forms.ValidationError('I think your name is just a tad bit longer')
         return first_name
+
+    # def clean_trailname(self):
+    #     return self.cleaned_data.get('trailname', None)
 
     class Meta:
         model = Explorer

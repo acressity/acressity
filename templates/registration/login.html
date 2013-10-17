@@ -5,9 +5,9 @@
 	{% if form.errors %}
 		<p class="error">Whoops, looks like there's an error with either your trailname or password</p>
 	{% endif %}
-	<form action="" method="POST">
+	<form action="{% url 'login' %}" method="POST">
 		{% csrf_token %}
-		<label for="username">Trailname:</label>
+		<label for="username">Email or <abbr title="Creative username to describe your journey">Trailname</abbr>:</label>
 		<br />
 		<input type="text" name="username" value="" id="username" />
 		<br />

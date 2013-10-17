@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password
 
 from photologue.models import Photo, Gallery
+from acressity.utils import embed_string
 
 # @receiver(m2m_changed, sender=Narrative)
 # def experience_handler(sender, **kwargs):
@@ -122,6 +123,9 @@ class Experience(models.Model):
                 self.gallery.is_public = self.is_public
                 self.gallery.save()
         super(Experience, self).save(*args, **kwargs)
+
+    def embedded_brief(self):
+        return embed_string(self.brief)
 
 
 class FeaturedExperience(models.Model):

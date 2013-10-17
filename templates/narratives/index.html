@@ -36,12 +36,7 @@
 			</div>
 		{% endif %}
 		<p>{{ narrative.date_created|date:"F j, Y" }}</p>
-		{% if narrative.parse_for_embed %}
-			<p>{{ narrative.parse_for_embed|safe }}</p>
-		{% endif %}
-		<p>
-			{{ narrative.narrative|linebreaks }}
-		</p>
+		<p>{{ narrative.embedded_narrative|safe|linebreaks }}</p>
 		<div class="clear_both"> </div>
 	</div>
 	<div class="next_previous">

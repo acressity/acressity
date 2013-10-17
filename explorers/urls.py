@@ -8,7 +8,7 @@ urlpatterns = patterns(
     url(r'^(?P<explorer_id>\d+)/$', 'journey', name='journey'),
     url(r'^journey/$', 'my_journey', name='my_journey'),
     url(r'^story/(?P<explorer_id>\d+)/$', 'story', name='story'),
-    url(r'^login/$', login),
+    url(r'^login/$', 'site_login', name='login'),  # Following was old : url(r'^login/$', login),
     url(r'^logout/$', 'farewell', name='farewell'),
     url(r'^journey/$', 'explorer_journey'),
     url(r'^new_explorer/$', 'new_explorer', name='register'),

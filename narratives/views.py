@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from narratives.models import Narrative
 from narratives.forms import NarrativeForm
@@ -81,3 +83,24 @@ def upload_photo(request, narrative_id):
     else:
         messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
         return render(request, 'acressity/message.html')
+
+
+def all(request, explorer_id):
+    explorer = get_object_or_404(get_user_model(), pk=explorer_id)
+    narrative_queryset = explorer.narratives.order_by('-date_created')
+    if request.user == explorer:
+        narrative_set = narrative_queryset
+    else:
+        narrative_set = narrative_queryset.filter(is_public=True)
+    paginator = Paginator(narrative_set, 10)
+    page = request.GET.get('page')
+    try:
+        narratives = paginator.page(page)
+    except PageNotAnInteger:
+        # Deliver the first page
+        narratives = paginator.page(1)
+        # return HttpResponse("here")
+    except EmptyPage:
+        # Deliver last page
+        narratives = paginator.page(paginator.num_pages)
+    return render(request, 'narratives/all_explorer_narratives.html', {'narratives': narratives})

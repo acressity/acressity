@@ -34,10 +34,10 @@ class Explorer(AbstractBaseUser):
     '''
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=60, null=False)
-    trailname = models.CharField(max_length=50, unique=True, db_index=True, help_text='A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you are encouraged to create a trailname that describes an aspect of your journey at the moment. It also allows others to find you by typing acressity.com/<em>trailname</em>')
+    trailname = models.CharField(max_length=50, null=True, blank=True, unique=True, help_text='A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you are encouraged to create a trailname that describes an aspect of your journey at the moment. It also allows others to find you by typing acressity.com/<em>trailname</em>')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
     brief = models.TextField(null=True, blank=True)
-    email = models.EmailField(max_length=254, null=False, blank=False, help_text='Email addresses are used for nothing more than resetting passwords. That\'s it. They won\'t even be used for activating accounts unless this is abused.')
+    email = models.EmailField(max_length=254, null=False, blank=False, unique=True, help_text='Email addresses are used for nothing more than resetting passwords. They won\'t be used for activating accounts unless this is abused.')
     birthdate = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(default=datetime.now)
     is_active = models.BooleanField(default=True)
@@ -49,7 +49,7 @@ class Explorer(AbstractBaseUser):
 
     objects = ExplorerManager()
 
-    USERNAME_FIELD = 'trailname'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'password']
 
     def __unicode__(self):

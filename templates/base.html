@@ -128,10 +128,11 @@ anything lacking in efficiency or if you have any suggestions.
 									</li>
 								</ul>
 							{% else %}
-								<form id="top_bar_login" action="/explorers/login/?next=/explorers/journey" method="POST" class="no_styling">
+								<form id="top_bar_login" action="/explorers/login/?next={{ request.path }}" method="POST" class="no_styling">
+								{# what about current page? #}
 									{% csrf_token %}
 									<div class="float_left">
-										Trailname:
+										Email or <abbr title="Creative username to describe your journey">Trailname</abbr>:
 										<input type="text" name="username" id="username" size="10" />
 									</div>
 									<div class="float_left">
@@ -142,7 +143,7 @@ anything lacking in efficiency or if you have any suggestions.
 										<input type="submit" class="expand-button" value="Log In" />
 									</div>
 								</form>
-								<form id="top_bar_signup" action="{% url 'step_two' %}" method="POST" onsubmit="return validateFirstExperience(this) && verify('Add as an experience:', this.experience);" class="no_styling">
+								<form id="top_bar_signup" action="{% url 'step_two' %}" method="POST" onsubmit="return validateFirstExperience(this);" class="no_styling">
 									{% csrf_token %}
 									<div class="float_right">
 										<input type="text" name="experience" value="Start with new experience..." onclick="setUp(this);" title="Submit your first experience to get started" />

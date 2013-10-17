@@ -22,6 +22,10 @@ def index(request):
 
 
 def step_two(request):
+    # Following is kinda hacky because of an unnecessary redirect, but okay for now....though it hurts my soul just a lil' bit
+    if not request.POST.get('experience'):
+        # User chose to create profile without initial experience
+        return redirect(reverse('register'))
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():

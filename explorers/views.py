@@ -144,25 +144,25 @@ def new_explorer(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             # The person correctly filled out the form. Register them
-            explorer = get_user_model()(trailname=form.cleaned_data['trailname'])
+            explorer = get_user_model()(email=form.cleaned_data.get('email'))
             explorer.set_password(form.cleaned_data['password1'])
             explorer.first_name = form.cleaned_data['first_name']
             explorer.last_name = form.cleaned_data['last_name']
             # explorer.email = form.cleaned_data['email']
             explorer.save()
-            explorer = authenticate(username=form.cleaned_data['trailname'], password=form.cleaned_data['password1'])
+            explorer = authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password1'])
             # Log them in
             login(request, explorer)
             if request.POST.get('experience'):
                 # Save their experience
-                first_experience = Experience(experience=request.POST['experience'], author=explorer)
+                first_experience = Experience(experience=request.POST.get('experience'), author=explorer)
                 first_experience.save()
                 explorer.experiences.add(first_experience)
                 explorer.featured_experience = first_experience
                 explorer.save()
                 # messages.success(request, 'Your first experience is {0}'.format(first_experience))
             # Create a new gallery for the new explorer
-            gallery = Gallery(title=explorer.trailname, title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get(model='Explorer'), object_pk=explorer.id)
+            gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get(model='Explorer'), object_pk=explorer.id)
             gallery.save()
             gallery.explorers.add(explorer)
             explorer.gallery = gallery
@@ -172,7 +172,7 @@ def new_explorer(request):
             return redirect(reverse('welcome'))
     else:
         form = RegistrationForm()
-    return render(request, 'registration/register.html', {'form': form, 'experience': request.POST['experience'], 'min_password_len': settings.MIN_PASSWORD_LEN})
+    return render(request, 'registration/register.html', {'form': form, 'experience': request.POST.get('experience'), 'min_password_len': settings.MIN_PASSWORD_LEN})
 
 
 # Settings page for the explorer
@@ -194,6 +194,7 @@ def farewell(request):
     logout(request)
     return render(request, 'explorers/farewell.html', {'featured_experience': featured_experience})
 
+
 @login_required
 def change_password(request):
     from explorers.forms import PasswordChangeForm
@@ -211,3 +212,24 @@ def change_password(request):
     else:
         form = PasswordChangeForm
     return render(request, 'explorers/change_password.html', {'form': form})
+
+
+def site_login(request):
+    next_url = request.GET.get('next') or request.POST.get('next')
+    username_provided = request.POST.get('username')
+    password_provided = request.POST.get('password')
+    # Site allows one to login with either email address or created trailname
+    if get_user_model().objects.filter(email=username_provided):
+        explorer = authenticate(username=username_provided, password=password_provided)
+        if explorer:
+            login(request, explorer)
+            return redirect(next_url)
+    if get_user_model().objects.filter(trailname=username_provided):
+        explorer = get_user_model().objects.get(trailname=username_provided)
+        explorer = authenticate(username=explorer.email, password=password_provided)
+        if explorer:
+            login(request, explorer)
+            return redirect(next_url)
+    # Login failed
+    messages.error(request, 'There was a problem with your username or password')
+    return redirect('/accounts/login')

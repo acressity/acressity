@@ -1,0 +1,23 @@
+{% extends "narratives/base.html" %}
+
+{% block content %}
+    {% for narrative in narratives %}
+        {% include "narratives/dash_snippet.html" %}
+    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if narratives.has_previous %}
+                <a href="?page={{ narratives.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ narratives.number }} of {{ narratives.paginator.num_pages }}.
+            </span>
+
+            {% if narratives.has_next %}
+                <a href="?page={{ narratives.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock content %}

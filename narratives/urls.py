@@ -8,4 +8,5 @@ urlpatterns = patterns(
     url(r'^edit/(?P<narrative_id>\d+)/$', 'edit'),
     url(r'^(?P<narrative_id>\d+)/delete/$', 'delete'),
     url(r'^(?P<narrative_id>\d+)/upload_photo/$', 'upload_photo'),
+    url(r'^all/(?P<explorer_id>\d+)/$', 'all', name='all_explorer_narratives'),
 )

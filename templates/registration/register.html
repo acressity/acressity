@@ -42,10 +42,12 @@
 {% endblock head_insert %}
 
 {% block content %}
-	<h2>Experience <em>{{ experience }}</em></h2>
+	{% if experience %}
+		<h2>Experience <em>{{ experience }}</em></h2>
+	{% endif %}
 	<p>
 		<h3>
-			Last step: brief, necessary information to build your journey
+			Brief, necessary information to build your journey
 		</h3>
 	</p>
 	{{ form.non_field_errors }}
@@ -103,7 +105,7 @@
 		</div>
 		<div id="register_trailname">	
 			<p>
-				<label for="id_trailname">Create a <abbr title="Creative username to describe your journey">trailname</abbr> for your journey:</label>
+				<label for="id_trailname">Create a <abbr title="Creative username to describe your journey">trailname</abbr> <em>(optional)</em>:</label>
 			</p>
 			<p>
 				{{ form.trailname }}
@@ -152,6 +154,8 @@
 		<div id="register_submit">
 			<input class="expand-button" type="submit" value="Register" />
 		</div>
-		<input type="hidden" name="experience" id="id_experience" value="{{ experience }}" />
+		{% if experience %}
+			<input type="hidden" name="experience" id="id_experience" value="{{ experience }}" />
+		{% endif %}
 	</form>
 {% endblock content %}
