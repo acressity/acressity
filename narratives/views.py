@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
+from django.utils import simplejson
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from narratives.models import Narrative
@@ -18,7 +19,10 @@ def index(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
     if not narrative.is_public or not narrative.experience.is_public:
         if request.user not in narrative.experience.explorers.all():
-            raise PermissionDenied
+            if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
+                pass
+            else:
+                raise PermissionDenied
     return render(request, 'narratives/index.html', {'narrative': narrative, 'author': narrative.is_author(request)})
 
 
@@ -36,6 +40,13 @@ def create(request, experience_id):
     else:
         form = NarrativeForm(request.user, initial={'experience': experience.id, 'is_public': experience.is_public})
     return render(request, 'narratives/create.html', {'form': form, 'experience': experience})
+
+
+# Following for AJAX saving purposes. Replace edit??
+@login_required
+def save(request, narrative_id):
+    json = simplejson.dumps({'success': 'no post'})
+    return HttpResponse(json)
 
 
 @login_required

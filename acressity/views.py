@@ -1,13 +1,15 @@
-from experiences.models import Experience, FeaturedExperience
-from experiences.forms import ExperienceForm
-from explorers.forms import RegistrationForm
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.http import Http404
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils.html import escape
+
+from experiences.models import Experience, FeaturedExperience
+from experiences.forms import ExperienceForm
+from explorers.forms import RegistrationForm
 
 
 def index(request):
@@ -34,7 +36,12 @@ def step_two(request):
             return render(request, 'registration/step_two.html', {'experience': experience, 'form': form})
 
 
-def journey_by_trailname(request, trailname):
-    # Pathetically primitive search algorithm...of sorts
-    explorer = get_object_or_404(get_user_model(), trailname=trailname)
-    return redirect(reverse('journey', args=(explorer.id,)))
+def handle_query_string(request, query_string):
+    query_string = escape(query_string)
+    if get_user_model().objects.filter(trailname=query_string):
+        # Someone is requesting journey by trailname
+        return redirect(reverse('journey', args=(get_user_model().objects.get(trailname=query_string).id,)))
+    elif Experience.objects.filter(search_term=query_string):
+        return redirect(reverse('experience', args=(Experience.objects.get(search_term=query_string).id,)))
+    else:
+        raise Http404

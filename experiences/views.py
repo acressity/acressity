@@ -43,7 +43,13 @@ def index(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if experience.is_public is False:
         if request.user not in experience.explorers.all():
-            raise PermissionDenied
+            if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
+                if request.get_signed_cookie('experience_password', salt='personal_domain') == str(experience_id):
+                    pass
+            else:
+                #return HttpResponse('still here')
+                # Give them the option of providing password
+                return redirect(reverse('check_password', args=(experience_id,)))
     if experience.is_comrade(request):
         comrade = True
     else:
@@ -77,8 +83,6 @@ def edit(request, experience_id):
                 form.save()
                 messages.success(request, 'Experience has been successfully edited')
                 return redirect(reverse('experience', args=(experience.id,)))
-            else:
-                return HttpResponse(form.errors)
         else:
             form = ExperienceForm(instance=experience)
             # if experience.gallery:
@@ -176,5 +180,17 @@ def upload_photo(request, experience_id):
             experience.save()
         return redirect('/photologue/gallery/{0}/upload_photo/'.format(gallery.id))
     else:
-        messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-        return render(request, 'acressity/message.html')
+        raise PermissionDenied
+
+
+def check_password(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        if experience.password == password:
+            response = render(request, 'experiences/index.html', {'experience': experience})
+            response.set_signed_cookie('experience_password', str(experience.id), salt='personal_domain')
+            return response
+        else:
+            raise PermissionDenied
+    return render(request, 'experiences/check_password.html', {'experience': experience})

@@ -61,6 +61,18 @@
 					{{ form.is_public.help_text }}
 				</div>
 			</div>
+			<div id="search_term_div" class="formatted_input">
+				<strong>Search term</strong>
+				{{ form.search_term.errors }}
+				{{ form.search_term }}
+				<div onclick="toggle_div(this.nextElementSibling);">
+					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" /></strong>
+				</div>
+				<div class="toggle_div smaller_font" id="about_search_term">
+					{{ form.search_term.help_text }}
+				</div>
+			</div>
+			{% comment %}
 			<div id="password_div" class="formatted_input">
 				<strong>Password</strong>
 				{{ form.password.errors }}
@@ -72,6 +84,7 @@
 					{{ form.password.help_text }}
 				</div>
 			</div>
+			{% endcomment %}
 		{% endifequal %}
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
 		<input type="hidden" name="explorer_id" value="{{ experience.explorer.id }}"/>

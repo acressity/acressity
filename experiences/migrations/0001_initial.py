@@ -19,6 +19,8 @@ class Migration(SchemaMigration):
             ('status', self.gf('django.db.models.fields.CharField')(max_length=160, null=True, blank=True)),
             ('gallery', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['photologue.Gallery'], unique=True, null=True, on_delete=models.SET_NULL, blank=True)),
             ('is_public', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('password', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
+            ('url_id', self.gf('django.db.models.fields.CharField')(max_length=80, unique=True, null=True, blank=True)),
         ))
         db.send_create_signal(u'experiences', ['Experience'])
 
@@ -57,7 +59,9 @@ class Migration(SchemaMigration):
             'gallery': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['photologue.Gallery']", 'unique': 'True', 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'status': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'})
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'status': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'}),
+            'url_id': ('django.db.models.fields.CharField', [], {'max_length': '80', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         u'experiences.featuredexperience': {
             'Meta': {'object_name': 'FeaturedExperience'},
@@ -70,7 +74,7 @@ class Migration(SchemaMigration):
             'birthdate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'brief': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '254'}),
+            'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
             'experiences': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'explorers'", 'symmetrical': 'False', 'to': u"orm['experiences.Experience']"}),
             'featured_experience': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'featured_experience'", 'null': 'True', 'on_delete': 'models.SET_NULL', 'to': u"orm['experiences.Experience']"}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
@@ -83,7 +87,7 @@ class Migration(SchemaMigration):
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'tracking_experiences': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'tracking_explorers'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['experiences.Experience']"}),
-            'trailname': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50', 'db_index': 'True'})
+            'trailname': ('django.db.models.fields.CharField', [], {'max_length': '50', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         u'photologue.gallery': {
             'Meta': {'ordering': "['-date_added']", 'object_name': 'Gallery'},

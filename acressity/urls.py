@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.contrib.auth.views import login
 
-from acressity.views import journey_by_trailname
 admin.autodiscover()
 
 urlpatterns = patterns(
@@ -25,6 +24,6 @@ urlpatterns = patterns(
     url(r'^glossary/$', TemplateView.as_view(template_name='acressity/glossary.html'), name='glossary'),
     # Patching to work with Django logout...
     url(r'^accounts/login/', login),
-    # url matching a string, calling view which checks if string == trailname (nickname), and returns the url for the matching explorer_id. Careful though: it matches any string not grabbed by the above. I believe this needs to remain at the bottom.
-    url(r'^(?P<trailname>\w+)/$', journey_by_trailname),
+    # semi-primitive search for the query string provided. Allows easier accessing of objects by an identifying string. Careful though: it matches any string not grabbed by the above. I believe this needs to remain at the bottom.
+    url(r'^(?P<query_string>\w+)/$', 'handle_query_string', name='handle_query_string'),
 )

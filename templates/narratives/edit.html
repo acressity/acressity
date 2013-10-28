@@ -1,8 +1,31 @@
 {% extends "narratives/base.html" %}
 
+{% block head_insert %}
+	<script>
+		// function prepare(){
+		// 	$("#edit_narrative").submit(function(event){
+		// 		var values = $(this).serialize();
+
+		// 		$.ajax({
+		// 			url: "/narratives/{{ narrative.id }}/save",
+		// 			data: values,
+		// 			success: function(json){
+		// 				alert(json["success"]);
+		// 			},
+		// 			error: function(json){
+		// 				alert(json["success"]);
+		// 			},
+		// 		});
+		// 		return false;
+		// 	})
+		// }
+		// $(document).ready(prepare); // Ensures element exists first
+	</script>
+{% endblock head_insert %}
+
 {% block content %}
 	<h2>Editing narrative <em>{{ narrative }}</em></h2>
-	<form action="" method="POST" class="full_width">
+	<form action="" id="edit_narrative" method="POST" class="full_width">
 		{% csrf_token %}
 		<div class="formatted_input">
 			<h3><label for="id_title">Title</label></h3>

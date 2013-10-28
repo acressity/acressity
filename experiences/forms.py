@@ -5,6 +5,7 @@ from django.forms.extras.widgets import SelectDateWidget
 from django.forms import ModelForm
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 from experiences.models import Experience
 from photologue.models import Photo
@@ -13,9 +14,7 @@ from explorers.models import Explorer
 
 class ExperienceForm(ModelForm):
     experience = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger'}))
-    make_feature = forms.BooleanField(required=False,
-                                      initial=False,
-                                      help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
+    make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     date_created = forms.DateField(widget=SelectDateWidget(years=range(datetime.now().year, datetime.now().year-110, -1)), required=False)
 
     class Meta:
@@ -37,6 +36,13 @@ class ExperienceForm(ModelForm):
         if len(experience) < 3:
             raise forms.ValidationError('Make the experience name a little more descriptive')
         return experience
+
+    def clean_search_term(self):
+        search_term = self.cleaned_data.get('search_term')
+        if search_term:
+            if get_user_model().objects.filter(trailname=search_term):
+                raise forms.ValidationError('This is already someone else\'s trailname')
+        return search_term
 
 
 class ExperienceBriefForm(ModelForm):
