@@ -51,8 +51,10 @@ class ExplorerForm(ModelForm):
 
 
 class ContactForm(forms.Form):
-    email = forms.EmailField(label='Your Email')
-    subject = forms.CharField()
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    email = forms.EmailField(max_length=54)
+    subject = forms.CharField(max_length=155)
     message = forms.CharField(widget=forms.Textarea)
 
 
