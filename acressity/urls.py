@@ -24,7 +24,7 @@ urlpatterns = patterns(
     # Patching to work with Django logout...
     url(r'^accounts/login/', login),
     url(r'^contact/', 'contact', name='contact'),
-    ('^activity/', include('actstream.urls')),
+    #('^activity/', include('actstream.urls')),
     # semi-primitive search for the query string provided. Allows easier accessing of objects by an identifying string. Careful though: it matches any string not grabbed by the above. I believe this needs to remain at the bottom.
     url(r'^(?P<query_string>\w+)/$', 'handle_query_string', name='handle_query_string'),
 )
