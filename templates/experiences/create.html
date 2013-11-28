@@ -24,7 +24,7 @@
             {{ form.status.errors }}
             {{ form.status }}
         </div>
-        <div onclick="toggle_div('additional_options')"><h3>Additional Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
+        <div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
         <div id="additional_options" class="toggle_div">
             <div class="formatted_input">
                 {% if user.featured_experience %}

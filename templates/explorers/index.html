@@ -23,7 +23,7 @@
 	</div>
 	{% endcomment %}
 
-	{% include "explorers/dash_snippet.html" %}
+	{% include "explorers/snippets/dash.html" %}
 
 	{% for experience in experiences %}
 		{% if forloop.first %}
@@ -33,7 +33,7 @@
 				<h2>Experiences</h2>
 			{% endifequal %}
 		{% endif %}
-		{% include "experiences/dash_snippet.html" %}
+		{% include "experiences/snippets/dash.html" %}
 		{% if forloop.first %}
 			{% if not forloop.last %}
 				{% ifequal experience explorer.featured_experience %}

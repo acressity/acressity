@@ -4,7 +4,7 @@
     <h1>Welcome, {{ invitation_request.potential_explorer.first_name }} {{invitation_request.potential_explorer.last_name }}</h1>
     {% with invitation_request.experience as experience %}
         <h2>You've been invited by {{ invitation_request.author.get_full_name }} to be part of the experience</h2>
-        {% include "experiences/dash_snippet.html" %}
+        {% include "experiences/snippets/dash.html" %}
     {% endwith %}
     <h3>Accepting invitation will bring you to a registration page</h3>
     <table>

@@ -1,0 +1,73 @@
+{% load comments %}
+
+{% comment %}
+    HTML for the experience items currently being used in several templates.
+    I literally just now learned about the {% include %} Django tag, even though I used the same function in PHP ubiquitously...
+{% endcomment %}
+
+<div class="experience_dash">
+    <div>
+        <a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
+            {% if experience.gallery.featured_photo %}
+                <div class="featured_photo">
+                    <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
+                </div>
+            {% endif %}
+            <h3>{{ experience }}</h3>
+        </a>
+        {% if experience.status %}
+            <p>
+                {{ experience.status }}
+            </p>
+        {% endif %}
+        {% if not experience.is_public %}
+            <h3 class="smaller_font">Private experience</h3>
+        {% endif %}
+        <div class="option_list">
+            {% if user.is_authenticated %}
+                {% if user in experience.explorers.all %}
+                    <a href="/experiences/{{ experience.id }}/narratives/create/"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
+                    <a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
+                    <a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
+                    {% ifequal user experience.author %}
+                        <a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
+                        <a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
+                    {% endifequal %}
+                {% endif %}
+                {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
+                    <form action="{% url 'track_experience' experience.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Track" />
+                    </form>
+                {% endif %}
+                <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle the note form">
+                    <strong>
+                        Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ experience.id }}_comment_toggle_icon" />
+                    </strong>
+                </div>
+                <div id="{{ experience.id }}_comment" class="comment" style="display: none;">
+                    {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
+                        {% include "support/snippets/note_form.html" %}
+                    {% endwith %}
+                </div>
+            {% endif %}
+            {% if experience.gallery %}
+                <a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        {# Section for latest activity #}
+        {% if experience.latest_narrative %}
+            {% with experience.latest_narrative as narrative %}
+                <div onclick="toggle_div(this.nextElementSibling);">
+                    <strong>Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" /></strong>
+                </div>
+                <div class="toggle_div">
+                    {% include "narratives/snippets/dash.html" %}
+                </div>
+            {% endwith %}
+        {% endif %}
+    </div>
+    <div class="clear_both"></div>
+</div>

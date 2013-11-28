@@ -7,8 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     'acressity.views',
-    url(r'^$', 'index', name='acressity_index'),
-    # url(r'^journey/$', 'acressity.views.my_journey', name='my_journey'),
+    url(r'^$', TemplateView.as_view(template_name='acressity/index.html'), name='acressity_index'),
     url(r'^explorers/', include('explorers.urls')),
     url(r'^experiences/', include('experiences.urls')),
     url(r'^narratives/', include('narratives.urls')),
@@ -25,6 +24,7 @@ urlpatterns = patterns(
     # Patching to work with Django logout...
     url(r'^accounts/login/', login),
     url(r'^contact/', 'contact', name='contact'),
+    ('^activity/', include('actstream.urls')),
     # semi-primitive search for the query string provided. Allows easier accessing of objects by an identifying string. Careful though: it matches any string not grabbed by the above. I believe this needs to remain at the bottom.
     url(r'^(?P<query_string>\w+)/$', 'handle_query_string', name='handle_query_string'),
 )

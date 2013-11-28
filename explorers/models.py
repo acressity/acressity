@@ -37,7 +37,7 @@ class Explorer(AbstractBaseUser):
     trailname = models.CharField(max_length=50, null=True, blank=True, unique=True, help_text='A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you are encouraged to create a trailname that describes an aspect of your journey at the moment. It also allows others to find you by typing acressity.com/<em>trailname</em>')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
     brief = models.TextField(null=True, blank=True)
-    email = models.EmailField(max_length=254, null=False, blank=False, unique=True, help_text='Email addresses are used for nothing more than resetting passwords. They won\'t be used for activating accounts unless this is abused.')
+    email = models.EmailField(max_length=254, null=False, blank=False, unique=True, help_text='Email addresses are used for resetting passwords and creating new narratives via email.')
     birthdate = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(default=datetime.now)
     is_active = models.BooleanField(default=True)
@@ -74,7 +74,7 @@ class Explorer(AbstractBaseUser):
 
     # Following not used, but I think it's necessary with the extended user model?
     def get_short_name(self):
-        return self.trailname
+        return self.first_name
 
     def cheering_for(self):
         return [c.explorer for c in self.cheers_from.all()]
@@ -93,7 +93,7 @@ class Explorer(AbstractBaseUser):
         return sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 
     def top_five(self):
-        return self.ordered_experiences()[:5]  # list(sorted(self.experiences.exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True)))[:5]  # Ugly...
+        return self.ordered_experiences()[:5]
 
     def latest_narrative(self):
         if self.narratives.exists():

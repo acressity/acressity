@@ -17,7 +17,7 @@
 		</div>
 	{% endif %}
 	<div class="option_list">
-		{% if comrade %}
+		{% if comrade %} 
 			<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
 			<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
 			<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
@@ -49,7 +49,7 @@
 		<tr>
 			{% for explorer in experience.explorers.all %}
 				<td>
-					{% include "explorers/dash_snippet.html" %}
+					{% include "explorers/snippets/dash.html" %}
 					{% comment %}
 						<div class="object_item thirds_item explorer_item dash_item">
 							{% if explorer.gallery.featured_photo %}
@@ -107,7 +107,7 @@
 					{% if user in experience.explorers.all %}
 						{% for narrative in experience.ordered_narratives %}
 							<td>
-								{% include "narratives/dash_snippet.html" %}
+								{% include "narratives/snippets/dash.html" %}
 							</td>
 							{% if forloop.counter|divisibleby:'3' %}
 								{% if not forloop.last %}
@@ -119,7 +119,7 @@
 					{% else %}
 						{% for narrative in experience.public_narratives %}
 							<td>
-								{% include "narratives/dash_snippet.html" %}
+								{% include "narratives/snippets/dash.html" %}
 							</td>
 							{% if forloop.counter|divisibleby:'3' %}
 								{% if not forloop.last %}
@@ -141,7 +141,7 @@
 		<div class="comment_list" id="exp_comment_list">
 			{% get_comment_list for experience as exp_comment_list %}
 			{% for note in exp_comment_list reversed %}
-				{% include "support/note_snippet.html" %}
+				{% include "support/snippets/note.html" %}
 			{% endfor %}
 		</div>
 	{% endif %}
@@ -151,7 +151,7 @@
 		<div id="{{ experience.id }}_note" class="comment" style="display: none;">
 			{# Create context for html snippet #}
 			{% with next_url_name='experience' next_url_pk=experience.id %}
-			    {% include "support/note_form.html" %}
+			    {% include "support/snippets/note_form.html" %}
 			{% endwith %}
 		</div>
 	{% endif %}

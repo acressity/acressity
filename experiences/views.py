@@ -89,8 +89,7 @@ def edit(request, experience_id):
             #     form.fields['featured_photo'].queryset = experience.gallery.children_photos()
         return render(request, 'experiences/edit.html', {'form': form, 'experience': experience})
     else:
-        messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-        return render(request, 'acressity/message.html')
+        raise PermissionDenied
 
 
 def brief(request, experience_id):
@@ -116,17 +115,40 @@ def home(request):
 
 
 def delete(request, experience_id):
-    experience = Experience.objects.get(pk=experience_id)
+    experience = get_object_or_404(Experience, pk=experience_id)
     if experience.author == request.user:
-        if request.method == 'POST' and 'confirm' in request.POST:
-            experience.delete()
-            messages.success(request, 'Experience {0} was deleted'.format(experience))
-            return redirect(reverse('journey', args=(request.user.id,)))
+        if request.method == 'POST':
+            if 'nominate' in request.POST:
+                new_author = get_object_or_404(get_user_model(), pk=request.POST.get('explorer_id'))
+                experience.author = new_author
+                experience.explorers.remove(request.user)
+                experience.save()
+                messages.success(request, '{0} is the new author and you have been removed from {1}'.format(new_author, experience))
+                return redirect(reverse('journey', args=(request.user.id,)))
+            elif 'confirm' in request.POST:
+                experience.delete()
+                messages.success(request, 'Experience {0} was deleted'.format(experience))
+                return redirect(reverse('journey', args=(request.user.id,)))
         else:
             return render(request, 'experiences/delete.html', {'experience': Experience.objects.get(pk=experience_id)})
     else:
-        messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-        return render(request, 'acressity/message.html')
+        raise PermissionDenied
+
+
+@login_required
+def leave_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    if request.user in experience.explorers.all():
+        # They are a comrade. This option is not available to author
+        if 'delete' in request.POST:
+            # Cascade delete all of their presence in experience
+            pass
+        else:
+            # Just remove them from experience.explorers
+            pass
+    else:
+        raise PermissionDenied
+    return redirect(reverse('journey', args=(request.user.id,)))
 
 
 def categorize(request, experience_id):
@@ -146,8 +168,7 @@ def categorize(request, experience_id):
                 narratives_forms.append((narrative, form))
         return render(request, 'experiences/categorize.html', {'narratives_forms': narratives_forms})
     else:
-        messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-        return render(request, 'acressity/message.html')
+        raise PermissionDenied
 
 
 def featured(request):

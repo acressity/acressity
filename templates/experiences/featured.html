@@ -5,7 +5,7 @@
 	{% for experience in featured_experiences %}
         {# Following is necessary to supercede the experience/trackexperience relationship #}
         {% with experience.experience as experience %}
-            {% include "experiences/dash_snippet.html" %}
+            {% include "experiences/snippets/dash.html" %}
         {% endwith %}
 	{% endfor %}
 {% endblock content %}

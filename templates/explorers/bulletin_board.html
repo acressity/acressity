@@ -34,19 +34,19 @@
 		{% if eo_notes %}
 			<h2>Your Personal Notes</h2>
 			{% for note in eo_notes %}
-				{% include "support/note_snippet.html" %}
+				{% include "support/snippets/note.html" %}
 			{% endfor %}
 		{% endif %}
 		{% if ei_notes %}
 			<h2>Experience Notes</h2>
 			{% for note in ei_notes %}
-				{% include "support/note_snippet.html" %}
+				{% include "support/snippets/note.html" %}
 			{% endfor %}
 		{% endif %}
 		{% if nr_notes %}
 			<h2>Narrative Notes</h2>
 			{% for note in nr_notes %}
-				{% include "support/note_snippet.html" %}
+				{% include "support/snippets/note.html" %}
 			{% endfor %}
 		{% endif %}
 	</div>

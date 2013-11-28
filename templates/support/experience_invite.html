@@ -33,7 +33,7 @@
 	<h3>Or select from registered explorers</h3>
 	{% for explorer in explorers %}
 		<div class="explorer_item">
-			{% include "explorers/dash_snippet.html" %}
+			{% include "explorers/snippets/dash.html" %}
 			<form action="" method="POST">
 				{% csrf_token %}
 				<input type="submit" value="Invite {{ explorer.first_name }}" class="invite-button" />

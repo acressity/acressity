@@ -22,11 +22,6 @@
 			{{ form.experience }}
 		</div>
 		<div class="formatted_input">
-			<h3><label for="id_narrative">Narrative</label></h3>
-			{{ form.narrative.errors }}
-			{{ form.narrative }}
-		</div>
-		<div class="formatted_input">
 			<h3><label for="id_title">Title (optional)</label></h3>
 			{{ form.title.errors }}
 			{{ form.title }}
@@ -37,18 +32,26 @@
 			{{ form.date_created }}
 		</div>
 		<div class="formatted_input">
-			<h3><label for="id_category">Categorize (optional)</label></h3>
-			{{ form.category.errors }}
-			{{ form.category }}
+			<h3><label for="id_narrative">Narrative</label></h3>
+			{{ form.narrative.errors }}
+			{{ form.narrative }}
 		</div>
-		<div class="formatted_input">
-			<h3>Public? {{ form.is_public }}</h3>
-			{{ form.is_public.errors }}
-			<div onclick="toggle_div(this.nextElementSibling);">
-				<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+		<div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
+        <div id="additional_options" class="toggle_div">
+			<div class="formatted_input">
+				<h3><label for="id_category">Categorize (optional)</label></h3>
+				{{ form.category.errors }}
+				{{ form.category }}
 			</div>
-			<div class="toggle_div smaller_font" id="is_public_help_text">
-				{{ form.is_public.help_text }}
+			<div class="formatted_input">
+				<h3>Public? {{ form.is_public }}</h3>
+				{{ form.is_public.errors }}
+				<div onclick="toggle_div(this.nextElementSibling);">
+					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+				</div>
+				<div class="toggle_div smaller_font" id="is_public_help_text">
+					{{ form.is_public.help_text }}
+				</div>
 			</div>
 		</div>
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
