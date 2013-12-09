@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 
-{% block content %}
-	<img src="{{ STATIC_URL }}img/here_and_there.jpg" alt="Experience" title="Experience" class="full_width" style="height: 500px;" />
-	<blockquote id="welcome_quote">
-		<h1>Acressity</h1>
-		<h2>
-			An application for the exploration and
-			<br />
-			expression of new experiences with an
-			<br />
-			emphasis on the journey
-		</h2>
-	</blockquote>
-	<a href="{% url 'about' %}">learn more</a>
-	</p>
-{% endblock content %}
+{% block head_insert %}
+	<style type="text/css">
+		#content {
+			padding: 0px;
+			-moz-box-shadow: 0 0 0px 0px #888;
+		    -webkit-box-shadow: 0 0 0px 0px #888;
+		    box-shadow: 0 0 0px 0px #888; 
+		}
+	</style>
+{% endblock head_insert %}
+
+{# No content div, leaving the background picture open for viewing #}
