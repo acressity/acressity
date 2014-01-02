@@ -39,10 +39,10 @@
 	</div>
 	<div class="next_previous">
 		{% if narrative.get_previous_narrative %}
-			<a href="{% url 'narratives.views.index' narrative.get_previous_narrative.id %}" title="{{ narrative.get_previous_narrative }}"><img src="{{ STATIC_URL }}img/icons/previous-icon.png" class="float_right" title="Previous narrative" /></a>
+			<a href="{% url 'narratives.views.index' narrative.get_previous_narrative.id %}" title="{{ narrative.get_previous_narrative }}"><img src="{{ STATIC_URL }}img/icons/previous-icon.png" class="float_left" title="Previous narrative" /></a>
 		{% endif %}
 		{% if narrative.get_next_narrative %}
-			<a href="{% url 'narratives.views.index' narrative.get_next_narrative.id %}" title="{{ narrative.get_next_narrative }}"><img src="{{ STATIC_URL }}img/icons/next-icon.png" class="float_left" title="Next narrative" /></a>
+			<a href="{% url 'narratives.views.index' narrative.get_next_narrative.id %}" title="{{ narrative.get_next_narrative }}"><img src="{{ STATIC_URL }}img/icons/next-icon.png" class="float_right" title="Next narrative" /></a>
 		{% endif %}
 	</div>
 	<div class="experience_item">

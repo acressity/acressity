@@ -9,10 +9,10 @@
     <h2>From Gallery <a href="{% url 'pl-gallery' object.gallery.id %}">{{ object.gallery.title }}</a>
     </h2>
     <div class="gallery_photo_container">
-        {% if object.get_next_in_gallery %}
-            <a href="/photologue/photo/{{ object.get_next_in_gallery.id }}/" title="Next Photo">
-                <div class="next_photo">
-                    <img src="{{ STATIC_URL }}img/icons/next-icon.png" />
+        {% if object.get_previous_in_gallery %}
+            <a href="/photologue/photo/{{ object.get_previous_in_gallery.id }}/" title="Previous Photo">
+                <div class="previous_photo">
+                    <img src="{{ STATIC_URL }}img/icons/previous-icon.png">
                 </div>
             </a>
         {% endif %}
@@ -22,10 +22,11 @@
             </a>
             {% if object.caption %}<p>{{ object.caption }}</p>{% endif %}
         </div>
-        {% if object.get_previous_in_gallery %}
-            <a href="/photologue/photo/{{ object.get_previous_in_gallery.id }}/" title="Previous Photo">
-                <div class="previous_photo">
-                    <img src="{{ STATIC_URL }}img/icons/previous-icon.png">
+        
+        {% if object.get_next_in_gallery %}
+            <a href="/photologue/photo/{{ object.get_next_in_gallery.id }}/" title="Next Photo">
+                <div class="next_photo">
+                    <img src="{{ STATIC_URL }}img/icons/next-icon.png" />
                 </div>
             </a>
         {% endif %}

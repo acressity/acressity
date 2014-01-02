@@ -10,7 +10,7 @@
 			<h3>Requests:</h3>
 			{% for request in requests %}
 				<div class="request_dash">
-					{% if owner %}You have{% else %}{{ explorer.get_full_name}} has{% endif %} been invited to be a part of
+					{% if owner %}You have{% else %}{{ explorer.get_full_name }} has{% endif %} been invited to be a part of
 					<h3>
 						<a href="{% url 'experiences.views.index' request.experience.id %}">{{ request }}</a>
 					</h3>
@@ -48,6 +48,9 @@
 			{% for note in nr_notes %}
 				{% include "support/snippets/note.html" %}
 			{% endfor %}
+		{% endif %}
+		{% if nothing %}
+			<h2>There is nothing here at the moment</h2>
 		{% endif %}
 	</div>
 {% endblock content %}

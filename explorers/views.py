@@ -97,7 +97,8 @@ def board(request, explorer_id):
             return redirect(reverse('accept_invitation_request', args=(request.user.id, invitation_request_id)))
         elif 'decline' in request.POST:
             return redirect(reverse('decline_invitation_request', args=(request.user.id, invitation_request_id)))
-    return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'owner': owner})
+    nothing = not (ei_notes or nr_notes or requests)
+    return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'nothing': nothing, 'owner': owner})
 
 
 # For subscription relationships
