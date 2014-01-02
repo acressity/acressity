@@ -12,10 +12,13 @@
 			{{ form.experience }}
 		</div>
 		<p>{{ form.featured_photo }}</p>
-		<div class="formatted_input">	
-			<h3>Date created</h3>
-			{{ form.date_created.errors }}
-			{{ form.date_created }}
+		
+		<div class="formatted_input">
+			<label for="id_status">
+				<h3>Status</h3>
+			</label>
+			{{ form.status.errors }}
+			{{ form.status }}
 		</div>
 		<div class="formatted_input">
 			<label for="id_brief">
@@ -24,68 +27,69 @@
 			{{ form.brief.errors }}
 			{{ form.brief }}
 		</div>
-		<div class="formatted_input">
-			<label for="id_status">
-				<h3>Status</h3>
-			</label>
-			{{ form.status.errors }}
-			{{ form.status }}
+		<div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
+        <div id="additional_options" class="toggle_div">
+        	<div class="formatted_input">	
+				<h3>Date created</h3>
+				{{ form.date_created.errors }}
+				{{ form.date_created }}
+			</div>
+			{% ifnotequal experience user.featured_experience %}
+				<div class="formatted_input">
+					<strong>Make this your featured experience?</strong> {{ form.make_feature }}
+					{{ form.make_feature.errors }}
+					<p onclick="toggle_div('make_feature_help_text');">
+						About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="make_feature_help_text_toggle_icon" />
+					</p>
+					<div class="toggle_div smaller_font" id="make_feature_help_text">
+						{{ form.make_feature.help_text }}
+					</div>
+				</div>
+			{% endifnotequal %}
+			{% ifequal user experience.author %}
+				{# Will need to be more secure... Easy to change POST information, I think #}
+				<div class="formatted_input">
+					<strong>Public?</strong> {{ form.is_public }}
+					<script type="text/javascript">
+						e = document.getElementById("id_is_public");
+						e.onclick = function(){
+							toggle_div("password_div");
+						};
+					</script>
+					{{ form.is_public.errors }}
+					<div onclick="toggle_div(this.nextElementSibling);">
+						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+					</div>
+					<div class="toggle_div smaller_font" id="is_public_help_text">
+						{{ form.is_public.help_text }}
+					</div>
+				</div>
+				<div id="search_term_div" class="formatted_input">
+					<strong>Search term</strong>
+					{{ form.search_term.errors }}
+					{{ form.search_term }}
+					<div onclick="toggle_div(this.nextElementSibling);">
+						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" /></strong>
+					</div>
+					<div class="toggle_div smaller_font" id="about_search_term">
+						{{ form.search_term.help_text }}
+					</div>
+				</div>
+				{% comment %}
+				<div id="password_div" class="formatted_input">
+					<strong>Password</strong>
+					{{ form.password.errors }}
+					{{ form.password }}
+					<div onclick="toggle_div(this.nextElementSibling);">
+						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
+					</div>
+					<div class="toggle_div smaller_font" id="password_help_text">
+						{{ form.password.help_text }}
+					</div>
+				</div>
+				{% endcomment %}
+			{% endifequal %}
 		</div>
-		{% ifnotequal experience user.featured_experience %}
-			<div class="formatted_input">
-				<strong>Make this your featured experience?</strong> {{ form.make_feature }}
-				{{ form.make_feature.errors }}
-				<p onclick="toggle_div('make_feature_help_text');">
-					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="make_feature_help_text_toggle_icon" />
-				</p>
-				<div class="toggle_div smaller_font" id="make_feature_help_text">
-					{{ form.make_feature.help_text }}
-				</div>
-			</div>
-		{% endifnotequal %}
-		{% ifequal user experience.author %}
-			{# Will need to be more secure... Easy to change POST information, I think #}
-			<div class="formatted_input">
-				<strong>Public?</strong> {{ form.is_public }}
-				<script type="text/javascript">
-					e = document.getElementById("id_is_public");
-					e.onclick = function(){
-						toggle_div("password_div");
-					};
-				</script>
-				{{ form.is_public.errors }}
-				<div onclick="toggle_div(this.nextElementSibling);">
-					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
-				</div>
-				<div class="toggle_div smaller_font" id="is_public_help_text">
-					{{ form.is_public.help_text }}
-				</div>
-			</div>
-			<div id="search_term_div" class="formatted_input">
-				<strong>Search term</strong>
-				{{ form.search_term.errors }}
-				{{ form.search_term }}
-				<div onclick="toggle_div(this.nextElementSibling);">
-					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" /></strong>
-				</div>
-				<div class="toggle_div smaller_font" id="about_search_term">
-					{{ form.search_term.help_text }}
-				</div>
-			</div>
-			{% comment %}
-			<div id="password_div" class="formatted_input">
-				<strong>Password</strong>
-				{{ form.password.errors }}
-				{{ form.password }}
-				<div onclick="toggle_div(this.nextElementSibling);">
-					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
-				</div>
-				<div class="toggle_div smaller_font" id="password_help_text">
-					{{ form.password.help_text }}
-				</div>
-			</div>
-			{% endcomment %}
-		{% endifequal %}
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
 		<input type="hidden" name="explorer_id" value="{{ experience.explorer.id }}"/>
 		<input type="submit" value="Update" />

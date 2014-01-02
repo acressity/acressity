@@ -33,33 +33,36 @@
 			{{ form.title }}
 		</div>
 		<div class="formatted_input">
-			<h3>From experience</h3>
-			{{ form.experience.errors }}
-			{{ form.experience }}
-		</div>
-		<div class="formatted_input">	
-			<h3>Date created</h3>
-			{{ form.date_created.errors }}
-			{{ form.date_created }}
-		</div>
-		<div class="formatted_input">
 			<h3>Narrative</h3>
 			{{ form.narrative.errors }}
 			{{ form.narrative }}
 		</div>
-		<div class="formatted_input">
-			<h3>Assign this narrative to a category (optional)</h3>
-			{{ form.category.errors }}
-			{{ form.category }}
-		</div>
-		<div class="formatted_input">
-			<strong>Public?</strong> {{ form.is_public }}
-			{{ form.is_public.errors }}
-			<p onclick="toggle_div(this.nextElementSibling);">
-				<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
-			</p>
-			<div class="toggle_div smaller_font" id="is_public_help_text">
-				{{ form.is_public.help_text }}
+		<div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
+        <div id="additional_options" class="toggle_div">
+			<div class="formatted_input">
+				<h3>From experience</h3>
+				{{ form.experience.errors }}
+				{{ form.experience }}
+			</div>
+			<div class="formatted_input">	
+				<h3>Date created</h3>
+				{{ form.date_created.errors }}
+				{{ form.date_created }}
+			</div>
+			<div class="formatted_input">
+				<h3>Assign this narrative to a category (optional)</h3>
+				{{ form.category.errors }}
+				{{ form.category }}
+			</div>
+			<div class="formatted_input">
+				<strong>Public?</strong> {{ form.is_public }}
+				{{ form.is_public.errors }}
+				<p onclick="toggle_div(this.nextElementSibling);">
+					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+				</p>
+				<div class="toggle_div smaller_font" id="is_public_help_text">
+					{{ form.is_public.help_text }}
+				</div>
 			</div>
 		</div>
 		<input type="hidden" name="narrative_id" value="{{ narrative.id }}" />
