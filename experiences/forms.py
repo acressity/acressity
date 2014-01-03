@@ -38,11 +38,11 @@ class ExperienceForm(ModelForm):
         return experience
 
     def clean_search_term(self):
-        search_term = self.cleaned_data.get('search_term')
-        if search_term:
-            if get_user_model().objects.filter(trailname=search_term):
-                raise forms.ValidationError('This is already someone else\'s trailname')
-        return search_term
+        # search_term = self.cleaned_data.get('search_term')
+        # if search_term is None:
+        #     if get_user_model().objects.filter(trailname=search_term):
+        #         raise forms.ValidationError('This is already someone else\'s trailname')
+        return self.cleaned_data.get('search_term') or None
 
 
 class ExperienceBriefForm(ModelForm):
