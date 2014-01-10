@@ -5,8 +5,7 @@ from django.contrib.auth.views import login
 
 admin.autodiscover()
 
-urlpatterns = patterns(
-    'acressity.views',
+urlpatterns = patterns('acressity.views',
     url(r'^$', TemplateView.as_view(template_name='acressity/index.html'), name='acressity_index'),
     url(r'^explorers/', include('explorers.urls')),
     url(r'^experiences/', include('experiences.urls')),
@@ -24,7 +23,8 @@ urlpatterns = patterns(
     # Patching to work with Django logout...
     url(r'^accounts/login/', login),
     url(r'^contact/', 'contact', name='contact'),
-    ('^activity/', include('actstream.urls')),
+    #('^notification/', include(notification.urls)),
+    # ('^activity/', include('actstream.urls')),
     # semi-primitive search for the query string provided. Allows easier accessing of objects by an identifying string. Careful though: it matches any string not grabbed by the above. I believe this needs to remain at the bottom.
     url(r'^(?P<query_string>\w+)/$', 'handle_query_string', name='handle_query_string'),
 )

@@ -17,10 +17,10 @@ from acressity.forms import ContactForm
 def step_two(request):
     if request.method == 'POST':
         request.session['signing_up'] = 1
-        form = ExperienceForm(request.POST)
-        if form.is_valid():
-            form = RegistrationForm()
-        return render(request, 'registration/step_two.html', {'experience': form.cleaned_data['experience'], 'form': form})
+        exp_form = ExperienceForm(request.POST)
+        if exp_form.is_valid():
+            reg_form = RegistrationForm()
+        return render(request, 'registration/step_two.html', {'experience': exp_form.cleaned_data['experience'], 'form': reg_form})
     return redirect(request.META['HTTP_REFERER'])
 
 

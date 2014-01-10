@@ -13,6 +13,7 @@ from django.conf import settings
 
 from explorers.forms import RegistrationForm, ExplorerForm
 from support.models import InvitationRequest
+from notification import models as notif
 from experiences.models import Experience, FeaturedExperience
 from photologue.models import Gallery, Photo
 from experiences.forms import ExperienceForm
@@ -98,7 +99,8 @@ def board(request, explorer_id):
         elif 'decline' in request.POST:
             return redirect(reverse('decline_invitation_request', args=(request.user.id, invitation_request_id)))
     nothing = not (ei_notes or nr_notes or requests)
-    return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'nothing': nothing, 'owner': owner})
+    notifications = notif.NoticeSetting.objects.filter(user=request.user.id)
+    return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'nothing': nothing, 'owner': owner, 'notifications': notifications})
 
 
 # For subscription relationships
@@ -216,7 +218,10 @@ def change_password(request):
 
 
 def site_login(request):
-    next_url = request.GET.get('next') or request.POST.get('next')
+    if request.GET.get('next') == '/explorers/logout/' or request.POST.get('next') == '/explorers/logout/':
+        next_url = reverse('my_journey')
+    else:
+        next_url = request.GET.get('next') or request.POST.get('next')
     username_provided = request.POST.get('username')
     password_provided = request.POST.get('password')
     # Site allows one to login with either email address or created trailname

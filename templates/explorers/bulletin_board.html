@@ -5,6 +5,19 @@
 {% block content %}
 	<div id="bulletin_board">
 		<div id="bulletin_board_background"></div>
+		{% if notifications %}
+			{% for notification in notifications %}
+				<div class="object_item" style="background-color: blue;">
+					<h3>{{ notification.notice_type.display }}</h3>
+					<p>{{ notification.notice_type.description }}</p>
+					<form method="POST" action="">
+						{% csrf_token %}
+						<input type="submit" value="Dismiss" />
+					</form>
+				</div>
+			{% endfor %}
+		{% endif %}
+		<h1>{{ notification }}</h1>
 		<h2><a href="{% url 'journey' explorer.id %}" title="To {{ explorer.get_full_name|possessive }} journey">{{ explorer.get_full_name|possessive }}</a> Bulletin Board</h2>
 		{% if requests %}
 			<h3>Requests:</h3>
