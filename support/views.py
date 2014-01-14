@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 
 from experiences.models import Experience
-from notification import models as notif
+from notifications import notify
 from support.models import InvitationRequest, PotentialExplorer
 from support.forms import PotentialExplorerForm
 from explorers.forms import RegistrationForm
@@ -32,7 +32,7 @@ def track_experience(request, experience_id):
                 messages.error(request, 'You are already tracking {0}'.format(experience))
             else:
                 request.user.tracking_experiences.add(experience)
-                notif.send(experience.explorers.all(), 'following', {'follower': request.user})
+                #notif.send(experience.explorers.all(), 'following', {'follower': request.user})
                 messages.success(request, 'You are now tracking the experience {0}'.format(experience))
     return redirect(reverse('tracking_experiences', args=(request.user.id,)))
 

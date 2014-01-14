@@ -12,7 +12,7 @@ from experiences.models import Experience, FeaturedExperience
 from narratives.models import Narrative
 from experiences.forms import ExperienceForm, ExperienceBriefForm
 from narratives.forms import NarrativeForm
-from notification import models as notif
+from notifications import notify
 from photologue.models import Gallery
 from explorers.models import Explorer
 from support.models import InvitationRequest
@@ -82,7 +82,7 @@ def edit(request, experience_id):
                     if experience.author != request.user:
                         raise PermissionDenied
                 form.save()
-                notif.send(experience.explorers.all(), 'experience_edited', {'edited_by': request.user})
+                #notif.send(experience.explorers.all(), 'experience_edited', {'edited_by': request.user})
                 messages.success(request, 'Experience has been successfully edited')
                 return redirect(reverse('experience', args=(experience.id,)))
         else:

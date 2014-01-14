@@ -13,7 +13,7 @@ from django.conf import settings
 
 from explorers.forms import RegistrationForm, ExplorerForm
 from support.models import InvitationRequest
-from notification import models as notif
+from notifications import notify
 from experiences.models import Experience, FeaturedExperience
 from photologue.models import Gallery, Photo
 from experiences.forms import ExperienceForm
@@ -99,7 +99,7 @@ def board(request, explorer_id):
         elif 'decline' in request.POST:
             return redirect(reverse('decline_invitation_request', args=(request.user.id, invitation_request_id)))
     nothing = not (ei_notes or nr_notes or requests)
-    notifications = notif.NoticeSetting.objects.filter(user=request.user.id)
+    notifications = explorer.notifications.unread()
     return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'nothing': nothing, 'owner': owner, 'notifications': notifications})
 
 

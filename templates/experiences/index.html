@@ -4,8 +4,8 @@
 
 {% block content %}
 	<h2>{{ experience }}</h2>
-	{% if experience.gallery.featured_photo %}
-		<div class="featured_photo">
+	<div class="featured_photo">
+		{% if experience.gallery.featured_photo %}
 			<a href="{% url 'pl-gallery' experience.gallery.id %}">
 				<img src="{{ experience.gallery.featured_photo.get_display_url }}" />
 			</a>
@@ -14,8 +14,16 @@
 					{{ experience.gallery.featured_photo.caption }}
 				</div>
 			{% endif %}
-		</div>
-	{% endif %}
+		{% else %}
+			{% if user in experience.explorers.all %}
+				<a href="{% url 'exp_upload_photo' experience.id %}" title="Upload photo for this experience">
+					<img src="{{ STATIC_URL }}img/logo.jpg" />
+				</a>
+			{% else %}
+				<img src="{{ STATIC_URL }}img/logo.jpg" />
+			{% endif %}
+		{% endif %}
+	</div>
 	<div class="option_list">
 		{% if comrade %} 
 			<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
