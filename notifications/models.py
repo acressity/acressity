@@ -1,14 +1,18 @@
 import datetime
+from .utils import id2slug
+from model_utils import managers, Choices
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
 from django.utils.timezone import utc
-from .utils import id2slug
 
 from notifications.signals import notify
 
-from model_utils import managers, Choices
+# The table fields:
+# id, level, recipient_id, unread, actor_content_type_id, actor_object_id, verb, description, target_content_type_id, target_object_id, action_object_content_type_id, action_object_object_id, timestamp, public
+
 
 now = datetime.datetime.now
 if getattr(settings, 'USE_TZ'):
@@ -188,7 +192,6 @@ Handler function to create Notification instance upon action signal call.
         newnotify.data = kwargs
 
     newnotify.save()
-
 
 # connect the signal
 notify.connect(notify_handler, dispatch_uid='notifications.models.notification')

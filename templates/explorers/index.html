@@ -23,7 +23,9 @@
 	</div>
 	{% endcomment %}
 
-	{% include "explorers/snippets/dash.html" %}
+	{% ifnotequal user explorer %}
+		{% include "explorers/snippets/dash.html" %}
+	{% endifnotequal %}
 
 	{% for experience in experiences %}
 		{% if forloop.first %}

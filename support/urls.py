@@ -8,6 +8,5 @@ urlpatterns = patterns(
     url(r'^comment_to_creator/$', 'comment_to_creator', name='comment_to_creator'),
     url(r'^experience_invite/(?P<experience_id>\d+)/$', 'experience_invite', name='experience_invite'),
     url(r'^view_invitation/(?P<code>\w{25})/$', 'view_invitation', name='view_invitation'),
-    url(r'^accept_invitation_request/(?P<explorer_id>\d+)/(?P<invitation_request_id>\d+)/$', 'accept_invitation_request', name='accept_invitation_request'),
-    url(r'^decline_invitation_request/(?P<explorer_id>\d+)/(?P<invitation_request_id>\d+)/$', 'decline_invitation_request', name='decline_invitation_request'),
+    url(r'^handle_invitation_request/(?P<invitation_request_id>\d+)/$', 'handle_invitation_request', name='handle_invitation_request'),
 )

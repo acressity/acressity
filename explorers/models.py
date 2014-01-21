@@ -1,12 +1,13 @@
-from photologue.models import Gallery
-from datetime import datetime
-from experiences.models import Experience
-
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.core.signals import request_finished
+
+from photologue.models import Gallery
+from datetime import datetime
+from experiences.models import Experience
 
 
 class ExplorerManager(BaseUserManager):

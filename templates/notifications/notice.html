@@ -1,26 +1,61 @@
-{% load url from future %}
-
-<div class="notice alert-block alert-{{ notice.level }}">
-  <a class="close pull-right" href="{% url 'notifications:mark_as_read' notice.slug %}">
-    <i class="icon-close"></i>
-  </a>
+<div class="notice alert-block alert-{{ notice.level }}">      
+    {# <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i> #}
+    <p>
+        <a href="{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
+    </p>
   
-  <h4>
-    <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i>
-    {{ notice.actor }}
-    {{ notice.verb }}
     {% if notice.target %}
-      of {{ notice.target }}
+        <p>
+            {% ifequal notice.target_content_type.model 'photo' %} 
+                <a href="{% url 'pl-photo' notice.target.id %}"><img src="{{ notice.target.get_thumbnail_url }}"></a>
+            {% else %}
+                {% ifequal notice.target_content_type.model 'invitationrequest' %}
+                    <a href="{% url 'experience' 1 %}">{{ notice.target.experience }}</a>
+                    <form action="{% url 'handle_invitation_request' notice.target.id %}" name="invite_respond" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="from_explorer_id" value="{{ notice.actor.id }}" />
+                        <input type="hidden" name="to_explorer_id" value="{{ notice.recipient.id }}" />
+                        <input type="hidden" name="experience_id" value="{{ notice.target.id }}" />
+                        <input type="submit" name="accept" value="Accept" />
+                        <input type="submit" name="decline" value="Decline" />
+                    </form>
+                {% else %}
+                    <a href="{% url notice.target_content_type.model notice.target.id %}">{{ notice.target }}</a>
+                {% endifequal %}
+            {% endifequal %}
+            
+            {% comment %}
+            {% ifequal notice.target_content_type.model 'narrative' %}
+                <a href="{% url 'narrative' notice.target.id %}">{{ notice.target }}</a>
+            {% else %}
+                {% ifequal notice.target_content_type.model 'experience' %}
+                    <a href="{% url 'experience' notice.target.id %}">{{ notice.target }}</a>
+                {% endifequal %}
+            {% endifequal %}
+            {% endcomment %}
+        </p>
     {% endif %}
-  </h4>
+
+    {% if notice.description %}
+        <p>
+            {{ notice.description|linebreaksbr }}
+        </p>
+    {% endif %}
   
-  <p>{{ notice.timesince }} ago</p>
+    <p>
+        {{ notice.timesince }} ago
+    </p>
+
+    {% if notice.unread %}
+        <form action="{% url 'mark_as_read' notice.id %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Dismiss" />
+    </form>
+    {% endif %}
   
-  <p>{{ notice.description|linebreaksbr }}</p>
-  
-  <div class="notice-actions">
-    {% for action in notice.data.actions %}
-      <a class="btn" href="{{ action.href }}">{{ action.title }}</a>
-    {% endfor %}
-  </div>
+    <div class="notice-actions">
+        {% for action in notice.data.actions %}
+            <a class="btn" href="{{ action.href }}">{{ action.title }}</a>
+        {% endfor %}
+    </div>
 </div>

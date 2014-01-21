@@ -5,11 +5,16 @@
 {% block content %}
 	<div id="bulletin_board">
 		<div id="bulletin_board_background"></div>
-		{% if notifications %}
-			{% include 'notifications/list.html' %}
-		{% endif %}
-		<h1>{{ notification }}</h1>
 		<h2><a href="{% url 'journey' explorer.id %}" title="To {{ explorer.get_full_name|possessive }} journey">{{ explorer.get_full_name|possessive }}</a> Bulletin Board</h2>
+		{% if explorer.notifications.unread %}
+			<h2>Notifications</h2>
+			{% include 'notifications/list.html' %}
+		{% else %}
+			<h2>No new notifications</h2>
+			{% if explorer.notifications.read %}
+				<a href="{% url 'past_notifications' explorer.id %}"><h2>See past notifications</h2></a>
+			{% endif %}
+		{% endif %}
 		{% if requests %}
 			<h3>Requests:</h3>
 			{% for request in requests %}
@@ -35,6 +40,7 @@
 				</div>
 			{% endfor %}
 		{% endif %}
+		{% comment %}
 		{% if eo_notes %}
 			<h2>Your Personal Notes</h2>
 			{% for note in eo_notes %}
@@ -56,5 +62,6 @@
 		{% if nothing %}
 			<h2>There is nothing here at the moment</h2>
 		{% endif %}
+		{% endcomment %}
 	</div>
 {% endblock content %}

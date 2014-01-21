@@ -2,6 +2,7 @@
 {# Referring template must convert accordingly (with-as statement) #}
 
 {% load explorers_extras %}
+{% load notifications_tags %}
 
 <div class="explorer_item">
     <div class="featured_photo">
@@ -14,6 +15,12 @@
         {% endif %}
     </div>
     <h3 class="align_center">{{ explorer.get_full_name }}</h3>
+    {% ifequal user explorer %}
+        {% notifications_unread as unread_count %}
+        {% if unread_count %}
+            <a href="{% url 'board' explorer.id %}">{{ unread_count }} new notification{{ unread_count|pluralize }}</a>
+        {% endif %}
+    {% endifequal %}
     <div class="option_list">
         <a href="{% url 'journey' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/journey-icon.png" title="Visit {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} journey" class="option_icon" /></a>
         <a href="{% url 'story' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} story" class="option_icon" /></a>
@@ -35,46 +42,4 @@
             {% endwith %}
         </div>
     {% endif %}
-    {% comment %}
-    <div class="experience_item">
-        {% if explorer.featured_experience %}
-            <div onclick="toggle_div(this.nextElementSibling);" name="{{ explorer.id }}_featured_experience">
-                <h3 title="Toggle information about {{ explorer.featured_experience }}">{{ explorer.featured_experience }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ explorer.id }}_featured_experience_toggle_icon" /></h3>
-            </div>
-            <div class="toggle_div" id="{{ explorer.id }}_featured_experience">
-                <a href="{% url 'experience' explorer.featured_experience.id %}" title="{% ifequal explorer user %}Work on your featured experience{% else %}View featured experience{% endifequal %}"></a>
-                {% if explorer.featured_experience.status %}
-                    Status: {{ explorer.featured_experience.status }}
-                {% endif %}
-                <div class="option_list">
-                    {% ifequal explorer user %}
-                        <a href="{% url 'narratives.views.create' explorer.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Write a new narrative for {{ explorer.featured_experience }}" class="option_icon" /></a>
-                        <a href="{% url 'experiences.views.edit' explorer.featured_experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit your featured experience" class="option_icon" /></a>
-                        <a href="/photologue/gallery/{{ explorer.featured_experience.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
-                        <a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" alt="Add new experience" class="option_icon" title="Add new experience" /></a>
-                    {% endifequal %}
-                </div>
-                {% if explorer.featured_experience.latest_narrative %}
-                    <div onclick="toggle_div(this.nextElementSibling);" title="Toggle the latest narrative">
-                        <h4>Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ explorer.id }}_featured_experience_latest_narrative_toggle_icon" /></h4>
-                    </div>
-                    <div class="toggle_div narrative_item" id="{{ explorer.id }}_featured_experience_latest_narrative">
-                        {% with explorer.featured_experience.latest_narrative as narrative %}
-                            {% include "narratives/dash_snippet.html" %}
-                        {% endwith %}
-                    </div>
-                {% endif %}
-            </div>
-                Following is just a little crowded for the explorer dash.
-                I would like to have it be centralized with the experience dash
-                {% with explorer.featured_experience as experience %}
-                    <div class="toggle_div" id="{{ explorer.id }}_featured_experience">
-                        {% include "experiences/dash_snippet.html" %}
-                    </div>
-                {% endwith %}
-        {% else %}
-            <em>{{ explorer.get_full_name }} currently doesn't have a featured experience</em>
-        {% endif %}
-    </div>
-    {% endcomment %}
 </div>

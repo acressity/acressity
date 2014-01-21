@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from photologue.models import Photo, Gallery
 from photologue.forms import GalleryForm, GalleryPhotoForm
+from notifications import notify
 
 from django.views.generic.dates import ArchiveIndexView, DateDetailView, DayArchiveView, MonthArchiveView, YearArchiveView
 from django.views.generic.detail import DetailView
@@ -31,6 +32,8 @@ def upload_photo(request, gallery_id):
                 gallery.featured_photo = photo
                 gallery.save()
             messages.success(request, 'Your photo was successfully uploaded')
+            for comrade in gallery.explorers.exclude(id=request.user.id):
+                notify.send(sender=request.user, recipient=comrade, target=photo, verb='has uploaded a new photo')
             return HttpResponseRedirect('/photologue/gallery/{0}/'.format(gallery.id))
     else:
         form = GalleryPhotoForm()

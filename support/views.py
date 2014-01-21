@@ -76,26 +76,22 @@ def comment_to_creator(request):
 
 
 @login_required
-def accept_invitation_request(request, explorer_id, invitation_request_id):
-    explorer = get_object_or_404(get_user_model(), pk=explorer_id)
-    invitation_request = get_object_or_404(InvitationRequest, pk=invitation_request_id)
-    if request.user == explorer:
+def handle_invitation_request(request, invitation_request_id):
+    '''This view handles the answering to an invitation, bringing together declining and accepting to one function'''
+    explorer = get_object_or_404(get_user_model(), pk=request.POST.get('to_explorer_id'))
+    assert explorer == request.user
+    invitation_request = InvitationRequest.objects.get(pk=invitation_request_id)  # Ugly way of filtering down
+    if 'accept' in request.POST:
         invitation_request.experience.explorers.add(explorer)
         if invitation_request.experience.gallery:
             invitation_request.experience.gallery.explorers.add(explorer)
         messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos.'.format(invitation_request.experience))
+        notify.send(sender=explorer, recipient=invitation_request.experience.author, verb='has accepted your request to be a part your experience', target=invitation_request.experience)
         invitation_request.delete()
-    return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
-
-
-@login_required
-def decline_invitation_request(request, explorer_id, invitation_request_id):
-    explorer = get_object_or_404(get_user_model(), pk=explorer_id)
-    invitation_request = get_object_or_404(InvitationRequest, pk=invitation_request_id)
-    if request.user == explorer:
+        return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
+    else:
         messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
         invitation_request.delete()
-    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def experience_invite(request, experience_id):
@@ -110,6 +106,7 @@ def experience_invite(request, experience_id):
             experience_request = InvitationRequest(author=request.user, recruit=recruit, experience=experience)
             experience_request.save()
             messages.success(request, 'You have invited {0} to be a part of {1}.'.format(recruit.get_full_name(), experience))
+            notify.send(sender=request.user, verb='has invited you to be part of the experience', recipient=recruit, target=experience_request)
             return redirect(reverse('experience_invite', args=(experience.id,)))
         elif 'email' in request.POST:
             form = PotentialExplorerForm(request.POST)
@@ -119,7 +116,7 @@ def experience_invite(request, experience_id):
                 invitation_request.save()
                 send_mail(
                     'Invitation from {0}'.format(request.user.get_full_name()), 'Hello {3} {4},\nYou\'ve been invited by {0} to participate in the experience "{1}"\n\nTo view this invitation, go to http://acressity.com/support/view_invitation/{2}\n\nIf you do not know this person, or believe this email was sent in error, please ignore or respond to acressity@acressity.com'.format(request.user.get_full_name(), experience, invitation_request.code, form.instance.first_name, form.instance.last_name), 'acressity@acressity.com', [form.cleaned_data['email']])
-                messages.success(request, 'You\'ve invited {0} {1} to {2}. They will be sent an invitation email'.format(form.cleaned_data['first_name'], form.cleaned_data['last_name']), experience)
+                messages.success(request, 'You\'ve invited {0} {1} to {2}. They will be sent an invitation email'.format(form.cleaned_data['first_name'], form.cleaned_data['last_name'], experience))
                 return redirect(reverse('experience', args=(experience.id,)))
     else:
         form = PotentialExplorerForm()

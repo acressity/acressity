@@ -1,0 +1,8 @@
+{% extends "explorers/base.html" %}
+
+{% block content %}
+    {% with user.notifications.read as notifications %}
+        <h2>Past Notifications</h2>
+        {% include 'notifications/list.html' %}
+    {% endwith %}
+{% endblock content %}

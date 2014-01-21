@@ -7,14 +7,16 @@
 	{% endif %}
 	<form action="{% url 'login' %}" method="POST">
 		{% csrf_token %}
-		<label for="username">Email or <abbr title="Creative username to describe your journey">Trailname</abbr>:</label>
-		<br />
-		<input type="text" name="username" value="" id="username" />
-		<br />
-		<label for="password">Password:</label>
-		<br />
-		<input type="password" name="password" value="" id="password" />
-		<br />
+		<div class="formatted_input">
+			<label for="username">Email or <abbr title="Creative username to describe your journey">Trailname</abbr>:</label>
+			<br />
+			<input type="text" name="username" value="" id="username" />
+		</div>
+		<div class="formatted_input">
+			<label for="password">Password:</label>
+			<br />
+			<input type="password" name="password" value="" id="password" />
+		</div>
 		<input type="submit" value="Log In" />
 		<input type="hidden" name="next" value="{% url 'my_journey' %}" />
 	</form>

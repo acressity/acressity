@@ -95,12 +95,17 @@ def board(request, explorer_id):
     if request.method == 'POST' and request.user == explorer:
         invitation_request_id = request.POST.get('invitation_request_id')
         if 'accept' in request.POST:
-            return redirect(reverse('accept_invitation_request', args=(request.user.id, invitation_request_id)))
+            return redirect(reverse('accept_invitation_request', args=(request.user.id,)))
         elif 'decline' in request.POST:
             return redirect(reverse('decline_invitation_request', args=(request.user.id, invitation_request_id)))
     nothing = not (ei_notes or nr_notes or requests)
     notifications = explorer.notifications.unread()
     return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'nothing': nothing, 'owner': owner, 'notifications': notifications})
+
+
+@login_required
+def past_notifications(request, explorer_id):
+    return render(request, 'explorers/past_notifications.html')
 
 
 # For subscription relationships

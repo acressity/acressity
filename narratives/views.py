@@ -13,6 +13,7 @@ from narratives.models import Narrative
 from narratives.forms import NarrativeForm
 from experiences.models import Experience
 from photologue.models import Gallery
+from notifications import notify
 
 
 def index(request, narrative_id):
@@ -36,6 +37,8 @@ def create(request, experience_id):
             form.instance.author = request.user
             new_narrative = form.save()
             messages.success(request, 'Your narrative has been added')
+            for comrade in experience.comrades(request):
+                notify.send(recipient=comrade, sender=request.user, target=new_narrative, verb='has written a new narrative for experience {0}'.format(experience))
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
         form = NarrativeForm(request.user, initial={'experience': experience.id, 'is_public': experience.is_public})
@@ -58,6 +61,8 @@ def edit(request, narrative_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Narrative successfully updated')
+                for comrade in narrative.experience.comrades(request):
+                    notify.send(recipient=comrade, sender=request.user, target=narrative, verb='edited a narrative')
                 return redirect('/narratives/{0}'.format(narrative.id))
         else:
             form = NarrativeForm(narrative.author, instance=narrative)

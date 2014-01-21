@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404, render, redirect, render_to_response
 from django.template.context import RequestContext
+from django.core.urlresolvers import reverse
 from .utils import slug2id
+
 from notifications.models import Notification
 
 
@@ -49,10 +51,10 @@ def mark_all_as_read(request):
 
 
 @login_required
-def mark_as_read(request, slug=None):
-    id = slug2id(slug)
+def mark_as_read(request, notice_id):
+    # id = slug2id(slug)
 
-    notification = get_object_or_404(Notification, recipient=request.user, id=id)
+    notification = get_object_or_404(Notification, recipient=request.user, id=notice_id)
     notification.mark_as_read()
 
     next = request.REQUEST.get('next')
@@ -60,14 +62,14 @@ def mark_as_read(request, slug=None):
     if next:
         return redirect(next)
 
-    return redirect('notifications:all')
+    return redirect(reverse('board', args=(request.user.id,)))
 
 
 @login_required
-def mark_as_unread(request, slug=None):
-    id = slug2id(slug)
+def mark_as_unread(request, notice_id):
+    # id = slug2id(slug)
 
-    notification = get_object_or_404(Notification, recipient=request.user, id=id)
+    notification = get_object_or_404(Notification, recipient=request.user, id=notice_id)
     notification.mark_as_unread()
 
     next = request.REQUEST.get('next')

@@ -4,8 +4,10 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.comments.signals import comment_was_posted
 
 from experiences.models import Experience
+from notifications.models import Notification
 
 
 # I'm not satisfied with this at the moment. I want to have a model that encompasses the ability to cheer (track) an arbitrary object (such as explorer or experience). Yet I don't want to have disorganized data in the db...
@@ -73,3 +75,35 @@ class PotentialExplorer(models.Model):
     # def save():
     #     'Transform this model instance into new explorer, with related experience as current feature'
     #     pass
+
+
+def comment_handler(sender, **kwargs):
+    '''
+    Handler function specifically designed to handle new comments being created
+    '''
+
+    comment = kwargs.pop('comment')
+    # request = kwargs.pop('request')
+
+    o = comment.content_object.model()
+    if o == 'Explorer':
+        recipient = comment.content_object
+    elif o == 'Experience':
+        recipient = comment.content_object.author  # This should eventually handle all explorers of the experience
+    elif o == 'Narrative':
+        recipient = comment.content_object.author
+    newnotify = Notification(
+        recipient=recipient,
+        #sender=comment.user,
+        verb='has posted a new note',
+        actor_content_type=ContentType.objects.get_for_model(comment.user),
+        actor_object_id=comment.user.pk,
+        public=True,
+        description=comment.comment,
+        timestamp=datetime.now()
+    )
+
+    newnotify.save()
+
+
+comment_was_posted.connect(comment_handler)

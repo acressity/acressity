@@ -87,8 +87,8 @@ class Experience(models.Model):
     def ordered_narratives(self):
         return self.narratives.order_by('-date_created')
 
-    def comrades(self):
-        return self.explorers.exclude(id=self.author.id)
+    def comrades(self, request):
+        return self.explorers.exclude(id=request.user.id)
 
     def create_gallery(self):
         gallery = Gallery(title=self.experience, content_type=ContentType.objects.get(model='experience'), object_pk=self.id, is_public=self.is_public)

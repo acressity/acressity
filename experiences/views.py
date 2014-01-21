@@ -33,8 +33,6 @@ def create(request):
                 messages.success(request, 'Your featured experience is now {0}'.format(form.instance.experience))
             messages.success(request, 'Experience successfully added')
             return redirect(reverse('experience', args=(new_experience.id,)))
-        # else:
-        #     messages.error(request, 'There was an error in saving your new experience')
     else:
         form = ExperienceForm()
     return render(request, 'experiences/create.html', {'form': form})
@@ -82,8 +80,9 @@ def edit(request, experience_id):
                     if experience.author != request.user:
                         raise PermissionDenied
                 form.save()
-                #notif.send(experience.explorers.all(), 'experience_edited', {'edited_by': request.user})
                 messages.success(request, 'Experience has been successfully edited')
+                for comrade in experience.comrades(request):
+                    notify.send(sender=request.user, recipient=comrade, target=experience, verb='has edited your shared experience')
                 return redirect(reverse('experience', args=(experience.id,)))
         else:
             form = ExperienceForm(instance=experience)
