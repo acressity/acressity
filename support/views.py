@@ -92,6 +92,7 @@ def handle_invitation_request(request, invitation_request_id):
     else:
         messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
         invitation_request.delete()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def experience_invite(request, experience_id):
