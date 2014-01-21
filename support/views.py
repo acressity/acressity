@@ -34,6 +34,7 @@ def track_experience(request, experience_id):
                 request.user.tracking_experiences.add(experience)
                 #notif.send(experience.explorers.all(), 'following', {'follower': request.user})
                 messages.success(request, 'You are now tracking the experience {0}'.format(experience))
+                notify.send(sender=request.user, recipient=experience.author, target=experience, verb='is tracking your experience')
     return redirect(reverse('tracking_experiences', args=(request.user.id,)))
 
 

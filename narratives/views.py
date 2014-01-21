@@ -68,8 +68,7 @@ def edit(request, narrative_id):
             form = NarrativeForm(narrative.author, instance=narrative)
         return render(request, 'narratives/edit.html', {'form': form, 'narrative': narrative})
     else:
-        messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-        return render(request, 'acressity/message.html')
+        raise PermissionDenied
 
 
 @login_required
@@ -78,6 +77,8 @@ def delete(request, narrative_id):
     if request.method == 'POST' and 'confirm' in request.POST and narrative.author == request.user:
         narrative.delete()
         messages.success(request, 'Your narrative was deleted')
+        for comrade in narrative.experience.comrades(request):
+            notify.send(sender=request.user, recipient=comrade, verb='has deleted a narrative from the experience', target=narrative.experience)
         return redirect(reverse('experience', args=(narrative.experience.id,)))
     else:
         return render(request, 'narratives/delete.html', {'narrative': narrative})

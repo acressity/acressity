@@ -8,6 +8,7 @@ from django.views.generic.dates import ArchiveIndexView, DateDetailView, DayArch
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.template.defaultfilters import slugify
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
@@ -142,8 +143,7 @@ def gallery_edit(request, gallery_id):
         form = GalleryForm(gallery=gallery, instance=gallery)
         return render(request, 'photologue/gallery_edit.html', {'object': gallery, 'form': form, 'photos_forms': photos_forms})
     else:
-        messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-        return render(request, 'acressity/message.html')
+        raise PermissionDenied
 
 
 class GalleryView(object):

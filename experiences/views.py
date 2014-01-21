@@ -32,6 +32,7 @@ def create(request):
                 request.user.save()
                 messages.success(request, 'Your featured experience is now {0}'.format(form.instance.experience))
             messages.success(request, 'Experience successfully added')
+            notify.send(sender=request.user, recipient=get_user_model().objects.get(pk=1), target=new_experience, verb='has created a new experience')
             return redirect(reverse('experience', args=(new_experience.id,)))
     else:
         form = ExperienceForm()
@@ -125,10 +126,13 @@ def delete(request, experience_id):
                 experience.explorers.remove(request.user)
                 experience.save()
                 messages.success(request, '{0} is the new author and you have been removed from {1}'.format(new_author, experience))
+                notify.send(sender=request.user, recipient=new_author, target=experience, verb='has made you the new author of the experience')
                 return redirect(reverse('journey', args=(request.user.id,)))
             elif 'confirm' in request.POST:
                 experience.delete()
                 messages.success(request, 'Experience {0} was deleted'.format(experience))
+                for comrade in experience.comrades(request):
+                    notify.send(sender=request.user, recipient=comrade, target=experience, verb='has deleted the experience')
                 return redirect(reverse('journey', args=(request.user.id,)))
         else:
             return render(request, 'experiences/delete.html', {'experience': Experience.objects.get(pk=experience_id)})

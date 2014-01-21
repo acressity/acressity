@@ -118,6 +118,7 @@ def cheer(request, explorer_id):
             cheer = Cheer(explorer=explorer, cheerer=request.user)
             cheer.save()
             messages.success(request, 'You are now cheering for {0}'.format(explorer.get_full_name()))
+            notify.send(sender=request.user, recipient=explorer, verb='is now cheering for you')
             return redirect(reverse('journey', args=(explorer.id,)))
         else:
             messages.error(request, 'You are already cheering for {0}'.format(explorer.get_full_name()))
@@ -177,6 +178,7 @@ def new_explorer(request):
             explorer.save()
             # Welcome and send them on introductory tour?
             messages.success(request, 'Welcome aboard, {0}'.format(explorer.get_full_name()))
+            notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
             return redirect(reverse('welcome'))
     else:
         form = RegistrationForm()
