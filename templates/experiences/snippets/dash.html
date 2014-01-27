@@ -34,11 +34,16 @@
                         <a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
                     {% endifequal %}
                 {% endif %}
+            {% endif %}
+            {# This little insertion between checking for user being logged in is necessary...I think #}
+            {% if experience.gallery %}
+                <a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option_icon" /></a>
+            {% endif %}
+            {% if user.is_authenticated %}
                 {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
-                    <form action="{% url 'track_experience' experience.id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="submit" value="Track" />
-                    </form>
+                    <a href="{% url 'track_experience' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/track-icon.png" title="Track this experience" class="option_icon" />
+                    </a>
                 {% endif %}
                 <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle the note form">
                     <strong>
@@ -50,9 +55,6 @@
                         {% include "support/snippets/note_form.html" %}
                     {% endwith %}
                 </div>
-            {% endif %}
-            {% if experience.gallery %}
-                <a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
             {% endif %}
         </div>
     </div>

@@ -9,12 +9,16 @@
     {% if not narrative.is_public %}
         <strong>Private narrative</strong>
     {% endif %}
-    <h3><a href="/narratives/{{ narrative.id }}/">{{ narrative.title }}</a></h3>
-    {% if narrative.gallery.featured_photo %}
-        <div class="featured_photo">
-            <a href="{{ narrative.gallery.featured_photo.get_absolute_url }}"><img src="{{ narrative.gallery.featured_photo.get_thumbnail_url }}" title="View this photo" /></a>
+    <a href="/narratives/{{ narrative.id }}/" title="View this narrative">
+        <div>
+            <h3>{{ narrative.title }}</h3>
+            {% if narrative.gallery.featured_photo %}
+                <div class="featured_photo">
+                    <img src="{{ narrative.gallery.featured_photo.get_thumbnail_url }}" />
+                </div>
+            {% endif %}
         </div>
-    {% endif %}
+    </a>
     <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle narrative taste">
         <strong>Short taste <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narrative_{{ narrative.id }}_taste_toggle_icon" /></strong>
     </div>
