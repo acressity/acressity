@@ -212,8 +212,7 @@ def change_password(request):
         form = PasswordChangeForm(request.POST, request=request)
         if form.is_valid():
             if request.user.check_password(form.cleaned_data.get('current_password')):
-                # return HttpResponse(form.cleaned_data.__dict__)
-                request.user.set_password(form.cleaned_data.get('new_password1'))  # For some reason unable to set to new_password2 because variable currently returning None. Kinda pissed/confused and wantig to move on...
+                request.user.set_password(form.cleaned_data.get('new_password1'))  # For some reason unable to set to new_password2 because variable currently returning None. Kinda pissed/confused and wanting to move on...
                 request.user.save()
                 messages.success(request, 'You have successfully changed your password')
             else:
@@ -225,7 +224,7 @@ def change_password(request):
 
 
 def site_login(request):
-    if request.GET.get('next') == '/explorers/logout/' or request.POST.get('next') == '/explorers/logout/':
+    if request.GET.get('next') == '/explorers/logout/' or request.POST.get('next') == '/explorers/logout/' or request.META.get('HTTP_REFERER') == request.build_absolute_uri(reverse('acressity_index')):
         next_url = reverse('my_journey')
     else:
         next_url = request.GET.get('next') or request.POST.get('next')

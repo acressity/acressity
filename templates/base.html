@@ -43,20 +43,21 @@ anything lacking in efficiency or if you have any suggestions.
 
 			<div id="top_bar">
 
-				<div id="top_bar_left">
+				<div id="top_bar_left" class="my_nav">
 					<a href="/"><span id="logo">
 						<img src="{{ STATIC_URL }}img/favicon_black.ico" /><strong>Acressity</strong>&nbsp;&nbsp;<em>Explore New Experiences</em>
 					</span></a>
-					<ul class="dropdown">
+					<ul>
 			        	<li><a href="{% url 'about' %}">About</a>
-			        		<ul class="sub_menu">
-			        			 <li><a href="{% url 'about' %}">About Site</a></li>
-			        			 <li><a href="{% url 'contact' %}">Contact</a></li>
-			        			 <li><a href="{% url 'creator_note' %}">Creator's Note</a></li>
-			        			 <li><a href="{% url 'glossary' %}">Glossary</a></li>
+			        		<ul>
+			        			 <a href="{% url 'about' %}"><li>About Site</li></a>
+			        			 <a href="{% url 'contact' %}"><li>Contact</li></a>
+			        			 <a href="{% url 'creator_note' %}"><li>Creator's Note</li></a>
+			        			 <a href="{% url 'glossary' %}"><li>Glossary</li></a>
 			        		</ul>
 			        	</li>
-
+			        </ul>
+			        <ul>
 			        	<li>
 			        		{# Syntax highlighting for following a little screwy, but does the job properly #}
 				        		{% if user.is_authenticated %}
@@ -64,21 +65,23 @@ anything lacking in efficiency or if you have any suggestions.
 				        		{% else %}
 				        			<a href="{% url 'featured_experiences' %}">
 				        		{% endif %}Journey</a>
-			        		<ul class="sub_menu">
+			        		<ul>
 
 			        			{% if user.is_authenticated %}
-				        			<li><a href="{% url 'journey' user.id %}">Your Journey</a></li>
+				        			<a href="{% url 'journey' user.id %}"><li>Your Journey</li></a>
 
 				        			{% if user.cheering_for %}
-				        				<li><a href="{% url 'explorers.views.cheering_for' request.user.id %}">Cheering</a></li>
+				        				<a href="{% url 'explorers.views.cheering_for' request.user.id %}"><li>Cheering</li></a>
 				        			{% endif %}
 				        		{% endif %}
 
-			        			<li><a href="{% url 'all_explorers' %}">All Journeys</a></li>
+			        			<a href="{% url 'all_explorers' %}"><li>All Journeys</li></a>
 
-			        			<li><a href="{% url 'explorers.views.random' %}">Random Journeys</a></li>
+			        			<a href="{% url 'explorers.views.random' %}"><li>Random Journeys</li></a>
 			        		</ul>
 			        	</li>
+			        </ul>
+			        <ul>
 
 			        	<li>
 			        		{% if request.user.is_authenticated %}
@@ -91,62 +94,66 @@ anything lacking in efficiency or if you have any suggestions.
 								{% if request.user.is_authenticated %}
 
 									{% for experience in request.user.top_five %}
-				        				<li><a href="{% url 'experiences.views.index' experience.id %}">
+				        				<a href="{% url 'experiences.views.index' experience.id %}"><li>
 				        					{% if experience.gallery.featured_photo %}
-				        						<img class="float_left" style="vertical-align: middle;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+				        						<img class="float_left" style="vertical-align: middle; padding: 5px;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
 				        					{% endif %}
-				        				{{ experience }}</a></li>
+				        				{{ experience }}</li></a>
 				        			{% endfor %}
 
-				        			<li><a href="{% url 'tracking_experiences' user.id %}">Your Tracking Experiences</a></li>
-
+				        			{% if user.tracking_experiences.count > 0 %}
+				        				<a href="{% url 'tracking_experiences' user.id %}"><li>Your Tracking Experiences</li></a>
+				        			{% endif %}
+				        			
 								{% endif %}
 
-								<li><a href="{% url 'experiences.views.featured' %}">Featured Experiences</a></li>
+								<a href="{% url 'experiences.views.featured' %}"><li>Featured Experiences</li></a>
 
-								<li><a href="{% url 'all_experiences' %}">All Site Experiences</a></li>
+								<a href="{% url 'all_experiences' %}"><li>All Site Experiences</li></a>
 
 			        		</ul>
 			        	</li>
 				    </ul>
 				</div>
 
-				<div id="top_bar_right">
+				<div id="top_bar_right" class="my_nav">
 			        <div id="login_out">
 						{% block login_header %}
 							{% if request.user.is_authenticated %}
-								<ul class="dropdown">
-									<li><a href="{% url 'journey' request.user.id %}">{{ request.user.get_full_name }}</a>
-										<ul class="sub_menu">
-											<li>
-												<a href="{% url 'journey' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/journey-icon.png" /> Your Journey</a>
-											</li>
-											<li>
-												<a href="{% url 'explorers.views.board' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" /> Bulletin Board</a>
-											</li>
-											<li>
-								        		<a href="{% url 'story' request.user.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" /> Your Story</a>
-								        	</li>
-						        			<li><a href="{% url 'farewell' %}"><img src="{{ STATIC_URL }}img/icons/logout-icon.png" /> Log Out</a></li>
+								<ul>
+									<a href="{% url 'journey' request.user.id %}"><li>{{ request.user.get_full_name }}</a>
+										<ul>
+											<a href="{% url 'journey' request.user.id %}"><li>
+												<img src="{{ STATIC_URL }}img/icons/journey-icon.png" /> Your Journey
+											</li></a>
+											<a href="{% url 'explorers.views.board' request.user.id %}"><li>
+												<img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" /> Bulletin Board
+											</li></a>
+											<a href="{% url 'story' request.user.id %}"><li>
+								        		<img src="{{ STATIC_URL }}img/icons/profile-icon.png" /> Your Story
+								        	</li></a>
+						        			<a href="{% url 'farewell' %}"><li>
+						        				<img src="{{ STATIC_URL }}img/icons/logout-icon.png" /> Log Out
+						        			</li></a>
 				        				</ul>
 									</li>
 								</ul>
 							{% else %}
-								<ul class="dropdown">
+								<ul>
 									<li><a>Login</a>
-										<ul class="sub_menu">
+										<ul>
 											<li id="top_bar_login">
 												<form action="/explorers/login/?next={{ request.path }}" method="POST" class="no_styling full_width">
 													{% csrf_token %}
-													<div class="float_left">
+													<div class="">
 														Email or <abbr title="Creative username to describe your journey">Trailname</abbr>:
 														<input type="text" name="username" id="username" size="10" />
 													</div>
-													<div class="float_left">
+													<div class="">
 														Password:
 														<input type="password" name="password" id="password" size="10" />
 													</div>
-													<div class="float_left">
+													<div class="">
 														<input type="submit" class="expand-button" value="Log In" />
 													</div>
 												</form>

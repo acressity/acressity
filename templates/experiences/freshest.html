@@ -1,14 +1,15 @@
+{# This should be dropped in favor of providing a GET variable to all_experiences for an order_by #}
+
 {% extends "base.html" %}
 
 {% block content %}
-	{% if freshest_experiences %}
-		<h2>Freshest Experiences:</h2>
-		<ul>
-			{% for experience in freshest_experiences %}
-				<li>{{ experience }}</li>
-			{% endfor %}
-		</ul>
-	{% else %}
-		<h2>No Experiences Exist</h2>
-	{% endif %}
+	<h2>Freshest Experiences</h2>
+	{% for experience in freshest_experiences %}
+		{% include "experiences/snippets/dash.html" %}
+	{% empty %}
+		There are currently no experiences
+	{% endfor %}
+	{% with '/experiences/freshest' as url %}
+	    {% include "snippets/pagination.html" %}
+	{% endwith %}
 {% endblock content %}

@@ -116,8 +116,7 @@ def all(request, explorer_id):
     except PageNotAnInteger:
         # Deliver the first page
         narratives = paginator.page(1)
-        # return HttpResponse("here")
     except EmptyPage:
         # Deliver last page
         narratives = paginator.page(paginator.num_pages)
-    return render(request, 'narratives/all_explorer_narratives.html', {'narratives': narratives})
+    return render(request, 'narratives/all_explorer_narratives.html', {'explorer': explorer, 'page_obj': narratives, 'is_paginated': True})

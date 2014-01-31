@@ -19,6 +19,14 @@
 			</label>
 			{{ form.status.errors }}
 			{{ form.status }}
+			<div class="about_this">
+				<p onclick="toggle_div('status_help_text');">
+					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="status_help_text_toggle_icon" />
+				</p>
+				<div class="toggle_div smaller_font" id="status_help_text">
+					{{ form.status.help_text }}
+				</div>
+			</div>
 		</div>
 		<div class="formatted_input">
 			<label for="id_brief">
@@ -26,6 +34,14 @@
 			</label>
 			{{ form.brief.errors }}
 			{{ form.brief }}
+			<div class="about_this">
+				<p onclick="toggle_div('brief_help_text');">
+					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="brief_help_text_toggle_icon" />
+				</p>
+				<div class="toggle_div smaller_font" id="brief_help_text">
+					{{ form.brief.help_text }}
+				</div>
+			</div>
 		</div>
 		<div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
         <div id="additional_options" class="toggle_div">
@@ -38,11 +54,13 @@
 				<div class="formatted_input">
 					<strong>Make this your featured experience?</strong> {{ form.make_feature }}
 					{{ form.make_feature.errors }}
-					<p onclick="toggle_div('make_feature_help_text');">
-						About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="make_feature_help_text_toggle_icon" />
-					</p>
-					<div class="toggle_div smaller_font" id="make_feature_help_text">
-						{{ form.make_feature.help_text }}
+					<div class="about_this">
+						<p onclick="toggle_div('make_feature_help_text');">
+							About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="make_feature_help_text_toggle_icon" />
+						</p>
+						<div class="toggle_div smaller_font" id="make_feature_help_text">
+							{{ form.make_feature.help_text }}
+						</div>
 					</div>
 				</div>
 			{% endifnotequal %}
@@ -57,22 +75,26 @@
 						};
 					</script>
 					{{ form.is_public.errors }}
-					<div onclick="toggle_div(this.nextElementSibling);">
-						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
-					</div>
-					<div class="toggle_div smaller_font" id="is_public_help_text">
-						{{ form.is_public.help_text }}
+					<div class="about_this">
+						<div onclick="toggle_div(this.nextElementSibling);">
+							About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" />
+						</div>
+						<div class="toggle_div smaller_font" id="is_public_help_text">
+							{{ form.is_public.help_text }}
+						</div>
 					</div>
 				</div>
 				<div id="search_term_div" class="formatted_input">
 					<strong>Search term</strong>
 					{{ form.search_term.errors }}
 					{{ form.search_term }}
-					<div onclick="toggle_div(this.nextElementSibling);">
-						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" /></strong>
-					</div>
-					<div class="toggle_div smaller_font" id="about_search_term">
-						{{ form.search_term.help_text }}
+					<div class="about_this">
+						<div onclick="toggle_div(this.nextElementSibling);">
+							About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" />
+						</div>
+						<div class="toggle_div smaller_font" id="about_search_term">
+							{{ form.search_term.help_text }}
+						</div>
 					</div>
 				</div>
 				{% comment %}

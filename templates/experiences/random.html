@@ -1,0 +1,13 @@
+{% extends "experiences/base.html" %}
+
+{% block content %}
+    {% for experience in random_experiences %}
+        {% include "experiences/snippets/dash.html" %}
+    {% endfor %}
+    {% comment %}
+    This is being disabled until I can find a way to split a random queryset across pages without making new request each time. Help me StackOverflow...
+    {% with '/experiences/random' as url %}
+        {% include "snippets/pagination.html" %}
+    {% endwith %}
+    {% endcomment %}
+{% endblock content %}

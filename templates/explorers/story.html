@@ -3,6 +3,7 @@
 {% load comments %}
 
 {% block content %}
+	{% comment %}
 	<div class="explorer_portrait">
 		{% if explorer.gallery.featured_photo %}
 		    <a href="{{ explorer.gallery.get_absolute_url }}"><img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" title="Explorer Portrait" /></a>
@@ -15,6 +16,9 @@
 		{% endif %}
 	</div>
 	<h2>{{ explorer.get_full_name }}</h2>
+	{% endcomment %}
+	{% include "explorers/snippets/dash.html" %}
+	<p>Member since {{ explorer.date_joined|date:'F j, o' }}</p>
 	{% if not owner and user.is_authenticated and request.user not in explorer.cheerers %}
 		<form action="/explorers/{{ explorer.id }}/cheer/" method="POST">
 			{% csrf_token %}
@@ -48,9 +52,11 @@
 				</label>
 				{{ form.trailname.errors }}
 				{{ form.trailname }}
-				<h4 onclick="toggle_div('about_trailname');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" /></h4>
-				<div id="about_trailname" class="help_text">
-					{{ form.trailname.help_text|safe }}
+				<div class="about_this">
+					<span onclick="toggle_div('about_trailname');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" /></span>
+					<div id="about_trailname" class="help_text">
+						{{ form.trailname.help_text|safe }}
+					</div>
 				</div>
 			</div>
 			<div class="formatted_input">
@@ -66,6 +72,12 @@
 				</label>
 				{{ form.brief.errors }}
 				{{ form.brief}}
+				<div class="about_this">
+					<span onclick="toggle_div('about_brief');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_brief_toggle_icon" /></span>
+					<div id="about_brief" class="help_text">
+						{{ form.brief.help_text }}
+					</div>
+				</div>
 			</div>
 			<div class="formatted_input">
 				<label>
@@ -73,9 +85,11 @@
 				</label>
 				{{ form.email.errors }}
 				{{ form.email }}
-				<h4 onclick="toggle_div('about_email');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_email_toggle_icon" /></h4>
-				<div id="about_email" class="help_text">
-					{{ form.email.help_text }}
+				<div class="about_this">
+					<span onclick="toggle_div('about_email');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_email_toggle_icon" /></span>
+					<div id="about_email" class="help_text">
+						{{ form.email.help_text }}
+					</div>
 				</div>
 			</div>
 			<div class="formatted_input">
@@ -87,18 +101,17 @@
 			<input type="submit" value="Save" />
 		</form>
 	{% else %}
-		Member since {{ explorer.date_joined }}
-		<br />
 		{% if explorer.brief %}
 			{{ explorer.brief }}
 			<br />
 		{% endif %}
 		{% if explorer.birthdate %}
-			Birthday: {{ explorer.birthdate }}
+			<p>Birthday: {{ explorer.birthdate }}</p>
 		{% endif %}
 		{% if user.is_authenticated %}
 			{% get_comment_form for explorer as expl_comment_form %}
 			<form action="{% comment_form_target %}" method="POST" class="note_form">
+				<h3>Leave {{ explorer.get_full_name }} a note</h3>
 				{% csrf_token %}
 				{{ expl_comment_form.comment }}
 				{{ expl_comment_form.honeypot }}
@@ -108,7 +121,7 @@
 			    {{ expl_comment_form.security_hash }}
 				<br />
 				<input type="hidden" name="next" value="{% url 'story' explorer.id %}">
-				<input type="submit" value="Submit comment" />
+				<input type="submit" value="Submit note" />
 			</form>
 		{% endif %}
 	{% endif %}

@@ -38,7 +38,7 @@ class Experience(models.Model):
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)
     is_public = models.BooleanField(default=True, help_text='Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. If the experience is changed from public to private, all of its narratives are changed to private. However, private narratives do not become public when the experience is changed from private to public.')
     password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text='Private experiences can be accessed by providing this password. Allows focused distribution of private content.')
-    search_term = models.CharField(max_length=80, null=True, blank=True, unique=True, help_text='Short phrase or word identifying the experience, allows access by typing http://acressity.com/your_descriptor_here. Needs to be unique and cannot be the same as another explorer\'s trailname')
+    search_term = models.CharField(max_length=80, null=True, blank=True, unique=True, help_text='Short phrase or word identifying the experience, allows access by typing http://acressity.com/your_search_term_here. Needs to be unique and cannot be the same as another explorer\'s trailname')
 
     objects = ExperienceManager()
 

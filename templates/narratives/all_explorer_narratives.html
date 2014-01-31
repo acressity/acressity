@@ -1,23 +1,16 @@
 {% extends "narratives/base.html" %}
 
+{% load explorers_extras %}
+
 {% block content %}
-    {% for narrative in narratives %}
+    <h2>{{ explorer.get_full_name|possessive }} narratives</h2>
+    {% for narrative in page_obj %}
         {% include "narratives/snippets/dash.html" %}
+    {% empty %}
+        There are currently no narratives
     {% endfor %}
 
-    <div class="pagination">
-        <span class="step-links">
-            {% if narratives.has_previous %}
-                <a href="?page={{ narratives.previous_page_number }}">previous</a>
-            {% endif %}
-
-            <span class="current">
-                Page {{ narratives.number }} of {{ narratives.paginator.num_pages }}.
-            </span>
-
-            {% if narratives.has_next %}
-                <a href="?page={{ narratives.next_page_number }}">next</a>
-            {% endif %}
-        </span>
-    </div>
+    {% with '/narratives/all/'|add:explorer.id as url %}
+        {% include "snippets/pagination.html" %}
+    {% endwith %}
 {% endblock content %}
