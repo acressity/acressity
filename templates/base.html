@@ -96,10 +96,11 @@ anything lacking in efficiency or if you have any suggestions.
 									{% for experience in request.user.top_five %}
 				        				<a href="{% url 'experiences.views.index' experience.id %}"><li>
 				        					{% if experience.gallery.featured_photo %}
-				        						<img style="text-align: center; padding: 5px;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
-				        						<br />
+				        						<img style="text-align: center; padding: 5px;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience }}"/>
+				        					{% else %}
+				        						{{ experience }}
 				        					{% endif %}
-				        				{{ experience }}</li></a>
+				        				</li></a>
 				        			{% endfor %}
 
 				        			{% if user.tracking_experiences.count > 0 %}
