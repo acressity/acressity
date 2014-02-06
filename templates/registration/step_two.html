@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<div class="featured_photo">
+		<img src="{{ STATIC_URL }}img/taking_off.jpg" alt="Taking Off" title="Taking Off" />
+	</div>
 	<form action="{% url 'register' %}" class="full_width larger" method="POST">
 		{% csrf_token %}
 		<h3>Your new experience</h3>
@@ -8,9 +11,6 @@
 		<input type="hidden" name="initial" />
 		<input type="submit" value="Proceed" class="expand-button" />
 	</form>
-	<div class="featured_photo">
-		<img src="{{ STATIC_URL }}img/taking_off.jpg" alt="Taking Off" title="Taking Off" />
-	</div>
 	<p>
 		You have added a new chapter to a book which has its pages written upon this site, accessible from nearly anywhere. Create narratives to track your movement within this experience, publish photos regarding the experience, and share it with others or make it a private venture for yourself.
 	</p>

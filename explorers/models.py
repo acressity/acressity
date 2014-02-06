@@ -73,6 +73,12 @@ class Explorer(AbstractBaseUser):
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
 
+    def get_full_trailname(self):
+        if self.trailname:
+            return '{0} "{1}" {2}'.format(self.first_name, self.trailname, self.last_name)
+        else:
+            return self.get_full_name()
+
     # Following not used, but I think it's necessary with the extended user model?
     def get_short_name(self):
         return self.first_name

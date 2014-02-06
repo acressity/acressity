@@ -43,5 +43,11 @@
 				{% endifequal %}
 			{% endif %}
 		{% endif %}
+	{% empty %}
+		{% ifequal user explorer %} 
+			<a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" style="vertical-align:middle;" title="Create first experience" /> Create your first experience</a>
+		{% else %}
+			{{ explorer }} doesn't currently have any public experiences
+		{% endifequal %}
 	{% endfor %}
 {% endblock content %}

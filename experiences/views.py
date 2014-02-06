@@ -129,10 +129,10 @@ def delete(request, experience_id):
                 notify.send(sender=request.user, recipient=new_author, target=experience, verb='has made you the new author of the experience')
                 return redirect(reverse('journey', args=(request.user.id,)))
             elif 'confirm' in request.POST:
-                experience.delete()
-                messages.success(request, 'Experience {0} was deleted'.format(experience))
                 for comrade in experience.comrades(request):
                     notify.send(sender=request.user, recipient=comrade, target=experience, verb='has deleted the experience')
+                experience.delete()
+                messages.success(request, 'Experience {0} was deleted'.format(experience))
                 return redirect(reverse('journey', args=(request.user.id,)))
         else:
             return render(request, 'experiences/delete.html', {'experience': Experience.objects.get(pk=experience_id)})

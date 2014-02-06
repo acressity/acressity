@@ -51,20 +51,19 @@ def story(request, explorer_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Your information has been saved')
-            else:
-                messages.error(request, 'There was a problem saving your information')
-            return redirect('/explorers/{0}'.format(explorer.id))
+            # else:
+            #     messages.error(request, 'There was a problem saving your information')
+            # return redirect('/explorers/{0}'.format(explorer.id))
         else:
             messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
             return render(request, 'acressity/message.html')
+    if request.user.id == explorer.id:
+        owner = True
+        form = ExplorerForm(explorer, instance=explorer)
     else:
-        if request.user.id == explorer.id:
-            owner = True
-            form = ExplorerForm(explorer, instance=explorer)
-        else:
-            form = None
-            owner = False
-        return render(request, 'explorers/story.html', {'explorer': explorer, 'owner': owner, 'form': form})
+        form = None
+        owner = False
+    return render(request, 'explorers/story.html', {'explorer': explorer, 'owner': owner, 'form': form})
 
 
 def board(request, explorer_id):

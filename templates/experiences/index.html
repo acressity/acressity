@@ -3,54 +3,56 @@
 {% load comments %}
 
 {% block content %}
-	<h2>{{ experience }}</h2>
-	<div class="featured_photo">
-		{% if experience.gallery.featured_photo %}
-			<a href="{% url 'pl-gallery' experience.gallery.id %}">
-				<img src="{{ experience.gallery.featured_photo.get_display_url }}" />
-			</a>
-			{% if experience.gallery.featured_photo.caption %}
-				<div class="caption">
-					{{ experience.gallery.featured_photo.caption }}
-				</div>
-			{% endif %}
-		{% else %}
-			{% if user in experience.explorers.all %}
-				<a href="{% url 'exp_upload_photo' experience.id %}" title="Upload photo for this experience">
-					<img src="{{ STATIC_URL }}img/logo.jpg" />
+	<div class="experience_item">
+		<h2>{{ experience }}</h2>
+		<div class="featured_photo">
+			{% if experience.gallery.featured_photo %}
+				<a href="{% url 'pl-gallery' experience.gallery.id %}">
+					<img src="{{ experience.gallery.featured_photo.get_display_url }}" />
 				</a>
+				{% if experience.gallery.featured_photo.caption %}
+					<div class="caption">
+						{{ experience.gallery.featured_photo.caption }}
+					</div>
+				{% endif %}
 			{% else %}
-				<img src="{{ STATIC_URL }}img/logo.jpg" />
-			{% endif %}
-		{% endif %}
-	</div>
-	<div class="option_list">
-		{% if comrade %} 
-			<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
-			<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
-			<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
-		{% else %}
-			{% if user.is_authenticated %}
-				{% if experience not in user.tracking_experiences.all %}
-					<form action="{% url 'track_experience' experience.id %}" method="POST">
-						{% csrf_token %}
-						<input type="submit" value="Track" title="Add this experience to your tracking list" />
-					</form>
+				{% if user in experience.explorers.all %}
+					<a href="{% url 'exp_upload_photo' experience.id %}" title="Upload photo for this experience">
+						<img src="{{ STATIC_URL }}img/logo.jpg" />
+					</a>
 				{% else %}
-					<form action="{% url 'untrack_experience' experience.id %}" method="POST">
-						{% csrf_token %}
-						<input type="submit" value="Untrack" title="Remove this experience from your tracking list" />
-					</form>
+					<img src="{{ STATIC_URL }}img/logo.jpg" />
 				{% endif %}
 			{% endif %}
-		{% endif %}
-		{% if experience.gallery %}
-			<a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
-		{% endif %}
-		{% if author %}
-			<a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
-			<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
-		{% endif %}
+		</div>
+		<div class="option_list">
+			{% if comrade %} 
+				<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
+				<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
+				<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
+			{% else %}
+				{% if user.is_authenticated %}
+					{% if experience not in user.tracking_experiences.all %}
+						<form action="{% url 'track_experience' experience.id %}" method="POST">
+							{% csrf_token %}
+							<input type="submit" value="Track" title="Add this experience to your tracking list" />
+						</form>
+					{% else %}
+						<form action="{% url 'untrack_experience' experience.id %}" method="POST">
+							{% csrf_token %}
+							<input type="submit" value="Untrack" title="Remove this experience from your tracking list" />
+						</form>
+					{% endif %}
+				{% endif %}
+			{% endif %}
+			{% if experience.gallery %}
+				<a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
+			{% endif %}
+			{% if author %}
+				<a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
+				<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
+			{% endif %}
+		</div>
 	</div>
 	<h3>Explorer{{ experience.explorers.count|pluralize }}</h3>
 	<table class="thirds_table">

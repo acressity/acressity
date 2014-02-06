@@ -14,7 +14,19 @@
             {% endifequal %}
         {% endif %}
     </div>
-    <h3 class="align_center">{{ explorer.get_full_name }}</h3>
+    <h3 class="align_center">
+        {{ explorer.get_full_trailname }}
+    </h3>
+    {% if explorer.brief %}
+        <div class="object_item">
+            <div onclick="toggle_div(this.nextElementSibling);">
+                {% ifequal explorer user %}Your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} brief <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
+            </div>
+            <div class="toggle_div">
+                <p>{{ explorer.brief|linebreaks }}</p>
+            </div>
+        </div>
+    {% endif %}
     {% ifequal user explorer %}
         {% notifications_unread as unread_count %}
         {% if unread_count %}
@@ -33,8 +45,8 @@
         {% endifequal %}
     </div>
     {% if explorer.featured_experience %}
-        <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience">
-            <strong>Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" /></strong>
+        <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
+            Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
         </div>
         <div class="toggle_div">
             {% with explorer.featured_experience as experience %}

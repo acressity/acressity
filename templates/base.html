@@ -89,14 +89,15 @@ anything lacking in efficiency or if you have any suggestions.
 			        		{% else %}
 			        			<a href="{% url 'experiences.views.featured' %}">
 			        		{% endif %}Experiences</a>
-			        		<ul class="sub_menu">
+			        		<ul>
 
 								{% if request.user.is_authenticated %}
 
 									{% for experience in request.user.top_five %}
 				        				<a href="{% url 'experiences.views.index' experience.id %}"><li>
 				        					{% if experience.gallery.featured_photo %}
-				        						<img class="float_left" style="vertical-align: middle; padding: 5px;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+				        						<img style="text-align: center; padding: 5px;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
+				        						<br />
 				        					{% endif %}
 				        				{{ experience }}</li></a>
 				        			{% endfor %}
