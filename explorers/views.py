@@ -24,8 +24,11 @@ from support.models import Cheer
 def journey(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     owner = explorer == request.user
+    form = None
     if owner:
         experiences = explorer.ordered_experiences()
+        if not experiences:
+            form = ExperienceForm()
     else:
         # Damn, this is hacky...
         # To start fixing this ugliness, must first have ordered_experiences() return a queryset instead of list
@@ -35,7 +38,7 @@ def journey(request, explorer_id):
                 experiences += [experience]
             elif request.user.is_authenticated() and experience in request.user.experiences.all():
                 experiences += [experience]
-    return render(request, 'explorers/index.html', {'explorer': explorer, 'experiences': experiences, 'owner': owner})
+    return render(request, 'explorers/index.html', {'explorer': explorer, 'experiences': experiences, 'owner': owner, 'form': form})
 
 
 @login_required
@@ -179,6 +182,9 @@ def new_explorer(request):
             messages.success(request, 'Welcome aboard, {0}'.format(explorer.get_full_name()))
             notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
             return redirect(reverse('welcome'))
+        # else:
+        #     messages.error(request, 'Please provide an experience you wish to have')
+        #     return redirect(request.META.get('HTTP_REFERER'))
     else:
         form = RegistrationForm()
     return render(request, 'registration/register.html', {'form': form, 'experience': request.POST.get('experience'), 'min_password_len': settings.MIN_PASSWORD_LEN})

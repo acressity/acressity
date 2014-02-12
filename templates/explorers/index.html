@@ -35,7 +35,9 @@
 				<h2>Experiences</h2>
 			{% endifequal %}
 		{% endif %}
-		{% include "experiences/snippets/dash.html" %}
+		<div{% if not forloop.last %} style="margin-bottom:100px;"{% endif %}>
+			{% include "experiences/snippets/dash.html" %}
+		</div>
 		{% if forloop.first %}
 			{% if not forloop.last %}
 				{% ifequal experience explorer.featured_experience %}
@@ -44,8 +46,9 @@
 			{% endif %}
 		{% endif %}
 	{% empty %}
-		{% ifequal user explorer %} 
-			<a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" style="vertical-align:middle;" title="Create first experience" /> Create your first experience</a>
+		{% ifequal user explorer %}
+			<h2>Create your first experience</h2>
+			{% include "experiences/forms/create_experience_form.html" %}
 		{% else %}
 			{{ explorer }} doesn't currently have any public experiences
 		{% endifequal %}

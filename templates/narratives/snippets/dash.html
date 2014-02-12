@@ -20,7 +20,7 @@
         </div>
     </a>
     <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle narrative taste">
-        <strong>Short taste <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narrative_{{ narrative.id }}_taste_toggle_icon" /></strong>
+        Short taste <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narrative_{{ narrative.id }}_taste_toggle_icon" />
     </div>
     <div id="narrative_{{ narrative.id }}_taste" class="narrative_taste">
         {{ narrative.taste|linebreaks }}
@@ -42,7 +42,7 @@
         {% endifequal %}
         {% get_comment_form for narrative as comment_form %}
         <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle the note form">
-            <strong>Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" /></strong>
+            Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
         </div>
         <div class="comment toggle_div">
             {% with next_url_name='narrative' next_url_pk=narrative.id %}

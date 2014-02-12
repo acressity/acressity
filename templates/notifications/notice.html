@@ -47,10 +47,12 @@
     </p>
 
     {% if notice.unread %}
-        <form action="{% url 'mark_as_read' notice.id %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Dismiss" />
-    </form>
+        {% ifequal user explorer %}
+            <form action="{% url 'mark_as_read' notice.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Dismiss" />
+            </form>
+        {% endifequal %}
     {% endif %}
   
     <div class="notice-actions">

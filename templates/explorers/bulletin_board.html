@@ -1,6 +1,7 @@
 {% extends "explorers/base.html" %}
 
 {% load explorers_extras %}
+{% load comments %}
 
 {% block content %}
 	<div id="bulletin_board">
@@ -8,6 +9,17 @@
 		<h2><a href="{% url 'journey' explorer.id %}" title="To {{ explorer.get_full_name|possessive }} journey">{{ explorer.get_full_name|possessive }}</a> Bulletin Board</h2>
 		{% ifnotequal user explorer %} 
 			{% include "explorers/snippets/dash.html" %}
+			<div class="object_item">
+				<p>
+	                Leave a note
+	            </p>
+	            <div class="comment">
+	                {% get_comment_form for explorer as comment_form %}
+	                {% with next_url_name='board' next_url_pk=explorer.id %}	
+	                	{% include "support/snippets/note_form.html" %}
+	                {% endwith %}
+	            </div>
+	        </div>
 		{% endifnotequal %}
 		{% if explorer.notifications.unread %}
 			<h2>Notifications</h2>

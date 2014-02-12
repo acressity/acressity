@@ -1,7 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>Acressity &#8212; <em>the quality or state of being at the peak of existence</em></h1>
+	<h1>Acressity</h1>
+	<h3 style="text-align: center;">
+		<em>the quality or state of being at the peak of existence</em>
+	</h3>
+	<div class="featured_photo"><img src="{{ STATIC_URL }}img/logo.jpg" style="width: 300px; float:left; margin: 10px;" /></div>
+	<br />
+	<div>
+		<p>
+			Explore new experiences past your current horizons. Place a stake within the land upon which you wish to traverse, and experience the journey of moving beyond your former limits.
+		</p>
+		<p>
+			Use this application as a tool for hoisting yourself beyond your comfort zone. Let it be the ice pick with which you dig into the mountains soaring above and beyond your fears, the hiking boots with which you take a step beyond where you had previously considered traveling, the photo album where you record visuals of your experiences, and the paper upon which you compose your narratives for the rest of the world to experience vicariously through you.
+		</p>
+	</div>
+	{% comment %}
 	<h2>Give Me the Facts: Purpose of Website</h2>
 	<p>
 		The <span class="description" title="Term meaning 'quality or state of being at the peak of existence'">Acressity</span> application can be thought of as a collection of evolving adventure novels&#8212;called journeys&#8212;with each journey being uniquely created, written, decorated, and owned by an <span class="description" title="Registered user of the site">explorer</span>. The journeys are encouraged to be filled with as many chapters&#8212;called experiences&#8212;by the explorer as they please.
@@ -36,7 +50,6 @@
 			<input type="hidden" name="initial" />
 		</form>
 	{% endif %}
-	{% comment %}
 	<p>
 		One's life journey can be compared to the symbolic act of ascending a mountain's peak within an expansive range of mountains. During moments of existential reflection, we conjure a peak representing the realization of our yearnings, dreams, hopes, and aspirations. Setting off on the trail of which direction is determined by this peak, we soon find ourselves enveloped in the particular details of the immediate trail.
 	</p>
@@ -49,8 +62,8 @@
 	<p>
 		Being presented with the choice	between comfort and risk, it is those who are willing to endeavor, explore,	and be adventurous who truly experience what it means to be alive and therein cross into extraordinary.
 	</p>
-	{% endcomment %}
 	<hr />
 	<h3><a href="{% url 'creator_note' %}">Creator's Note</a></h3>
 	<h3><a href="{% url 'glossary' %}">Glossary</a></h3>
+	{% endcomment %}
 {% endblock content %}

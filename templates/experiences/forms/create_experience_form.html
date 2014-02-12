@@ -1,0 +1,88 @@
+<form action="{% url 'create_experience' %}" method="POST" class="full_width">
+    {% csrf_token %}
+    <div class="formatted_input">
+        <h3>Title</h3>
+        {{ form.experience.errors }}
+        {{ form.experience }}
+    </div>
+    <div class="formatted_input">
+        <h3>Status <em>(optional)</em></h3>
+        {{ form.status.errors }}
+        {{ form.status }}
+        <div class="about_this">
+            <p onclick="toggle_div('status_help_text');">
+                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="status_help_text_toggle_icon" />
+            </p>
+            <div class="toggle_div smaller_font" id="status_help_text">
+                {{ form.status.help_text }}
+            </div>
+        </div>
+    </div>
+    <div class="formatted_input">
+        <h3>Brief <em>(optional)</em></h3>
+        {{ form.brief.errors }}
+        {{ form.brief }}
+        <div class="about_this">
+            <p onclick="toggle_div('brief_help_text');">
+                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="brief_help_text_toggle_icon" />
+            </p>
+            <div class="toggle_div smaller_font" id="brief_help_text">
+                {{ form.brief.help_text }}
+            </div>
+        </div>
+    </div>
+    <div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
+    <div id="additional_options" class="toggle_div">
+        <div class="formatted_input">
+            <h3>Date created (leave blank for today)</h3>
+            {{ form.date_created.errors }}
+            {{ form.date_created }}
+        </div>
+        <div class="formatted_input">
+            {% if user.featured_experience %}
+                <p><strong>Your featured experience is currently</strong></p>
+                <div class="experience_item">{{ user.featured_experience }}</div>
+            {% endif %}
+            <label for="id_make_feature">    
+                <h3>Make this new experience your featured experience? {{ form.make_feature }}</h3>
+            </label>
+            <div class="about_this">
+                <div onclick="toggle_div('about_featured_experience');" class="smaller_font">
+                    <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_featured_experience_toggle_icon" /></strong>
+                </div>
+                <div id="about_featured_experience" class="help_text">
+                    {{ form.make_feature.help_text }}
+                </div>
+            </div>
+        </div>
+        <div class="formatted_input">
+            <label for="id_is_public">    
+                <h3>Public? {{ form.is_public }}</h3>
+            </label>
+            <div class="about_this">
+                <div onclick="toggle_div('about_public_experiences');" class="smaller_font">
+                    <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" /></strong>
+                </div>
+                <div id="about_public_experiences" class="help_text">
+                    {{ form.is_public.help_text}}
+                </div>
+            </div>
+        </div>
+        <div class="formatted_input">
+            <label for="id_search_term">
+                <h3>Search term</h3>
+                {{ form.search_term.errors }}
+                {{ form.search_term }}
+            </label>
+            <div class="about_this">
+                <div onclick="toggle_div('about_search_term');" class="smaller_font">
+                    <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" /></strong>
+                </div>
+                <div id="about_search_term" class="help_text">
+                    {{ form.search_term.help_text }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="Save" />
+</form>

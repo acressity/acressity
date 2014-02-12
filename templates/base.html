@@ -44,11 +44,11 @@ anything lacking in efficiency or if you have any suggestions.
 			<div id="top_bar">
 
 				<div id="top_bar_left" class="my_nav">
-					<a href="/"><span id="logo">
-						<img src="{{ STATIC_URL }}img/favicon_black.ico" /><strong>Acressity</strong>&nbsp;&nbsp;<em>Explore New Experiences</em>
+					<span id="logo">
+						<img src="{{ STATIC_URL }}img/favicon_black.ico" style="vertical-align: middle;" /><em>Explore New Experiences</em>
 					</span></a>
 					<ul>
-			        	<li><a href="{% url 'about' %}">About</a>
+			        	<li><a href="/">Acressity</a>
 			        		<ul>
 			        			 <a href="{% url 'about' %}"><li>About Site</li></a>
 			        			 <a href="{% url 'contact' %}"><li>Contact</li></a>
@@ -57,6 +57,7 @@ anything lacking in efficiency or if you have any suggestions.
 			        		</ul>
 			        	</li>
 			        </ul>
+
 			        <ul>
 			        	<li>
 			        		{# Syntax highlighting for following a little screwy, but does the job properly #}
@@ -64,14 +65,30 @@ anything lacking in efficiency or if you have any suggestions.
 				        			<a href="{% url 'journey' user.id %}">
 				        		{% else %}
 				        			<a href="{% url 'featured_experiences' %}">
-				        		{% endif %}Journey</a>
+				        		{% endif %}Journeys</a>
 			        		<ul>
 
 			        			{% if user.is_authenticated %}
 				        			<a href="{% url 'journey' user.id %}"><li>Your Journey</li></a>
 
 				        			{% if user.cheering_for %}
-				        				<a href="{% url 'explorers.views.cheering_for' request.user.id %}"><li>Cheering</li></a>
+				        				{% if user.cheering_for %}
+					        				{% for explorer in user.top_cheerers %}
+					        					<a href="{% url 'journey' explorer.id %}"><li>
+					        						{% if explorer.gallery.featured_photo %}
+					        							<img style="text-align: center; padding: 5px; float: left;" src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer }}"/>
+														{{ explorer.get_full_trailname }}
+					        							<div style="clear:both;"></div>
+					        						{% else %}
+					        							{{ explorer.get_full_trailname }}
+					        						{% endif %}
+					        					</li></a>
+					        				{% endfor %}
+					        				{% if user.cheering_for|length > user.top_cheerers|length %}
+					        					<a href="{% url 'explorers.views.cheering_for' request.user.id %}"><li>All Cheerers</li></a>
+				        					{% endif %}
+				        			{% endif %}
+				        				
 				        			{% endif %}
 				        		{% endif %}
 
@@ -96,10 +113,10 @@ anything lacking in efficiency or if you have any suggestions.
 									{% for experience in request.user.top_five %}
 				        				<a href="{% url 'experiences.views.index' experience.id %}"><li>
 				        					{% if experience.gallery.featured_photo %}
-				        						<img style="text-align: center; padding: 5px;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience }}"/>
-				        					{% else %}
-				        						{{ experience }}
+				        						<img style="text-align: center; padding: 5px; float: left;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience }}"/>
 				        					{% endif %}
+				        					{{ experience }}
+				        					<div style="clear:both;"></div>
 				        				</li></a>
 				        			{% endfor %}
 
@@ -193,7 +210,7 @@ anything lacking in efficiency or if you have any suggestions.
 								{% endwith %}
 							{% else %}
 								<div style="background-color: #D3CDD8; margin: 10px 0px;">
-									{% if 'signing_up' not in request.session %}
+									{% if not request.session.signing_up %}
 										<blockquote id="welcome_quote">
 											<h2>Acressity</h2>
 											<h3>
