@@ -41,20 +41,23 @@ def create(request):
 
 def index(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if experience.is_public is False:
-        if request.user not in experience.explorers.all():
-            if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
-                if request.get_signed_cookie('experience_password', salt='personal_domain') == str(experience_id):
-                    pass
-            else:
-                #return HttpResponse('still here')
+    privileged = request.user in experience.explorers.all()
+    if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
+        if request.get_signed_cookie('experience_password', salt='personal_domain') == str(experience_id):
+            privileged = True
+    if not experience.is_public:
+        if not privileged:
+            if experience.password:
                 # Give them the option of providing password
                 return redirect(reverse('check_password', args=(experience_id,)))
-    if experience.is_comrade(request):
-        comrade = True
-    else:
-        comrade = False
-    if comrade:
+            else:
+                raise PermissionDenied
+    if experience.narratives.filter(is_public=False):
+        if privileged:
+            narratives = experience.ordered_narratives()
+        else:
+            narratives = experience.ordered_narratives().filter(is_public=True)
+    if request.user in experience.explorers.all():
         form = NarrativeForm(request.user)
     else:
         form = None
@@ -62,9 +65,7 @@ def index(request, experience_id):
         experience_brief_form = ExperienceBriefForm(instance=experience)
     else:
         experience_brief_form = None
-    if request.user in experience.explorers.all():
-        comrade = True
-    return render(request, 'experiences/index.html', {'experience': experience, 'author': experience.is_author(request), 'comrade': comrade, 'form': form, 'experience_brief_form': experience_brief_form})
+    return render(request, 'experiences/index.html', {'experience': experience, 'narratives': narratives, 'author': experience.is_author(request), 'privileged': privileged, 'form': form, 'experience_brief_form': experience_brief_form})
 
 
 def edit(request, experience_id):
@@ -214,7 +215,8 @@ def check_password(request, experience_id):
     if request.method == 'POST':
         password = request.POST.get('password')
         if experience.password == password:
-            response = render(request, 'experiences/index.html', {'experience': experience})
+            messages.success(request, 'Welcome to the privileged side of things. Your privileged state will expire at some point, requiring a reentry of the password.')
+            response = redirect(reverse('experience', args=(experience.id,)))  # (request, 'experiences/index.html', {'experience': experience, 'privileged': True, 'narratives': experience.ordered_narratives()})
             response.set_signed_cookie('experience_password', str(experience.id), salt='personal_domain')
             return response
         else:

@@ -45,13 +45,16 @@
         {% endifequal %}
     </div>
     {% if explorer.featured_experience %}
-        <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
-            Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
-        </div>
-        <div class="toggle_div">
-            {% with explorer.featured_experience as experience %}
-                {% include "experiences/snippets/dash.html" %}
-            {% endwith %}
-        </div>
+        {% url 'experience' explorer.featured_experience.id as featured_experience_path %}
+        {% ifnotequal featured_experience_path request.path %}
+            <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
+                Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
+            </div>
+            <div class="toggle_div">
+                {% with explorer.featured_experience as experience %}
+                    {% include "experiences/snippets/dash.html" %}
+                {% endwith %}
+            </div>
+        {% endifnotequal %}
     {% endif %}
 </div>

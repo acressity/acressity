@@ -86,5 +86,21 @@ class Narrative(models.Model):
             narrative = None
         return narrative
 
+    def get_next_public_narrative(self):
+        narrative = self.get_next_by_date_created(experience_id=self.experience.id)
+        while not narrative.is_public:
+            narrative = narrative.get_next_by_date_created(experience_id=narrative.experience.id)
+        if not narrative.is_public:
+            narrative = None
+        return narrative
+
+    def get_previous_public_narrative(self):
+        narrative = self.get_previous_by_date_created(experience_id=self.experience.id)
+        while not narrative.is_public:
+            narrative = narrative.get_previous_by_date_created(experience_id=narrative.experience.id)
+        if not narrative.is_public:
+            narrative = None
+        return narrative
+
     def embedded_narrative(self):
         return embed_string(self.narrative)

@@ -35,7 +35,7 @@
 				<h2>Experiences</h2>
 			{% endifequal %}
 		{% endif %}
-		<div{% if not forloop.last %} style="margin-bottom:100px;"{% endif %}>
+		<div>
 			{% include "experiences/snippets/dash.html" %}
 		</div>
 		{% if forloop.first %}
@@ -44,6 +44,9 @@
 					<h2>Shelved Experiences</h2>
 				{% endifequal %}
 			{% endif %}
+		{% endif %}
+		{% if not forloop.last %}
+			<hr />
 		{% endif %}
 	{% empty %}
 		{% ifequal user explorer %}
