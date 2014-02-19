@@ -57,6 +57,8 @@ def index(request, experience_id):
             narratives = experience.ordered_narratives()
         else:
             narratives = experience.ordered_narratives().filter(is_public=True)
+    else:
+        narratives = experience.ordered_narratives()
     if request.user in experience.explorers.all():
         form = NarrativeForm(request.user)
     else:
