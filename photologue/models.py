@@ -593,6 +593,9 @@ class Photo(ImageModel):
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
 
+    def model(self):
+        return self.__class__.__name__
+
     class Meta:
         ordering = ['date_added']
         get_latest_by = 'date_added'

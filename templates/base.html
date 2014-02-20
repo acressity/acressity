@@ -159,7 +159,7 @@ anything lacking in efficiency or if you have any suggestions.
 								</ul>
 							{% else %}
 								<ul>
-									<li><a>Login</a>
+									<li><a href="{% url 'login_page' %}">Login</a>
 										<ul>
 											<li id="top_bar_login">
 												<form action="/explorers/login/?next={{ request.path }}" method="POST" class="no_styling full_width">
@@ -215,8 +215,7 @@ anything lacking in efficiency or if you have any suggestions.
 											<h2>Acressity</h2>
 											<h3>
 												An application for the exploration and
-												expression of new experiences with an
-												emphasis on the journey
+												expression of new experiences within your journey
 											</h3>
 											<a href="{% url 'about' %}">learn more</a>
 										</blockquote>

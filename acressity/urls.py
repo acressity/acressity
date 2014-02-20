@@ -23,10 +23,9 @@ urlpatterns = patterns('acressity.views',
     url(r'^creator_note/$', TemplateView.as_view(template_name='acressity/creator_note.html'), name='creator_note'),
     url(r'^glossary/$', TemplateView.as_view(template_name='acressity/glossary.html'), name='glossary'),
     # Patching to work with Django logout...
-    url(r'^accounts/login/', login),
+    url(r'^accounts/login/', login, name='login_page'),
     url(r'^contact/', 'contact', name='contact'),
     url(r'^notifications/', include('notifications.urls')),
-    # ('^activity/', include('actstream.urls')),
     # semi-primitive search for the query string provided. Allows easier accessing of objects by an identifying string. Careful though: it matches any string not grabbed by the above. I believe this needs to remain at the bottom.
     url(r'^(?P<query_string>\w+)/$', 'handle_query_string', name='handle_query_string'),
 )

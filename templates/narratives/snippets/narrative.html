@@ -17,6 +17,15 @@
         <a href="/narratives/{{ narrative.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
         <a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this narrative" class="option_icon" /></a>
     {% endif %}
+    {% if user.is_authenticated %}
+        <a onclick="toggle_div('{{ narrative.id }}_note');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" class="option_icon" /></a>
+    {% endif %}
+</div>
+{% get_comment_form for narrative as comment_form %}
+<div id="{{ narrative.id }}_note" class="comment" style="display: none;">
+    {% with next_url_name='narrative' next_url_pk=narrative.id %}
+        {% include "support/snippets/note_form.html" %}
+    {% endwith %}
 </div>
 <div class="narrative_detail">
     {% if narrative.gallery.photos %}
@@ -70,14 +79,5 @@
         {% for note in narr_comment_list reversed %}
             {% include "support/snippets/note.html" %}
         {% endfor %}
-    </div>
-{% endif %}
-{% if user.is_authenticated %}
-    {% get_comment_form for narrative as comment_form %}
-    <h4 onclick="toggle_div('{{ narrative.id }}_note')";>Leave a Note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ narrative.id }}_note_toggle_icon" /></h4>
-    <div id="{{ narrative.id }}_note" class="comment" style="display: none;">
-        {% with next_url_name='narrative' next_url_pk=narrative.id %}
-            {% include "support/snippets/note_form.html" %}
-        {% endwith %}
     </div>
 {% endif %}
