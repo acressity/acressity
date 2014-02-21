@@ -129,4 +129,16 @@
 			<em>Member since {{ explorer.date_joined|date:'F j, o' }}</em>
 		</p>
 	</div>
+	{% ifequal user explorer %} 
+		{% get_comment_count for explorer as exp_comment_count %}
+		{% if exp_comment_count > 0 %}
+			<h4 title="Click to expand" onclick="toggle_div('exp_comment_list');">{{ exp_comment_count }} Note{{ exp_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="exp_comment_list_toggle_icon" /></h4>
+			<div class="comment_list" id="exp_comment_list">
+				{% get_comment_list for explorer as exp_comment_list %}
+				{% for note in exp_comment_list reversed %}
+					{% include "support/snippets/note.html" %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endifequal %}
 {% endblock content %}

@@ -38,13 +38,11 @@
             <div class="option_list">
                 <a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this narrative" class="option_icon" /></a>
                 <a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this narrative" class="option_icon" /></a>
+                <a onclick="toggle_div($(this).parent().next());"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" class="option_icon" /></a>
             </div>
         {% endifequal %}
         {% get_comment_form for narrative as comment_form %}
-        <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle the note form">
-            Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
-        </div>
-        <div class="comment toggle_div">
+        <div id="something" class="comment toggle_div">
             {% with next_url_name='narrative' next_url_pk=narrative.id %}
                 {% include "support/snippets/note_form.html" %}
             {% endwith %}

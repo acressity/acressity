@@ -30,13 +30,13 @@
                         <a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
                     {% endifequal %}
                 {% endif %}
-                <a onclick="toggle_div('{{ experience.id }}_comment');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" /></a>
             {% endif %}
             {# This little insertion between checking for user being logged in is necessary...I think #}
             {% if experience.gallery %}
                 <a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option_icon" /></a>
             {% endif %}
             {% if user.is_authenticated %}
+                <a onclick="toggle_div('{{ experience.id }}_comment');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" /></a>
                 {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
                     <a href="{% url 'track_experience' experience.id %}">
                         <img src="{{ STATIC_URL }}img/icons/track-icon.png" title="Track this experience" class="option_icon" />

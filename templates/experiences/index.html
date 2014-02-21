@@ -52,7 +52,15 @@
 				<a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
 				<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
 			{% endif %}
+			{% if user.is_authenticated %}
+				<a onclick="toggle_div('{{ experience.id }}_comment');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" /></a>
+			{% endif %}
 		</div>
+		<div id="{{ experience.id }}_comment" class="comment" style="display: none;">
+            {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
+                {% include "support/snippets/note_form.html" %}
+            {% endwith %}
+        </div>
 	</div>
 	<h3>Explorer{{ experience.explorers.count|pluralize }}</h3>
 	<table class="thirds_table">
