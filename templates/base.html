@@ -159,7 +159,7 @@ anything lacking in efficiency or if you have any suggestions.
 								</ul>
 							{% else %}
 								<ul>
-									<li><a href="{% url 'login_page' %}">Login</a>
+									<li><a onclick="window.location.href='/accounts/login';">Login</a>
 										<ul>
 											<li id="top_bar_login">
 												<form action="/explorers/login/?next={{ request.path }}" method="POST" class="no_styling full_width">
