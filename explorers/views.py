@@ -1,3 +1,5 @@
+import simplejson
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -250,3 +252,8 @@ def site_login(request):
     # Login failed
     messages.error(request, 'There was a problem with your username or password')
     return redirect('/accounts/login')
+
+
+def check_trailname(request):
+    trailname = request.GET.get('trailname')
+    return HttpResponse(simplejson.dumps({'found': bool(get_user_model().objects.filter(trailname=trailname))}), mimetype='application/json')

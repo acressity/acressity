@@ -3,6 +3,32 @@
 {% load comments %}
 
 {% block content %}
+	{% comment %}
+	<form>
+		{% csrf_token %}
+		<input type="submit" value="clickme" id="clicker" style="width:100%; height:200px;" />
+		<input type="hidden" value="{{ experience.id }}" id="exp_id" name="exp_id" />
+	</form>
+	{% endcomment %}
+	<script type="text/javascript">
+		function do_it(){
+			$.ajax({
+				url:"/experiences/ajax_thing/",
+				data:{exp_id:$("#exp_id").val()},// csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()},
+				dataType: 'json',
+				//success: here
+			})
+			.done(function(a, b, c){
+				alert(c);
+			})
+			
+			return false;
+		};
+
+		//setup_ajax();
+
+		$("#clicker").click(do_it);
+	</script>
 	<div class="experience_item">
 		<h2>{{ experience }}</h2>
 		<div class="featured_photo">

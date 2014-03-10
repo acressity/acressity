@@ -23,7 +23,8 @@ anything lacking in efficiency or if you have any suggestions.
 		<link rel="icon" type="image/ico" href="{{ STATIC_URL }}img/favicon.ico" />
 		{# <link href='http://fonts.googleapis.com/css?family=Merriweather+Sans' rel='stylesheet' type='text/css' /> #}
 		{# <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" /> #}
-		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.3.1.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.form.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/functions.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/dropdownPlain.js"></script>
 		{% block head_insert %}{% endblock head_insert %}
@@ -176,6 +177,8 @@ anything lacking in efficiency or if you have any suggestions.
 														<input type="submit" class="expand-button" value="Log In" />
 													</div>
 												</form>
+												<br />
+												<input type="button" class="expand-button" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
 											</li>
 											{% comment %}
 											{# Taken out in favor of having the signup bar on the right #}
@@ -226,10 +229,8 @@ anything lacking in efficiency or if you have any suggestions.
 											<div class="formatted_input">
 												<input type="text" id="id_experience" name="experience" class="larger" onfocus="setUp(this);" />
 											</div>
-											<input type="submit" class="expand-button" value="Create experience" />
-										</form>
-										<form action="{% url 'register' %}">
-											<input type="submit" class="expand-button" value="Sign up" />
+											<input type="submit" class="expand-button" value="Experience" />
+											<input type="button" class="expand-button" style="position:relative; right:-5em;" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
 										</form>
 									{% comment %}
 									<div>
@@ -249,6 +250,11 @@ anything lacking in efficiency or if you have any suggestions.
 									</div>
 									{% endcomment %}
 									{% else %}
+										<form method="POST" action="{% url 'register' %}">
+											{% csrf_token %}
+											Continue signing up <input type="submit" value="here" />
+										</form>
+
 										<blockquote>
 											<p>
 												Build of your imaginings a bower in the wilderness ere you build a house within the city walls.

@@ -64,5 +64,6 @@ urlpatterns = patterns(
     url(r'^photo/page/(?P<page>[0-9]+)/$',
         PhotoListView.as_view(),
         name='pl-photo-list'),
-
+    url(r'^photo/update_photo', 'photologue.views.update_photo', name='update_photo'),  # AJAX function for convenient updating
+    url(r'^photo/ajax_upload', 'photologue.views.ajax_upload', name='ajax_upload'),
 )

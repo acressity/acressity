@@ -1,6 +1,7 @@
 {% extends "photologue/root.html" %}
 
 {% load photologue_tags %}
+{% load comments %}
 
 {% block title %} - {{ object.title }}{% endblock %}
 
@@ -8,6 +9,15 @@
     <h1>{{ object.title }}</h1>
     <h2>From Gallery <a href="{% url 'pl-gallery' object.gallery.id %}">{{ object.gallery.title }}</a>
     </h2>
+    <div class="option_list">
+        {% if object.gallery %}
+            <a href="{{ object.gallery.get_absolute_url }}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title=" Back to {{ object.gallery.title }} Gallery" class="option_icon" /></a>
+            {% ifequal user object.author %} 
+                <a href="{% url 'photologue.views.gallery_edit' object.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this photo's album" class="option_icon" /></a>
+                <a href="{% url 'delete_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" onclick="return confirm('Delete this photo?');" /></a>
+            {% endifequal %}
+        {% endif %}
+    </div>
     <div class="gallery_photo_container">
         {% if object.get_previous_in_gallery %}
             <a href="/photologue/photo/{{ object.get_previous_in_gallery.id }}/" title="Previous Photo">
@@ -22,7 +32,6 @@
             </a>
             {% if object.caption %}<p>{{ object.caption }}</p>{% endif %}
         </div>
-        
         {% if object.get_next_in_gallery %}
             <a href="/photologue/photo/{{ object.get_next_in_gallery.id }}/" title="Next Photo">
                 <div class="next_photo">
@@ -31,13 +40,14 @@
             </a>
         {% endif %}
     </div>
-    <div class="option_list">
-        {% if object.gallery %}
-            <a href="{{ object.gallery.get_absolute_url }}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title=" Back to {{ object.gallery.title }} Gallery" class="option_icon" /></a>
-            {% ifequal user object.author %} 
-                <a href="{% url 'photologue.views.gallery_edit' object.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this photo's album" class="option_icon" /></a>
-                <a href="{% url 'delete_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" onclick="return confirm('Delete this photo?');" /></a>
-            {% endifequal %}
-        {% endif %}
-    </div>
+    {% get_comment_count for object as photo_comment_count %}
+    {% if photo_comment_count > 0 %}
+        <h4 title="Click to see comments" onclick="toggle_div('photo_comment_list');">{{ photo_comment_count }} note{{ photo_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="photo_comment_list_toggle_icon" /></h4>
+        <div class="comment_list" id="photo_comment_list" style="display: none;">
+            {% get_comment_list for object as photo_comment_list %}
+            {% for note in photo_comment_list reversed %}
+                {% include "support/snippets/note.html" %}
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

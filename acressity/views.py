@@ -26,6 +26,7 @@ def step_two(request):
     if request.method == 'POST':
         exp_form = ExperienceForm(request.POST)
         if exp_form.is_valid():
+            request.session['experience'] = exp_form.cleaned_data['experience']  # Store the data in case they wish to peruse for a bit
             request.session['signing_up'] = 1
             reg_form = RegistrationForm()
             return render(request, 'registration/step_two.html', {'experience': exp_form.cleaned_data['experience'], 'form': reg_form})

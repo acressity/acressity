@@ -4,6 +4,32 @@
 {% block title %} - Edit: {{ object.title }}{% endblock %}
 
 {% block content %}
+	<script type="text/javascript">
+		function update_photo(form){
+			var photo_data = {
+				"photo_id": $(form).find("#id_id").val(),
+				"title": $(form).find("#id_title").val(),
+				"caption": $(form).find("#id_caption").val()
+			};
+
+			$.ajax({
+				url: "{% url 'update_photo' %}",
+				data: photo_data,
+				dataType: 'json',
+				//error: function(ts) { alert(ts.responseText) }
+			})
+			.done(function(a, b, c){
+				ajax_message("Your photo has been saved");
+			})
+			.fail(function(a, b, c){
+				ajax_message("Sorry, there was an error saving your photo");
+			})
+			//alert(data["id"]);
+
+
+			return false;
+		}
+	</script>
 	<div class="object_item">
 		<form action="" method="POST" class="full_width">
 			{% csrf_token %}
@@ -40,7 +66,7 @@
 		        </div>
 		        <div class="right">
 			        {% ifequal request.user photo.author %}
-				        <form action="/photologue/photo/{{ photo.id }}/edit_photo/" method="POST">
+				        <form action="/photologue/photo/{{ photo.id }}/edit_photo/" method="POST" onsubmit="return update_photo(this);">
 				        	{% csrf_token %}
 				        	<div class="formatted_input">
 				    			<label for="id_title">
@@ -56,6 +82,7 @@
 					    		{{ form.caption.errors }}
 					    		{{ form.caption }}
 					    	</div>
+					    	<input type="hidden" id="id_id" value="{{ photo.id }}" />
 				    		<input type="submit" value="Update" />
 						</form>
 						<form action="{% url 'delete_photo' photo.id %}" method="POST">

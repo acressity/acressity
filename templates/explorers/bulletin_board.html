@@ -29,12 +29,12 @@
 				<p>
 					No new notifications
 				</p>
-				{% if explorer.notifications.read %}
-					<p>
-						<a href="{% url 'past_notifications' explorer.id %}">Past notifications</a>
-					</p>
-				{% endif %}
 			</div>
+		{% endif %}
+		{% if explorer.notifications.read %}
+			<p>
+				<a href="{% url 'past_notifications' explorer.id %}">Past notifications</a>
+			</p>
 		{% endif %}
 		{% comment %}
 			{% if requests %}

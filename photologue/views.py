@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import simplejson
+
 from photologue.models import Photo, Gallery
 from photologue.forms import GalleryForm, GalleryPhotoForm
 from notifications import notify
@@ -41,6 +43,31 @@ def upload_photo(request, gallery_id):
     return render(request, 'photologue/upload_photo.html', {'form': form, 'gallery': gallery})
 
 
+def ajax_upload(request):
+    gallery = get_object_or_404(Gallery, pk=request.POST.get('gallery_id'))
+    if request.method == 'POST':
+        form = GalleryPhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            photo = form.save(commit=False)
+            photo.author = request.user
+            photo.title_slug = slugify(photo.title)
+            photo.is_public = True
+            photo.gallery = gallery
+            photo.save()
+            if 'feature' in request.POST.keys():
+                gallery.featured_photo = photo
+                gallery.save()
+            for comrade in gallery.explorers.exclude(id=request.user.id):
+                notify.send(sender=request.user, recipient=comrade, target=photo, verb='has uploaded a new photo')
+            data = {'url': photo.get_icon_url(), 'photo_id': photo.id}
+            return HttpResponse(simplejson.dumps(data))
+        else:
+            raise PermissionDenied
+            return HttpResponse('Please fill out the form correctly')
+    # Return nothing for failure??
+    return HttpResponse('api')
+
+
 @login_required
 def edit_photo(request, photo_id):
     # return HttpResponse('Thought this wasn\'t needed')
@@ -54,6 +81,22 @@ def edit_photo(request, photo_id):
     else:
         form = GalleryPhotoForm(instance=photo)
     return render(request, 'photologue/gallery_edit.html', {'form': form})
+
+
+@login_required
+def update_photo(request):
+    photo = Photo.objects.get(pk=request.GET.get('photo_id'))
+    photo.title = request.GET.get('title')
+    photo.caption = request.GET.get('caption')
+    d = {}
+    try:
+        photo.save()
+    except:
+        d['yack'] = 'There was a failure saving your photo'
+    else:
+        d['yack'] = 'Your photo has been saved successfully'
+    json = simplejson.dumps(d)
+    return HttpResponse(json, mimetype='application/json')
 
 
 @login_required

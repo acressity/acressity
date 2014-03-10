@@ -6,8 +6,12 @@
   
     {% if notice.target %}
         <p>
-            {% ifequal notice.target_content_type.model 'photo' %} 
-                <a href="{% url 'pl-photo' notice.target.id %}"><img src="{{ notice.target.get_thumbnail_url }}"></a>
+            {% ifequal notice.target_content_type.model 'photo' %}
+                {% with notice.target as photo %}
+                    <div class="object_item">
+                        {% include "photologue/snippets/photo_dash.html" %}
+                    </div>
+                {% endwith %}
             {% else %}
                 {% ifequal notice.target_content_type.model 'invitationrequest' %}
                     <a href="{% url 'experience' 1 %}">{{ notice.target.experience }}</a>

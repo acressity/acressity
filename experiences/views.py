@@ -1,8 +1,10 @@
+import simplejson
+
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -224,3 +226,11 @@ def check_password(request, experience_id):
         else:
             raise PermissionDenied
     return render(request, 'experiences/check_password.html', {'experience': experience})
+
+
+def ajax_thing(request):
+    experience = Experience.objects.get(pk=request.GET['exp_id'])
+    d = {'thing_two': experience.experience}
+
+    json = simplejson.dumps(d)
+    return HttpResponse(json, mimetype='application/json')

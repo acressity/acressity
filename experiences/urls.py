@@ -21,4 +21,5 @@ urlpatterns = patterns(
     url(r'^all/$', ListView.as_view(queryset=Experience.objects.exclude(is_public=False), context_object_name='all_public_experiences', template_name='experiences/all.html', paginate_by=10), name="all_experiences"),
     url(r'^create_experience/$', 'create', name='create_experience'),
     url(r'^(?P<experience_id>\d+)/leave_experience/$', 'leave_experience', name='leave_experience'),
+    url(r'^ajax_thing/$', 'ajax_thing'),
 )
