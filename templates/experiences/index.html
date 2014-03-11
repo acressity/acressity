@@ -9,7 +9,6 @@
 		<input type="submit" value="clickme" id="clicker" style="width:100%; height:200px;" />
 		<input type="hidden" value="{{ experience.id }}" id="exp_id" name="exp_id" />
 	</form>
-	{% endcomment %}
 	<script type="text/javascript">
 		function do_it(){
 			$.ajax({
@@ -29,6 +28,7 @@
 
 		$("#clicker").click(do_it);
 	</script>
+	{% endcomment %}
 	<div class="experience_item">
 		<h2>{{ experience }}</h2>
 		<div class="featured_photo">
