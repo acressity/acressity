@@ -33,7 +33,7 @@ def create(request):
                 messages.success(request, 'Your featured experience is now {0}'.format(form.instance.experience))
             messages.success(request, 'Experience successfully added')
             notify.send(sender=request.user, recipient=get_user_model().objects.get(pk=1), target=new_experience, verb='has created a new experience')
-            return redirect(reverse('experience', args=(new_experience.id,)))
+            return redirect(reverse('new_experience', args=(new_experience.id,)))
     else:
         form = ExperienceForm()
     return render(request, 'experiences/create.html', {'form': form})
@@ -220,3 +220,9 @@ def check_password(request, experience_id):
         else:
             raise PermissionDenied
     return render(request, 'experiences/check_password.html', {'experience': experience})
+
+
+def new_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    assert request.user == experience.author
+    return render(request, 'experiences/new.html', {'experience': experience})

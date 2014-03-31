@@ -1,0 +1,1170 @@
+3.1.15 (Brainy Betty)
+83c00cbc89037d0f884f565edc93906152b9bdbe
+o:Sass::Tree::RootNode
+:@template"†;
+/*This file is compiled in sass to the file /static/css/compiled/style.css*/
+
+// Reset CSS for cross-browser consistency
+@import "reset";
+
+// image directory
+$img_dir: "/static/img/";
+
+html {
+    background: url($img_dir + "experience_beyond_limit.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    width: 100%;
+}
+
+body {
+    /* 'Merriweather Sans' is currently my favorite, but working in so many environments without internet connection is inspiring my to return to Ubuntu momentarily...plus, it's so beautiful... */
+    font-family: Ubuntu, Helvetica, serif;
+    color: #222;
+    height: 100%;
+    font-size: 115%;
+}
+
+p {
+    //line-height: 125%;
+    margin: 15px 5px;
+}
+
+$link_color: #1A4B6E;
+
+$main_color: #F68026; //#FF7900;
+
+a {
+    color: $link_color;
+    text-decoration: none;
+    outline: 0;
+    &:hover {
+        color: #595;
+    }
+}
+
+hr {
+    //border: 2px solid;
+}
+
+ul { 
+    list-style: none;
+}
+
+div {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+textarea {
+    border-radius: 5px;
+}
+
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    border: none;
+}
+
+input[type="button"], input[type="submit"] {
+    -moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+    box-shadow: inset 0px 1px 0px 0px #ffffff;
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+    background: -moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+    background-color: #ededed;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    display: inline-block;
+    color: #1c2b68;
+    padding: 2px 24px;
+    text-decoration: none;
+    text-shadow: 1px 1px 0px #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+form.larger {
+    font-size: larger;
+}
+
+.icon_button {
+    background-size: 20px; 
+    padding-left: 24px;
+    height: 24px;
+}
+
+input.expand-button {
+    @extend .icon_button;
+    background: #ededed url($img_dir + "favicon.ico") no-repeat left;
+}
+
+input.edit-button {
+    @extend .icon_button;
+    background: #ededed url($img_dir + "icons/edit-icon.png") no-repeat left;
+}
+
+input.delete-button {
+    @extend .icon_button;
+    background: #ededed url($img_dir + "icons/delete-icon.png") no-repeat left;
+    background-size: 20px; /* For some reason this isn't being inherited from parent class... */
+}
+
+input.invite-button {
+    @extend .icon_button;
+    background: #ededed url($img_dir + "icons/invite-icon.png") no-repeat left;
+}
+
+form {
+    border-radius: 10px;
+    border: 2px rgba(100, 100, 100, 0.1) solid;
+    background-color: rgba(230, 230, 255, 0.5);
+    padding: 3px;
+    &.no_styling {
+        border-radius: 0;
+        border: none;
+        background-color: transparent;
+        padding: 0;
+    }
+}
+
+textarea {
+    background: url($img_dir + "/notepad_row.png") repeat;
+    line-height: 25px;
+    padding: 2px 10px;
+    font-family: Ubuntu, Tahoma, sans-serif;
+    font-size: 14px;
+    min-height: 2em;
+    border: hidden;
+}
+
+blockquote:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+blockquote .author {
+    float: right;
+    font-style: italic;
+}
+
+form.full_width input[type="text"] input[type="password"], textarea  {
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+img.full_width {
+    width: 100%;
+}
+
+#main {
+    margin-top: 40px;
+    clear: both;
+}
+
+.background_color {
+    background-color: rgba(230, 230, 255, 0.92);
+}
+
+.shadow_border {
+    -moz-box-shadow: 0 0 2px 1px #888;
+    -webkit-box-shadow: 0 0 2px 1px #888;
+    box-shadow: 0 0 2px 1px #888; 
+}
+
+#content {
+    @extend .shadow_border;
+    @extend .background_color;
+    position: relative;
+    float: left;
+    width: 70%;
+    padding: 5px;
+    // & > div {
+    //     padding: 3px;
+    // }
+}
+
+#right_content {
+    @extend .shadow_border;
+    @extend .background_color;
+    padding: 5px;
+    position: fixed;
+    margin-left: 65%;
+    width: 25%;
+    overflow-y: auto;
+    max-height: 90%;
+    div {
+        padding: 5px;
+    }
+}
+
+.object_item_list {
+    position: relative;
+}
+
+.object_item {
+    position: relative;
+    padding: 5px;
+    border-right: 2px solid rgba(74, 123, 158, 0.2);
+    border-left: 2px solid rgba(74, 123, 158, 0.2);
+    border-radius: 0.3em;
+    margin: 2px;
+    /*&:hover {
+        border-right: 2px solid rgba(74, 123, 158, 0.6);
+        border-left: 2px solid rgba(74, 123, 158, 0.6);
+    }*/
+}
+
+.thirds_table {
+    width: 100%;
+}
+
+.thirds_table td {
+    vertical-align: top;
+    width: 33%;
+}
+
+.thirds_table td > div {
+    min-height: 300px;
+}
+
+$item_opacity: 0.3;
+
+.explorer_item {
+    @extend .object_item;
+    background-color: rgba(74, 123, 138, $item_opacity);//rgba(131, 135, 141, $item_opacity);//
+}
+
+.experience_item {
+    @extend .object_item;
+    background-color: rgba(127, 95, 142, $item_opacity);//rgba(72, 61, 65, $item_opacity);//
+    // min-height: 100px;
+}
+
+.narrative_item {
+    @extend .object_item;
+    background-color: rgba(54, 112, 60, $item_opacity); //rgba(88, 98, 97, $item_opacity);
+    min-height: 100px;
+    word-wrap: break-word;
+}
+
+.post_it {
+    background: url($img_dir + "icons/tack-right-icon.png") no-repeat top right, url($img_dir + "icons/tack-left-icon.png") no-repeat top left,  url($img_dir + "/notepad_row.png");
+}
+
+.note {
+    @extend .post_it;
+    padding: 30px 10px 10px;
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+
+.explorer_note {
+    @extend .explorer_item;
+    @extend .note;
+    // border: 2px solid rgba(74, 123, 158, 1);
+}
+
+.experience_note {
+    @extend .experience_item;
+    @extend .note;
+    // border: 2px solid rgba(167, 95, 142, 1);
+}
+
+.narrative_note {
+    @extend .narrative_item;
+    @extend .note;
+    // border: 2px solid rgba(54, 152, 60, 1);
+}
+
+.experience_dash {
+    @extend .experience_item;
+    position: relative;
+}
+
+.request_dash {
+    @extend .object_item;
+    background-color: rgba(50, 80, 150, 0.5);
+}
+
+.left {
+    float: left;
+    width: 47%;
+    margin: 5px;
+    padding: 5px;
+    background-color: rgba(10, 10, 10, 0.1);
+}
+
+.right {
+    width: 47%;
+    float: right;
+    padding: 5px;
+    margin: 5px;
+    // background-color: rgba(10, 10, 10, 0.1);
+}
+
+.align_center {
+    text-align: center;
+}
+
+.smaller_font {
+    font-size: smaller;
+}
+
+.x-small_font {
+    font-size: x-small;
+}
+
+.narrative_dash {
+    @extend .narrative_item;
+    min-height: 100px;
+}
+
+.narrative_taste {
+    display: none;
+}
+
+.narrative_detail {
+    @extend .narrative_item;
+    min-height: 325px;
+}
+
+.narrative_detail .images_right {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 5px;
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.object_item_interaction {
+    position: relative;
+    bottom: 0px;
+    left: 0px;
+}
+
+.comment_list {
+    font-size: smaller;
+    position: relative;
+}
+
+.comment textarea {
+    
+}
+
+.youtube {
+    padding: 5px;
+}
+
+#photo_form {
+    width: 50%;
+}
+
+#photo_form_feedback {
+    width: 40%;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.uploaded_photo {
+    margin: 5px;
+    float: left;
+    width: 100px;
+}
+
+.gallery_photo_item {
+    @extend .object_item;
+    min-height: 290px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.featured_photo {
+    text-align: center;
+    img {
+        max-width: 95%;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: rgba(200, 200, 200, 0.3);
+        border-radius: 0.55em;
+    }
+}
+
+.gallery_photo_container {
+    position: relative;
+    min-height: 250px;
+}
+
+.previous_photo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5%;
+    background-color: rgba(100, 100, 100, 0.2);
+    height: 90%;
+    &:hover {
+        background-color: rgba(100, 100, 100, 0.4);
+    }
+}
+
+.previous_photo img {
+    position: relative;
+    top: 50%;
+}
+
+.gallery_photo {
+    text-align: center;
+    position: relative;
+    height: 90%;
+    width: 90%;
+    left: 5%;
+}
+
+.gallery_photo img {
+    position: relative;
+    max-width: 85%;
+}
+
+.next_photo {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5%;
+    height: 90%;
+    background-color: rgba(100, 100, 100, 0.2);
+    &:hover {
+        background-color: rgba(100, 100, 100, 0.4);
+    }
+}
+
+.next_photo img {
+    position: relative;
+    top: 50%;
+}
+
+.narrative_photo {
+    margin-bottom: 25px;
+}
+
+.photo_caption {
+    font-style: italic;
+    text-align: center;
+    font-size: smaller;
+}
+
+.caption {
+    @extend .photo_caption;
+}
+
+.description {
+    border-bottom: 1px dotted;
+}
+
+.icon_gallery_object {
+    float: left;
+}
+
+.explorer_portrait {
+    text-align: center;
+}
+
+.explorer_portrait img {
+    width: 200px;
+}
+
+/* div for options near top of pages (e.g. experience: view photos, upload photo */
+.option_list {
+    @extend .object_item;
+    overflow: hidden;
+    background-color: rgba(150, 150, 150, 0.3);
+    display: table;
+    
+}
+
+.option_icon {
+    padding-right: 7px;
+    width: 26px;
+    margin: 1px;
+    &:hover {
+        width: 28px;
+        position:relative;
+        margin: 0px; // hacky, but I kinda like it and it works wonderfully
+    }
+}
+
+.toggle_div {
+    // div initially hidden from view, expanded with jQuery in html template
+    display: none;
+}
+
+/* div for the navigating of previous/next objects */
+.next_previous {
+    overflow: hidden;
+}
+
+.float_right {
+    float: right;
+}
+
+.float_left {
+    float: left;
+}
+
+.clear_both {
+    clear: both;
+}
+
+.position_relative {
+    position: relative;
+}
+
+.hidden {
+    display: none;
+}
+
+.help_text {
+    display: none;
+    font-size: smaller;
+    background-color: rgba(250, 250, 250, 0.15);
+}
+
+.pagination {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 30%;
+    background-color: rgba(74, 123, 138, $item_opacity);
+    height: 50px;
+    line-height: 50px;
+    img {
+        vertical-align: middle;
+    }
+}
+
+.half {
+    width: 50%;
+}
+
+.error {
+    color: #B00;
+    font-size: smaller;
+}
+
+.errorlist {
+    @extend .error;
+}
+
+#wrapper {
+    height: 100%;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#messages {
+    @extend .shadow_border;
+    font-size: smaller;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(200, 200, 200, 0.7);
+    z-index: 3;
+    top: 0px;
+    left: 0px;
+}
+
+#messages_note {
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+}
+
+#top_bar {
+    @extend .shadow_border;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: $main_color; // previously: rgba(74, 123, 158, 0.9);
+    z-index: 2;
+    border-radius: 0em;
+}
+
+#top_bar_left {
+    max-width: 75%;
+    float: left;
+}
+
+#top_bar_right {
+    max-width: 25%;
+    position: absolute;
+    right:150px;
+}
+
+#top_bar_signup {
+    position: relative;
+    top: 5px;
+}
+
+#logo {
+    padding: 0px 30px;
+    position: relative;
+    float: left;
+    color: #000;
+    top: 8px;
+}
+
+#logo em {
+    font-size: small;
+    position: relative;
+    bottom: 1px;
+}
+
+// #login_out {
+//     position: relative;
+//     right: 20px;
+// }
+
+.main_color {
+    background-color: $main_color;
+}
+
+#id_comment {
+    width: 100%;
+    height: 2em;
+    overflow: hidden;
+}
+
+#exp_comment_list {
+    display: none;
+}
+
+#footer {
+/*  margin-top: -50px;*/
+    text-align: center;
+    position: relative;
+    clear: both;
+    height: 50px;
+    background-color: #AAA;
+    opacity: 0.6;
+}
+
+#welcome_quote {
+    padding: 10px;
+    h2 {
+        color: #5986A7;
+    }
+}
+
+#featured_experience {
+    // font-size: 18px;
+    // background-color: rgba(167, 95, 142, 0.55);
+    // padding: 3px;
+}
+
+.latest_narrative {
+    @extend .narrative_item;
+    max-height: 250px;
+    overflow-y: auto;
+    display: none;
+}
+
+#bulletin_board {
+    position: relative;
+    display: block;
+    z-index: 1;
+    padding: 5px;
+}
+
+#bulletin_board_background {
+    content: "";
+    background: url($img_dir + "bulletin_board_background.jpg");
+    opacity: .5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.notifications {
+    .notice {
+        //@extend .object_item;
+        @extend .note;
+        //border: 2px solid $main_color;
+    }
+}
+
+#new_narrative_form {
+    display: none;
+}
+
+#id_caption {
+    width: 350px;
+    height: 100px;
+}
+
+#id_description {
+    width: 350px;
+    height: 100px;
+}
+
+.formatted_input {
+    @extend .object_item;
+    padding: 5px;
+    margin: 10px;
+    background-color: rgba(100, 100, 100, 0.2);
+    input, select {
+        min-height: 1em;
+        font-size: 1em;
+    }
+    input, textarea {
+        background-color: #F4DAFF;// #EEE;
+        border-radius: 0.3em;
+    }
+}
+
+.register_input {
+    @extend .formatted_input;
+    width: 350px;
+    min-height: 70px;
+}
+
+#register_first_name {
+    @extend .register_input;
+    float: left;
+}
+
+#register_last_name {
+    @extend .register_input;
+    float: left;
+}
+
+#register_email {
+    @extend .register_input;
+    float: left;
+}
+
+#register_trailname {
+    @extend .register_input;
+    float: left;
+}
+
+#register_password1 {
+    @extend .register_input;
+    float: left;
+}
+
+#register_password2 {
+    @extend .register_input;
+    float: left;
+}
+
+#register_submit {
+    clear: both;
+}
+
+#id_honeypot {
+    display: none;
+}
+
+.my_nav ul {
+    text-align: left;
+    font-weight: bold;
+    display: inline;
+    margin-right: 15px;
+    padding: 5px 9px 6px 0;
+    list-style: none;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    li {
+        font: bold;// sans-serif;
+        display: inline-block;
+        margin-right: -12px;
+        position: relative;
+        padding: 5px;
+        //background: #fff;
+        cursor: pointer;
+        -webkit-transition: all 0.2s;
+        -moz-transition: all 0.2s;
+        -ms-transition: all 0.2s;
+        -o-transition: all 0.2s;
+        transition: all 0.2s;
+        a {
+            color: #000;
+        }
+    }
+}
+
+.my_nav ul li:hover {
+    background: rgb(74, 123, 138);
+    color: #fff;
+
+}
+
+.my_nav ul li ul {
+    padding: 0;
+    position: absolute;
+    top: 31px;
+    left: 0;
+    width: 150px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transiton: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -transition: opacity 0.2s;
+    li { 
+        background: rgb(74, 123, 138); 
+        display: block; 
+        color: #fff;
+        padding: 10px;
+        width: 11em;
+        text-shadow: 0 -1px 0 #000;
+        border-top: 1px #FFF solid; 
+        a {
+            color: #FFF;
+        }
+        &:hover {
+            background: rgb(84, 133, 148);
+        }
+    }
+}
+
+.my_nav ul li:hover ul {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+:
+@linei:@children[ào:Sass::Tree::CommentNode:
+@loud0:@silent0:@value["Q/*This file is compiled in sass to the file /static/css/compiled/style.css*/;i;[ :@options{ o;	;
+0;i ;["2/* Reset CSS for cross-browser consistency */;i	;[ ;@o:Sass::Tree::ImportNode
+:@imported_filename"
+reset;0;i
+;[ ;@o;	;
+0;i ;["/* image directory */;i;[ ;@o:Sass::Tree::VariableNode:@guarded0:
+@name"img_dir:
+@expro:Sass::Script::String	:
+@type:string;"/static/img/;i;@;i;[ ;@o:Sass::Tree::RuleNode:@parsed_ruleso:"Sass::Selector::CommaSequence:@filename" ;i:@members[o:Sass::Selector::Sequence;[o:#Sass::Selector::SimpleSequence;@;i;[o:Sass::Selector::Element	;["	html:@namespace0;@;i:
+@tabsi ;i;[o:Sass::Tree::PropNode;["background; i ;o:Sass::Script::List	:@separator:
+space;[
+o:Sass::Script::Funcall
+;"url:@keywords{ ;i:
+@args[o:Sass::Script::Operation
+:@operator:	plus:@operand2o;	;;;" experience_beyond_limit.jpg;i;@;i:@operand1o:Sass::Script::Variable	;"img_dir:@underscored_name"img_dir;i;@;@;@o;	;:identifier;"no-repeat;i;@o;	;;/;"center;i;@o;	;;/;"center;i;@o;	;;/;"
+fixed;i;@;i;@;i;[ :@prop_syntax:new;@o;!;["-webkit-background-size; i ;o;;;/;"
+cover;@;i;[ ;0;1;@o;!;["-moz-background-size; i ;o;;;/;"
+cover;@;i;[ ;0;1;@o;!;["-o-background-size; i ;o;;;/;"
+cover;@;i;[ ;0;1;@o;!;["background-size; i ;o;;;/;"
+cover;@;i;[ ;0;1;@o;!;["
+width; i ;o;;;/;"	100%;@;i;[ ;0;1;@;@:@has_childrenT:
+@rule["	htmlo;;o;;" ;i;[o;;[o;;@c;i;[o;	;["	body;0;@c;i; i ;i;[
+o;	;
+0;0;["¿/* 'Merriweather Sans' is currently my favorite, but working in so many environments without internet connection is inspiring my to return to Ubuntu momentarily...plus, it's so beautiful... */;i;[ ;@o;!;["font-family; i ;o;;;/;"Ubuntu, Helvetica, serif;@;i;[ ;0;1;@o;!;["
+color; i ;o;;;/;"	#222;@;i;[ ;0;1;@o;!;["height; i ;o;;;/;"	100%;@;i;[ ;0;1;@o;!;["font-size; i ;o;;;/;"	115%;@;i;[ ;0;1;@;@;2T;3["	bodyo;;o;;" ;i ;[o;;[o;;@à;i ;[o;	;["p;0;@à;i ; i ;i ;[o;	;
+0;i ;["/*line-height: 125%; */;i!;[ ;@o;!;["margin; i ;o;;;/;"15px 5px;@;i";[ ;0;1;@;@;2T;3["po;;0;"link_color;o:Sass::Script::Color	:@attrs{	:	blueis:redi:
+alphai:
+greeniP;0;i%;@;i%;[ ;@o;;0;"main_color;o;4	;5{	;6i+;7iˆ;8i;9iÄ;0;i';@;i';[ ;@o;	;
+0;i ;["/*#FF7900; */;i';[ ;@o;;o;;" ;i);[o;;[o;;@Æ;i);[o;	;["a;0;@Æ;i); i ;i);[	o;!;["
+color; i ;o;-	;"link_color;."link_color;i*;@;i*;[ ;0;1;@o;!;["text-decoration; i ;o;;;/;"	none;@;i+;[ ;0;1;@o;!;["outline; i ;o;;;/;"0;@;i,;[ ;0;1;@o;;o;;" ;i-;[o;;[o;;@Õ;i-;[o:Sass::Selector::Parent;@Õ;i-o:Sass::Selector::Pseudo
+;["
+hover:	@arg0;:
+class;@Õ;i-; i ;i-;[o;!;["
+color; i ;o;;;/;"	#595;@;i.;[ ;0;1;@;@;2T;3["&:hover;@;2T;3["ao;;o;;" ;i2;[o;;[o;;@‰;i2;[o;	;["hr;0;@‰;i2; i ;i2;[o;	;
+0;i ;["/*border: 2px solid; */;i3;[ ;@;@;2T;3["hro;;o;;" ;i6;[o;;[o;;@ˆ;i6;[o;	;["ul;0;@ˆ;i6; i ;i6;[o;!;["list-style; i ;o;;;/;"	none;@;i7;[ ;0;1;@;@;2T;3["ulo;;o;;" ;i:;[o;;[o;;@
+;i:;[o;	;["div;0;@
+;i:; i ;i:;[o;!;["border-radius; i ;o;;;/;"5px;@;i;;[ ;0;1;@o;!;["-moz-border-radius; i ;o;;;/;"5px;@;i<;[ ;0;1;@o;!;["-webkit-border-radius; i ;o;;;/;"5px;@;i=;[ ;0;1;@;@;2T;3["divo;;o;;" ;i@;[o;;[o;;@*;i@;[o;	;["textarea;0;@*;i@; i ;i@;[o;!;["border-radius; i ;o;;;/;"5px;@;iA;[ ;0;1;@;@;2T;3["textareao;;o;;" ;iH;[
+o;;[o;;@>;iH;[o;	;["button;0;@>;iHo;;
+;["-moz-focus-inner;<0;:element;@>;iHo;;["
+o;;@>;iH;[o;	;["
+input;0;@>;iHo:Sass::Selector::Attribute;["	type;0;)"=;@>;[""reset";iHo;;
+;["-moz-focus-inner;<0;;>;@>;iHo;;["
+o;;@>;iH;[o;	;["
+input;0;@>;iHo;?;["	type;0;)"=;@>;[""button";iHo;;
+;["-moz-focus-inner;<0;;>;@>;iHo;;["
+o;;@>;iH;[o;	;["
+input;0;@>;iHo;?;["	type;0;)"=;@>;[""submit";iHo;;
+;["-moz-focus-inner;<0;;>;@>;iHo;;[	"
+o;;@>;iH;[o;	;["
+input;0;@>;iHo;?;["	type;0;)"=;@>;[""file";iH">o;;@>;iH;[o;	;["
+input;0;@>;iHo;?;["	type;0;)"=;@>;[""button";iHo;;
+;["-moz-focus-inner;<0;;>;@>;iH; i ;iH;[o;!;["border; i ;o;;;/;"	none;@;iI;[ ;0;1;@;@;2T;3["Ãbutton::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-innero;;o;;" ;iL;[o;;[o;;@•;iL;[o;	;["
+input;0;@•;iLo;?;["	type;0;)"=;@•;[""button";iLo;;[o;;@•;iL;[o;	;["
+input;0;@•;iLo;?;["	type;0;)"=;@•;[""submit";iL; i ;iL;[o;!;["-moz-box-shadow; i ;o;;;/;""inset 0px 1px 0px 0px #ffffff;@;iM;[ ;0;1;@o;!;["-webkit-box-shadow; i ;o;;;/;""inset 0px 1px 0px 0px #ffffff;@;iN;[ ;0;1;@o;!;["box-shadow; i ;o;;;/;""inset 0px 1px 0px 0px #ffffff;@;iO;[ ;0;1;@o;!;["background; i ;o;%
+;"-webkit-gradient;&{ ;iP;'[
+o;	;;/;"linear;iP;@o;"	;#;$;[o;	;;/;"	left;iP;@o;	;;/;"top;iP;@;iP;@o;"	;#;$;[o;	;;/;"	left;iP;@o;	;;/;"bottom;iP;@;iP;@o;%
+;"color-stop;&{ ;iP;'[o:Sass::Script::Number:@denominator_units[ :@numerator_units[ :@original"	0.05;f0.050000000000000003 ôö;iP;@o;4	;5{	;6iÌ;7iÌ;8i;9iÌ;0;iP;@;@o;%
+;"color-stop;&{ ;iP;'[o;@;A@Ó;B[ ;C"1;i;iP;@o;4	;5{	;6iﬂ;7iﬂ;8i;9iﬂ;0;iP;@;@;@;iP;[ ;0;1;@o;!;["background; i ;o;%
+;"-moz-linear-gradient;&{ ;iQ;'[o;"	;#;$;[o;	;;/;"center;iQ;@o;	;;/;"top;iQ;@;iQ;@o;"	;#;$;[o;4	;5{	;6iÌ;7iÌ;8i;9iÌ;0;iQ;@o;@;A[ ;B["%;C"5%;i
+;iQ;@;iQ;@o;"	;#;$;[o;4	;5{	;6iﬂ;7iﬂ;8i;9iﬂ;0;iQ;@o;@;A[ ;B["%;C"	100%;ii;iQ;@;iQ;@;@;iQ;[ ;0;1;@o;!;["background-color; i ;o;;;/;"#ededed;@;iR;[ ;0;1;@o;!;["-moz-border-radius; i ;o;;;/;"6px;@;iS;[ ;0;1;@o;!;["-webkit-border-radius; i ;o;;;/;"6px;@;iT;[ ;0;1;@o;!;["border-radius; i ;o;;;/;"6px;@;iU;[ ;0;1;@o;!;["border; i ;o;;;/;"1px solid #dcdcdc;@;iV;[ ;0;1;@o;!;["display; i ;o;;;/;"inline-block;@;iW;[ ;0;1;@o;!;["
+color; i ;o;;;/;"#1c2b68;@;iX;[ ;0;1;@o;!;["padding; i ;o;;;/;"2px 24px;@;iY;[ ;0;1;@o;!;["text-decoration; i ;o;;;/;"	none;@;iZ;[ ;0;1;@o;!;["text-shadow; i ;o;;;/;"1px 1px 0px #ffffff;@;i[;[ ;0;1;@o;!;["font-weight; i ;o;;;/;"	bold;@;i\;[ ;0;1;@o;!;["cursor; i ;o;;;/;"pointer;@;i];[ ;0;1;@;@;2T;3["/input[type="button"], input[type="submit"]o;;o;;" ;i`;[o;;[o;;@j;i`;[o;	;["	form;0;@j;i`o:Sass::Selector::Class;["larger;@j;i`; i ;i`;[o;!;["font-size; i ;o;;;/;"larger;@;ia;[ ;0;1;@;@;2T;3["form.largero;;o;;" ;id;[o;;[o;;@Å;id;[o;D;["icon_button;@Å;id; i ;id;[o;!;["background-size; i ;o;;;/;"	20px;@;ie;[ ;0;1;@o;!;["padding-left; i ;o;;;/;"	24px;@;if;[ ;0;1;@o;!;["height; i ;o;;;/;"	24px;@;ig;[ ;0;1;@;@;2T;3[".icon_buttono;;o;;" ;ij;[o;;[o;;@°;ij;[o;	;["
+input;0;@°;ijo;D;["expand-button;@°;ij; i ;ij;[o:Sass::Tree::ExtendNode	:@selector["."icon_button;ik;[ ;@o;!;["background; i ;o;"	;#;$;[	o;4	;5{	;6iÌ;7iÌ;8i;9iÌ;0;il;@o;%
+;"url;&{ ;il;'[o;(
+;);*;+o;	;;;"favicon.ico;il;@;il;,o;-	;"img_dir;."img_dir;il;@;@;@o;	;;/;"no-repeat;il;@o;	;;/;"	left;il;@;il;@;il;[ ;0;1;@;@;2T;3["input.expand-buttono;;o;;" ;io;[o;;[o;;@Õ;io;[o;	;["
+input;0;@Õ;ioo;D;["edit-button;@Õ;io; i ;io;[o;E	;F["."icon_button;ip;[ ;@o;!;["background; i ;o;"	;#;$;[	o;4	;5{	;6iÌ;7iÌ;8i;9iÌ;0;iq;@o;%
+;"url;&{ ;iq;'[o;(
+;);*;+o;	;;;"icons/edit-icon.png;iq;@;iq;,o;-	;"img_dir;."img_dir;iq;@;@;@o;	;;/;"no-repeat;iq;@o;	;;/;"	left;iq;@;iq;@;iq;[ ;0;1;@;@;2T;3["input.edit-buttono;;o;;" ;it;[o;;[o;;@˘;it;[o;	;["
+input;0;@˘;ito;D;["delete-button;@˘;it; i ;it;[	o;E	;F["."icon_button;iu;[ ;@o;!;["background; i ;o;"	;#;$;[	o;4	;5{	;6iÌ;7iÌ;8i;9iÌ;0;iv;@o;%
+;"url;&{ ;iv;'[o;(
+;);*;+o;	;;;"icons/delete-icon.png;iv;@;iv;,o;-	;"img_dir;."img_dir;iv;@;@;@o;	;;/;"no-repeat;iv;@o;	;;/;"	left;iv;@;iv;@;iv;[ ;0;1;@o;!;["background-size; i ;o;;;/;"	20px;@;iw;[ ;0;1;@o;	;
+0;0;["J/* For some reason this isn't being inherited from parent class... */;iw;[ ;@;@;2T;3["input.delete-buttono;;o;;" ;iz;[o;;[o;;@/;iz;[o;	;["
+input;0;@/;izo;D;["invite-button;@/;iz; i ;iz;[o;E	;F["."icon_button;i{;[ ;@o;!;["background; i ;o;"	;#;$;[	o;4	;5{	;6iÌ;7iÌ;8i;9iÌ;0;i|;@o;%
+;"url;&{ ;i|;'[o;(
+;);*;+o;	;;;"icons/invite-icon.png;i|;@;i|;,o;-	;"img_dir;."img_dir;i|;@;@;@o;	;;/;"no-repeat;i|;@o;	;;/;"	left;i|;@;i|;@;i|;[ ;0;1;@;@;2T;3["input.invite-buttono;;o;;" ;i;[o;;[o;;@[;i;[o;	;["	form;0;@[;i; i ;i;[
+o;!;["border-radius; i ;o;;;/;"	10px;@;i{;[ ;0;1;@o;!;["border; i ;o;"	;#;$;[o;@;A[ ;B["px;C"2px;i;i|;@o;%
+;"	rgba;&{ ;i|;'[	o;@;A@Ó;B[ ;C"100;ii;i|;@o;@;A@Ó;B[ ;C"100;ii;i|;@o;@;A@Ó;B[ ;C"100;ii;i|;@o;@;A@Ó;B[ ;C"0.1;f0.10000000000000001 ôö;i|;@;@o;	;;/;"
+solid;i|;@;i|;@;i|;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i};'[	o;@;A@Ó;B[ ;C"230;iÊ;i};@o;@;A@Ó;B[ ;C"230;iÊ;i};@o;@;A@Ó;B[ ;C"255;iˇ;i};@o;@;A@Ó;B[ ;C"0.5;f0.5;i};@;@;i};[ ;0;1;@o;!;["padding; i ;o;;;/;"3px;@;i~;[ ;0;1;@o;;o;;" ;i;[o;;[o;;@¶;i;[o;:;@¶;io;D;["no_styling;@¶;i; i ;i;[	o;!;["border-radius; i ;o;;;/;"0;@;iÄ;[ ;0;1;@o;!;["border; i ;o;;;/;"	none;@;iÅ;[ ;0;1;@o;!;["background-color; i ;o;;;/;"transparent;@;iÇ;[ ;0;1;@o;!;["padding; i ;o;;;/;"0;@;iÉ;[ ;0;1;@;@;2T;3["&.no_styling;@;2T;3["	formo;;o;;" ;iá;[o;;[o;;@œ;iá;[o;	;["textarea;0;@œ;iá; i ;iá;[o;!;["background; i ;o;"	;#;$;[o;%
+;"url;&{ ;ià;'[o;(
+;);*;+o;	;;;"/notepad_row.png;ià;@;ià;,o;-	;"img_dir;."img_dir;ià;@;@;@o;	;;/;"repeat;ià;@;ià;@;ià;[ ;0;1;@o;!;["line-height; i ;o;;;/;"	25px;@;iâ;[ ;0;1;@o;!;["padding; i ;o;;;/;"2px 10px;@;iä;[ ;0;1;@o;!;["font-family; i ;o;;;/;"Ubuntu, Tahoma, sans-serif;@;iã;[ ;0;1;@o;!;["font-size; i ;o;;;/;"	14px;@;iå;[ ;0;1;@o;!;["min-height; i ;o;;;/;"2em;@;iç;[ ;0;1;@o;!;["border; i ;o;;;/;"hidden;@;ié;[ ;0;1;@;@;2T;3["textareao;;o;;" ;ië;[o;;[o;;@;ië;[o;	;["blockquote;0;@;iëo;;
+;["
+after;<0;;=;@;ië; i ;ië;[	o;!;["content; i ;o;;;/;"" ";@;ií;[ ;0;1;@o;!;["display; i ;o;;;/;"
+block;@;iì;[ ;0;1;@o;!;["height; i ;o;;;/;"0;@;iî;[ ;0;1;@o;!;["
+clear; i ;o;;;/;"	both;@;iï;[ ;0;1;@;@;2T;3["blockquote:aftero;;o;;" ;iò;[o;;[o;;@<;iò;[o;	;["blockquote;0;@<;iòo;;@<;iò;[o;D;["author;@<;iò; i ;iò;[o;!;["
+float; i ;o;;;/;"
+right;@;iô;[ ;0;1;@o;!;["font-style; i ;o;;;/;"italic;@;iö;[ ;0;1;@;@;2T;3["blockquote .authoro;;o;;" ;iù;[o;;[o;;@[;iù;[o;	;["	form;0;@[;iùo;D;["full_width;@[;iùo;;@[;iù;[o;	;["
+input;0;@[;iùo;?;["	type;0;)"=;@[;[""text";iùo;;@[;iù;[o;	;["
+input;0;@[;iùo;?;["	type;0;)"=;@[;[""password";iùo;;[o;;@[;iù;[o;	;["textarea;0;@[;iù; i ;iù;[	o;!;["
+width; i ;o;;;/;"	100%;@;iû;[ ;0;1;@o;!;["box-sizing; i ;o;;;/;"border-box;@;iü;[ ;0;1;@o;!;["-moz-box-sizing; i ;o;;;/;"border-box;@;i†;[ ;0;1;@o;!;["-webkit-box-sizing; i ;o;;;/;"border-box;@;i°;[ ;0;1;@;@;2T;3["Hform.full_width input[type="text"] input[type="password"], textareao;;o;;" ;i§;[o;;[o;;@°;i§;[o;	;["img;0;@°;i§o;D;["full_width;@°;i§; i ;i§;[o;!;["
+width; i ;o;;;/;"	100%;@;i•;[ ;0;1;@;@;2T;3["img.full_widtho;;o;;" ;i®;[o;;[o;;@∏;i®;[o:Sass::Selector::Id;["	main;@∏;i®; i ;i®;[o;!;["margin-top; i ;o;;;/;"	40px;@;i©;[ ;0;1;@o;!;["
+clear; i ;o;;;/;"	both;@;i™;[ ;0;1;@;@;2T;3["
+#maino;;o;;" ;i≠;[o;;[o;;@“;i≠;[o;D;["background_color;@“;i≠; i ;i≠;[o;!;["background-color; i ;o;%
+;"	rgba;&{ ;iÆ;'[	o;@;A@Ó;B[ ;C"230;iÊ;iÆ;@o;@;A@Ó;B[ ;C"230;iÊ;iÆ;@o;@;A@Ó;B[ ;C"255;iˇ;iÆ;@o;@;A@Ó;B[ ;C"	0.92;f0.92000000000000004 =q;iÆ;@;@;iÆ;[ ;0;1;@;@;2T;3[".background_coloro;;o;;" ;i±;[o;;[o;;@ı;i±;[o;D;["shadow_border;@ı;i±; i ;i±;[o;!;["-moz-box-shadow; i ;o;;;/;"0 0 2px 1px #888;@;i≤;[ ;0;1;@o;!;["-webkit-box-shadow; i ;o;;;/;"0 0 2px 1px #888;@;i≥;[ ;0;1;@o;!;["box-shadow; i ;o;;;/;"0 0 2px 1px #888;@;i¥;[ ;0;1;@;@;2T;3[".shadow_bordero;;o;;" ;i∑;[o;;[o;;@;i∑;[o;G;["content;@;i∑; i ;i∑;[o;E	;F["."shadow_border;i∏;[ ;@o;E	;F["."background_color;iπ;[ ;@o;!;["position; i ;o;;;/;"relative;@;i∫;[ ;0;1;@o;!;["
+float; i ;o;;;/;"	left;@;iª;[ ;0;1;@o;!;["
+width; i ;o;;;/;"70%;@;iº;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px;@;iΩ;[ ;0;1;@o;	;
+0;i ;["./* & > div {
+ *     padding: 3px;
+ * } */;iæ;[ ;@;@;2T;3["#contento;;o;;" ;i√;[o;;[o;;@I;i√;[o;G;["right_content;@I;i√; i ;i√;[o;E	;F["."shadow_border;iƒ;[ ;@o;E	;F["."background_color;i≈;[ ;@o;!;["padding; i ;o;;;/;"5px;@;i∆;[ ;0;1;@o;!;["position; i ;o;;;/;"
+fixed;@;i«;[ ;0;1;@o;!;["margin-left; i ;o;;;/;"65%;@;i»;[ ;0;1;@o;!;["
+width; i ;o;;;/;"25%;@;i…;[ ;0;1;@o;!;["overflow-y; i ;o;;;/;"	auto;@;i ;[ ;0;1;@o;!;["max-height; i ;o;;;/;"90%;@;iÀ;[ ;0;1;@o;;o;;" ;iÃ;[o;;[o;;@É;iÃ;[o;	;["div;0;@É;iÃ; i ;iÃ;[o;!;["padding; i ;o;;;/;"5px;@;iÕ;[ ;0;1;@;@;2T;3["div;@;2T;3["#right_contento;;o;;" ;i—;[o;;[o;;@ô;i—;[o;D;["object_item_list;@ô;i—; i ;i—;[o;!;["position; i ;o;;;/;"relative;@;i“;[ ;0;1;@;@;2T;3[".object_item_listo;;o;;" ;i’;[o;;[o;;@≠;i’;[o;D;["object_item;@≠;i’; i ;i’;[o;!;["position; i ;o;;;/;"relative;@;i÷;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px;@;i◊;[ ;0;1;@o;!;["border-right; i ;o;"	;#;$;[o;@;A[ ;B["px;C"2px;i;iÿ;@o;	;;/;"
+solid;iÿ;@o;%
+;"	rgba;&{ ;iÿ;'[	o;@;A@Ó;B[ ;C"74;iO;iÿ;@o;@;A@Ó;B[ ;C"123;i{;iÿ;@o;@;A@Ó;B[ ;C"158;iû;iÿ;@o;@;A@Ó;B[ ;C"0.2;f0.20000000000000001 ôö;iÿ;@;@;iÿ;@;iÿ;[ ;0;1;@o;!;["border-left; i ;o;"	;#;$;[o;@;A[ ;B["px;C"2px;i;iŸ;@o;	;;/;"
+solid;iŸ;@o;%
+;"	rgba;&{ ;iŸ;'[	o;@;A@Ó;B[ ;C"74;iO;iŸ;@o;@;A@Ó;B[ ;C"123;i{;iŸ;@o;@;A@Ó;B[ ;C"158;iû;iŸ;@o;@;A@Ó;B[ ;C"0.2;f0.20000000000000001 ôö;iŸ;@;@;iŸ;@;iŸ;[ ;0;1;@o;!;["border-radius; i ;o;;;/;"
+0.3em;@;i⁄;[ ;0;1;@o;!;["margin; i ;o;;;/;"2px;@;i€;[ ;0;1;@o;	;
+0;0;["}/*&:hover {
+    border-right: 2px solid rgba(74, 123, 158, 0.6);
+    border-left: 2px solid rgba(74, 123, 158, 0.6);
+}*/;i‹;[ ;@;@;2T;3[".object_itemo;;o;;" ;i‚;[o;;[o;;@;i‚;[o;D;["thirds_table;@;i‚; i ;i‚;[o;!;["
+width; i ;o;;;/;"	100%;@;i„;[ ;0;1;@;@;2T;3[".thirds_tableo;;o;;" ;iÊ;[o;;[o;;@';iÊ;[o;D;["thirds_table;@';iÊo;;@';iÊ;[o;	;["td;0;@';iÊ; i ;iÊ;[o;!;["vertical-align; i ;o;;;/;"top;@;iÁ;[ ;0;1;@o;!;["
+width; i ;o;;;/;"33%;@;iË;[ ;0;1;@;@;2T;3[".thirds_table tdo;;o;;" ;iÎ;[o;;[	o;;@F;iÎ;[o;D;["thirds_table;@F;iÎo;;@F;iÎ;[o;	;["td;0;@F;iÎ">o;;@F;iÎ;[o;	;["div;0;@F;iÎ; i ;iÎ;[o;!;["min-height; i ;o;;;/;"
+300px;@;iÏ;[ ;0;1;@;@;2T;3[".thirds_table td > divo;;0;"item_opacity;o;@;A@Ó;B[ ;C"0.3;f0.29999999999999999 33;iÔ;@;iÔ;[ ;@o;;o;;" ;iÒ;[o;;[o;;@l;iÒ;[o;D;["explorer_item;@l;iÒ; i ;iÒ;[o;E	;F["."object_item;iÚ;[ ;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;iÛ;'[	o;@;A@Ó;B[ ;C"74;iO;iÛ;@o;@;A@Ó;B[ ;C"123;i{;iÛ;@o;@;A@Ó;B[ ;C"138;iä;iÛ;@o;-	;"item_opacity;."item_opacity;iÛ;@;@;iÛ;[ ;0;1;@o;	;
+0;i ;["//*rgba(131, 135, 141, $item_opacity);// */;iÛ;[ ;@;@;2T;3[".explorer_itemo;;o;;" ;iˆ;[o;;[o;;@ó;iˆ;[o;D;["experience_item;@ó;iˆ; i ;iˆ;[o;E	;F["."object_item;i˜;[ ;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i¯;'[	o;@;A@Ó;B[ ;C"127;i;i¯;@o;@;A@Ó;B[ ;C"95;id;i¯;@o;@;A@Ó;B[ ;C"142;ié;i¯;@o;-	;"item_opacity;."item_opacity;i¯;@;@;i¯;[ ;0;1;@o;	;
+0;i ;["B/*rgba(72, 61, 65, $item_opacity);//
+ * min-height: 100px; */;i¯;[ ;@;@;2T;3[".experience_itemo;;o;;" ;i¸;[o;;[o;;@¬;i¸;[o;D;["narrative_item;@¬;i¸; i ;i¸;[
+o;E	;F["."object_item;i˝;[ ;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i˛;'[	o;@;A@Ó;B[ ;C"54;i;;i˛;@o;@;A@Ó;B[ ;C"112;iu;i˛;@o;@;A@Ó;B[ ;C"60;iA;i˛;@o;-	;"item_opacity;."item_opacity;i˛;@;@;i˛;[ ;0;1;@o;	;
+0;i ;["*/*rgba(88, 98, 97, $item_opacity); */;i˛;[ ;@o;!;["min-height; i ;o;;;/;"
+100px;@;iˇ;[ ;0;1;@o;!;["word-wrap; i ;o;;;/;"break-word;@;i ;[ ;0;1;@;@;2T;3[".narrative_itemo;;o;;" ;i;[o;;[o;;@˘;i;[o;D;["post_it;@˘;i; i ;i;[o;!;["background; i ;o;"	;#:
+comma;[o;"	;#;$;[	o;%
+;"url;&{ ;i;'[o;(
+;);*;+o;	;;;"icons/tack-right-icon.png;i;@;i;,o;-	;"img_dir;."img_dir;i;@;@;@o;	;;/;"no-repeat;i;@o;	;;/;"top;i;@o;	;;/;"
+right;i;@;i;@o;"	;#;$;[	o;%
+;"url;&{ ;i;'[o;(
+;);*;+o;	;;;"icons/tack-left-icon.png;i;@;i;,o;-	;"img_dir;."img_dir;i;@;@;@o;	;;/;"no-repeat;i;@o;	;;/;"top;i;@o;	;;/;"	left;i;@;i;@o;%
+;"url;&{ ;i;'[o;(
+;);*;+o;	;;;"/notepad_row.png;i;@;i;,o;-	;"img_dir;."img_dir;i;@;@;@;i;@;i;[ ;0;1;@;@;2T;3[".post_ito;;o;;" ;i;[o;;[o;;@;;i;[o;D;["	note;@;;i; i ;i;[	o;E	;F["."post_it;i;[ ;@o;!;["padding; i ;o;;;/;"30px 10px 10px;@;i	;[ ;0;1;@o;!;["min-height; i ;o;;;/;"
+100px;@;i
+;[ ;0;1;@o;!;["margin-bottom; i ;o;;;/;"	10px;@;i;[ ;0;1;@;@;2T;3["
+.noteo;;o;;" ;i;[o;;[o;;@`;i;[o;D;["explorer_note;@`;i; i ;i;[o;E	;F["."explorer_item;i;[ ;@o;E	;F["."	note;i;[ ;@o;	;
+0;i ;["3/* border: 2px solid rgba(74, 123, 158, 1); */;i;[ ;@;@;2T;3[".explorer_noteo;;o;;" ;i;[o;;[o;;@|;i;[o;D;["experience_note;@|;i; i ;i;[o;E	;F["."experience_item;i;[ ;@o;E	;F["."	note;i;[ ;@o;	;
+0;i ;["3/* border: 2px solid rgba(167, 95, 142, 1); */;i;[ ;@;@;2T;3[".experience_noteo;;o;;" ;i;[o;;[o;;@ò;i;[o;D;["narrative_note;@ò;i; i ;i;[o;E	;F["."narrative_item;i;[ ;@o;E	;F["."	note;i;[ ;@o;	;
+0;i ;["2/* border: 2px solid rgba(54, 152, 60, 1); */;i;[ ;@;@;2T;3[".narrative_noteo;;o;;" ;i ;[o;;[o;;@¥;i ;[o;D;["experience_dash;@¥;i ; i ;i ;[o;E	;F["."experience_item;i!;[ ;@o;!;["position; i ;o;;;/;"relative;@;i";[ ;0;1;@;@;2T;3[".experience_dasho;;o;;" ;i%;[o;;[o;;@Õ;i%;[o;D;["request_dash;@Õ;i%; i ;i%;[o;E	;F["."object_item;i&;[ ;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i';'[	o;@;A@Ó;B[ ;C"50;i7;i';@o;@;A@Ó;B[ ;C"80;iU;i';@o;@;A@Ó;B[ ;C"150;iñ;i';@o;@;A@Ó;B[ ;C"0.5;f0.5;i';@;@;i';[ ;0;1;@;@;2T;3[".request_dasho;;o;;" ;i*;[o;;[o;;@ı;i*;[o;D;["	left;@ı;i*; i ;i*;[
+o;!;["
+float; i ;o;;;/;"	left;@;i+;[ ;0;1;@o;!;["
+width; i ;o;;;/;"47%;@;i,;[ ;0;1;@o;!;["margin; i ;o;;;/;"5px;@;i-;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px;@;i.;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i/;'[	o;@;A@Ó;B[ ;C"10;i;i/;@o;@;A@Ó;B[ ;C"10;i;i/;@o;@;A@Ó;B[ ;C"10;i;i/;@o;@;A@Ó;B[ ;C"0.1;f0.10000000000000001 ôö;i/;@;@;i/;[ ;0;1;@;@;2T;3["
+.lefto;;o;;" ;i2;[o;;[o;;@0;i2;[o;D;["
+right;@0;i2; i ;i2;[
+o;!;["
+width; i ;o;;;/;"47%;@;i3;[ ;0;1;@o;!;["
+float; i ;o;;;/;"
+right;@;i4;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px;@;i5;[ ;0;1;@o;!;["margin; i ;o;;;/;"5px;@;i6;[ ;0;1;@o;	;
+0;i ;["3/* background-color: rgba(10, 10, 10, 0.1); */;i7;[ ;@;@;2T;3[".righto;;o;;" ;i:;[o;;[o;;@Z;i:;[o;D;["align_center;@Z;i:; i ;i:;[o;!;["text-align; i ;o;;;/;"center;@;i;;[ ;0;1;@;@;2T;3[".align_centero;;o;;" ;i>;[o;;[o;;@n;i>;[o;D;["smaller_font;@n;i>; i ;i>;[o;!;["font-size; i ;o;;;/;"smaller;@;i?;[ ;0;1;@;@;2T;3[".smaller_fonto;;o;;" ;iB;[o;;[o;;@Ç;iB;[o;D;["x-small_font;@Ç;iB; i ;iB;[o;!;["font-size; i ;o;;;/;"x-small;@;iC;[ ;0;1;@;@;2T;3[".x-small_fonto;;o;;" ;iF;[o;;[o;;@ñ;iF;[o;D;["narrative_dash;@ñ;iF; i ;iF;[o;E	;F["."narrative_item;iG;[ ;@o;!;["min-height; i ;o;;;/;"
+100px;@;iH;[ ;0;1;@;@;2T;3[".narrative_dasho;;o;;" ;iK;[o;;[o;;@Ø;iK;[o;D;["narrative_taste;@Ø;iK; i ;iK;[o;!;["display; i ;o;;;/;"	none;@;iL;[ ;0;1;@;@;2T;3[".narrative_tasteo;;o;;" ;iO;[o;;[o;;@√;iO;[o;D;["narrative_detail;@√;iO; i ;iO;[o;E	;F["."narrative_item;iP;[ ;@o;!;["min-height; i ;o;;;/;"
+325px;@;iQ;[ ;0;1;@;@;2T;3[".narrative_detailo;;o;;" ;iT;[o;;[o;;@‹;iT;[o;D;["narrative_detail;@‹;iTo;;@‹;iT;[o;D;["images_right;@‹;iT; i ;iT;[
+o;!;["
+float; i ;o;;;/;"
+right;@;iU;[ ;0;1;@o;!;["
+width; i ;o;;;/;"30%;@;iV;[ ;0;1;@o;!;["text-align; i ;o;;;/;"center;@;iW;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px;@;iX;[ ;0;1;@o;;o;;" ;iY;[o;;[o;;@	;iY;[o;	;["img;0;@	;iY; i ;iY;[o;!;["display; i ;o;;;/;"
+block;@;iZ;[ ;0;1;@o;!;["margin-left; i ;o;;;/;"	auto;@;i[;[ ;0;1;@o;!;["margin-right; i ;o;;;/;"	auto;@;i\;[ ;0;1;@;@;2T;3["img;@;2T;3["$.narrative_detail .images_righto;;o;;" ;i`;[o;;[o;;@'	;i`;[o;D;["object_item_interaction;@'	;i`; i ;i`;[o;!;["position; i ;o;;;/;"relative;@;ia;[ ;0;1;@o;!;["bottom; i ;o;;;/;"0px;@;ib;[ ;0;1;@o;!;["	left; i ;o;;;/;"0px;@;ic;[ ;0;1;@;@;2T;3[".object_item_interactiono;;o;;" ;if;[o;;[o;;@G	;if;[o;D;["comment_list;@G	;if; i ;if;[o;!;["font-size; i ;o;;;/;"smaller;@;ig;[ ;0;1;@o;!;["position; i ;o;;;/;"relative;@;ih;[ ;0;1;@;@;2T;3[".comment_listo;;o;;" ;ik;[o;;[o;;@a	;ik;[o;D;["comment;@a	;iko;;@a	;ik;[o;	;["textarea;0;@a	;ik; i ;ik;[ ;@;2T;3[".comment textareao;;o;;" ;io;[o;;[o;;@t	;io;[o;D;["youtube;@t	;io; i ;io;[o;!;["padding; i ;o;;;/;"5px;@;ip;[ ;0;1;@;@;2T;3[".youtubeo;;o;;" ;is;[o;;[o;;@à	;is;[o;G;["photo_form;@à	;is; i ;is;[o;!;["
+width; i ;o;;;/;"50%;@;it;[ ;0;1;@;@;2T;3["#photo_formo;;o;;" ;iw;[o;;[o;;@ú	;iw;[o;G;["photo_form_feedback;@ú	;iw; i ;iw;[	o;!;["
+width; i ;o;;;/;"40%;@;ix;[ ;0;1;@o;!;["position; i ;o;;;/;"absolute;@;iy;[ ;0;1;@o;!;["
+right; i ;o;;;/;"0px;@;iz;[ ;0;1;@o;!;["top; i ;o;;;/;"0px;@;i{;[ ;0;1;@;@;2T;3["#photo_form_feedbacko;;o;;" ;i~;[o;;[o;;@¬	;i~;[o;D;["uploaded_photo;@¬	;i~; i ;i~;[o;!;["margin; i ;o;;;/;"5px;@;i;[ ;0;1;@o;!;["
+float; i ;o;;;/;"	left;@;iÄ;[ ;0;1;@o;!;["
+width; i ;o;;;/;"
+100px;@;iÅ;[ ;0;1;@;@;2T;3[".uploaded_photoo;;o;;" ;iÑ;[o;;[o;;@‚	;iÑ;[o;D;["gallery_photo_item;@‚	;iÑ; i ;iÑ;[o;E	;F["."object_item;iÖ;[ ;@o;!;["min-height; i ;o;;;/;"
+290px;@;iÜ;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;iá;'[	o;@;A@Ó;B[ ;C"0;i ;iá;@o;@;A@Ó;B[ ;C"0;i ;iá;@o;@;A@Ó;B[ ;C"0;i ;iá;@o;@;A@Ó;B[ ;C"0.1;f0.10000000000000001 ôö;iá;@;@;iá;[ ;0;1;@;@;2T;3[".gallery_photo_itemo;;o;;" ;iä;[o;;[o;;@
+;iä;[o;D;["featured_photo;@
+;iä; i ;iä;[o;!;["text-align; i ;o;;;/;"center;@;iã;[ ;0;1;@o;;o;;" ;iå;[o;;[o;;@"
+;iå;[o;	;["img;0;@"
+;iå; i ;iå;[o;!;["max-width; i ;o;;;/;"95%;@;iç;[ ;0;1;@o;!;["display; i ;o;;;/;"inline-block;@;ié;[ ;0;1;@o;!;["margin-left; i ;o;;;/;"	auto;@;iè;[ ;0;1;@o;!;["margin-right; i ;o;;;/;"	auto;@;iê;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;ië;'[	o;@;A@Ó;B[ ;C"200;i»;ië;@o;@;A@Ó;B[ ;C"200;i»;ië;@o;@;A@Ó;B[ ;C"200;i»;ië;@o;@;A@Ó;B[ ;C"0.3;f0.29999999999999999 33;ië;@;@;ië;[ ;0;1;@o;!;["border-radius; i ;o;;;/;"0.55em;@;ií;[ ;0;1;@;@;2T;3["img;@;2T;3[".featured_photoo;;o;;" ;iñ;[o;;[o;;@e
+;iñ;[o;D;["gallery_photo_container;@e
+;iñ; i ;iñ;[o;!;["position; i ;o;;;/;"relative;@;ió;[ ;0;1;@o;!;["min-height; i ;o;;;/;"
+250px;@;iò;[ ;0;1;@;@;2T;3[".gallery_photo_containero;;o;;" ;iõ;[o;;[o;;@
+;iõ;[o;D;["previous_photo;@
+;iõ; i ;iõ;[o;!;["position; i ;o;;;/;"absolute;@;iú;[ ;0;1;@o;!;["	left; i ;o;;;/;"0;@;iù;[ ;0;1;@o;!;["top; i ;o;;;/;"0;@;iû;[ ;0;1;@o;!;["
+width; i ;o;;;/;"5%;@;iü;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i†;'[	o;@;A@Ó;B[ ;C"100;ii;i†;@o;@;A@Ó;B[ ;C"100;ii;i†;@o;@;A@Ó;B[ ;C"100;ii;i†;@o;@;A@Ó;B[ ;C"0.2;f0.20000000000000001 ôö;i†;@;@;i†;[ ;0;1;@o;!;["height; i ;o;;;/;"90%;@;i°;[ ;0;1;@o;;o;;" ;i¢;[o;;[o;;@æ
+;i¢;[o;:;@æ
+;i¢o;;
+;["
+hover;<0;;=;@æ
+;i¢; i ;i¢;[o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i£;'[	o;@;A@Ó;B[ ;C"100;ii;i£;@o;@;A@Ó;B[ ;C"100;ii;i£;@o;@;A@Ó;B[ ;C"100;ii;i£;@o;@;A@Ó;B[ ;C"0.4;f0.40000000000000002 ôö;i£;@;@;i£;[ ;0;1;@;@;2T;3["&:hover;@;2T;3[".previous_photoo;;o;;" ;iß;[o;;[o;;@‰
+;iß;[o;D;["previous_photo;@‰
+;ißo;;@‰
+;iß;[o;	;["img;0;@‰
+;iß; i ;iß;[o;!;["position; i ;o;;;/;"relative;@;i®;[ ;0;1;@o;!;["top; i ;o;;;/;"50%;@;i©;[ ;0;1;@;@;2T;3[".previous_photo imgo;;o;;" ;i¨;[o;;[o;;@;i¨;[o;D;["gallery_photo;@;i¨; i ;i¨;[
+o;!;["text-align; i ;o;;;/;"center;@;i≠;[ ;0;1;@o;!;["position; i ;o;;;/;"relative;@;iÆ;[ ;0;1;@o;!;["height; i ;o;;;/;"90%;@;iØ;[ ;0;1;@o;!;["
+width; i ;o;;;/;"90%;@;i∞;[ ;0;1;@o;!;["	left; i ;o;;;/;"5%;@;i±;[ ;0;1;@;@;2T;3[".gallery_photoo;;o;;" ;i¥;[o;;[o;;@/;i¥;[o;D;["gallery_photo;@/;i¥o;;@/;i¥;[o;	;["img;0;@/;i¥; i ;i¥;[o;!;["position; i ;o;;;/;"relative;@;iµ;[ ;0;1;@o;!;["max-width; i ;o;;;/;"85%;@;i∂;[ ;0;1;@;@;2T;3[".gallery_photo imgo;;o;;" ;iπ;[o;;[o;;@N;iπ;[o;D;["next_photo;@N;iπ; i ;iπ;[o;!;["position; i ;o;;;/;"absolute;@;i∫;[ ;0;1;@o;!;["
+right; i ;o;;;/;"0;@;iª;[ ;0;1;@o;!;["top; i ;o;;;/;"0;@;iº;[ ;0;1;@o;!;["
+width; i ;o;;;/;"5%;@;iΩ;[ ;0;1;@o;!;["height; i ;o;;;/;"90%;@;iæ;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;iø;'[	o;@;A@Ó;B[ ;C"100;ii;iø;@o;@;A@Ó;B[ ;C"100;ii;iø;@o;@;A@Ó;B[ ;C"100;ii;iø;@o;@;A@Ó;B[ ;C"0.2;f0.20000000000000001 ôö;iø;@;@;iø;[ ;0;1;@o;;o;;" ;i¿;[o;;[o;;@ç;i¿;[o;:;@ç;i¿o;;
+;["
+hover;<0;;=;@ç;i¿; i ;i¿;[o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i¡;'[	o;@;A@Ó;B[ ;C"100;ii;i¡;@o;@;A@Ó;B[ ;C"100;ii;i¡;@o;@;A@Ó;B[ ;C"100;ii;i¡;@o;@;A@Ó;B[ ;C"0.4;f0.40000000000000002 ôö;i¡;@;@;i¡;[ ;0;1;@;@;2T;3["&:hover;@;2T;3[".next_photoo;;o;;" ;i≈;[o;;[o;;@≥;i≈;[o;D;["next_photo;@≥;i≈o;;@≥;i≈;[o;	;["img;0;@≥;i≈; i ;i≈;[o;!;["position; i ;o;;;/;"relative;@;i∆;[ ;0;1;@o;!;["top; i ;o;;;/;"50%;@;i«;[ ;0;1;@;@;2T;3[".next_photo imgo;;o;;" ;i ;[o;;[o;;@“;i ;[o;D;["narrative_photo;@“;i ; i ;i ;[o;!;["margin-bottom; i ;o;;;/;"	25px;@;iÀ;[ ;0;1;@;@;2T;3[".narrative_photoo;;o;;" ;iŒ;[o;;[o;;@Ê;iŒ;[o;D;["photo_caption;@Ê;iŒ; i ;iŒ;[o;!;["font-style; i ;o;;;/;"italic;@;iœ;[ ;0;1;@o;!;["text-align; i ;o;;;/;"center;@;i–;[ ;0;1;@o;!;["font-size; i ;o;;;/;"smaller;@;i—;[ ;0;1;@;@;2T;3[".photo_captiono;;o;;" ;i‘;[o;;[o;;@;i‘;[o;D;["caption;@;i‘; i ;i‘;[o;E	;F["."photo_caption;i’;[ ;@;@;2T;3[".captiono;;o;;" ;iÿ;[o;;[o;;@;iÿ;[o;D;["description;@;iÿ; i ;iÿ;[o;!;["border-bottom; i ;o;;;/;"1px dotted;@;iŸ;[ ;0;1;@;@;2T;3[".descriptiono;;o;;" ;i‹;[o;;[o;;@-;i‹;[o;D;["icon_gallery_object;@-;i‹; i ;i‹;[o;!;["
+float; i ;o;;;/;"	left;@;i›;[ ;0;1;@;@;2T;3[".icon_gallery_objecto;;o;;" ;i‡;[o;;[o;;@A;i‡;[o;D;["explorer_portrait;@A;i‡; i ;i‡;[o;!;["text-align; i ;o;;;/;"center;@;i·;[ ;0;1;@;@;2T;3[".explorer_portraito;;o;;" ;i‰;[o;;[o;;@U;i‰;[o;D;["explorer_portrait;@U;i‰o;;@U;i‰;[o;	;["img;0;@U;i‰; i ;i‰;[o;!;["
+width; i ;o;;;/;"
+200px;@;iÂ;[ ;0;1;@;@;2T;3[".explorer_portrait imgo;	;
+0;0;["X/* div for options near top of pages (e.g. experience: view photos, upload photo */;iË;[ ;@o;;o;;" ;iÈ;[o;;[o;;@r;iÈ;[o;D;["option_list;@r;iÈ; i ;iÈ;[	o;E	;F["."object_item;iÍ;[ ;@o;!;["overflow; i ;o;;;/;"hidden;@;iÎ;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;iÏ;'[	o;@;A@Ó;B[ ;C"150;iñ;iÏ;@o;@;A@Ó;B[ ;C"150;iñ;iÏ;@o;@;A@Ó;B[ ;C"150;iñ;iÏ;@o;@;A@Ó;B[ ;C"0.3;f0.29999999999999999 33;iÏ;@;@;iÏ;[ ;0;1;@o;!;["display; i ;o;;;/;"
+table;@;iÌ;[ ;0;1;@;@;2T;3[".option_listo;;o;;" ;iÒ;[o;;[o;;@¶;iÒ;[o;D;["option_icon;@¶;iÒ; i ;iÒ;[	o;!;["padding-right; i ;o;;;/;"7px;@;iÚ;[ ;0;1;@o;!;["
+width; i ;o;;;/;"	26px;@;iÛ;[ ;0;1;@o;!;["margin; i ;o;;;/;"1px;@;iÙ;[ ;0;1;@o;;o;;" ;iı;[o;;[o;;@ƒ;iı;[o;:;@ƒ;iıo;;
+;["
+hover;<0;;=;@ƒ;iı; i ;iı;[	o;!;["
+width; i ;o;;;/;"	28px;@;iˆ;[ ;0;1;@o;!;["position; i ;o;;;/;"relative;@;i˜;[ ;0;1;@o;!;["margin; i ;o;;;/;"0px;@;i¯;[ ;0;1;@o;	;
+0;i ;[">/* hacky, but I kinda like it and it works wonderfully */;i¯;[ ;@;@;2T;3["&:hover;@;2T;3[".option_icono;;o;;" ;i¸;[o;;[o;;@Î;i¸;[o;D;["toggle_div;@Î;i¸; i ;i¸;[o;	;
+0;i ;["P/* div initially hidden from view, expanded with jQuery in html template */;i˝;[ ;@o;!;["display; i ;o;;;/;"	none;@;i˛;[ ;0;1;@;@;2T;3[".toggle_divo;	;
+0;0;[":/* div for the navigating of previous/next objects */;i;[ ;@o;;o;;" ;i;[o;;[o;;@;i;[o;D;["next_previous;@;i; i ;i;[o;!;["overflow; i ;o;;;/;"hidden;@;i;[ ;0;1;@;@;2T;3[".next_previouso;;o;;" ;i;[o;;[o;;@;i;[o;D;["float_right;@;i; i ;i;[o;!;["
+float; i ;o;;;/;"
+right;@;i;[ ;0;1;@;@;2T;3[".float_righto;;o;;" ;i
+;[o;;[o;;@/;i
+;[o;D;["float_left;@/;i
+; i ;i
+;[o;!;["
+float; i ;o;;;/;"	left;@;i;[ ;0;1;@;@;2T;3[".float_lefto;;o;;" ;i;[o;;[o;;@C;i;[o;D;["clear_both;@C;i; i ;i;[o;!;["
+clear; i ;o;;;/;"	both;@;i;[ ;0;1;@;@;2T;3[".clear_botho;;o;;" ;i;[o;;[o;;@W;i;[o;D;["position_relative;@W;i; i ;i;[o;!;["position; i ;o;;;/;"relative;@;i;[ ;0;1;@;@;2T;3[".position_relativeo;;o;;" ;i;[o;;[o;;@k;i;[o;D;["hidden;@k;i; i ;i;[o;!;["display; i ;o;;;/;"	none;@;i;[ ;0;1;@;@;2T;3[".hiddeno;;o;;" ;i;[o;;[o;;@;i;[o;D;["help_text;@;i; i ;i;[o;!;["display; i ;o;;;/;"	none;@;i;[ ;0;1;@o;!;["font-size; i ;o;;;/;"smaller;@;i;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i;'[	o;@;A@Ó;B[ ;C"250;i˙;i;@o;@;A@Ó;B[ ;C"250;i˙;i;@o;@;A@Ó;B[ ;C"250;i˙;i;@o;@;A@Ó;B[ ;C"	0.15;f0.14999999999999999 33;i;@;@;i;[ ;0;1;@;@;2T;3[".help_texto;;o;;" ;i ;[o;;[o;;@Æ;i ;[o;D;["pagination;@Æ;i ; i ;i ;[o;!;["margin-left; i ;o;;;/;"	auto;@;i!;[ ;0;1;@o;!;["margin-right; i ;o;;;/;"	auto;@;i";[ ;0;1;@o;!;["text-align; i ;o;;;/;"center;@;i#;[ ;0;1;@o;!;["
+width; i ;o;;;/;"30%;@;i$;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i%;'[	o;@;A@Ó;B[ ;C"74;iO;i%;@o;@;A@Ó;B[ ;C"123;i{;i%;@o;@;A@Ó;B[ ;C"138;iä;i%;@o;-	;"item_opacity;."item_opacity;i%;@;@;i%;[ ;0;1;@o;!;["height; i ;o;;;/;"	50px;@;i&;[ ;0;1;@o;!;["line-height; i ;o;;;/;"	50px;@;i';[ ;0;1;@o;;o;;" ;i(;[o;;[o;;@Ú;i(;[o;	;["img;0;@Ú;i(; i ;i(;[o;!;["vertical-align; i ;o;;;/;"middle;@;i);[ ;0;1;@;@;2T;3["img;@;2T;3[".paginationo;;o;;" ;i-;[o;;[o;;@;i-;[o;D;["	half;@;i-; i ;i-;[o;!;["
+width; i ;o;;;/;"50%;@;i.;[ ;0;1;@;@;2T;3["
+.halfo;;o;;" ;i1;[o;;[o;;@;i1;[o;D;["
+error;@;i1; i ;i1;[o;!;["
+color; i ;o;;;/;"	#B00;@;i2;[ ;0;1;@o;!;["font-size; i ;o;;;/;"smaller;@;i3;[ ;0;1;@;@;2T;3[".erroro;;o;;" ;i6;[o;;[o;;@6;i6;[o;D;["errorlist;@6;i6; i ;i6;[o;E	;F["."
+error;i7;[ ;@;@;2T;3[".errorlisto;;o;;" ;i:;[o;;[o;;@I;i:;[o;G;["wrapper;@I;i:; i ;i:;[	o;!;["height; i ;o;;;/;"	100%;@;i;;[ ;0;1;@o;!;["
+width; i ;o;;;/;"90%;@;i<;[ ;0;1;@o;!;["margin-right; i ;o;;;/;"	auto;@;i=;[ ;0;1;@o;!;["margin-left; i ;o;;;/;"	auto;@;i>;[ ;0;1;@;@;2T;3["#wrappero;;o;;" ;iA;[o;;[o;;@o;iA;[o;G;["messages;@o;iA; i ;iA;[o;E	;F["."shadow_border;iB;[ ;@o;!;["font-size; i ;o;;;/;"smaller;@;iC;[ ;0;1;@o;!;["position; i ;o;;;/;"
+fixed;@;iD;[ ;0;1;@o;!;["
+width; i ;o;;;/;"	100%;@;iE;[ ;0;1;@o;!;["text-align; i ;o;;;/;"center;@;iF;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;iG;'[	o;@;A@Ó;B[ ;C"200;i»;iG;@o;@;A@Ó;B[ ;C"200;i»;iG;@o;@;A@Ó;B[ ;C"200;i»;iG;@o;@;A@Ó;B[ ;C"0.7;f0.69999999999999996 ff;iG;@;@;iG;[ ;0;1;@o;!;["z-index; i ;o;;;/;"3;@;iH;[ ;0;1;@o;!;["top; i ;o;;;/;"0px;@;iI;[ ;0;1;@o;!;["	left; i ;o;;;/;"0px;@;iJ;[ ;0;1;@;@;2T;3["#messageso;;o;;" ;iM;[o;;[o;;@¡;iM;[o;G;["messages_note;@¡;iM; i ;iM;[o;!;["position; i ;o;;;/;"absolute;@;iN;[ ;0;1;@o;!;["bottom; i ;o;;;/;"0px;@;iO;[ ;0;1;@o;!;["
+right; i ;o;;;/;"	20px;@;iP;[ ;0;1;@;@;2T;3["#messages_noteo;;o;;" ;iS;[o;;[o;;@·;iS;[o;G;["top_bar;@·;iS; i ;iS;[o;E	;F["."shadow_border;iT;[ ;@o;!;["position; i ;o;;;/;"
+fixed;@;iU;[ ;0;1;@o;!;["top; i ;o;;;/;"0px;@;iV;[ ;0;1;@o;!;["	left; i ;o;;;/;"0px;@;iW;[ ;0;1;@o;!;["
+width; i ;o;;;/;"	100%;@;iX;[ ;0;1;@o;!;["background-color; i ;o;-	;"main_color;."main_color;iY;@;iY;[ ;0;1;@o;	;
+0;i ;["//* previously: rgba(74, 123, 158, 0.9); */;iY;[ ;@o;!;["z-index; i ;o;;;/;"2;@;iZ;[ ;0;1;@o;!;["border-radius; i ;o;;;/;"0em;@;i[;[ ;0;1;@;@;2T;3["#top_baro;;o;;" ;i^;[o;;[o;;@#;i^;[o;G;["top_bar_left;@#;i^; i ;i^;[o;!;["max-width; i ;o;;;/;"75%;@;i_;[ ;0;1;@o;!;["
+float; i ;o;;;/;"	left;@;i`;[ ;0;1;@;@;2T;3["#top_bar_lefto;;o;;" ;ic;[o;;[o;;@=;ic;[o;G;["top_bar_right;@=;ic; i ;ic;[o;!;["max-width; i ;o;;;/;"25%;@;id;[ ;0;1;@o;!;["position; i ;o;;;/;"absolute;@;ie;[ ;0;1;@o;!;["
+right; i ;o;;;/;"
+150px;@;if;[ ;0;1;@;@;2T;3["#top_bar_righto;;o;;" ;ii;[o;;[o;;@];ii;[o;G;["top_bar_signup;@];ii; i ;ii;[o;!;["position; i ;o;;;/;"relative;@;ij;[ ;0;1;@o;!;["top; i ;o;;;/;"5px;@;ik;[ ;0;1;@;@;2T;3["#top_bar_signupo;;o;;" ;in;[o;;[o;;@w;in;[o;G;["	logo;@w;in; i ;in;[
+o;!;["padding; i ;o;;;/;"0px 30px;@;io;[ ;0;1;@o;!;["position; i ;o;;;/;"relative;@;ip;[ ;0;1;@o;!;["
+float; i ;o;;;/;"	left;@;iq;[ ;0;1;@o;!;["
+color; i ;o;;;/;"	#000;@;ir;[ ;0;1;@o;!;["top; i ;o;;;/;"8px;@;is;[ ;0;1;@;@;2T;3["
+#logoo;;o;;" ;iv;[o;;[o;;@£;iv;[o;G;["	logo;@£;ivo;;@£;iv;[o;	;["em;0;@£;iv; i ;iv;[o;!;["font-size; i ;o;;;/;"
+small;@;iw;[ ;0;1;@o;!;["position; i ;o;;;/;"relative;@;ix;[ ;0;1;@o;!;["bottom; i ;o;;;/;"1px;@;iy;[ ;0;1;@;@;2T;3["#logo emo;	;
+0;i ;["K/* #login_out {
+ *     position: relative;
+ *     right: 20px;
+ * } */;i|;[ ;@o;;o;;" ;iÅ;[o;;[o;;@Ã;iÅ;[o;D;["main_color;@Ã;iÅ; i ;iÅ;[o;!;["background-color; i ;o;-	;"main_color;."main_color;iÇ;@;iÇ;[ ;0;1;@;@;2T;3[".main_coloro;;o;;" ;iÖ;[o;;[o;;@·;iÖ;[o;G;["id_comment;@·;iÖ; i ;iÖ;[o;!;["
+width; i ;o;;;/;"	100%;@;iÜ;[ ;0;1;@o;!;["height; i ;o;;;/;"2em;@;iá;[ ;0;1;@o;!;["overflow; i ;o;;;/;"hidden;@;ià;[ ;0;1;@;@;2T;3["#id_commento;;o;;" ;iã;[o;;[o;;@;iã;[o;G;["exp_comment_list;@;iã; i ;iã;[o;!;["display; i ;o;;;/;"	none;@;iå;[ ;0;1;@;@;2T;3["#exp_comment_listo;;o;;" ;iè;[o;;[o;;@;iè;[o;G;["footer;@;iè; i ;iè;[o;	;
+0;0;["/*  margin-top: -50px;*/;iê;[ ;@o;!;["text-align; i ;o;;;/;"center;@;ië;[ ;0;1;@o;!;["position; i ;o;;;/;"relative;@;ií;[ ;0;1;@o;!;["
+clear; i ;o;;;/;"	both;@;iì;[ ;0;1;@o;!;["height; i ;o;;;/;"	50px;@;iî;[ ;0;1;@o;!;["background-color; i ;o;;;/;"	#AAA;@;iï;[ ;0;1;@o;!;["opacity; i ;o;;;/;"0.6;@;iñ;[ ;0;1;@;@;2T;3["#footero;;o;;" ;iô;[o;;[o;;@K;iô;[o;G;["welcome_quote;@K;iô; i ;iô;[o;!;["padding; i ;o;;;/;"	10px;@;iö;[ ;0;1;@o;;o;;" ;iõ;[o;;[o;;@];iõ;[o;	;["h2;0;@];iõ; i ;iõ;[o;!;["
+color; i ;o;;;/;"#5986A7;@;iú;[ ;0;1;@;@;2T;3["h2;@;2T;3["#welcome_quoteo;;o;;" ;i†;[o;;[o;;@s;i†;[o;G;["featured_experience;@s;i†; i ;i†;[o;	;
+0;i ;["[/* font-size: 18px;
+ * background-color: rgba(167, 95, 142, 0.55);
+ * padding: 3px; */;i°;[ ;@;@;2T;3["#featured_experienceo;;o;;" ;i¶;[o;;[o;;@Ö;i¶;[o;D;["latest_narrative;@Ö;i¶; i ;i¶;[	o;E	;F["."narrative_item;iß;[ ;@o;!;["max-height; i ;o;;;/;"
+250px;@;i®;[ ;0;1;@o;!;["overflow-y; i ;o;;;/;"	auto;@;i©;[ ;0;1;@o;!;["display; i ;o;;;/;"	none;@;i™;[ ;0;1;@;@;2T;3[".latest_narrativeo;;o;;" ;i≠;[o;;[o;;@™;i≠;[o;G;["bulletin_board;@™;i≠; i ;i≠;[	o;!;["position; i ;o;;;/;"relative;@;iÆ;[ ;0;1;@o;!;["display; i ;o;;;/;"
+block;@;iØ;[ ;0;1;@o;!;["z-index; i ;o;;;/;"1;@;i∞;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px;@;i±;[ ;0;1;@;@;2T;3["#bulletin_boardo;;o;;" ;i¥;[o;;[o;;@–;i¥;[o;G;["bulletin_board_background;@–;i¥; i ;i¥;[o;!;["content; i ;o;;;/;""";@;iµ;[ ;0;1;@o;!;["background; i ;o;%
+;"url;&{ ;i∂;'[o;(
+;);*;+o;	;;;""bulletin_board_background.jpg;i∂;@;i∂;,o;-	;"img_dir;."img_dir;i∂;@;@;@;i∂;[ ;0;1;@o;!;["opacity; i ;o;;;/;".5;@;i∑;[ ;0;1;@o;!;["top; i ;o;;;/;"0;@;i∏;[ ;0;1;@o;!;["	left; i ;o;;;/;"0;@;iπ;[ ;0;1;@o;!;["bottom; i ;o;;;/;"0;@;i∫;[ ;0;1;@o;!;["
+right; i ;o;;;/;"0;@;iª;[ ;0;1;@o;!;["position; i ;o;;;/;"absolute;@;iº;[ ;0;1;@o;!;["z-index; i ;o;@;A@Ó;B[ ;C"-1;i˙;iΩ;@;iΩ;[ ;0;1;@;@;2T;3["#bulletin_board_backgroundo;;o;;" ;i¿;[o;;[o;;@;i¿;[o;D;["notifications;@;i¿; i ;i¿;[o;;o;;" ;i¡;[o;;[o;;@);i¡;[o;D;["notice;@);i¡; i ;i¡;[o;	;
+0;i ;["/*@extend .object_item; */;i¬;[ ;@o;E	;F["."	note;i√;[ ;@o;	;
+0;i ;["(/*border: 2px solid $main_color; */;iƒ;[ ;@;@;2T;3[".notice;@;2T;3[".notificationso;;o;;" ;i»;[o;;[o;;@F;i»;[o;G;["new_narrative_form;@F;i»; i ;i»;[o;!;["display; i ;o;;;/;"	none;@;i…;[ ;0;1;@;@;2T;3["#new_narrative_formo;;o;;" ;iÃ;[o;;[o;;@Z;iÃ;[o;G;["id_caption;@Z;iÃ; i ;iÃ;[o;!;["
+width; i ;o;;;/;"
+350px;@;iÕ;[ ;0;1;@o;!;["height; i ;o;;;/;"
+100px;@;iŒ;[ ;0;1;@;@;2T;3["#id_captiono;;o;;" ;i—;[o;;[o;;@t;i—;[o;G;["id_description;@t;i—; i ;i—;[o;!;["
+width; i ;o;;;/;"
+350px;@;i“;[ ;0;1;@o;!;["height; i ;o;;;/;"
+100px;@;i”;[ ;0;1;@;@;2T;3["#id_descriptiono;;o;;" ;i÷;[o;;[o;;@é;i÷;[o;D;["formatted_input;@é;i÷; i ;i÷;[o;E	;F["."object_item;i◊;[ ;@o;!;["padding; i ;o;;;/;"5px;@;iÿ;[ ;0;1;@o;!;["margin; i ;o;;;/;"	10px;@;iŸ;[ ;0;1;@o;!;["background-color; i ;o;%
+;"	rgba;&{ ;i⁄;'[	o;@;A@Ó;B[ ;C"100;ii;i⁄;@o;@;A@Ó;B[ ;C"100;ii;i⁄;@o;@;A@Ó;B[ ;C"100;ii;i⁄;@o;@;A@Ó;B[ ;C"0.2;f0.20000000000000001 ôö;i⁄;@;@;i⁄;[ ;0;1;@o;;o;;" ;i€;[o;;[o;;@¿;i€;[o;	;["
+input;0;@¿;i€o;;[o;;@¿;i€;[o;	;["select;0;@¿;i€; i ;i€;[o;!;["min-height; i ;o;;;/;"1em;@;i‹;[ ;0;1;@o;!;["font-size; i ;o;;;/;"1em;@;i›;[ ;0;1;@;@;2T;3["input, selecto;;o;;" ;iﬂ;[o;;[o;;@·;iﬂ;[o;	;["
+input;0;@·;iﬂo;;[o;;@·;iﬂ;[o;	;["textarea;0;@·;iﬂ; i ;iﬂ;[o;!;["background-color; i ;o;;;/;"#F4DAFF;@;i‡;[ ;0;1;@o;	;
+0;i ;["/* #EEE; */;i‡;[ ;@o;!;["border-radius; i ;o;;;/;"
+0.3em;@;i·;[ ;0;1;@;@;2T;3["input, textarea;@;2T;3[".formatted_inputo;;o;;" ;iÂ;[o;;[o;;@;iÂ;[o;D;["register_input;@;iÂ; i ;iÂ;[o;E	;F["."formatted_input;iÊ;[ ;@o;!;["
+width; i ;o;;;/;"
+350px;@;iÁ;[ ;0;1;@o;!;["min-height; i ;o;;;/;"	70px;@;iË;[ ;0;1;@;@;2T;3[".register_inputo;;o;;" ;iÎ;[o;;[o;;@';iÎ;[o;G;["register_first_name;@';iÎ; i ;iÎ;[o;E	;F["."register_input;iÏ;[ ;@o;!;["
+float; i ;o;;;/;"	left;@;iÌ;[ ;0;1;@;@;2T;3["#register_first_nameo;;o;;" ;i;[o;;[o;;@@;i;[o;G;["register_last_name;@@;i; i ;i;[o;E	;F["."register_input;iÒ;[ ;@o;!;["
+float; i ;o;;;/;"	left;@;iÚ;[ ;0;1;@;@;2T;3["#register_last_nameo;;o;;" ;iı;[o;;[o;;@Y;iı;[o;G;["register_email;@Y;iı; i ;iı;[o;E	;F["."register_input;iˆ;[ ;@o;!;["
+float; i ;o;;;/;"	left;@;i˜;[ ;0;1;@;@;2T;3["#register_emailo;;o;;" ;i˙;[o;;[o;;@r;i˙;[o;G;["register_trailname;@r;i˙; i ;i˙;[o;E	;F["."register_input;i˚;[ ;@o;!;["
+float; i ;o;;;/;"	left;@;i¸;[ ;0;1;@;@;2T;3["#register_trailnameo;;o;;" ;iˇ;[o;;[o;;@ã;iˇ;[o;G;["register_password1;@ã;iˇ; i ;iˇ;[o;E	;F["."register_input;i ;[ ;@o;!;["
+float; i ;o;;;/;"	left;@;i;[ ;0;1;@;@;2T;3["#register_password1o;;o;;" ;i;[o;;[o;;@§;i;[o;G;["register_password2;@§;i; i ;i;[o;E	;F["."register_input;i;[ ;@o;!;["
+float; i ;o;;;/;"	left;@;i;[ ;0;1;@;@;2T;3["#register_password2o;;o;;" ;i	;[o;;[o;;@Ω;i	;[o;G;["register_submit;@Ω;i	; i ;i	;[o;!;["
+clear; i ;o;;;/;"	both;@;i
+;[ ;0;1;@;@;2T;3["#register_submito;;o;;" ;i;[o;;[o;;@—;i;[o;G;["id_honeypot;@—;i; i ;i;[o;!;["display; i ;o;;;/;"	none;@;i;[ ;0;1;@;@;2T;3["#id_honeypoto;;o;;" ;i;[o;;[o;;@Â;i;[o;D;["my_nav;@Â;io;;@Â;i;[o;	;["ul;0;@Â;i; i ;i;[o;!;["text-align; i ;o;;;/;"	left;@;i;[ ;0;1;@o;!;["font-weight; i ;o;;;/;"	bold;@;i;[ ;0;1;@o;!;["display; i ;o;;;/;"inline;@;i;[ ;0;1;@o;!;["margin-right; i ;o;;;/;"	15px;@;i;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px 9px 6px 0;@;i;[ ;0;1;@o;!;["list-style; i ;o;;;/;"	none;@;i;[ ;0;1;@o;!;["-webkit-box-shadow; i ;o;"	;#;$;[	o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A[ ;B["px;C"5px;i
+;i;@o;%
+;"	rgba;&{ ;i;'[	o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"	0.15;f0.14999999999999999 33;i;@;@;i;@;i;[ ;0;1;@o;!;["-moz-box-shadow; i ;o;"	;#;$;[	o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A[ ;B["px;C"5px;i
+;i;@o;%
+;"	rgba;&{ ;i;'[	o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"	0.15;f0.14999999999999999 33;i;@;@;i;@;i;[ ;0;1;@o;!;["box-shadow; i ;o;"	;#;$;[	o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A[ ;B["px;C"5px;i
+;i;@o;%
+;"	rgba;&{ ;i;'[	o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"0;i ;i;@o;@;A@Ó;B[ ;C"	0.15;f0.14999999999999999 33;i;@;@;i;@;i;[ ;0;1;@o;;o;;" ;i;[o;;[o;;@Ä;i;[o;	;["li;0;@Ä;i; i ;i;[o;!;["	font; i ;o;;;/;"	bold;@;i;[ ;0;1;@o;	;
+0;i ;["/* sans-serif; */;i;[ ;@o;!;["display; i ;o;;;/;"inline-block;@;i;[ ;0;1;@o;!;["margin-right; i ;o;@;A[ ;B["px;C"
+-12px;iÔ;i;@;i;[ ;0;1;@o;!;["position; i ;o;;;/;"relative;@;i;[ ;0;1;@o;!;["padding; i ;o;;;/;"5px;@;i ;[ ;0;1;@o;	;
+0;i ;["/*background: #fff; */;i!;[ ;@o;!;["cursor; i ;o;;;/;"pointer;@;i";[ ;0;1;@o;!;["-webkit-transition; i ;o;;;/;"all 0.2s;@;i#;[ ;0;1;@o;!;["-moz-transition; i ;o;;;/;"all 0.2s;@;i$;[ ;0;1;@o;!;["-ms-transition; i ;o;;;/;"all 0.2s;@;i%;[ ;0;1;@o;!;["-o-transition; i ;o;;;/;"all 0.2s;@;i&;[ ;0;1;@o;!;["transition; i ;o;;;/;"all 0.2s;@;i';[ ;0;1;@o;;o;;" ;i(;[o;;[o;;@Ÿ;i(;[o;	;["a;0;@Ÿ;i(; i ;i(;[o;!;["
+color; i ;o;;;/;"	#000;@;i);[ ;0;1;@;@;2T;3["a;@;2T;3["li;@;2T;3[".my_nav ulo;;o;;" ;i.;[o;;[o;;@Ò;i.;[o;D;["my_nav;@Ò;i.o;;@Ò;i.;[o;	;["ul;0;@Ò;i.o;;@Ò;i.;[o;	;["li;0;@Ò;i.o;;
+;["
+hover;<0;;=;@Ò;i.; i ;i.;[o;!;["background; i ;o;%
+;"rgb;&{ ;i/;'[o;@;A@Ó;B[ ;C"74;iO;i/;@o;@;A@Ó;B[ ;C"123;i{;i/;@o;@;A@Ó;B[ ;C"138;iä;i/;@;@;i/;[ ;0;1;@o;!;["
+color; i ;o;;;/;"	#fff;@;i0;[ ;0;1;@;@;2T;3[".my_nav ul li:hovero;;o;;" ;i4;[o;;[	o;;@#;i4;[o;D;["my_nav;@#;i4o;;@#;i4;[o;	;["ul;0;@#;i4o;;@#;i4;[o;	;["li;0;@#;i4o;;@#;i4;[o;	;["ul;0;@#;i4; i ;i4;[o;!;["padding; i ;o;;;/;"0;@;i5;[ ;0;1;@o;!;["position; i ;o;;;/;"absolute;@;i6;[ ;0;1;@o;!;["top; i ;o;;;/;"	31px;@;i7;[ ;0;1;@o;!;["	left; i ;o;;;/;"0;@;i8;[ ;0;1;@o;!;["
+width; i ;o;;;/;"
+150px;@;i9;[ ;0;1;@o;!;["-webkit-box-shadow; i ;o;;;/;"	none;@;i:;[ ;0;1;@o;!;["-moz-box-shadow; i ;o;;;/;"	none;@;i;;[ ;0;1;@o;!;["box-shadow; i ;o;;;/;"	none;@;i<;[ ;0;1;@o;!;["display; i ;o;;;/;"	none;@;i=;[ ;0;1;@o;!;["opacity; i ;o;;;/;"0;@;i>;[ ;0;1;@o;!;["visibility; i ;o;;;/;"hidden;@;i?;[ ;0;1;@o;!;["-webkit-transiton; i ;o;;;/;"opacity 0.2s;@;i@;[ ;0;1;@o;!;["-moz-transition; i ;o;;;/;"opacity 0.2s;@;iA;[ ;0;1;@o;!;["-ms-transition; i ;o;;;/;"opacity 0.2s;@;iB;[ ;0;1;@o;!;["-o-transition; i ;o;;;/;"opacity 0.2s;@;iC;[ ;0;1;@o;!;["-transition; i ;o;;;/;"opacity 0.2s;@;iD;[ ;0;1;@o;;o;;" ;iE;[o;;[o;;@û;iE;[o;	;["li;0;@û;iE; i ;iE;[o;!;["background; i ;o;%
+;"rgb;&{ ;iF;'[o;@;A@Ó;B[ ;C"74;iO;iF;@o;@;A@Ó;B[ ;C"123;i{;iF;@o;@;A@Ó;B[ ;C"138;iä;iF;@;@;iF;[ ;0;1;@o;!;["display; i ;o;;;/;"
+block;@;iG;[ ;0;1;@o;!;["
+color; i ;o;;;/;"	#fff;@;iH;[ ;0;1;@o;!;["padding; i ;o;;;/;"	10px;@;iI;[ ;0;1;@o;!;["
+width; i ;o;;;/;"	11em;@;iJ;[ ;0;1;@o;!;["text-shadow; i ;o;"	;#;$;[	o;@;A@Ó;B[ ;C"0;i ;iK;@o;@;A[ ;B["px;C"	-1px;i˙;iK;@o;@;A@Ó;B[ ;C"0;i ;iK;@o;4	;5{	;6i ;7i ;8i;9i ;0;iK;@;iK;@;iK;[ ;0;1;@o;!;["border-top; i ;o;;;/;"1px #FFF solid;@;iL;[ ;0;1;@o;;o;;" ;iM;[o;;[o;;@Ï;iM;[o;	;["a;0;@Ï;iM; i ;iM;[o;!;["
+color; i ;o;;;/;"	#FFF;@;iN;[ ;0;1;@;@;2T;3["ao;;o;;" ;iP;[o;;[o;;@ ;iP;[o;:;@ ;iPo;;
+;["
+hover;<0;;=;@ ;iP; i ;iP;[o;!;["background; i ;o;%
+;"rgb;&{ ;iQ;'[o;@;A@Ó;B[ ;C"84;iY;iQ;@o;@;A@Ó;B[ ;C"133;iÖ;iQ;@o;@;A@Ó;B[ ;C"148;iî;iQ;@;@;iQ;[ ;0;1;@;@;2T;3["&:hover;@;2T;3["li;@;2T;3[".my_nav ul li ulo;;o;;" ;iV;[o;;[	o;;@$;iV;[o;D;["my_nav;@$;iVo;;@$;iV;[o;	;["ul;0;@$;iVo;;@$;iV;[o;	;["li;0;@$;iVo;;
+;["
+hover;<0;;=;@$;iVo;;@$;iV;[o;	;["ul;0;@$;iV; i ;iV;[o;!;["display; i ;o;;;/;"
+block;@;iW;[ ;0;1;@o;!;["opacity; i ;o;;;/;"1;@;iX;[ ;0;1;@o;!;["visibility; i ;o;;;/;"visible;@;iY;[ ;0;1;@;@;2T;3[".my_nav ul li:hover ul;@;2T

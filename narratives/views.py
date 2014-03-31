@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
@@ -41,7 +43,7 @@ def create(request, experience_id):
                 notify.send(recipient=comrade, sender=request.user, target=new_narrative, verb='has written a new narrative for experience {0}'.format(experience))
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
-        form = NarrativeForm(request.user, initial={'experience': experience.id, 'is_public': experience.is_public})
+        form = NarrativeForm(request.user, initial={'experience': experience.id, 'is_public': experience.is_public, 'title': datetime.now().strftime('%B %d, %Y')})
     return render(request, 'narratives/create.html', {'form': form, 'experience': experience})
 
 
