@@ -7,7 +7,8 @@ import notifications
 
 admin.autodiscover()
 
-urlpatterns = patterns('acressity.views',
+urlpatterns = patterns(
+    'acressity.views',
     url(r'^$', 'acressity_index', name='acressity_index'),
     url(r'^explorers/', include('explorers.urls')),
     url(r'^experiences/', include('experiences.urls')),

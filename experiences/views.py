@@ -228,16 +228,15 @@ def check_password(request, experience_id):
     return render(request, 'experiences/check_password.html', {'experience': experience})
 
 
-<<<<<<< HEAD
 def new_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     assert request.user == experience.author
     return render(request, 'experiences/new.html', {'experience': experience})
-=======
+
+
 def ajax_thing(request):
     experience = Experience.objects.get(pk=request.GET['exp_id'])
     d = {'thing_two': experience.experience}
 
     json = simplejson.dumps(d)
     return HttpResponse(json, mimetype='application/json')
->>>>>>> 5a29d7264b2ef17f36234beef31f338adefb375e

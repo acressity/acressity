@@ -10,11 +10,8 @@ from django.core.exceptions import PermissionDenied
 
 class NarrativeForm(ModelForm):
     date_created = forms.DateField(widget=SelectDateWidget(years=range(datetime.now().year, datetime.now().year-110, -1)), required=False)
-<<<<<<< HEAD
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger', 'onfocus': 'if($(this).val()==this.defaultValue){$(this).val("")};', 'onblur': 'if($(this).val()==""){$(this).val(this.defaultValue)};'}))  # default value moved to views.py
-=======
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger', 'value': datetime.today().strftime('%B %d, %Y'), 'onfocus': 'if($(this).val()==this.defaultValue){$(this).val("")};'}))
->>>>>>> 5a29d7264b2ef17f36234beef31f338adefb375e
 
     def __init__(self, explorer, *args, **kwargs):
         super(NarrativeForm, self).__init__(*args, **kwargs)
