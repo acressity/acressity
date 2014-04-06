@@ -1,8 +1,10 @@
+import simplejson
+
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -41,20 +43,25 @@ def create(request):
 
 def index(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if experience.is_public is False:
-        if request.user not in experience.explorers.all():
-            if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
-                if request.get_signed_cookie('experience_password', salt='personal_domain') == str(experience_id):
-                    pass
-            else:
-                #return HttpResponse('still here')
+    privileged = request.user in experience.explorers.all()
+    if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
+        if request.get_signed_cookie('experience_password', salt='personal_domain') == str(experience_id):
+            privileged = True
+    if not experience.is_public:
+        if not privileged:
+            if experience.password:
                 # Give them the option of providing password
                 return redirect(reverse('check_password', args=(experience_id,)))
-    if experience.is_comrade(request):
-        comrade = True
+            else:
+                raise PermissionDenied
+    if experience.narratives.filter(is_public=False):
+        if privileged:
+            narratives = experience.ordered_narratives()
+        else:
+            narratives = experience.ordered_narratives().filter(is_public=True)
     else:
-        comrade = False
-    if comrade:
+        narratives = experience.ordered_narratives()
+    if request.user in experience.explorers.all():
         form = NarrativeForm(request.user)
     else:
         form = None
@@ -62,9 +69,7 @@ def index(request, experience_id):
         experience_brief_form = ExperienceBriefForm(instance=experience)
     else:
         experience_brief_form = None
-    if request.user in experience.explorers.all():
-        comrade = True
-    return render(request, 'experiences/index.html', {'experience': experience, 'author': experience.is_author(request), 'comrade': comrade, 'form': form, 'experience_brief_form': experience_brief_form})
+    return render(request, 'experiences/index.html', {'experience': experience, 'narratives': narratives, 'author': experience.is_author(request), 'privileged': privileged, 'form': form, 'experience_brief_form': experience_brief_form})
 
 
 def edit(request, experience_id):
@@ -214,7 +219,8 @@ def check_password(request, experience_id):
     if request.method == 'POST':
         password = request.POST.get('password')
         if experience.password == password:
-            response = render(request, 'experiences/index.html', {'experience': experience})
+            messages.success(request, 'Welcome to the privileged side of things. Your privileged state will expire at some point, requiring a reentry of the password.')
+            response = redirect(reverse('experience', args=(experience.id,)))  # (request, 'experiences/index.html', {'experience': experience, 'privileged': True, 'narratives': experience.ordered_narratives()})
             response.set_signed_cookie('experience_password', str(experience.id), salt='personal_domain')
             return response
         else:
@@ -222,7 +228,16 @@ def check_password(request, experience_id):
     return render(request, 'experiences/check_password.html', {'experience': experience})
 
 
+<<<<<<< HEAD
 def new_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     assert request.user == experience.author
     return render(request, 'experiences/new.html', {'experience': experience})
+=======
+def ajax_thing(request):
+    experience = Experience.objects.get(pk=request.GET['exp_id'])
+    d = {'thing_two': experience.experience}
+
+    json = simplejson.dumps(d)
+    return HttpResponse(json, mimetype='application/json')
+>>>>>>> 5a29d7264b2ef17f36234beef31f338adefb375e

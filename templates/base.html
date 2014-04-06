@@ -23,7 +23,16 @@ anything lacking in efficiency or if you have any suggestions.
 		<link rel="icon" type="image/ico" href="{{ STATIC_URL }}img/favicon.ico" />
 		{# <link href='http://fonts.googleapis.com/css?family=Merriweather+Sans' rel='stylesheet' type='text/css' /> #}
 		{# <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" /> #}
-		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.3.1.min.js"></script>
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		  ga('create', 'UA-48867509-1', 'acressity.com');
+		  ga('send', 'pageview');
+		</script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.form.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/functions.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/dropdownPlain.js"></script>
 		{% block head_insert %}{% endblock head_insert %}
@@ -44,11 +53,11 @@ anything lacking in efficiency or if you have any suggestions.
 			<div id="top_bar">
 
 				<div id="top_bar_left" class="my_nav">
-					<a href="/"><span id="logo">
-						<img src="{{ STATIC_URL }}img/favicon_black.ico" /><strong>Acressity</strong>&nbsp;&nbsp;<em>Explore New Experiences</em>
+					<span id="logo">
+						<img src="{{ STATIC_URL }}img/favicon_black.ico" style="vertical-align: middle;" /><em>Explore New Experiences</em>
 					</span></a>
 					<ul>
-			        	<li><a href="{% url 'about' %}">About</a>
+			        	<li><a href="/">Acressity</a>
 			        		<ul>
 			        			 <a href="{% url 'about' %}"><li>About Site</li></a>
 			        			 <a href="{% url 'contact' %}"><li>Contact</li></a>
@@ -57,6 +66,7 @@ anything lacking in efficiency or if you have any suggestions.
 			        		</ul>
 			        	</li>
 			        </ul>
+
 			        <ul>
 			        	<li>
 			        		{# Syntax highlighting for following a little screwy, but does the job properly #}
@@ -64,14 +74,30 @@ anything lacking in efficiency or if you have any suggestions.
 				        			<a href="{% url 'journey' user.id %}">
 				        		{% else %}
 				        			<a href="{% url 'featured_experiences' %}">
-				        		{% endif %}Journey</a>
+				        		{% endif %}Journeys</a>
 			        		<ul>
 
 			        			{% if user.is_authenticated %}
 				        			<a href="{% url 'journey' user.id %}"><li>Your Journey</li></a>
 
 				        			{% if user.cheering_for %}
-				        				<a href="{% url 'explorers.views.cheering_for' request.user.id %}"><li>Cheering</li></a>
+				        				{% if user.cheering_for %}
+					        				{% for explorer in user.top_cheerers %}
+					        					<a href="{% url 'journey' explorer.id %}"><li>
+					        						{% if explorer.gallery.featured_photo %}
+					        							<img style="text-align: center; padding: 5px; float: left;" src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer }}"/>
+														{{ explorer.get_full_trailname }}
+					        							<div style="clear:both;"></div>
+					        						{% else %}
+					        							{{ explorer.get_full_trailname }}
+					        						{% endif %}
+					        					</li></a>
+					        				{% endfor %}
+					        				{% if user.cheering_for|length > user.top_cheerers|length %}
+					        					<a href="{% url 'explorers.views.cheering_for' request.user.id %}"><li>All Cheerers</li></a>
+				        					{% endif %}
+				        			{% endif %}
+				        				
 				        			{% endif %}
 				        		{% endif %}
 
@@ -96,10 +122,10 @@ anything lacking in efficiency or if you have any suggestions.
 									{% for experience in request.user.top_five %}
 				        				<a href="{% url 'experiences.views.index' experience.id %}"><li>
 				        					{% if experience.gallery.featured_photo %}
-				        						<img style="text-align: center; padding: 5px;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience }}"/>
-				        					{% else %}
-				        						{{ experience }}
+				        						<img style="text-align: center; padding: 5px; float: left;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience }}"/>
 				        					{% endif %}
+				        					{{ experience }}
+				        					<div style="clear:both;"></div>
 				        				</li></a>
 				        			{% endfor %}
 
@@ -142,7 +168,7 @@ anything lacking in efficiency or if you have any suggestions.
 								</ul>
 							{% else %}
 								<ul>
-									<li><a>Login</a>
+									<li><a onclick="window.location.href='/accounts/login';">Login</a>
 										<ul>
 											<li id="top_bar_login">
 												<form action="/explorers/login/?next={{ request.path }}" method="POST" class="no_styling full_width">
@@ -159,6 +185,8 @@ anything lacking in efficiency or if you have any suggestions.
 														<input type="submit" class="expand-button" value="Log In" />
 													</div>
 												</form>
+												<br />
+												<input type="button" class="expand-button" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
 											</li>
 											{% comment %}
 											{# Taken out in favor of having the signup bar on the right #}
@@ -193,13 +221,12 @@ anything lacking in efficiency or if you have any suggestions.
 								{% endwith %}
 							{% else %}
 								<div style="background-color: #D3CDD8; margin: 10px 0px;">
-									{% if 'signing_up' not in request.session %}
+									{% if not request.session.signing_up %}
 										<blockquote id="welcome_quote">
 											<h2>Acressity</h2>
 											<h3>
 												An application for the exploration and
-												expression of new experiences with an
-												emphasis on the journey
+												expression of new experiences within your journey
 											</h3>
 											<a href="{% url 'about' %}">learn more</a>
 										</blockquote>
@@ -210,10 +237,8 @@ anything lacking in efficiency or if you have any suggestions.
 											<div class="formatted_input">
 												<input type="text" id="id_experience" name="experience" class="larger" onfocus="setUp(this);" />
 											</div>
-											<input type="submit" class="expand-button" value="Create experience" />
-										</form>
-										<form action="{% url 'register' %}">
-											<input type="submit" class="expand-button" value="Sign up" />
+											<input type="submit" class="expand-button" value="Experience" />
+											<input type="button" class="expand-button" style="position:relative; right:-5em;" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
 										</form>
 									{% comment %}
 									<div>
@@ -233,6 +258,11 @@ anything lacking in efficiency or if you have any suggestions.
 									</div>
 									{% endcomment %}
 									{% else %}
+										<form method="POST" action="{% url 'register' %}">
+											{% csrf_token %}
+											Continue signing up <input type="submit" value="here" />
+										</form>
+
 										<blockquote>
 											<p>
 												Build of your imaginings a bower in the wilderness ere you build a house within the city walls.

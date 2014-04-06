@@ -90,7 +90,7 @@ def comment_handler(sender, **kwargs):
         recipient = comment.content_object
     elif o == 'Experience':
         recipient = comment.content_object.author  # This should eventually handle all explorers of the experience
-    elif o == 'Narrative':
+    elif o == 'Narrative' or o == 'Photo':
         recipient = comment.content_object.author
     newnotify = Notification(
         recipient=recipient,

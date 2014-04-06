@@ -37,20 +37,42 @@
 				$("#password2_feedback").html("Passwords match");
 			}
 		}
+		function check_trailname()
+		{
+			// Check if the trailname has already been chosen by another explorer
+			// This function automatically called by the explorer form association upon blur event of text field
+			trailname = $("#id_trailname").val();
+			feedback = $("#trailname_feedback");
+			if (trailname.length > 2){
+				$.ajax({
+					url: "{% url 'check_trailname' %}",
+					dataType: 'json',
+					data: {"trailname": trailname},
+				})
+				.always(function(a){
+					if (a.found){
+						feedback.html("That trailname has already been chosen");
+					} else {
+						feedback.html("Trailname available. Proceed, " + trailname)
+					}
+				})
+			} else {
+				feedback.html("Trailname must be a little longer");
+			}
+		}
 	</script>
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/registration.css" />
 {% endblock head_insert %}
 
 {% block content %}
-	{% if experience %}
+	{% if request.session.experience %}
 		<h2>Experience</h2>
-		<em>{{ experience }}</em>
+		<h3>{{ request.session.experience }}</h3>
+		{{ request.session.experience.get_expiry_date }}
 	{% endif %}
-	<p>
 		<h3>
 			Brief, necessary information to build your journey
 		</h3>
-	</p>
 	{{ form.non_field_errors }}
 	<form action="" method="POST">
 		{% csrf_token %}
@@ -109,7 +131,9 @@
 				<label for="id_trailname">Create a <abbr title="Creative username to describe your journey">trailname</abbr> <em>(optional)</em>:</label>
 			</p>
 			<p>
+				{# Following activates `check_trailname()` when onblur() event occurs. Defined in explorer form #}
 				{{ form.trailname }}
+				<div id="trailname_feedback"></div>
 			</p>
 			<div class="smaller_font">
 				<p id="expand_about_trailname" onclick="toggle_div('about_trailname');" title="Click to toggle description of trailname">

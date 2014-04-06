@@ -1,5 +1,7 @@
 {% extends "photologue/root.html" %}
 
+{% load explorers_extras %}
+
 {% block title %} - Gallery: {{ object.title }}{% endblock %}
 
 {% block content %}
@@ -29,11 +31,7 @@
 			    {% for photo in object.photos.all %}
 			    	<td>
 					    <div class="object_item thirds_item featured_photo">
-				        	<a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" /></a>
-				        	{% if photo.title %}
-				        		<br />
-				        		<span class="caption">{{ photo.title }}</span>
-				        	{% endif %}
+				        	{% include "photologue/snippets/photo_dash.html" %}
 					    </div>
 			    	</td>
 					{% if forloop.counter|divisibleby:'3' %}
@@ -50,7 +48,13 @@
 		{% if object.children_photos %}
 			<table class="thirds_table">
 				{% ifequal object.content_type.model 'explorer' %}
-					<h3>Photos from explorer's experiences and narratives</h3>
+					<h3>Photos from 
+					{% ifequal user object.object %} 
+						your
+					{% else %}
+						{{ object.object.get_full_name|possessive }}
+					{% endifequal %}
+					experiences and narratives</h3>
 				{% else %}
 					{% ifequal object.content_type.model 'experience' %}
 						<h3>Photos from the narratives</h3>
@@ -59,7 +63,7 @@
 			    {% for photo in children_photos %}
 					<td>
 					    <div class="object_item thirds_item featured_photo">
-					        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+					        {% include "photologue/snippets/photo_dash.html" %}
 					    </div>
 					</td>
 					{% if forloop.counter|divisibleby:'3' %}

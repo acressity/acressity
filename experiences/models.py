@@ -36,8 +36,8 @@ class Experience(models.Model):
     brief = models.TextField(blank=True, null=True, help_text='Written description of the experience to provide a little insight.')
     status = models.CharField(max_length=160, null=True, blank=True, help_text='Optional short state of the experience at the moment.')
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)
-    is_public = models.BooleanField(default=True, help_text='Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. If the experience is changed from public to private, all of its narratives are changed to private. However, private narratives do not become public when the experience is changed from private to public.')
-    password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text='Private experiences can be accessed by providing this password. Allows focused distribution of private content.')
+    is_public = models.BooleanField(default=True, help_text='Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers and those providing a correct password if one is selected. A correct password also provides access to all private narratives. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. However, private narratives do not become public when the experience is changed from private to public.')
+    password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text='Submitting the correct password provides access to the experience if it is private as well as all of the private narratives.')
     search_term = models.CharField(max_length=80, null=True, blank=True, unique=True, help_text='Short phrase or word identifying the experience, allows access by typing http://acressity.com/your_search_term_here. Needs to be unique and cannot be the same as another explorer\'s trailname')
 
     objects = ExperienceManager()
@@ -79,10 +79,7 @@ class Experience(models.Model):
         if request.user.is_authenticated():
             if request.user in self.explorers.all():
                 return True
-            else:
-                return False
-        else:
-            return False
+        return False
 
     def ordered_narratives(self):
         return self.narratives.order_by('-date_created')

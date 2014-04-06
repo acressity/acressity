@@ -86,6 +86,9 @@ class Explorer(AbstractBaseUser):
     def cheering_for(self):
         return [c.explorer for c in self.cheers_from.all()]
 
+    def top_cheerers(self):
+        return self.cheering_for()[:3]
+
     def cheerers(self):
         return [c.cheerer for c in self.cheers_for.all()]
 

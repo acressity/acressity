@@ -2,26 +2,22 @@
 
 {% comment %}
     HTML for the experience items currently being used in several templates.
-    I literally just now learned about the {% include %} Django tag, even though I used the same function in PHP ubiquitously...
 {% endcomment %}
 
 <div class="experience_dash">
     <div>
         <a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
-            {% if experience.gallery.featured_photo %}
-                <div class="featured_photo">
-                    <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
-                </div>
-            {% endif %}
-            <h3>{{ experience }}</h3>
+            <div class="object_item">
+                {% if experience.gallery.featured_photo %}
+                    <div class="featured_photo">
+                        <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
+                    </div>
+                {% endif %}
+                <h3 style="text-align: center;">{{ experience }} {% if not experience.is_public %}(Private experience){% endif %}</h3>
+            </div>
         </a>
         {% if experience.status %}
-            <p>
-                {{ experience.status }}
-            </p>
-        {% endif %}
-        {% if not experience.is_public %}
-            <h3 class="smaller_font">Private experience</h3>
+            <p>{{ experience.status }}</p>
         {% endif %}
         <div class="option_list">
             {% if user.is_authenticated %}
@@ -40,16 +36,12 @@
                 <a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option_icon" /></a>
             {% endif %}
             {% if user.is_authenticated %}
+                <a onclick="toggle_div('{{ experience.id }}_comment');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" /></a>
                 {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
                     <a href="{% url 'track_experience' experience.id %}">
                         <img src="{{ STATIC_URL }}img/icons/track-icon.png" title="Track this experience" class="option_icon" />
                     </a>
                 {% endif %}
-                <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle the note form">
-                    <strong>
-                        Leave a note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="{{ experience.id }}_comment_toggle_icon" />
-                    </strong>
-                </div>
                 <div id="{{ experience.id }}_comment" class="comment" style="display: none;">
                     {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
                         {% include "support/snippets/note_form.html" %}
@@ -61,14 +53,16 @@
     <div>
         {# Section for latest activity #}
         {% if experience.latest_narrative %}
-            {% with experience.latest_narrative as narrative %}
-                <div onclick="toggle_div(this.nextElementSibling);">
-                    <strong>Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" /></strong>
-                </div>
-                <div class="toggle_div">
-                    {% include "narratives/snippets/dash.html" %}
-                </div>
-            {% endwith %}
+            <div class="object_item">
+                {% with experience.latest_narrative as narrative %}
+                    <div onclick="toggle_div(this.nextElementSibling);">
+                        Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
+                    </div>
+                    <div class="toggle_div">
+                        {% include "narratives/snippets/dash.html" %}
+                    </div>
+                {% endwith %}
+            </div>
         {% endif %}
     </div>
     <div class="clear_both"></div>

@@ -14,13 +14,23 @@ from explorers.forms import RegistrationForm
 from acressity.forms import ContactForm
 
 
+def acressity_index(request):
+    if request.user.is_authenticated():
+        return redirect(reverse('journey', args=(request.user.id,)))
+    else:
+        return render(request, 'acressity/index.html')
+
+
 def step_two(request):
+    request.session['signing_up'] = 0
     if request.method == 'POST':
-        request.session['signing_up'] = 1
         exp_form = ExperienceForm(request.POST)
         if exp_form.is_valid():
+            request.session['experience'] = exp_form.cleaned_data['experience']  # Store the data in case they wish to peruse for a bit
+            request.session['signing_up'] = 1
             reg_form = RegistrationForm()
-        return render(request, 'registration/step_two.html', {'experience': exp_form.cleaned_data['experience'], 'form': reg_form})
+            return render(request, 'registration/step_two.html', {'experience': exp_form.cleaned_data['experience'], 'form': reg_form})
+    return redirect('/')
     return redirect(request.META['HTTP_REFERER'])
 
 

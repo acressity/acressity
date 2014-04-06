@@ -20,13 +20,17 @@ from notifications import notify
 
 def index(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
-    if not narrative.is_public or not narrative.experience.is_public:
-        if request.user not in narrative.experience.explorers.all():
-            if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
-                pass
-            else:
-                raise PermissionDenied
-    return render(request, 'narratives/index.html', {'narrative': narrative, 'author': narrative.is_author(request)})
+    privileged = request.user in narrative.experience.explorers.all()
+    if not privileged:
+        if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
+            if request.get_signed_cookie('experience_password', salt='personal_domain') == str(narrative.experience.id):
+                privileged = True
+    if not privileged and (not narrative.is_public or not narrative.experience.is_public):
+        if narrative.experience.password:
+            return redirect(reverse('check_password', args=(narrative.experience.id,)))
+        else:
+            raise PermissionDenied
+    return render(request, 'narratives/index.html', {'narrative': narrative, 'privileged': privileged, 'author': narrative.is_author(request)})
 
 
 @login_required

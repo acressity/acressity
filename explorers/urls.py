@@ -8,7 +8,7 @@ urlpatterns = patterns(
     url(r'^(?P<explorer_id>\d+)/$', 'journey', name='journey'),
     url(r'^journey/$', 'my_journey', name='my_journey'),
     url(r'^story/(?P<explorer_id>\d+)/$', 'story', name='story'),
-    url(r'^login/$', 'site_login', name='login'),  # Following was old : url(r'^login/$', login),
+    url(r'^login/$', 'site_login', name='login'),
     url(r'^logout/$', 'farewell', name='farewell'),
     url(r'^journey/$', 'explorer_journey'),
     url(r'^new_explorer/$', 'new_explorer', name='register'),
@@ -21,6 +21,7 @@ urlpatterns = patterns(
     url(r'^(?P<explorer_id>\d+)/cheering_for/$', 'cheering_for'),
     url(r'^(?P<explorer_id>\d+)/cheerers/$', 'cheerers'),
     url(r'^(?P<explorer_id>\d+)/tracking_experiences/$', 'tracking_experiences', name='tracking_experiences'),
+    url(r'^check_trailname/$', 'check_trailname', name='check_trailname'),
     # Private functions, doesn't need explorer_id in url for others to see. More secure this way, I believe
     url(r'^change_password/$', 'change_password', name='change_password'),
 )

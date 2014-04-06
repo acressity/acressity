@@ -6,9 +6,15 @@
         <div class="smaller_font">
             <p><a href="{% url 'story' note.user_id %}">{{ note.user_name }}</a></p>
             {% ifnotequal model 'explorer'  %}
-                <p>
-                     Regarding <a href="{% url note.content_type.model note.content_object.id %}">{{ note.content_object }}</a>
-                </p>
+                {% ifnotequal model 'photo' %}
+                    <p>
+                         Regarding <a href="{% url note.content_type.model note.content_object.id %}">{{ note.content_object }}</a>
+                    </p>
+                {% else %}
+                    <p>
+                        On photo <a href="{% url 'pl-photo' note.content_object.id %}">{{ note.content_object }}</a>
+                    </p>
+                {% endifnotequal %}
             {% endifnotequal %}
             {{ note.submit_date|timesince }} ago
             {% ifequal user note.user %} 

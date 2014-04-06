@@ -3,6 +3,32 @@
 {% load comments %}
 
 {% block content %}
+	{% comment %}
+	<form>
+		{% csrf_token %}
+		<input type="submit" value="clickme" id="clicker" style="width:100%; height:200px;" />
+		<input type="hidden" value="{{ experience.id }}" id="exp_id" name="exp_id" />
+	</form>
+	<script type="text/javascript">
+		function do_it(){
+			$.ajax({
+				url:"/experiences/ajax_thing/",
+				data:{exp_id:$("#exp_id").val()},// csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()},
+				dataType: 'json',
+				//success: here
+			})
+			.done(function(a, b, c){
+				alert(c);
+			})
+			
+			return false;
+		};
+
+		//setup_ajax();
+
+		$("#clicker").click(do_it);
+	</script>
+	{% endcomment %}
 	<div class="experience_item">
 		<h2>{{ experience }}</h2>
 		<div class="featured_photo">
@@ -26,7 +52,7 @@
 			{% endif %}
 		</div>
 		<div class="option_list">
-			{% if comrade %} 
+			{% if request.user in experience.explorers.all %} 
 				<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
 				<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
 				<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
@@ -52,7 +78,15 @@
 				<a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
 				<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
 			{% endif %}
+			{% if user.is_authenticated %}
+				<a onclick="toggle_div('{{ experience.id }}_comment');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" /></a>
+			{% endif %}
 		</div>
+		<div id="{{ experience.id }}_comment" class="comment" style="display: none;">
+            {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
+                {% include "support/snippets/note_form.html" %}
+            {% endwith %}
+        </div>
 	</div>
 	<h3>Explorer{{ experience.explorers.count|pluralize }}</h3>
 	<table class="thirds_table">
@@ -71,6 +105,7 @@
 				</td>
 			{% endfor %}
 		</tr>
+		<hr />
 	</table>
 	{% if experience.brief %}
 		<div class="experience_item">
@@ -78,7 +113,7 @@
 			{{ experience.embedded_brief|safe|linebreaks }}
 		</div>
 	{% else %}
-		{% if comrade %}
+		{% if request.user in experience.explorers.all %}
 			<h3>Write a brief</h3>
 			<form action="{% url 'experiences.views.brief' experience.id %}" method="POST">
 				{% csrf_token %}
@@ -90,7 +125,15 @@
 			{{ block.super }}
 		{% endif %}
 	{% endif %}
-	{% if comrade %}
+	{% if experience.latest_narrative %} {# This also checks for public status #}
+		<h3>Latest narrative</h3>
+		<div class="narrative_item">
+			{% with experience.latest_narrative as narrative %}
+			    {% include "narratives/snippets/narrative.html" %}
+			{% endwith %}
+		</div>
+	{% endif %}
+	{% if request.user in experience.explorers.all %}
 		<a href="{% url 'create_narrative' experience.id %}"><h3><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" style="vertical-align: middle;" /> Create new narrative</h3></a>
 		{% comment %}
 		{# Following being phased out for a couple reasons: clutters the page, and formatting screwy when expanding with jQuery #}
@@ -112,33 +155,29 @@
 	<div class="object_item_list">
 		{% if experience.narratives.count > 0 %}
 			<h3>Narratives</h3>
+			{% if not privileged and experience.password %}
+				<h4>If you have been provided a password, you may provide it here</h4>
+				<form action="{% url 'check_password' experience.id %}" method="POST">
+					{% csrf_token %}
+					<div class="formatted_input">
+						<input type="text" name="password" />
+					</div>
+					<input type="submit" value="Submit" />
+				</form>
+			{% endif %}
 			<table class="thirds_table">
 				<tr>
-					{% if user in experience.explorers.all %}
-						{% for narrative in experience.ordered_narratives %}
-							<td>
-								{% include "narratives/snippets/dash.html" %}
-							</td>
-							{% if forloop.counter|divisibleby:'3' %}
-								{% if not forloop.last %}
-									</tr>
-									<tr>
-								{% endif %}
+					{% for narrative in narratives %}
+						<td>
+							{% include "narratives/snippets/dash.html" %}
+						</td>
+						{% if forloop.counter|divisibleby:'3' %}
+							{% if not forloop.last %}
+								</tr>
+								<tr>
 							{% endif %}
-						{% endfor %}
-					{% else %}
-						{% for narrative in experience.public_narratives %}
-							<td>
-								{% include "narratives/snippets/dash.html" %}
-							</td>
-							{% if forloop.counter|divisibleby:'3' %}
-								{% if not forloop.last %}
-									</tr>
-									<tr>
-								{% endif %}
-							{% endif %}
-						{% endfor %}
-					{% endif %}
+						{% endif %}
+					{% endfor %}
 				</tr>
 			</table>
 		{% else %}

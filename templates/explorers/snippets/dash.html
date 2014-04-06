@@ -3,6 +3,7 @@
 
 {% load explorers_extras %}
 {% load notifications_tags %}
+{% load comments %}
 
 <div class="explorer_item">
     <div class="featured_photo">
@@ -23,7 +24,7 @@
                 {% ifequal explorer user %}Your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} brief <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
             </div>
             <div class="toggle_div">
-                <p>{{ explorer.brief|linebreaks }}</p>
+                <div class="explorer_item">{{ explorer.brief|linebreaks }}</div>
             </div>
         </div>
     {% endif %}
@@ -43,15 +44,26 @@
         {% ifequal user explorer %} 
             <a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" class="option_icon" title="Create new experience" /></a>
         {% endifequal %}
+        {% if user.is_authenticated %}
+            <a onclick="toggle_div('{{ explorer.id }}_note');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" class="option_icon" /></a>
+        {% endif %}
+    </div>
+    <div id="{{ explorer.id }}_note" class="comment" style="display: none;">
+        {% get_comment_form for explorer as comment_form %}{% with next_url_name='story' next_url_pk=explorer.id %}
+            {% include "support/snippets/note_form.html" %}
+        {% endwith %}
     </div>
     {% if explorer.featured_experience %}
-        <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
-            Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
-        </div>
-        <div class="toggle_div">
-            {% with explorer.featured_experience as experience %}
-                {% include "experiences/snippets/dash.html" %}
-            {% endwith %}
-        </div>
+        {% url 'experience' explorer.featured_experience.id as featured_experience_path %}
+        {% ifnotequal featured_experience_path request.path %}
+            <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
+                Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
+            </div>
+            <div class="toggle_div">
+                {% with explorer.featured_experience as experience %}
+                    {% include "experiences/snippets/dash.html" %}
+                {% endwith %}
+            </div>
+        {% endifnotequal %}
     {% endif %}
 </div>

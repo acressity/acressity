@@ -1,6 +1,15 @@
 {% extends "experiences/base.html" %}
 
 {% block content %}
+	<script type="text/javascript">
+	$(document).ready(function(){
+		e = document.getElementById("id_is_public");
+		d = document.getElementById("password_div");
+		if (e.checked){
+			$(d).css("display", "none");  {# If this initial setting is correct, the toggling of the password div should be on par with future checking and unchecking. Is my logic flawed???? #}
+		}
+	})
+	</script>
 	<h2>Editing experience <em>{{ experience }}</em></h2>
 	<form action="" method="POST" class="full_width">
 		{% csrf_token %}
@@ -70,6 +79,7 @@
 					<strong>Public?</strong> {{ form.is_public }}
 					<script type="text/javascript">
 						e = document.getElementById("id_is_public");
+						d = document.getElementById("password_div");
 						e.onclick = function(){
 							toggle_div("password_div");
 						};
@@ -82,6 +92,17 @@
 						<div class="toggle_div smaller_font" id="is_public_help_text">
 							{{ form.is_public.help_text }}
 						</div>
+					</div>
+				</div>
+				<div id="password_div" class="formatted_input">
+					<strong>Password</strong>
+					{{ form.password.errors }}
+					{{ form.password }}
+					<div onclick="toggle_div(this.nextElementSibling);">
+						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
+					</div>
+					<div class="toggle_div smaller_font" id="password_help_text">
+						{{ form.password.help_text }}
 					</div>
 				</div>
 				<div id="search_term_div" class="formatted_input">
@@ -97,19 +118,6 @@
 						</div>
 					</div>
 				</div>
-				{% comment %}
-				<div id="password_div" class="formatted_input">
-					<strong>Password</strong>
-					{{ form.password.errors }}
-					{{ form.password }}
-					<div onclick="toggle_div(this.nextElementSibling);">
-						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
-					</div>
-					<div class="toggle_div smaller_font" id="password_help_text">
-						{{ form.password.help_text }}
-					</div>
-				</div>
-				{% endcomment %}
 			{% endifequal %}
 		</div>
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
