@@ -13,7 +13,8 @@
                         <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
                     </div>
                 {% endif %}
-                <h3 style="text-align: center;">{{ experience }} {% if not experience.is_public %}(Private experience){% endif %}</h3>
+                <h3 style="text-align: center;">{{ experience }}</h3>
+                {% if not experience.is_public %}(Private experience){% endif %}
             </div>
         </a>
         {% if experience.status %}

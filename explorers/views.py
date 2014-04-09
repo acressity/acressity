@@ -48,7 +48,7 @@ def my_journey(request):
     return redirect(reverse('journey', args=(request.user.id,)))
 
 
-def story(request, explorer_id):
+def profile(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.method == 'POST':
         if request.user == explorer:
@@ -68,7 +68,16 @@ def story(request, explorer_id):
     else:
         form = None
         owner = False
-    return render(request, 'explorers/story.html', {'explorer': explorer, 'owner': owner, 'form': form})
+    return render(request, 'explorers/profile.html', {'explorer': explorer, 'owner': owner, 'form': form})
+
+
+def story(request, explorer_id):
+    explorer = get_object_or_404(get_user_model(), pk=explorer_id)
+    if request.user == explorer:
+        narratives = explorer.narratives.all()
+    else:
+        narratives = explorer.narratives.filter(is_public=True)
+    return render(request, 'explorers/story.html', {'narratives': narratives})
 
 
 def board(request, explorer_id):
@@ -92,8 +101,9 @@ def board(request, explorer_id):
     # Filter the results down for just the experiences pertaining to explorer
     nr_notes = []
     for nr_note in narrative_notes:
-        if explorer == nr_note.content_object.author:
-            nr_notes.append(nr_note)
+        if nr_note.content_object:
+            if explorer == nr_note.content_object.author:
+                nr_notes.append(nr_note)
     # Any requests pertaining to the explorer
     requests = InvitationRequest.objects.filter(recruit=explorer)
     if request.method == 'POST' and request.user == explorer:
