@@ -13,11 +13,7 @@ from django.contrib import messages
 
 class Narrative(models.Model):
     '''
-    Term describing description of an aspect of an experience.
-    Think of these as pages or sections within a chapter;
-    they are the sustenance of the experience.
-    Examples of narratives include an update, thought, plan,
-    itinerary, journal entry, publication, ad infinitum...
+    Term describing description of an aspect of an experience. Think of these as pages or sections within a chapter; they are the sustenance of the experience. Examples of narratives include a note, update, thought, plan, itinerary, journal entry, publication, (ad infinitum) about the experience...
     '''
     narrative = models.TextField(help_text='The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.', null=False)
     title = models.CharField(max_length=200, blank=True, null=True, help_text='Title of the narrative. If none given, defaults to date created.')
@@ -28,6 +24,9 @@ class Narrative(models.Model):
     category = models.CharField(max_length=50, null=True, blank=True, help_text='Optional information used to classify and order the narratives within the experience.')
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)
     is_public = models.BooleanField(null=False, default=True, help_text='Public narratives will be displayed in the default views. Private ones are only seen by yourself and the other explorers in the narrative\'s experience. Changing the status of the narrative also changes the status of the photo gallery.')
+    # location = models.ForeignKey(GeoLocation)  # Something like this would be nice
+    # lat = models.FloatField(null=True, help_text='Voluntarily saved latitude associated with the narrative')
+    # long = models.FloatField(null=True, help_text='Voluntarily saved longitude associated with the narrative')
 
     def __init__(self, *args, **kwargs):
         # Allows the quicker check of whether or not a particular field has changed

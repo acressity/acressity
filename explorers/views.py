@@ -246,6 +246,9 @@ def site_login(request):
     else:
         next_url = request.GET.get('next') or request.POST.get('next')
     username_provided = request.POST.get('username')
+    if username_provided is None:
+        messages.error(request, 'Please provide either your email or optional trailname for logging in')
+        return redirect('/accounts/login')
     password_provided = request.POST.get('password')
     # Site allows one to login with either email address or created trailname
     if get_user_model().objects.filter(email=username_provided):

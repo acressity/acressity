@@ -67,7 +67,7 @@ def comment_to_creator(request):
         # Poohbear is a honeypot input element. Used to catch scripts filling every form input. Hidden from interface
         poohbear = request.POST.get('poohbear')
         if poohbear:
-            return redirect('/')  # And also, go f*** yourself, spammers
+            return redirect('/')
         if len(comment) >= 5:
             message = comment + '\n\n{0}'.format(request.META.get('HTTP_REFERER'))
             if request.user.is_authenticated():
