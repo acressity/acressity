@@ -196,7 +196,7 @@ def notify_handler(verb, **kwargs):
 
     # Send email to recipient of notification
     if newnotify.recipient.notify:
-        to = 'andrew.s.gaines@gmail.com'  # newnotify.recipient.email
+        to = newnotify.recipient.email
         from_email = 'acressity@acressity.com'
         subject = 'New note on your Acressity journey'
         text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
