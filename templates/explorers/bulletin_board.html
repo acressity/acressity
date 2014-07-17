@@ -15,7 +15,7 @@
 	            </p>
 	            <div class="comment">
 	                {% get_comment_form for explorer as comment_form %}
-	                {% with next_url_name='board' next_url_pk=explorer.id %}	
+	                {% with next_url_name='board' next_url_pk=explorer.id %}
 	                	{% include "support/snippets/note_form.html" %}
 	                {% endwith %}
 	            </div>

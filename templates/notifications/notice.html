@@ -1,9 +1,10 @@
-<div class="notice alert-block alert-{{ notice.level }}">      
+<div class="notice alert-block alert-{{ notice.level }}">
     {# <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i> #}
-    <p>
-        <a href="{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
-    </p>
-  
+    {% if notice.actor %}
+        <p>
+            <a href="{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
+        </p>
+    {% endif %}
     {% if notice.target %}
         <p>
             {% ifequal notice.target_content_type.model 'photo' %}
@@ -14,7 +15,7 @@
                 {% endwith %}
             {% else %}
                 {% ifequal notice.target_content_type.model 'invitationrequest' %}
-                    <a href="{% url 'experience' 1 %}">{{ notice.target.experience }}</a>
+                    <a href="{% url 'experience' notice.target.experience.id %}">{{ notice.target.experience }}</a>
                     <form action="{% url 'handle_invitation_request' notice.target.id %}" name="invite_respond" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="from_explorer_id" value="{{ notice.actor.id }}" />

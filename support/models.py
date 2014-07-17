@@ -5,6 +5,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.comments.signals import comment_was_posted
+from django.template import Context, Template
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponse
 
 from experiences.models import Experience
 from notifications.models import Notification
@@ -105,5 +109,14 @@ def comment_handler(sender, **kwargs):
 
     newnotify.save()
 
+    if newnotify.recipient.notify:
+        to = 'andrew.s.gaines@gmail.com'  # newnotify.recipient.email
+        from_email = 'acressity@acressity.com'
+        subject = 'New note on your Acressity journey'
+        text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
+        html_content = render_to_string('notifications/email.html', {'notice': newnotify})
+        message = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
+        message.send()
 
 comment_was_posted.connect(comment_handler)

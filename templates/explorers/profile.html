@@ -90,6 +90,12 @@
 					</div>
 					<div class="formatted_input">
 						{# Having label for this doesn't make sense: no obvious first input #}
+						<h3>Be notified by new activity on your journey?</h3>
+						{{ form.notify.errors }}
+						{{ form.notify }}
+					</div>
+					<div class="formatted_input">
+						{# Having label for this doesn't make sense: no obvious first input #}
 						<h3>Birthdate</h3>
 						{{ form.birthdate.errors }}
 						{{ form.birthdate }}

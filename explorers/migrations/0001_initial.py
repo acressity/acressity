@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -29,20 +29,22 @@ class Migration(SchemaMigration):
         db.send_create_signal(u'explorers', ['Explorer'])
 
         # Adding M2M table for field experiences on 'Explorer'
-        db.create_table(u'explorers_explorer_experiences', (
+        m2m_table_name = db.shorten_name(u'explorers_explorer_experiences')
+        db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('explorer', models.ForeignKey(orm[u'explorers.explorer'], null=False)),
             ('experience', models.ForeignKey(orm[u'experiences.experience'], null=False))
         ))
-        db.create_unique(u'explorers_explorer_experiences', ['explorer_id', 'experience_id'])
+        db.create_unique(m2m_table_name, ['explorer_id', 'experience_id'])
 
         # Adding M2M table for field tracking_experiences on 'Explorer'
-        db.create_table(u'explorers_explorer_tracking_experiences', (
+        m2m_table_name = db.shorten_name(u'explorers_explorer_tracking_experiences')
+        db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('explorer', models.ForeignKey(orm[u'explorers.explorer'], null=False)),
             ('experience', models.ForeignKey(orm[u'experiences.experience'], null=False))
         ))
-        db.create_unique(u'explorers_explorer_tracking_experiences', ['explorer_id', 'experience_id'])
+        db.create_unique(m2m_table_name, ['explorer_id', 'experience_id'])
 
 
     def backwards(self, orm):
@@ -50,10 +52,10 @@ class Migration(SchemaMigration):
         db.delete_table(u'explorers_explorer')
 
         # Removing M2M table for field experiences on 'Explorer'
-        db.delete_table('explorers_explorer_experiences')
+        db.delete_table(db.shorten_name(u'explorers_explorer_experiences'))
 
         # Removing M2M table for field tracking_experiences on 'Explorer'
-        db.delete_table('explorers_explorer_tracking_experiences')
+        db.delete_table(db.shorten_name(u'explorers_explorer_tracking_experiences'))
 
 
     models = {
@@ -75,6 +77,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'search_term': ('django.db.models.fields.CharField', [], {'max_length': '80', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'max_length': '160', 'null': 'True', 'blank': 'True'})
         },
         u'explorers.explorer': {
@@ -108,7 +111,7 @@ class Migration(SchemaMigration):
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'object_pk': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             'tags': ('photologue.models.TagField', [], {'max_length': '255', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '75'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'title_slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
         },
         u'photologue.photo': {

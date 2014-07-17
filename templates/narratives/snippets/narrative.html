@@ -35,7 +35,11 @@
                     <a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" title="{{ photo.title }}" /></a>
                     {% if photo.caption %}
                         <div class="photo_caption">
-                            {{ photo.caption }}
+                            {% if photo.caption %}
+                                {{ photo.caption }}
+                            {% else %}
+                                {{ photo.title }}
+                            {% endif %}
                         </div>
                     {% endif %}
                 </div>
@@ -43,7 +47,9 @@
         </div>
     {% endif %}
     <p style="text-align:right;">{{ narrative.date_created|date:"F j, Y" }}</p>
-    <p>{{ narrative.embedded_narrative|safe|linebreaks }}</p>
+    <div>
+        {{ narrative.embedded_narrative|safe|linebreaks }}
+    </div>
     <div class="clear_both"> </div>
 </div>
 <div class="next_previous">

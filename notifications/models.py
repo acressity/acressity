@@ -6,7 +6,8 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import models
-from django.utils.timezone import utc
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
 
 from notifications.signals import notify
 
@@ -165,8 +166,8 @@ if getattr(settings, 'NOTIFY_USE_JSONFIELD', False):
 
 def notify_handler(verb, **kwargs):
     """
-Handler function to create Notification instance upon action signal call.
-"""
+    Handler function to create Notification instance upon action signal call.
+    """
 
     kwargs.pop('signal', None)
     recipient = kwargs.pop('recipient')
@@ -192,6 +193,17 @@ Handler function to create Notification instance upon action signal call.
         newnotify.data = kwargs
 
     newnotify.save()
+
+    # Send email to recipient of notification
+    if newnotify.recipient.notify:
+        to = 'andrew.s.gaines@gmail.com'  # newnotify.recipient.email
+        from_email = 'acressity@acressity.com'
+        subject = 'New note on your Acressity journey'
+        text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
+        html_content = render_to_string('notifications/email.html', {'notice': newnotify})
+        message = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
+        message.send()
 
 # connect the signal
 notify.connect(notify_handler, dispatch_uid='notifications.models.notification')

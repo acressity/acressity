@@ -20,6 +20,7 @@ anything lacking in efficiency or if you have any suggestions.
 		<meta name="author" content="Andrew Gaines" />
 		<meta name="google-site-verification" content="3iDs3Jcximcq98UiGgWraWkgspn2xYTbkHiZcC0Asrc" />
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/style.css" />
+		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jqueryui-editable.css" />
 		<link rel="icon" type="image/ico" href="{{ STATIC_URL }}img/favicon.ico" />
 		{# <link href='http://fonts.googleapis.com/css?family=Merriweather+Sans' rel='stylesheet' type='text/css' /> #}
 		{# <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" /> #}
@@ -33,6 +34,7 @@ anything lacking in efficiency or if you have any suggestions.
 		</script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.form.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ui.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/functions.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/dropdownPlain.js"></script>
 		{% block head_insert %}{% endblock head_insert %}
@@ -50,164 +52,8 @@ anything lacking in efficiency or if you have any suggestions.
 				</div>
 			{% endif %}
 
-			<div id="top_bar">
+			{% include "acressity/top_bar.html" %}
 
-				<div id="top_bar_left" class="my_nav">
-					<span id="logo">
-						<img src="{{ STATIC_URL }}img/favicon_black.ico" style="vertical-align: middle;" /><em>Explore New Experiences</em>
-					</span></a>
-					<ul>
-			        	<li><a href="/">Acressity</a>
-			        		<ul>
-			        			 <a href="{% url 'about' %}"><li>About Site</li></a>
-			        			 <a href="{% url 'contact' %}"><li>Contact</li></a>
-			        			 <a href="{% url 'creator_note' %}"><li>Creator's Note</li></a>
-			        			 <a href="{% url 'glossary' %}"><li>Glossary</li></a>
-			        		</ul>
-			        	</li>
-			        </ul>
-
-			        <ul>
-			        	<li>
-			        		{# Syntax highlighting for following a little screwy, but does the job properly #}
-				        		{% if user.is_authenticated %}
-				        			<a href="{% url 'journey' user.id %}">
-				        		{% else %}
-				        			<a href="{% url 'featured_experiences' %}">
-				        		{% endif %}Journeys</a>
-			        		<ul>
-
-			        			{% if user.is_authenticated %}
-				        			<a href="{% url 'journey' user.id %}"><li>Your Journey</li></a>
-
-				        			{% if user.cheering_for %}
-				        				{% if user.cheering_for %}
-					        				{% for explorer in user.top_cheerers %}
-					        					<a href="{% url 'journey' explorer.id %}"><li>
-					        						{% if explorer.gallery.featured_photo %}
-					        							<img style="text-align: center; padding: 5px; float: left;" src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer }}"/>
-														{{ explorer.get_full_trailname }}
-					        							<div style="clear:both;"></div>
-					        						{% else %}
-					        							{{ explorer.get_full_trailname }}
-					        						{% endif %}
-					        					</li></a>
-					        				{% endfor %}
-					        				{% if user.cheering_for|length > user.top_cheerers|length %}
-					        					<a href="{% url 'explorers.views.cheering_for' request.user.id %}"><li>All Cheerers</li></a>
-				        					{% endif %}
-				        			{% endif %}
-				        				
-				        			{% endif %}
-				        		{% endif %}
-
-			        			<a href="{% url 'all_explorers' %}"><li>All Journeys</li></a>
-
-			        			<a href="{% url 'explorers.views.random' %}"><li>Random Journeys</li></a>
-			        		</ul>
-			        	</li>
-			        </ul>
-			        <ul>
-
-			        	<li>
-			        		{% if request.user.is_authenticated %}
-			        			<a href="{% url 'journey' request.user.id %}">
-			        		{% else %}
-			        			<a href="{% url 'experiences.views.featured' %}">
-			        		{% endif %}Experiences</a>
-			        		<ul>
-
-								{% if request.user.is_authenticated %}
-
-									{% for experience in request.user.top_five %}
-				        				<a href="{% url 'experiences.views.index' experience.id %}"><li>
-				        					{% if experience.gallery.featured_photo %}
-				        						<img style="text-align: center; padding: 5px; float: left;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience }}"/>
-				        					{% endif %}
-				        					{{ experience }}
-				        					<div style="clear:both;"></div>
-				        				</li></a>
-				        			{% endfor %}
-
-				        			{% if user.tracking_experiences.count > 0 %}
-				        				<a href="{% url 'tracking_experiences' user.id %}"><li>Your Tracking Experiences</li></a>
-				        			{% endif %}
-				        			
-								{% endif %}
-
-								<a href="{% url 'experiences.views.featured' %}"><li>Featured Experiences</li></a>
-
-								<a href="{% url 'all_experiences' %}"><li>All Site Experiences</li></a>
-
-			        		</ul>
-			        	</li>
-				    </ul>
-				</div>
-
-				<div id="top_bar_right" class="my_nav">
-			        <div id="login_out">
-						{% block login_header %}
-							{% if request.user.is_authenticated %}
-								<ul>
-									<a href="{% url 'journey' request.user.id %}"><li>{{ request.user.get_full_name }}</a>
-										<ul>
-											<a href="{% url 'journey' request.user.id %}"><li>
-												<img src="{{ STATIC_URL }}img/icons/journey-icon.png" /> Your Journey
-											</li></a>
-											<a href="{% url 'explorers.views.board' request.user.id %}"><li>
-												<img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" /> Bulletin Board
-											</li></a>
-											<a href="{% url 'story' request.user.id %}"><li>
-								        		<img src="{{ STATIC_URL }}img/icons/profile-icon.png" /> Your Story
-								        	</li></a>
-						        			<a href="{% url 'farewell' %}"><li>
-						        				<img src="{{ STATIC_URL }}img/icons/logout-icon.png" /> Log Out
-						        			</li></a>
-				        				</ul>
-									</li>
-								</ul>
-							{% else %}
-								<ul>
-									<li><a onclick="window.location.href='/accounts/login';">Login</a>
-										<ul>
-											<li id="top_bar_login">
-												<form action="/explorers/login/?next={{ request.path }}" method="POST" class="no_styling full_width">
-													{% csrf_token %}
-													<div class="">
-														Email or <abbr title="Creative username to describe your journey">Trailname</abbr>:
-														<input type="text" name="username" id="username" size="10" />
-													</div>
-													<div class="">
-														Password:
-														<input type="password" name="password" id="password" size="10" />
-													</div>
-													<div class="">
-														<input type="submit" class="expand-button" value="Log In" />
-													</div>
-												</form>
-												<br />
-												<input type="button" class="expand-button" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
-											</li>
-											{% comment %}
-											{# Taken out in favor of having the signup bar on the right #}
-											<li>
-												<form id="top_bar_signup" action="{% url 'register' %}" class="no_styling">
-													{% csrf_token %}
-													<div class="float_right">
-														<input type="submit" class="expand-button" value="Sign up" />
-													</div>
-												</form>
-											</li>
-											{% endcomment %}
-										</ul>
-									</li>
-								</ul>
-							{% endif %}
-						{% endblock login_header %}
-					</div>
-				</div>
-
-		    </div>
 			<div id="main">
 				{% block main %}
 					<div id="content">
@@ -220,7 +66,7 @@ anything lacking in efficiency or if you have any suggestions.
 								    {% include "explorers/snippets/dash.html" %}
 								{% endwith %}
 							{% else %}
-								<div style="background-color: #D3CDD8; margin: 10px 0px;">
+								<div class="experience_item">
 									{% if not request.session.signing_up %}
 										<blockquote id="welcome_quote">
 											<h2>Acressity</h2>
@@ -230,7 +76,7 @@ anything lacking in efficiency or if you have any suggestions.
 											</h3>
 											<a href="{% url 'about' %}">learn more</a>
 										</blockquote>
-										<form action="{% url 'step_two' %}" method="POST" class="full_width main_color" onsubmit="return validateFirstExperience(this);">
+										<form action="{% url 'step_two' %}" method="POST" class="full_width main_color" style="position:relative;" onsubmit="return validateFirstExperience(this);">
 											{% csrf_token %}
 											<input type="hidden" name="initial" />
 											<h3>What do you want to experience?</h3>
@@ -238,7 +84,7 @@ anything lacking in efficiency or if you have any suggestions.
 												<input type="text" id="id_experience" name="experience" class="larger" onfocus="setUp(this);" />
 											</div>
 											<input type="submit" class="expand-button" value="Experience" />
-											<input type="button" class="expand-button" style="position:relative; right:-5em;" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
+											<input type="button" class="expand-button" style="position:absolute; right:5px;" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
 										</form>
 									{% comment %}
 									<div>
@@ -285,6 +131,7 @@ anything lacking in efficiency or if you have any suggestions.
 								{% endif %}
 							{% endif %}
 						{% endblock right_content %}
+						{% comment %}
 						<div>
 							<h4 onclick="toggle_div('comment_to_creator_form');">Comments for website creator <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="comment_to_creator_form_toggle_icon" /></h4>
 							<div id="comment_to_creator_form" style="display: none;" class="smaller_font object_item">
@@ -310,6 +157,7 @@ anything lacking in efficiency or if you have any suggestions.
 								</form>
 							</div>
 						</div>
+						{% endcomment %}
 					</div>
 				{% endblock main %}
 			</div>
