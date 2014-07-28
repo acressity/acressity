@@ -1,23 +1,26 @@
 {# Expects user object passed in as explorer #}
 {# Referring template must convert accordingly (with-as statement) #}
+{# "stacked" option allows for divs to be stacked vertically rather than horizontally (as seen on explorer index page) #}
 
 {% load explorers_extras %}
 {% load notifications_tags %}
 {% load comments %}
 
 <div class="explorer_item">
-    <div class="featured_photo">
-        {% if explorer.gallery.featured_photo %}
-            <a href="{% url 'journey' explorer.id %}"><img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" /></a>
-        {% else %}
-            {% ifequal explorer user %}
-                <a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/explorer-icon.png" title="Upload photo for your story" /></a>
-            {% endifequal %}
-        {% endif %}
-    </div>
-    <h3 class="align_center">
-        {{ explorer.get_full_trailname }}
-    </h3>
+    <a href="{% url 'journey' explorer.id %}"><div>
+        <div class="featured_photo">
+            {% if explorer.gallery.featured_photo %}
+                <img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" />
+            {% else %}
+                {% ifequal explorer user %}
+                    <a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/explorer-icon.png" title="Upload photo for your story" /></a>
+                {% endifequal %}
+            {% endif %}
+        </div>
+        <h3 class="align_center">
+            {{ explorer.get_full_trailname }}
+        </h3>
+    </div></a>
     {% if explorer.brief %}
         <div class="object_item">
             <div onclick="toggle_div(this.nextElementSibling);">
@@ -60,7 +63,7 @@
                 Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
             </div>
             <div class="toggle_div">
-                {% with explorer.featured_experience as experience %}
+                {% with experience=explorer.featured_experience stacked=True %}
                     {% include "experiences/snippets/dash.html" %}
                 {% endwith %}
             </div>

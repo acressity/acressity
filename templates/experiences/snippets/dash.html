@@ -5,56 +5,24 @@
 {% endcomment %}
 
 <div class="experience_dash">
-    <div>
+    <div {% if not stacked %}class="left"{% endif %}>
         <a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
             <div class="object_item">
-                {% if experience.gallery.featured_photo %}
-                    <div class="featured_photo">
-                        <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
-                    </div>
-                {% endif %}
                 <h3 style="text-align: center;">{{ experience }}
                     {% if not experience.is_public %}
                         <br />(Private experience)
                     {% endif %}
                 </h3>
+                {% if experience.gallery.featured_photo %}
+                    <div class="featured_photo">
+                        <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
+                    </div>
+                {% endif %}
             </div>
         </a>
         {% if experience.status %}
             <p>{{ experience.status }}</p>
         {% endif %}
-        <div class="option_list">
-            {% if user.is_authenticated %}
-                {% if user in experience.explorers.all %}
-                    <a href="/experiences/{{ experience.id }}/narratives/create/"><img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" class="option_icon" /></a>
-                    <a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option_icon" /></a>
-                    <a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
-                    {% ifequal user experience.author %}
-                        <a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
-                        <a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option_icon" /></a>
-                    {% endifequal %}
-                {% endif %}
-            {% endif %}
-            {# This little insertion between checking for user being logged in is necessary...I think #}
-            {% if experience.gallery %}
-                <a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option_icon" /></a>
-            {% endif %}
-            {% if user.is_authenticated %}
-                <a onclick="toggle_div('{{ experience.id }}_comment');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" /></a>
-                {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
-                    <a href="{% url 'track_experience' experience.id %}">
-                        <img src="{{ STATIC_URL }}img/icons/track-icon.png" title="Track this experience" class="option_icon" />
-                    </a>
-                {% endif %}
-                <div id="{{ experience.id }}_comment" class="comment" style="display: none;">
-                    {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
-                        {% include "support/snippets/note_form.html" %}
-                    {% endwith %}
-                </div>
-            {% endif %}
-        </div>
-    </div>
-    <div>
         {# Section for latest activity #}
         {% if experience.latest_narrative %}
             <div class="object_item">
@@ -68,6 +36,77 @@
                 {% endwith %}
             </div>
         {% endif %}
+    </div>
+    <div {% if not stacked %}class="right"{% endif %}>
+        <ul class="option_list">
+            {% if user.is_authenticated %}
+                {% if user in experience.explorers.all %}
+                    <a href="/experiences/{{ experience.id }}/narratives/create/">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" /> Create new narrative
+                        </li>
+                    </a>
+                    <a href="{% url 'experiences.views.edit' experience.id %}">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option" />
+                            Edit this experience
+                        </li>
+                    </a>
+                    <a href="{% url 'experiences.views.upload_photo' experience.id %}">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option" />
+                            Upload a photo
+                        </li>
+                    </a>
+                    {% ifequal user experience.author %}
+                        <a href="{% url 'experience_invite' experience.id %}">
+                            <li class="option">
+                                <img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option" title="Invite a comrade to be a part of this experience" />
+                                Invite someone to this experience
+                            </li>
+                        </a>
+                        <a href="{% url 'experiences.views.delete' experience.id %}">
+                            <li class="option">
+                                <img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option" />
+                                Delete this experience
+                            </li>
+                        </a>
+                    {% endifequal %}
+                {% endif %}
+            {% endif %}
+            {# This little insertion between checking for user being logged in is necessary...I think #}
+            {% if experience.gallery %}
+                <a href="{% url 'pl-gallery' experience.gallery.id %}">
+                    <li class="option">
+                        <img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option" />
+                        View gallery
+                    </li>
+                </a>
+            {% endif %}
+            {% if user.is_authenticated %}
+            {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
+                    <a href="{% url 'track_experience' experience.id %}">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/track-icon.png" title="Track this experience" class="option" />
+                            Track this experience
+                        </li>
+                    </a>
+                {% endif %}
+                <div onclick="toggle_div($(this).next());">
+                    <a>
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option" />
+                            Tack on a note
+                        </li>
+                    </a>
+                </div>
+                <div class="toggle_div comment">
+                    {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
+                        {% include "support/snippets/note_form.html" %}
+                    {% endwith %}
+                </div>
+            {% endif %}
+        </ul>
     </div>
     <div class="clear_both"></div>
 </div>

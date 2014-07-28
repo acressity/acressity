@@ -1,7 +1,9 @@
 {% with domain='http://www.acressity.com' %} {# hacky, yes... #}
     <h3>From your Acressity journey</h3>
 
-    <a href="{{ domain }}{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
+    <p>
+        <a href="{{ domain }}{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
+    </p>
       
     {% if notice.target %}
         {% ifequal notice.target_content_type.model 'invitationrequest' %}
