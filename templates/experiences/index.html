@@ -63,7 +63,7 @@
         </div>
 	</div>
 	<div class="explorer_item">
-		<h3>Explorer{{ experience.explorers.count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="explorers_toggle_icon" onclick="toggle_div('explorers');" /></h3>
+		<h3 onclick="toggle_div('explorers');">Explorer{{ experience.explorers.count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="explorers_toggle_icon" /></h3>
 		<div id="explorers" class="toggle_div">
 			<table class="thirds_table">
 				<tr>

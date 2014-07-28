@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Welcome, {{ request.user.get_full_name }}</h1>
+    <h1>Welcome, {{ request.user.get_full_name }}!</h1>
     {% comment %}
         <p>
             This application encourages you to follow through on the experiences you add to your journey. With each experience you create being comparable to the chapter titles of a favorite book, you're encouraged to fill them with as many narratives and photos, and invite as many fellow explorers to each experience as you please.
         </p>
     {% endcomment %}
+    <p>
+        It's good to have you here! This application will (hopefully) help you explore some experiences to enrich your life.
+    </p>
     <p>
         On the right is your dash information. It displays the picture you choose to be recognized by, and gives you quick access to your featured experience.
     </p>
