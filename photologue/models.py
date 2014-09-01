@@ -243,7 +243,7 @@ class Gallery(models.Model):
             # Initialize queryset
             photo_queryset = self.photos.none()
             for narrative in ei.narratives.all():
-                if narrative.gallery:
+                if narrative.gallery and narrative.is_public:
                     photo_queryset = photo_queryset | narrative.gallery.photos.all()
             return photo_queryset
 
