@@ -16,8 +16,10 @@
         </div>
         <div id="featured_experiences" class="toggle_div">
         	<ul>
-        		{% for experience in featured_experiences %}
-        			<li>{% include "experiences/snippets/dash.html" %}</li>
+        		{% for featured_experience in featured_experiences %}
+        			{% with featured_experience.experience as experience %}
+        				<li>{% include "experiences/snippets/dash.html" %}</li>
+        			{% endwith %}
         		{% endfor %}
         	</ul>
         </div>
