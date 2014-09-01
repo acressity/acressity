@@ -1,17 +1,52 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block head_insert %}
-	<style type="text/css">
-		#content {
-			padding: 0px;
-			-moz-box-shadow: 0 0 0px 0px #888;
-		    -webkit-box-shadow: 0 0 0px 0px #888;
-		    box-shadow: 0 0 0px 0px #888; 
-		}
-	</style>
-{% endblock head_insert %}
-
-{% comment %}
-    No content div, leaving the background picture open for viewing.
-    The code which runs in the sidebar is placed in the base.html file for universality across all pages
-{% endcomment %}
+{% block content %}
+	<div id="main_index_header">
+		<img src="{{ STATIC_URL }}img/logo.jpg" title="From the comfort of the valleys to the growth in the mountains" />
+		<h1>Acressity</h1>
+		<h3>A bucketlist application for exploring new experiences and recording growth</h3>
+	</div>
+	<br />
+	<br />
+	<div class="experience_item">
+        <div class="align_center">
+            <h3 class="option">
+                <img src="{{ STATIC_URL }}img/icons/track-icon.png" class="option_icon" /> View some of the site featured experiences
+            </h3>
+        </div>
+        <div id="featured_experiences" class="toggle_div">
+        	<ul>
+        		{% for experience in featured_experiences %}
+        			<li>{% include "experiences/snippets/dash.html" %}</li>
+        		{% endfor %}
+        	</ul>
+        </div>
+        <img src="{{ STATIC_URL }}img/icons/wide-down-arrow.png" class="wide_toggler" onclick="toggle_div('featured_experiences');" />
+    </div>
+    <br />
+    <br />
+    <div class="explorer_item">
+    	<div class="align_center">
+    		<h3 class="option">
+            	<img src="{{ STATIC_URL }}img/icons/explorer-icon.png" class="option_icon" /> View some of the explorers
+            </h3>
+    	</div>
+        <div id="featured_explorers" class="toggle_div">
+        	<ul>
+        		{% for explorer in explorers %}
+        			<li>{% include "explorers/snippets/dash.html" %}</li>
+        		{% endfor %}
+        	</ul>
+        </div>
+        <img src="{{ STATIC_URL }}img/icons/wide-down-arrow.png" name="hoobla" onclick="toggle_div('featured_explorers');" class="wide_toggler" />
+    </div>
+    <br />
+    <br />
+    <a href="{% url 'register' %}">
+    	<div class="main_item align_center">
+	        <h3 class="option">
+	        	<img src="{{ STATIC_URL }}img/logo.png" class="option_icon" /> Create your own journey
+	        </h3>
+	    </div>
+    </a>
+{% endblock content %}

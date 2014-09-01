@@ -8,9 +8,9 @@ from django.core.mail import send_mail
 # from django.contrib.auth.decorators import login_required
 from django.utils.html import escape
 
-from experiences.models import Experience
+from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm
-from explorers.forms import RegistrationForm
+from explorers.forms import RegistrationForm, Explorer
 from acressity.forms import ContactForm
 
 
@@ -18,7 +18,7 @@ def acressity_index(request):
     if request.user.is_authenticated():
         return redirect(reverse('journey', args=(request.user.id,)))
     else:
-        return render(request, 'acressity/index.html')
+        return render(request, 'acressity/index.html', {'featured_experiences': FeaturedExperience.objects.get_random(3), 'explorers': Explorer.objects.get_random(3)})
 
 
 def step_two(request):

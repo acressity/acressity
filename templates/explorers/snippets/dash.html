@@ -48,10 +48,10 @@
             <a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" class="option_icon" title="Create new experience" /></a>
         {% endifequal %}
         {% if user.is_authenticated %}
-            <a onclick="toggle_div('{{ explorer.id }}_note');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" class="option_icon" /></a>
+            <a><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" onclick="toggle_div($(this).parent().parent().next());" class="option_icon" /></a>
         {% endif %}
     </div>
-    <div id="{{ explorer.id }}_note" class="comment" style="display: none;">
+    <div id="{{ explorer.id }}_note" class="comment toggle_div">
         {% get_comment_form for explorer as comment_form %}{% with next_url_name='profile' next_url_pk=explorer.id %}
             {% include "support/snippets/note_form.html" %}
         {% endwith %}
