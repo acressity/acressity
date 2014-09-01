@@ -6,7 +6,7 @@
 			var options = {
 	            //target:   '#photo_form_feedback',   // target element(s) to be updated with server response
 	            // beforeSubmit:  beforeSubmit,  // pre-submit callback
-	            resetForm: true,        // reset the form after successful submit
+	            resetForm: true, // reset the form after successful submit
 	            error: what,
 	            dataType: 'json',
 	            success: show_photo,
@@ -29,8 +29,8 @@
         		$("#photo_form_feedback").append(html);
         	}
 
-        	function what(a, b, c){
-        		alert('error' + a + b + c);
+        	function what(jqXHR, textStatus, errorThrown){
+        		alert('error: ' + jqXHR.status + ' ' + jqXHR.responseText + ' ' + errorThrown);
         		$("#ajax-loader").toggle();
         	}
 		})
