@@ -18,10 +18,10 @@
 			{% else %}
 				{% if user in experience.explorers.all %}
 					<a href="{% url 'exp_upload_photo' experience.id %}" title="Upload photo for this experience">
-						<img src="{{ STATIC_URL }}img/logo.jpg" />
+						<img src="{{ STATIC_URL }}img/logo.jpg" style="width: 200px;" />
 					</a>
 				{% else %}
-					<img src="{{ STATIC_URL }}img/logo.jpg" />
+					<img src="{{ STATIC_URL }}img/logo.jpg" style="width: 200px;" />
 				{% endif %}
 			{% endif %}
 		</div>

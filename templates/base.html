@@ -71,7 +71,7 @@ anything lacking in efficiency or if you have any suggestions.
 										<blockquote id="welcome_quote">
 											<h2>Acressity</h2>
 											<h3>
-												An application for the exploration of new experiences within your journey
+												An online bucketlist for the exploration of new experiences
 											</h3>
 											<a href="{% url 'about' %}">learn more</a>
 										</blockquote>
@@ -82,26 +82,8 @@ anything lacking in efficiency or if you have any suggestions.
 											<div class="formatted_input">
 												<input type="text" id="id_experience" name="experience" class="larger" onfocus="setUp(this);" />
 											</div>
-											<input type="submit" class="expand-button" value="Explore" />
-											<input type="button" class="expand-button" style="position:absolute; right:5px;" value="Create" onclick="window.location.href='{% url 'register' %}';" />
+											<input type="submit" value="Create" />
 										</form>
-									{% comment %}
-									<div>
-										<h4 onclick="toggle_div('featured_experiences');">Some featured experiences <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="featured_experiences_toggle_icon" /></h4>
-										<div id="featured_experiences" style="display: none;">
-											{% for explorer, experience in explorer_experience %}
-												<div class="object_item experience_item">
-													{% if experience.gallery.featured_photo %}
-														<div class="featured_photo left">
-															<img src="{{ experience.gallery.featured_photo.get_icon_url }}" alt="Featured photo" title="{{ experience.gallery.featured_photo.title }}"/>
-														</div>
-													{% endif %}
-													<a href="/experiences/{{ experience.id }}"><h3>{{ experience }}</h3></a> by {{ explorer.get_full_name }}
-												</div>
-											{% endfor %}
-										</div>
-									</div>
-									{% endcomment %}
 									{% else %}
 										<form method="POST" action="{% url 'register' %}">
 											{% csrf_token %}
@@ -126,45 +108,27 @@ anything lacking in efficiency or if you have any suggestions.
 											</p>
 											<span class="author">-Khalil Gibran</span>
 										</blockquote>
-									</div>
-								{% endif %}
+									{% endif %}
+								</div>
 							{% endif %}
 						{% endblock right_content %}
-						{% comment %}
-						<div>
-							<h4 onclick="toggle_div('comment_to_creator_form');">Comments for website creator <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="comment_to_creator_form_toggle_icon" /></h4>
-							<div id="comment_to_creator_form" style="display: none;" class="smaller_font object_item">
-								<p>
-									This information will be sent directly to the creator of this site, and will be used to improve the website experience.
-								</p>
-								<p>
-									Include any suggestions, notices, errors, or just a feature you'd like to see!
-								</p>
-								<p>
-									<em>Thank you,</em>
-									<br />
-									<a href="{% url 'journey' 1 %}">Andrew Gaines</a>
-								</p>
-								<form method="POST" action="{% url 'comment_to_creator' %}">
-									{% csrf_token %}
-									<div class="formatted_input">
-										<textarea name="comment_to_creator"></textarea>
-									</div>
-									{# Following is a honeypot. If filled (most likely by a bot) have appropriate response #}
-									<input type="text" name="poohbear" style="display: none;" />
-									<input type="submit" value="Submit" />
-								</form>
-							</div>
-						</div>
-						{% endcomment %}
 					</div>
 				{% endblock main %}
 			</div>
 		</div> <!--end of wrapper div-->
-		<!--
 		<div id="footer">
-			
+			<ul class="horizontal_list">
+				<a href="{% url 'acressity_index' %}"><li>Acressity</li></a>
+				<a href="{% url 'about' %}"><li>About</li></a>
+				<a href="{% url 'contact' %}"><li>Contact</li></a>
+				<a href="{% url 'experiences.views.featured' %}"><li>Experiences</li></a>
+				<a href="{% url 'all_explorers' %}"><li>Explorers</li></a>
+				{% if user.is_authenticated %}
+					<a href="{% url 'journey' user.id %}"><li>Your journey</li></a>
+				{% else %}
+					<a href="{% url 'register' %}"><li>Sign up</li></a>
+				{% endif %}
+			</ul>
 		</div>
-		-->
 	</body>
 </html>

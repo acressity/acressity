@@ -3,11 +3,12 @@
 {% block content %}
 	<div id="main_index_header">
 		<img src="{{ STATIC_URL }}img/logo.jpg" title="From the comfort of the valleys to the growth in the mountains" />
-		<h1>Acressity</h1>
-		<h3>A bucketlist application for exploring new experiences and recording growth</h3>
+        <div id="text">
+    		<h1>Acressity</h1>
+    		<h3>Explore new experiences</h3>
+        </div>
 	</div>
-	<br />
-	<br />
+	<hr />
 	<div class="experience_item">
         <div class="align_center">
             <h3 class="option">
@@ -25,8 +26,7 @@
         </div>
         <img src="{{ STATIC_URL }}img/icons/wide-down-arrow.png" class="wide_toggler" onclick="toggle_div('featured_experiences');" />
     </div>
-    <br />
-    <br />
+    <hr />
     <div class="explorer_item">
     	<div class="align_center">
     		<h3 class="option">
@@ -42,13 +42,8 @@
         </div>
         <img src="{{ STATIC_URL }}img/icons/wide-down-arrow.png" name="hoobla" onclick="toggle_div('featured_explorers');" class="wide_toggler" />
     </div>
-    <br />
-    <br />
+    <hr />
     <a href="{% url 'register' %}">
-    	<div class="main_item align_center">
-	        <h3 class="option">
-	        	<img src="{{ STATIC_URL }}img/logo.png" class="option_icon" /> Create your own journey
-	        </h3>
-	    </div>
+        <input id="large_button" type="button" value="Create your own journey" />
     </a>
 {% endblock content %}
