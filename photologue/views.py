@@ -62,7 +62,7 @@ def ajax_upload(request):
             data = {'url': photo.get_icon_url(), 'photo_id': photo.id}
             return HttpResponse(simplejson.dumps(data))
         else:
-            raise PermissionDenied
+            # Here's the problem with the images not uploading properly
             return HttpResponse('Please fill out the form correctly')
     # Return nothing for failure??
     return HttpResponse('api')

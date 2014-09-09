@@ -29,8 +29,7 @@ def journey(request, explorer_id):
     form = None
     if owner:
         experiences = explorer.ordered_experiences()
-        if not experiences:
-            form = ExperienceForm()
+        form = ExperienceForm()
     else:
         # Damn, this is hacky...
         # To start fixing this ugliness, must first have ordered_experiences() return a queryset instead of list

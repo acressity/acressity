@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 # from django.contrib.auth.decorators import login_required
 from django.utils.html import escape
+from django.views.generic import TemplateView
 
 from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm
@@ -56,3 +57,10 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'acressity/contact.html', {'form': form})
+
+
+class WelcomeTemplateView(TemplateView):
+    def get_context_data(self, **kwargs):
+        context = super(WelcomeTemplateView, self).get_context_data(**kwargs)
+        context['form'] = ExperienceForm()
+        return context

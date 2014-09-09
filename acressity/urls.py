@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.contrib.auth.views import login
 
-import notifications
+from acressity.views import WelcomeTemplateView
 
 admin.autodiscover()
 
@@ -20,7 +20,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^about/$', TemplateView.as_view(template_name='acressity/about.html'), name='about'),
     url(r'^step_two/', 'step_two', name="step_two"),
-    url(r'^welcome/$', TemplateView.as_view(template_name='registration/welcome.html'), name='welcome'),
+    url(r'^welcome/$', WelcomeTemplateView.as_view(template_name='registration/welcome.html'), name='welcome'),
     url(r'^creators_note/$', TemplateView.as_view(template_name='acressity/creators_note.html'), name='creator_note'),
     url(r'^glossary/$', TemplateView.as_view(template_name='acressity/glossary.html'), name='glossary'),
     # Patching to work with Django logout...

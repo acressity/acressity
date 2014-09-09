@@ -8,10 +8,10 @@
         </p>
     {% endcomment %}
     <p>
-        It's good to have you here! This application will (hopefully) help you explore some experiences to enrich your life.
+        It's good to have you here! This application is designed to help you explore new experiences.
     </p>
     <p>
-        On the right is your dash information. It displays the picture you choose to be recognized by, and gives you quick access to your featured experience.
+        On the right is your dash information. It displays the picture by which you choose to be recognized, and gives you quick access to your featured experience.
     </p>
     <div>
         {% if user.featured_experience %}
@@ -44,8 +44,14 @@
             </h3>
         {% else %}
             {# User created new journey without an experience #}
-            You can create a new experience for your journey <a href="{% url 'create_experience' %}">here</a>
+            <h2>Create your first experience</h2>
+            <form action="{% url 'create_experience' %}" class="larger full_width" method="POST">
+                {% csrf_token %}
+                <div class="formatted_input">
+                    {{ form.experience }}
+                </div>
+                <input type="submit" value="Create" />
+            </form>
         {% endif %}
-        
     </div>
 {% endblock content %}

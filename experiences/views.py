@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
+from django.template.loader import render_to_string
+from django.conf import settings
 
 from experiences.models import Experience, FeaturedExperience
 from narratives.models import Narrative
@@ -33,8 +35,12 @@ def create(request):
                 request.user.featured_experience = form.instance
                 request.user.save()
                 messages.success(request, 'Your featured experience is now {0}'.format(form.instance.experience))
-            messages.success(request, 'Experience successfully added')
             notify.send(sender=request.user, recipient=get_user_model().objects.get(pk=1), target=new_experience, verb='has created a new experience')
+            if 'ajax' in request.POST:
+                html = '<hr />' + render_to_string('experiences/snippets/dash.html', {'experience': new_experience, 'user': request.user, 'STATIC_URL': settings.STATIC_URL})
+                data = {'html': html}
+                return HttpResponse(simplejson.dumps(data))
+            messages.success(request, 'Experience successfully added')
             return redirect(reverse('new_experience', args=(new_experience.id,)))
     else:
         form = ExperienceForm()
