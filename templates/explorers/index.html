@@ -22,7 +22,7 @@
 			}
 
 			function errorHandler(jqXHR, textStatus, errorThrown){
-				alert(errorThrown);
+				alert("There was a problem submitting the experience");
 			}
 		})
 	</script>
@@ -52,7 +52,7 @@
 	{% ifnotequal user explorer %}
 		{% include "explorers/snippets/dash.html" %}
 	{% else %}
-		<h1 style="text-align: center;">Your Journey</h1 style="text-align: center;">
+		<h1 style="text-align: center;">Your Journey</h1>
 	{% endifnotequal %}
 	<div id="experiences_list">
 		{% for experience in experiences %}
@@ -74,31 +74,49 @@
 			{% if not forloop.last %}
 				<hr />
 			{% endif %}
-		{% empty %}z
+		{% empty %}
 			{% ifnotequal user explorer %}
 				{{ explorer }} doesn't currently have any public experiences
+			{% else %}
+				<div class="post_it">
+					<p>
+				        It's good to have you here! This application is designed to help you explore new experiences, with each experience being an item in your bucketlist.
+				    </p>
+				    <h3>Begin by</h3>
+				    <ul>
+				    	<li>Creating a list of experiences you wish to have</li>
+				    	<li>Featuring one experience upon which you're currently focusing</li>
+				    	<li>Writing narratives to record your progress for each experience</li>
+				    	<li><a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/">Uploading</a> a photo to be displayed beside your journey</li>
+				    </ul>
+				</div>
 			{% endifnotequal %}
 		{% endfor %}
 	</div>
-	{% ifequal user explorer %} 
-		<h2 class="toggler" onclick="toggle_div('create_experience_div');">Create a new experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="create_experience_div_toggle_icon" /></h2>
-		<div id="create_experience_div" class="toggle_div">
-			<form action="{% url 'create_experience' %}" id="create_experience" class="full_width" method="POST">
-				{% csrf_token %}
-				<div class="formatted_input">
-					{{ form.experience }}
-				</div>
-				<h4 class="toggler" onclick="toggle_div('more_options');">
-					More options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="more_options_toggle_icon" />
-				</h4>
-				<div class="toggle_div" id="more_options">
+	{% ifequal user explorer %}
+		<div class="experience_item">
+			<h2 class="toggler" onclick="toggle_div('create_experience_div');">{% if experiences %}Add another experience to your journey{% else %}Create a new experience{% endif %} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="create_experience_div_toggle_icon" /></h2>
+			<div id="create_experience_div" class="toggle_div">
+				<form action="{% url 'create_experience' %}" id="create_experience" class="full_width" method="POST">
+					{% csrf_token %}
 					<div class="formatted_input">
-						Experience is public {{ form.is_public }}
+						{{ form.experience }}
 					</div>
-				</div>
-				<input type="hidden" id="ajax" name="ajax" value="True" /> {# used for the create_experience view #}
-				<input type="submit" value="Create" />
-			</form>
+					<h4 class="toggler" onclick="toggle_div('more_options');">
+						More options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="more_options_toggle_icon" />
+					</h4>
+					<div class="toggle_div" id="more_options">
+						<div class="formatted_input">
+							Experience is public {{ form.is_public }}
+						</div>
+						<div class="formatted_input">
+							Feature this experience {{ form.make_feature }}
+						</div>
+					</div>
+					<input type="hidden" id="ajax" name="ajax" value="True" /> {# used for the create_experience view #}
+					<input type="submit" value="Create" />
+				</form>
+			</div>
 		</div>
 	{% endifequal %}
 {% endblock content %}

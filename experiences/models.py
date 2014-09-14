@@ -29,16 +29,16 @@ class Experience(models.Model):
     a book about your journey.
     '''
 
-    experience = models.CharField(max_length=200, help_text='Title of the experience.')  # Add null=False
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text='Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.')
+    experience = models.CharField(max_length=200, help_text=_('Title of the experience.'))  # Add null=False
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text=_('Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.'))
     date_created = models.DateTimeField(default=datetime.now, null=False, blank=True)
-    date_modified = models.DateTimeField(auto_now=True, help_text='Updated every time object saved', null=True, blank=True)
-    brief = models.TextField(blank=True, null=True, help_text='Written description of the experience to provide a little insight.')
-    status = models.CharField(max_length=160, null=True, blank=True, help_text='Optional short state of the experience at the moment.')
+    date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
+    brief = models.TextField(blank=True, null=True, help_text=_('Written description of the experience to provide a little insight.'))
+    status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
-    is_public = models.BooleanField(default=True, help_text='Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers and those providing a correct password if one is selected. A correct password also provides access to all private narratives. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. However, private narratives do not become public when the experience is changed from private to public.')
-    password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text='Submitting the correct password provides access to the experience if it is private as well as all of the private narratives.')
-    search_term = models.CharField(max_length=80, null=True, blank=True, unique=True, help_text='Short phrase or word identifying the experience, allows access by typing http://acressity.com/your_search_term_here. Needs to be unique and cannot be the same as another explorer\'s trailname')
+    is_public = models.BooleanField(default=True, help_text=_('Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers and those providing a correct password if one is selected. A correct password also provides access to all private narratives. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. However, private narratives do not become public when the experience is changed from private to public.'))
+    password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to the experience if it is private as well as all of the private narratives.'))
+    search_term = models.CharField(max_length=80, null=True, blank=True, unique=True, help_text=_('Short phrase or word identifying the experience, allows access by typing http://acressity.com/your_search_term_here. Needs to be unique and cannot be the same as another explorer\'s trailname'))
 
     objects = ExperienceManager()
 

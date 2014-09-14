@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -34,13 +35,13 @@ def create(request):
             if form.cleaned_data['make_feature']:
                 request.user.featured_experience = form.instance
                 request.user.save()
-                messages.success(request, 'Your featured experience is now {0}'.format(form.instance.experience))
+                messages.success(request, _('Your featured experience is now {0}'.format(form.instance.experience)))
             notify.send(sender=request.user, recipient=get_user_model().objects.get(pk=1), target=new_experience, verb='has created a new experience')
             if 'ajax' in request.POST:
                 html = '<hr />' + render_to_string('experiences/snippets/dash.html', {'experience': new_experience, 'user': request.user, 'STATIC_URL': settings.STATIC_URL})
                 data = {'html': html}
                 return HttpResponse(simplejson.dumps(data))
-            messages.success(request, 'Experience successfully added')
+            messages.success(request, _('Experience successfully added'))
             return redirect(reverse('new_experience', args=(new_experience.id,)))
     else:
         form = ExperienceForm()
@@ -87,12 +88,12 @@ def edit(request, experience_id):
                 if form.cleaned_data['make_feature']:
                     request.user.featured_experience = form.instance
                     request.user.save()
-                    messages.success(request, 'Your featured experience is now {0}'.format(form.instance))
+                    messages.success(request, _('Your featured experience is now {0}'.format(form.instance)))
                 if 'is_public' in request.POST:
                     if experience.author != request.user:
                         raise PermissionDenied
                 form.save()
-                messages.success(request, 'Experience has been successfully edited')
+                messages.success(request, _('Experience has been successfully edited'))
                 for comrade in experience.comrades(request):
                     notify.send(sender=request.user, recipient=comrade, target=experience, verb='has edited your shared experience')
                 return redirect(reverse('experience', args=(experience.id,)))
@@ -111,7 +112,7 @@ def brief(request, experience_id):
         form = ExperienceBriefForm(request.POST, instance=experience)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Experience brief was successfully added')
+            messages.success(request, _('Experience brief was successfully added'))
             return redirect('/experiences/{0}'.format(experience.id))
     else:
         form = None
@@ -136,7 +137,7 @@ def delete(request, experience_id):
                 experience.author = new_author
                 experience.explorers.remove(request.user)
                 experience.save()
-                messages.success(request, '{0} is the new author and you have been removed from {1}'.format(new_author, experience))
+                messages.success(request, _('{0} is the new author and you have been removed from {1}'.format(new_author, experience)))
                 notify.send(sender=request.user, recipient=new_author, target=experience, verb='has made you the new author of the experience')
                 return redirect(reverse('journey', args=(request.user.id,)))
             elif 'confirm' in request.POST:
@@ -225,7 +226,7 @@ def check_password(request, experience_id):
     if request.method == 'POST':
         password = request.POST.get('password')
         if experience.password == password:
-            messages.success(request, 'Welcome to the privileged side of things. Your privileged state will expire at some point, requiring a reentry of the password.')
+            messages.success(request, _('Welcome to the privileged side of things. Your privileged state will expire at some point, requiring a reentry of the password.'))
             response = redirect(reverse('experience', args=(experience.id,)))  # (request, 'experiences/index.html', {'experience': experience, 'privileged': True, 'narratives': experience.ordered_narratives()})
             response.set_signed_cookie('experience_password', str(experience.id), salt='personal_domain')
             return response

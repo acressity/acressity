@@ -9,6 +9,7 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.contrib.auth import logout
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.conf import settings
@@ -54,12 +55,12 @@ def profile(request, explorer_id):
             form = ExplorerForm(explorer, request.POST, instance=explorer)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Your information has been saved')
+                messages.success(request, _('Your information has been saved'))
             # else:
             #     messages.error(request, 'There was a problem saving your information')
             # return redirect('/explorers/{0}'.format(explorer.id))
         else:
-            messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
+            messages.error(request, _('Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.'))
             return render(request, 'acressity/message.html')
     if request.user.id == explorer.id:
         owner = True
@@ -134,7 +135,7 @@ def cheer(request, explorer_id):
             notify.send(sender=request.user, recipient=explorer, verb='is now cheering for you')
             return redirect(reverse('journey', args=(explorer.id,)))
         else:
-            messages.error(request, 'You are already cheering for {0}'.format(explorer.get_full_name()))
+            messages.error(request, _('You are already cheering for {0}'.format(explorer.get_full_name())))
     return redirect(reverse('journey', args=(request.user.id,)))
 
 
@@ -182,7 +183,6 @@ def new_explorer(request):
                 explorer.experiences.add(first_experience)
                 explorer.featured_experience = first_experience
                 explorer.save()
-                # messages.success(request, 'Your first experience is {0}'.format(first_experience))
             # Create a new gallery for the new explorer
             gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get(model='Explorer'), object_pk=explorer.id)
             gallery.save()
@@ -192,7 +192,7 @@ def new_explorer(request):
             # Welcome and send them on introductory tour?
             messages.success(request, 'Welcome aboard, {0}'.format(explorer.get_full_name()))
             notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
-            return redirect(reverse('welcome'))
+            return redirect(reverse('journey', args=(explorer.id,)))
         # else:
         #     messages.error(request, 'Please provide an experience you wish to have')
         #     return redirect(request.META.get('HTTP_REFERER'))
@@ -230,9 +230,9 @@ def change_password(request):
             if request.user.check_password(form.cleaned_data.get('current_password')):
                 request.user.set_password(form.cleaned_data.get('new_password1'))  # For some reason unable to set to new_password2 because variable currently returning None. Kinda pissed/confused and wanting to move on...
                 request.user.save()
-                messages.success(request, 'You have successfully changed your password')
+                messages.success(request, _('You have successfully changed your password'))
             else:
-                messages.success(request, 'Your attempt to change your password failed...')
+                messages.success(request, _('Your attempt to change your password failed...'))
             return redirect(reverse('journey', args=(request.user.id,)))
     else:
         form = PasswordChangeForm
@@ -246,7 +246,7 @@ def site_login(request):
         next_url = request.GET.get('next') or request.POST.get('next')
     username_provided = request.POST.get('username')
     if username_provided is None:
-        messages.error(request, 'Please provide either your email or optional trailname for logging in')
+        messages.error(request, _('Please provide either your email or optional trailname for logging in'))
         return redirect('/accounts/login')
     password_provided = request.POST.get('password')
     # Site allows one to login with either email address or created trailname
@@ -262,7 +262,7 @@ def site_login(request):
             login(request, explorer)
             return redirect(next_url)
     # Login failed
-    messages.error(request, 'There was a problem with your username or password')
+    messages.error(request, _('There was a problem with your username or password'))
     return redirect('/accounts/login')
 
 
