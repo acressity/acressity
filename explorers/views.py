@@ -260,6 +260,7 @@ def site_login(request):
         explorer = authenticate(username=explorer.email, password=password_provided)
         if explorer:
             login(request, explorer)
+            # return HttpResponse(next_url)
             return redirect(next_url)
     # Login failed
     messages.error(request, _('There was a problem with your username or password'))

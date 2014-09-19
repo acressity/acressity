@@ -1,4 +1,5 @@
 from datetime import datetime
+from itertools import chain
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -43,8 +44,8 @@ def create(request, experience_id):
             form.instance.author = request.user
             new_narrative = form.save()
             messages.success(request, 'Your narrative has been added')
-            for comrade in experience.comrades(request):
-                notify.send(recipient=comrade, sender=request.user, target=new_narrative, verb='has written a new narrative for experience {0}'.format(experience))
+            for explorer in set(chain(experience.comrades(request), experience.tracking_explorers.all())):
+                notify.send(recipient=explorer, sender=request.user, target=new_narrative, verb='has written a new narrative for experience {0}'.format(experience))
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
         form = NarrativeForm(request.user, initial={'experience': experience.id, 'is_public': experience.is_public, 'title': datetime.now().strftime('%B %d, %Y')})
@@ -67,7 +68,7 @@ def edit(request, narrative_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Narrative successfully updated')
-                for comrade in narrative.experience.comrades(request):
+                for explorer in narrative.experience.comrades(request):
                     notify.send(recipient=comrade, sender=request.user, target=narrative, verb='edited a narrative')
                 return redirect('/narratives/{0}'.format(narrative.id))
         else:

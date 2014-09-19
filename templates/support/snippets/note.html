@@ -4,7 +4,7 @@
     <div class="{{ model }}_note">
         <p>{{ note.comment }}</p>
         <div class="smaller_font">
-            <p><a href="{% url 'story' note.user_id %}">{{ note.user_name }}</a></p>
+            <p><a href="{% url 'profile' note.user_id %}">{{ note.user_name }}</a></p>
             {% ifnotequal model 'explorer'  %}
                 {% ifnotequal model 'photo' %}
                     <p>
