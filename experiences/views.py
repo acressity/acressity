@@ -121,13 +121,6 @@ def brief(request, experience_id):
     return render(request, 'experiences/brief.html', {'experience': experience, 'form': form})
 
 
-def home(request):
-    if request.user.is_authenticated():
-        experiences = Experience.objects.filter(explorer_id=request.user.id)
-    featured_experiences = Experience.objects.filter(is_feature=True)
-    return render(request, 'experiences/home.html', {'experiences': experiences, 'featured_experiences': featured_experiences})
-
-
 def delete(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if experience.author == request.user:

@@ -109,6 +109,10 @@ class Explorer(AbstractBaseUser):
     def top_five(self):
         return self.ordered_experiences()[:5]
 
+    # Wanting to have only 3 to keep topbar dropdown less cluttered. Need top_five for backwards compatibility
+    def top_three(self):
+        return self.ordered_experiences()[:3]
+
     def latest_narrative(self):
         if self.narratives.exists():
             return self.narratives.latest('date_created')

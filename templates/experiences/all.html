@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>All Public Experiences</h2>
+	<h2>All Experiences</h2>
     <a href="{% url 'freshest_experiences' %}">Newest experiences first</a>
 	{% for experience in all_public_experiences %}
 		{% include "experiences/snippets/dash.html" %}
 	{% endfor %}
-    {% with '/experiences/all' as url %}
+    {% with '/experiences/' as url %}
         {% include "snippets/pagination.html" %}
     {% endwith %}
 {% endblock content %}

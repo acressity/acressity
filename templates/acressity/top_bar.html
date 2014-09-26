@@ -68,7 +68,7 @@
 
                     {% if request.user.is_authenticated %}
 
-                        {% for experience in request.user.top_five %}
+                        {% for experience in request.user.top_three %}
                             <a href="{% url 'experiences.views.index' experience.id %}"><li>
                                 {% if experience.gallery.featured_photo %}
                                     <img style="text-align: center; padding: 5px; float: left;" src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience }}"/>

@@ -2,7 +2,6 @@ settings.py
 *.pyc
 static/
 static3/
-logs/
 TODO
 .sass_cache/
 manage.py

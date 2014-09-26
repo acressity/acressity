@@ -243,7 +243,7 @@ def site_login(request):
     if request.GET.get('next') == '/explorers/logout/' or request.POST.get('next') == '/explorers/logout/' or request.META.get('HTTP_REFERER') == request.build_absolute_uri(reverse('acressity_index')):
         next_url = reverse('my_journey')
     else:
-        next_url = request.GET.get('next') or request.POST.get('next')
+        next_url = request.GET.get('next') or request.POST.get('next') or 'my_journey'
     username_provided = request.POST.get('username')
     if username_provided is None:
         messages.error(request, _('Please provide either your email or optional trailname for logging in'))
