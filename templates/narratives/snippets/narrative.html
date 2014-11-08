@@ -1,4 +1,5 @@
 {% load comments %}
+{% load narrative_extras %}
 
 <h2>{{ narrative.title }}</h2>
 {% if not narrative.is_public %}
@@ -48,7 +49,7 @@
     {% endif %}
     <p style="text-align:right;">{{ narrative.date_created|date:"F j, Y" }}</p>
     <div>
-        {{ narrative.embedded_narrative|safe|linebreaks }}
+        {{ narrative.embedded_narrative|replace:"/ /&nbsp;"|safe|linebreaksbr }}
     </div>
     <div class="clear_both"> </div>
 </div>
