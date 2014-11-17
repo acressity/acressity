@@ -49,7 +49,7 @@
     {% endif %}
     <p style="text-align:right;">{{ narrative.date_created|date:"F j, Y" }}</p>
     <div>
-        <pre>{{ narrative.embedded_narrative|safe|linebreaksbr }}</pre>
+        {{ narrative.embedded_narrative|safe|linebreaksbr }}
     </div>
     <div class="clear_both"> </div>
 </div>
