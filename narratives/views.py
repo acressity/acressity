@@ -69,7 +69,7 @@ def edit(request, narrative_id):
                 form.save()
                 messages.success(request, 'Narrative successfully updated')
                 for explorer in narrative.experience.comrades(request):
-                    notify.send(recipient=comrade, sender=request.user, target=narrative, verb='edited a narrative')
+                    notify.send(recipient=explorer, sender=request.user, target=narrative, verb='edited a narrative')
                 return redirect('/narratives/{0}'.format(narrative.id))
         else:
             form = NarrativeForm(narrative.author, instance=narrative)
