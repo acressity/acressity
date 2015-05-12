@@ -45,7 +45,7 @@
 				{{ form.category }}
 			</div>
 			<div class="formatted_input">
-				<h3>Public? {{ form.is_public }}</h3>
+				<h3 id="id_is_public">Public? {{ form.is_public }}</h3>
 				{{ form.is_public.errors }}
 				<div onclick="toggle_div('is_public_help_text');">
 					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
@@ -54,6 +54,29 @@
 					{{ form.is_public.help_text }}
 				</div>
 			</div>
+			{% comment %}
+				A start on getting individual narratives password-protected
+				{# Hide the password field if the experience is public #}
+				{# Toggle the password field when is_public is toggled #}
+				<div id="password_div" class="formatted_input {% if form.is_public %}hidden{% endif %}">
+					<script type="text/javascript">
+						e = document.getElementById("id_is_public");
+						d = document.getElementById("password_div");
+						e.onclick = function(){
+							toggle_div("password_div");
+						};
+					</script>
+					<h3>Password</h3>
+					{{ form.password.errors }}
+					{{ form.password }}
+					<div onclick="toggle_div('password_help_text');">
+						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
+					</div>
+					<div class="toggle_div smaller_font" id="password_help_text">
+						{{ form.password.help_text }}
+					</div>
+				</div>
+			{% endcomment %}
 		</div>
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
 		<input type="submit" value="Add narrative" />

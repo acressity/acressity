@@ -22,7 +22,7 @@
                     {% if user.is_authenticated %}
                         <a href="{% url 'journey' user.id %}">
                     {% else %}
-                        <a href="{% url 'featured_experiences' %}">
+                        <a href="{% url 'all_explorers' %}">
                     {% endif %}Journeys</a>
                 <ul>
 

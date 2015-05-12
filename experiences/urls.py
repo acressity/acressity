@@ -18,7 +18,7 @@ urlpatterns = patterns(
     url(r'^(?P<experience_id>\d+)/narratives/', include('narratives.urls')),
     url(r'^(?P<experience_id>\d+)/gallery/$', 'gallery', name='exp-gallery-list'),
     url(r'^(?P<experience_id>\d+)/upload_photo/$', 'upload_photo', name='exp_upload_photo'),
-    url(r'^(?P<experience_id>\d+)/check_password/$', 'check_password', name='check_password'),
+    url(r'^(?P<experience_id>\d+)/check_password/$', 'check_password', name='experience_check_password'),
     url(r'^create_experience/$', 'create', name='create_experience'),
     url(r'^(?P<experience_id>\d+)/leave_experience/$', 'leave_experience', name='leave_experience'),
     url(r'^(?P<experience_id>\d+)/new_experience/$', 'new_experience', name='new_experience'),

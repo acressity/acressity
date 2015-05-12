@@ -4,10 +4,12 @@ from photologue.models import Gallery, Photo
 from acressity.utils import embed_string
 
 from django.db import models
+from django import forms
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 
 
@@ -15,8 +17,8 @@ class Narrative(models.Model):
     '''
     Term describing description of an aspect of an experience. Think of these as pages or sections within a chapter; they are the sustenance of the experience. Examples of narratives include a note, update, thought, plan, itinerary, journal entry, publication, (ad infinitum) about the experience...
     '''
-    narrative = models.TextField(help_text='The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.', null=False)
-    title = models.CharField(max_length=200, blank=True, null=True, help_text='Title of the narrative. If none given, defaults to date created.')
+    narrative = models.TextField(help_text=_('The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.'), null=False)
+    title = models.CharField(max_length=200, blank=True, null=True, help_text=_('Title of the narrative. If none given, defaults to date created.'))
     experience = models.ForeignKey(Experience, related_name='narratives')
     author = models.ForeignKey(get_user_model(), related_name='narratives', null=False)
     date_created = models.DateTimeField(default=datetime.now, null=False, blank=True)
@@ -27,6 +29,7 @@ class Narrative(models.Model):
     # location = models.ForeignKey(GeoLocation)  # Something like this would be nice
     # lat = models.FloatField(null=True, help_text='Voluntarily saved latitude associated with the narrative')
     # long = models.FloatField(null=True, help_text='Voluntarily saved longitude associated with the narrative')
+    password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to this narrative if it is private.'))
 
     def __init__(self, *args, **kwargs):
         # Allows the quicker check of whether or not a particular field has changed
@@ -57,10 +60,7 @@ class Narrative(models.Model):
         if request.user.is_authenticated():
             if request.user.id == self.author_id:
                 return True
-            else:
-                return False
-        else:
-            return False
+        return False
 
     def save(self, *args, **kwargs):
         if not self.title:

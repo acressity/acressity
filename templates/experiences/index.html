@@ -142,7 +142,7 @@
 			<h3>Narratives</h3>
 			{% if not privileged and experience.password %}
 				<h4>If you have been given a password, you may provide it here</h4>
-				<form action="{% url 'check_password' experience.id %}" method="POST">
+				<form action="{% url 'experience_check_password' experience.id %}" method="POST">
 					{% csrf_token %}
 					<div class="formatted_input">
 						<input type="text" name="password" />

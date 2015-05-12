@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 
+{% block head_insert %}
+    <style type="text/css">
+        /* Remove the evidence left by this div */
+        #content {
+            padding: 0px;
+            -moz-box-shadow: 0 0 0px 0px #000;
+            -webkit-box-shadow: 0 0 0px 0px #000;
+            box-shadow: 0 0 0px 0px #000;
+            background-color: rgba(0, 0, 0, 0);
+        }
+    </style>
+{% endblock head_insert %}
+
+{% block content %}
+    
+    <a href="{% url 'featured_experiences' %}">
+        <div id="explore_button">
+            <p>Explore</p>
+        </div>
+    </a>
+    
+{% endblock content %}
+
+{# {% block right_content %}{% endblock right_content %} #}
+
+{% comment %} Former stuff before Alec's suggestion
 {% block content %}
 	<div id="main_index_header">
 		<img src="{{ STATIC_URL }}img/logo.jpg" title="From the comfort of the valleys to the growth in the mountains" />
@@ -47,3 +73,4 @@
         <input id="large_button" type="button" value="Create your own journey" />
     </a>
 {% endblock content %}
+{% endcomment %}

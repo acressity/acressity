@@ -58,6 +58,13 @@
         <div class="formatted_input">
             <label for="id_is_public">    
                 <h3>Public? {{ form.is_public }}</h3>
+                <script type="text/javascript">
+                    e = document.getElementById("id_is_public");
+                    d = document.getElementById("password_div");
+                    e.onclick = function(){
+                        toggle_div("password_div");
+                    };
+                </script>
             </label>
             <div class="about_this">
                 <div onclick="toggle_div('about_public_experiences');" class="smaller_font">
@@ -66,6 +73,20 @@
                 <div id="about_public_experiences" class="help_text">
                     {{ form.is_public.help_text}}
                 </div>
+            </div>
+        </div>
+        {# No need to check whether user is author #}
+        {# By default, the password field is hidden since default state for is
+        _public is false #}
+        <div id="password_div" class="formatted_input hidden">
+            <strong>Password</strong>
+            {{ form.password.errors }}
+            {{ form.password }}
+            <div onclick="toggle_div(this.nextElementSibling);">
+                <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
+            </div>
+            <div class="toggle_div smaller_font" id="password_help_text">
+                {{ form.password.help_text }}
             </div>
         </div>
         <div class="formatted_input">
