@@ -2,6 +2,7 @@ settings.py
 *.pyc
 static/
 static3/
+.sass-cache
 logs/
 TODO
 .sass_cache/

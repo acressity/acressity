@@ -1,7 +1,12 @@
 <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" /></a>
 {% if photo.title %}
     <br />
-    <span class="caption">{{ photo.title }}</span>
+    <h4>{{ photo.title }}</h4>
+    <span class="caption">
+      <p>
+        {{ photo.caption }}
+      </p>
+    </span>
 {% endif %}
 {% if user.is_authenticated %}
     {% load comments %}
