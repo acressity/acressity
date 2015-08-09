@@ -1,5 +1,6 @@
 from datetime import datetime
 from itertools import chain
+import json
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -9,7 +10,6 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
-from django.utils import simplejson
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from narratives.models import Narrative
@@ -55,7 +55,7 @@ def create(request, experience_id):
 # Following for AJAX saving purposes. Replace edit??
 @login_required
 def save(request, narrative_id):
-    json = simplejson.dumps({'success': 'no post'})
+    json = json.dumps({'success': 'no post'})
     return HttpResponse(json)
 
 

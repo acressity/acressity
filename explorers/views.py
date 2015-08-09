@@ -1,4 +1,4 @@
-import simplejson
+import json
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
@@ -269,4 +269,4 @@ def site_login(request):
 
 def check_trailname(request):
     trailname = request.GET.get('trailname')
-    return HttpResponse(simplejson.dumps({'found': bool(get_user_model().objects.filter(trailname=trailname))}), mimetype='application/json')
+    return HttpResponse(json.dumps({'found': bool(get_user_model().objects.filter(trailname=trailname))}))
