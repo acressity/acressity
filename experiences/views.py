@@ -21,6 +21,7 @@ from notifications import notify
 from photologue.models import Gallery
 from explorers.models import Explorer
 from support.models import InvitationRequest
+from paypal.standard.forms import PayPalPaymentsForm
 
 
 @login_required
@@ -74,9 +75,15 @@ def index(request, experience_id):
     experience_brief_form = None
     if not experience.brief:
         experience_brief_form = ExperienceBriefForm(instance=experience)
-    else:
-        experience_brief_form = None
-    return render(request, 'experiences/index.html', {'experience': experience, 'narratives': narratives, 'author': experience.is_author(request), 'privileged': privileged, 'form': form, 'experience_brief_form': experience_brief_form})
+    context = {
+        'experience': experience,
+        'narratives': narratives,
+        'author': experience.is_author(request),
+        'privileged': privileged,
+        'narrative_form': narrative_form,
+        'experience_brief_form': experience_brief_form,
+    }
+    return render(request, 'experiences/index.html', context)
 
 
 def edit(request, experience_id):
