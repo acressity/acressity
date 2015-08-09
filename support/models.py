@@ -70,8 +70,8 @@ class PotentialExplorer(models.Model):
     '''
     Model to represent a person being invited to be a part of an experience. Should be deleted based on reply or a timeout
     '''
-    first_name = models.CharField(max_length=30, null=False, blank=False)
-    last_name = models.CharField(max_length=30, null=False, blank=False)
+    first_name = models.CharField(max_length=50, null=False, blank=False)
+    last_name = models.CharField(max_length=60, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False, help_text='This information is used responsibly. It will only be used to send an invitation request.')
 
     def __unicode__(self):
