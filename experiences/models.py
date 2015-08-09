@@ -12,10 +12,6 @@ from django.contrib.auth.hashers import make_password
 from photologue.models import Photo, Gallery
 from acressity.utils import embed_string
 
-# @receiver(m2m_changed, sender=Narrative)
-# def experience_handler(sender, **kwargs):
-# 	pass
-
 
 class ExperienceManager(models.Manager):
     def get_random(self, num=1):
@@ -30,7 +26,7 @@ class Experience(models.Model):
     a book about your journey.
     '''
 
-    experience = models.CharField(max_length=200, help_text=_('Title of the experience.'))  # Add null=False
+    experience = models.CharField(max_length=255, null=False, help_text=_('Title of the experience.'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text=_('Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.'))
     date_created = models.DateTimeField(default=timezone.now, null=False, blank=True)
     date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
