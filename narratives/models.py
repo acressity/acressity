@@ -4,21 +4,23 @@ from acressity.utils import embed_string
 
 from django.db import models
 from django import forms
-from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
+from django.conf import settings
 
 
 class Narrative(models.Model):
     '''
-    Term describing description of an aspect of an experience. Think of these as pages or sections within a chapter; they are the sustenance of the experience. Examples of narratives include a note, update, thought, plan, itinerary, journal entry, publication, (ad infinitum) about the experience...
+    Term describing description of an aspect of an experience. Think of these as pages or sections
+    within a chapter; they are the sustenance of the experience. Examples of narratives include a note,
+    update, thought, plan, itinerary, journal entry, publication, (ad infinitum) about the experience...
     '''
     narrative = models.TextField(help_text=_('The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.'), null=False)
-    title = models.CharField(max_length=200, blank=True, null=True, help_text=_('Title of the narrative. If none given, defaults to date created.'))
+    title = models.CharField(max_length=255, blank=True, null=True, help_text=_('Title of the narrative. If none given, defaults to date created.'))
     experience = models.ForeignKey(Experience, related_name='narratives')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='narratives', null=False)
     date_created = models.DateTimeField(default=timezone.now, null=False, blank=True)
