@@ -4,7 +4,7 @@ from model_utils import managers, Choices
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.generic import GenericForeignKey
 from django.db import models
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
