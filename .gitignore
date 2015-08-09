@@ -1,15 +1,12 @@
 settings.py
 *.pyc
-static/
-static3/
-.sass-cache
 logs/
 TODO
-.sass_cache/
-manage.py
 DEPLOY
+static/
 explorers/migrations/
 experiences/migrations/
 photologue/migrations/
 support/migrations/
 narratives/migrations/
+.idea
