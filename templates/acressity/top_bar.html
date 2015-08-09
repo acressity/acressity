@@ -79,7 +79,7 @@
                         {% endfor %}
 
                         {% if user.tracking_experiences.count > 0 %}
-                            <a href="{% url 'tracking_experiences' user.id %}"><li>Your Tracking Experiences</li></a>
+                            <a href="{% url 'tracking_experiences' user.id %}"><li>Experiences You Track</li></a>
                         {% endif %}
                         
                     {% endif %}
@@ -119,35 +119,27 @@
                     <ul>
                         <li><a onclick="window.location.href='/accounts/login';">Login</a>
                             <ul>
-                                <li id="top_bar_login">
-                                    <form action="/explorers/login/?next={{ request.path }}" method="POST" class="no_styling full_width">
+                                <li id="top_bar_login" class="smaller">
+                                    <form action="/explorers/login/?next={{ request.path }}" method="POST" class="full_width">
                                         {% csrf_token %}
-                                        <div class="">
-                                            Email or <abbr title="Creative username to describe your journey">Trailname</abbr>:
-                                            <input type="text" name="username" id="username" size="10" />
+                                        <div class="formatted_input">
+                                            <label for="username">Email/<abbr title="Creative username to describe your journey">Trailname</abbr></label>
+                                            <input type="text" class="smaller" name="username" id="username"
+                                                   size="10" />
                                         </div>
-                                        <div class="">
-                                            Password:
-                                            <input type="password" name="password" id="password" size="10" />
+                                        <div class="formatted_input">
+                                            <label for="password">Password</label>
+                                            <input type="password" class="smaller" name="password" id="password"
+                                                   size="10" />
                                         </div>
-                                        <div class="">
-                                            <input type="submit" class="expand-button" value="Log In" />
+                                        <div class="formatted_input">
+                                            <input type="submit" value="Log In" />
                                         </div>
                                     </form>
-                                    <br />
-                                    <input type="button" class="expand-button" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
+                                    <div class="formatted_input">
+                                        <input type="button" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
+                                    </div>
                                 </li>
-                                {% comment %}
-                                {# Taken out in favor of having the signup bar on the right #}
-                                <li>
-                                    <form id="top_bar_signup" action="{% url 'register' %}" class="no_styling">
-                                        {% csrf_token %}
-                                        <div class="float_right">
-                                            <input type="submit" class="expand-button" value="Sign up" />
-                                        </div>
-                                    </form>
-                                </li>
-                                {% endcomment %}
                             </ul>
                         </li>
                     </ul>
