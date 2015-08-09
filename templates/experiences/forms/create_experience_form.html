@@ -76,8 +76,7 @@
             </div>
         </div>
         {# No need to check whether user is author #}
-        {# By default, the password field is hidden since default state for is
-        _public is false #}
+        {# By default, the password field is hidden since default state for is_public is false #}
         <div id="password_div" class="formatted_input hidden">
             <strong>Password</strong>
             {{ form.password.errors }}
@@ -96,10 +95,10 @@
                 {{ form.search_term }}
             </label>
             <div class="about_this">
-                <div onclick="toggle_div('about_search_term');" class="smaller_font">
+                <div onclick="toggle_div('about_search_term');" class="help-text toggle_div">
                     <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" /></strong>
                 </div>
-                <div id="about_search_term" class="help_text">
+                <div id="about_search_term" class="toggle_div help-text">
                     {{ form.search_term.help_text }}
                 </div>
             </div>

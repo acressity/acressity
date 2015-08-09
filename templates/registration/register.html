@@ -65,14 +65,6 @@
 {% endblock head_insert %}
 
 {% block content %}
-	{% if request.session.experience %}
-		<h2>Experience</h2>
-		<h3>{{ request.session.experience }}</h3>
-		{{ request.session.experience.get_expiry_date }}
-	{% endif %}
-		<h3>
-			Brief, necessary information to start your journey
-		</h3>
 	{{ form.non_field_errors }}
 	<form action="" method="POST">
 		{% csrf_token %}

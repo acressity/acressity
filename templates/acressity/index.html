@@ -2,7 +2,6 @@
 
 {% block head_insert %}
     <style type="text/css">
-        /* Remove the evidence left by this div */
         #content {
             padding: 0px;
             -moz-box-shadow: 0 0 0px 0px #000;
@@ -22,55 +21,3 @@
     </a>
     
 {% endblock content %}
-
-{# {% block right_content %}{% endblock right_content %} #}
-
-{% comment %} Former stuff before Alec's suggestion
-{% block content %}
-	<div id="main_index_header">
-		<img src="{{ STATIC_URL }}img/logo.jpg" title="From the comfort of the valleys to the growth in the mountains" />
-        <div id="text">
-    		<h1>Acressity</h1>
-    		<h3>Explore new experiences</h3>
-        </div>
-	</div>
-	<hr />
-	<div class="experience_item">
-        <div class="align_center">
-            <h3 class="option">
-                <img src="{{ STATIC_URL }}img/icons/track-icon.png" class="option_icon" /> View some of the site featured experiences
-            </h3>
-        </div>
-        <div id="featured_experiences" class="toggle_div">
-        	<ul>
-        		{% for featured_experience in featured_experiences %}
-        			{% with featured_experience.experience as experience %}
-        				<li>{% include "experiences/snippets/dash.html" %}</li>
-        			{% endwith %}
-        		{% endfor %}
-        	</ul>
-        </div>
-        <img src="{{ STATIC_URL }}img/icons/wide-down-arrow.png" class="wide_toggler" onclick="toggle_div('featured_experiences');" />
-    </div>
-    <hr />
-    <div class="explorer_item">
-    	<div class="align_center">
-    		<h3 class="option">
-            	<img src="{{ STATIC_URL }}img/icons/explorer-icon.png" class="option_icon" /> View some of the explorers
-            </h3>
-    	</div>
-        <div id="featured_explorers" class="toggle_div">
-        	<ul>
-        		{% for explorer in explorers %}
-        			<li>{% include "explorers/snippets/dash.html" %}</li>
-        		{% endfor %}
-        	</ul>
-        </div>
-        <img src="{{ STATIC_URL }}img/icons/wide-down-arrow.png" name="hoobla" onclick="toggle_div('featured_explorers');" class="wide_toggler" />
-    </div>
-    <hr />
-    <a href="{% url 'register' %}">
-        <input id="large_button" type="button" value="Create your own journey" />
-    </a>
-{% endblock content %}
-{% endcomment %}
