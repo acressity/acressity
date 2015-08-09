@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -43,7 +43,7 @@ class Hurrah(models.Model):
     '''
     Model for 'appreciating' function. No functionality atm
     '''
-    explorer = models.ForeignKey(get_user_model())
+    explorer = models.ForeignKey(settings.AUTH_USER_MODEL)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField(_('object ID'), null=False)
 
@@ -55,8 +55,8 @@ class InvitationRequest(models.Model):
     '''
     Model attempting to be fairly universal for the potential new relationship between two people. Author refers to the explorer who created the experience. Recruit is an existing explorer, and potential_explorer is a person not yet registered, but nonetheless with some sort of interest in the experience.
     '''
-    author = models.ForeignKey(get_user_model(), related_name='experience_author', null=False, help_text='The author of the experience. Able to be the explorer who invited the recruit or potential explorer, or the person who an existing explorer is contacting to become a part of the experience.')
-    recruit = models.ForeignKey(get_user_model(), related_name='experience_recruit', null=True, blank=True, help_text='References an existing explorer potentially being added to experience.')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_author', null=False, help_text='The author of the experience. Able to be the explorer who invited the recruit or potential explorer, or the person who an existing explorer is contacting to become a part of the experience.')
+    recruit = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_recruit', null=True, blank=True, help_text='References an existing explorer potentially being added to experience.')
     potential_explorer = models.ForeignKey('PotentialExplorer', null=True, blank=True, help_text='References potential new user with little information for registration provided by invitation author.', related_name='invitation_request')
     date_created = models.DateTimeField(default=timezone.now)
     experience = models.ForeignKey(Experience, null=False)
