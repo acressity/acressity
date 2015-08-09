@@ -38,7 +38,7 @@ class Explorer(AbstractBaseUser):
     '''
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=60, null=False)
-    trailname = models.CharField(max_length=50, null=True, blank=True, unique=True, help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment.<br />It\'ll be displayed as John "<em>trailname</em>" Doe<br />It also allows others to find you by typing acressity.com/<em>trailname</em>'))
+    trailname = models.CharField(max_length=55, null=True, blank=True, unique=True, help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment.<br />It\'ll be displayed as John "<em>trailname</em>" Doe<br />It also allows others to find you by typing acressity.com/<em>trailname</em>'))
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
     brief = models.TextField(null=True, blank=True, help_text=_('Short bio about you'))
     email = models.EmailField(max_length=254, null=False, blank=False, unique=True, help_text=_('Email addresses are used for resetting passwords and notifications. Privacy is protected and confidential.'))
@@ -49,7 +49,7 @@ class Explorer(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     notify = models.BooleanField(default=True)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
-    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers', blank=True, null=True, help_text=_('Experiences that the explorer has chosen to track.'))
+    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers', blank=True, help_text=_('Experiences that the explorer has chosen to track.'))
     featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience', help_text=_('The experience that an explorer is currently featuring. Will be displayed on explorer\'s dash for easy accessibility and will be shown alongside explorer information for others to see.'))
 
     objects = ExplorerManager()
