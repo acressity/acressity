@@ -72,27 +72,33 @@ anything lacking in efficiency or if you have any suggestions.
 									{% if not request.session.signing_up %}
 										<blockquote id="welcome_quote">
 											<h2>Acressity</h2>
-											<h3>
-												An online bucketlist for the exploration of new experiences
-											</h3>
+											<h3>A bucketlist for the exploration of new experiences</h3>
 											<a href="{% url 'about' %}">learn more</a>
 										</blockquote>
 										<form action="{% url 'step_two' %}" method="POST" class="full_width main_color" style="position:relative;" onsubmit="return validateFirstExperience(this);">
 											{% csrf_token %}
 											<input type="hidden" name="initial" />
-											<h3>What do you want to experience?</h3>
+											<h3>What do <em>you</em> wish to experience?</h3>
 											<div class="formatted_input">
-												<input type="text" id="id_experience" name="experience" class="larger" onfocus="setUp(this);" />
+												<textarea type="text"  id="id_experience" name="experience" onfocus="setUp(this);"></textarea>
 											</div>
-											<input type="submit" value="Create" />
+											<div class="formatted_input">
+											    <input type="submit" value="Create" />
+											    </div>
 										</form>
 									{% else %}
-										<form method="POST" action="{% url 'register' %}">
-											{% csrf_token %}
-											Continue signing up <input type="submit" value="here" />
-										</form>
+									    {% url 'step_two' as step_two %}
+									    {% url 'register' as register %}
+									    {% ifnotequal request.path step_two %}
+									        {% ifnotequal request.path register %}
+                                                <form method="POST" action="{% url 'register' %}">
+                                                    {% csrf_token %}
+                                                    Continue signing up <input type="submit" value="here" />
+                                                </form>
+                                            {% endifnotequal %}
+                                        {% endifnotequal %}
 
-										<blockquote>
+										<blockquote class="border-demilited">
 											<p>
 												Build of your imaginings a bower in the wilderness ere you build a house within the city walls.
 											</p>
