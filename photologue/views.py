@@ -107,7 +107,7 @@ def delete_photo(request, photo_id):
         messages.success(request, 'Photo was successfully deleted')
     else:
         raise PermissionDenied
-    return redirect(reverse('pl-gallery', args=(photo.gallery.id,)))
+    return redirect(reverse('pl-gallery-edit', args=(photo.gallery.id,)))
 
 
 def photo_view(request, pk):
