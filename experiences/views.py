@@ -68,10 +68,10 @@ def index(request, experience_id):
             narratives = experience.ordered_narratives().filter(is_public=True)
     else:
         narratives = experience.ordered_narratives()
+    narrative_form = None
     if request.user in experience.explorers.all():
-        form = NarrativeForm(request.user)
-    else:
-        form = None
+        narrative_form = NarrativeForm(request.user)
+    experience_brief_form = None
     if not experience.brief:
         experience_brief_form = ExperienceBriefForm(instance=experience)
     else:
