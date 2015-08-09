@@ -15,7 +15,9 @@ anything lacking in efficiency or if you have any suggestions.
 	<head profile="http://www.w3.org/2005/10/profile">
 		<title>Acressity {% block title %}{% endblock %} {% if user.is_authenticated %}{% notifications_unread as unread_count %}{% if unread_count %}({{ unread_count }}){% endif %}{% endif %}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<meta name="description" content="{% block meta_description %}This social application is designed to be a tool with which to chart your journey into new experiences{% endblock %}" />
+		<meta name="og:description" content="{% block meta_description %}This social application is designed to be a tool with which to chart your journey into new experiences{% endblock %}" />
+		<meta name="og:title" content="Acressity - Explore New Experiences" />
+		<meta name="og:image" content="{{ STATIC_URL }}img/logo.png" />
 		<meta name="keywords" content="{% block meta_keywords %}new experience, experiences, trials, tribulations, missions{% endblock %}" />
 		<meta name="author" content="Andrew Gaines" />
 		<meta name="google-site-verification" content="3iDs3Jcximcq98UiGgWraWkgspn2xYTbkHiZcC0Asrc" />
