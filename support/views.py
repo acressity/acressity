@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.exceptions import PermissionDenied
-from django.contrib.comments import Comment
+from django_comments.models import Comment
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 

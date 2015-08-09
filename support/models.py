@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.comments.signals import comment_was_posted
+from django_comments.signals import comment_was_posted
 from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives

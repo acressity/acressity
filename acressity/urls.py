@@ -15,7 +15,7 @@ urlpatterns = patterns(
     url(r'^narratives/', include('narratives.urls')),
     url(r'^photologue/', include('photologue.urls')),
     url(r'^support/', include('support.urls')),
-    url(r'^comments/', include('django.contrib.comments.urls')),
+    url(r'^comments/', include('django_comments.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^about/$', TemplateView.as_view(template_name='acressity/about.html'), name='about'),

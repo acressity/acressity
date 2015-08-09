@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.contrib.comments import Comment
+from django_comments.models import Comment
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify

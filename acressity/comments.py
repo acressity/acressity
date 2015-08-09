@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.comments.forms import CommentDetailsForm
+from django_comments.forms import CommentDetailsForm
 
 
 class CommentForm(CommentDetailsForm):
@@ -8,4 +8,4 @@ class CommentForm(CommentDetailsForm):
 
 
 def get_form():
-        return CommentForm
+    return CommentForm
