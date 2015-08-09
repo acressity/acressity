@@ -24,3 +24,4 @@ class GalleryForm(ModelForm):
 
     class Meta:
         model = Gallery
+        exclude = ()

@@ -13,6 +13,7 @@ class PotentialExplorerForm(ModelForm):
 
     class Meta:
         model = PotentialExplorer
+        exclude = ()
 
     # def __init__(self, explorer, *args, **kwargs):
     #     super(PotentialExplorerForm, self).__init__(*args, **kwargs)
