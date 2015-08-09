@@ -3,7 +3,7 @@
 {% with note.content_type.model as model %}
     <div class="{{ model }}_note">
         <p>{{ note.comment }}</p>
-        <div class="smaller_font">
+        <div class="help-text">
             <p><a href="{% url 'profile' note.user_id %}">{{ note.user_name }}</a></p>
             {% ifnotequal model 'explorer'  %}
                 {% ifnotequal model 'photo' %}

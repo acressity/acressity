@@ -60,7 +60,7 @@
 				<div onclick="toggle_div('is_public_help_text');">
 					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
 				</div>
-				<div class="toggle_div smaller_font" id="is_public_help_text">
+				<div class="toggle_div help-text" id="is_public_help_text">
 					{{ form.is_public.help_text }}
 				</div>
 			</div>
@@ -82,7 +82,7 @@
 					<div onclick="toggle_div('password_help_text');">
 						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
 					</div>
-					<div class="toggle_div smaller_font" id="password_help_text">
+					<div class="toggle_div help-text" id="password_help_text">
 						{{ form.password.help_text }}
 					</div>
 				</div>

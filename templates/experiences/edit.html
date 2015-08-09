@@ -32,7 +32,7 @@
 				<p onclick="toggle_div('status_help_text');">
 					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="status_help_text_toggle_icon" />
 				</p>
-				<div class="toggle_div smaller_font" id="status_help_text">
+				<div class="toggle_div help-text" id="status_help_text">
 					{{ form.status.help_text }}
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 				<p onclick="toggle_div('brief_help_text');">
 					About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="brief_help_text_toggle_icon" />
 				</p>
-				<div class="toggle_div smaller_font" id="brief_help_text">
+				<div class="toggle_div help-text" id="brief_help_text">
 					{{ form.brief.help_text }}
 				</div>
 			</div>
@@ -67,7 +67,7 @@
 						<p onclick="toggle_div('make_feature_help_text');">
 							About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="make_feature_help_text_toggle_icon" />
 						</p>
-						<div class="toggle_div smaller_font" id="make_feature_help_text">
+						<div class="toggle_div help-text" id="make_feature_help_text">
 							{{ form.make_feature.help_text }}
 						</div>
 					</div>
@@ -89,7 +89,7 @@
 						<div onclick="toggle_div(this.nextElementSibling);">
 							About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" />
 						</div>
-						<div class="toggle_div smaller_font" id="is_public_help_text">
+						<div class="toggle_div help-text" id="is_public_help_text">
 							{{ form.is_public.help_text }}
 						</div>
 					</div>
@@ -101,7 +101,7 @@
 					<div onclick="toggle_div(this.nextElementSibling);">
 						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
 					</div>
-					<div class="toggle_div smaller_font" id="password_help_text">
+					<div class="toggle_div help-text" id="password_help_text">
 						{{ form.password.help_text }}
 					</div>
 				</div>
@@ -113,7 +113,7 @@
 						<div onclick="toggle_div(this.nextElementSibling);">
 							About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" />
 						</div>
-						<div class="toggle_div smaller_font" id="about_search_term">
+						<div class="toggle_div help-text" id="about_search_term">
 							{{ form.search_term.help_text }}
 						</div>
 					</div>
