@@ -5,6 +5,7 @@ import zipfile
 
 from datetime import datetime
 from inspect import isclass
+from importlib import import_module
 
 from django.db import models
 from django.db.models.signals import post_init
@@ -15,7 +16,6 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.utils.encoding import smart_str, force_unicode
 from django.utils.functional import curry
-from django.utils.importlib import import_module
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -185,7 +185,7 @@ class Gallery(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      verbose_name=_('content type'),
                                      related_name="content_type_set_for_%(class)s")
-    object_pk = models.TextField(_('object ID'), null=True)
+    object_pk = models.IntegerField(_('object ID'), null=True)
 
     class Meta:
         ordering = ['-date_added']
