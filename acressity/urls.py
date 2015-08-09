@@ -20,7 +20,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^about/$', TemplateView.as_view(template_name='acressity/about.html'), name='about'),
     url(r'^step_two/', 'step_two', name="step_two"),
-    url(r'^welcome/$', WelcomeTemplateView.as_view(template_name='registration/welcome.html'), name='welcome'),
+    url(r'^welcome/$', WelcomeTemplateView.as_view(), name='welcome'),
     url(r'^creators_note/$', TemplateView.as_view(template_name='acressity/creators_note.html'), name='creator_note'),
     url(r'^glossary/$', TemplateView.as_view(template_name='acressity/glossary.html'), name='glossary'),
     # Patching to work with Django logout...

@@ -60,6 +60,8 @@ def contact(request):
 
 
 class WelcomeTemplateView(TemplateView):
+    template_name = 'registration/welcome.html'
+
     def get_context_data(self, **kwargs):
         context = super(WelcomeTemplateView, self).get_context_data(**kwargs)
         context['form'] = ExperienceForm()
