@@ -11,7 +11,7 @@ from experiences.models import Experience
 
 class RegistrationForm(ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password1()'}), label='password1')
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'onkeyup': 'check_password2()'}), label='password2')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password2()'}), label='password2')
     first_name = forms.CharField(widget=forms.TextInput(attrs={'onblur': 'say_hello();'}))
 
     class Meta:
