@@ -9,4 +9,5 @@ experiences/migrations/
 photologue/migrations/
 support/migrations/
 narratives/migrations/
+notifications/migrations/
 .idea
