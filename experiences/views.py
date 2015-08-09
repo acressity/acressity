@@ -1,4 +1,4 @@
-import simplejson
+import json
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -40,7 +40,7 @@ def create(request):
             if 'ajax' in request.POST:
                 html = '<hr />' + render_to_string('experiences/snippets/dash.html', {'experience': new_experience, 'user': request.user, 'STATIC_URL': settings.STATIC_URL})
                 data = {'html': html}
-                return HttpResponse(simplejson.dumps(data))
+                return HttpResponse(json.dumps(data))
             messages.success(request, _('Experience successfully added'))
             return redirect(reverse('new_experience', args=(new_experience.id,)))
     else:
@@ -238,5 +238,5 @@ def ajax_thing(request):
     experience = Experience.objects.get(pk=request.GET['exp_id'])
     d = {'thing_two': experience.experience}
 
-    json = simplejson.dumps(d)
-    return HttpResponse(json, mimetype='application/json')
+    json_val = json.dumps(d)
+    return HttpResponse(json_val, mimetype='application/json')
