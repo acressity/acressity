@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django import forms
 from django.db import models
@@ -32,7 +32,7 @@ class Experience(models.Model):
 
     experience = models.CharField(max_length=200, help_text=_('Title of the experience.'))  # Add null=False
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text=_('Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.'))
-    date_created = models.DateTimeField(default=datetime.now, null=False, blank=True)
+    date_created = models.DateTimeField(default=timezone.now, null=False, blank=True)
     date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
     brief = models.TextField(blank=True, null=True, help_text=_('Written description of the experience to provide a little insight.'))
     status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
@@ -132,7 +132,7 @@ class Experience(models.Model):
 
 class FeaturedExperience(models.Model):
     experience = models.ForeignKey(Experience)
-    date_featured = models.DateTimeField(default=datetime.now)
+    date_featured = models.DateTimeField(default=timezone.now)
 
     objects = ExperienceManager()
 

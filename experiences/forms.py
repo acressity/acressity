@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
@@ -15,7 +15,7 @@ from explorers.models import Explorer
 class ExperienceForm(ModelForm):
     experience = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger'}))
     make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
-    date_created = forms.DateField(widget=SelectDateWidget(years=range(datetime.now().year, datetime.now().year-110, -1)), required=False)
+    date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
 
     class Meta:
         model = Experience
@@ -28,7 +28,7 @@ class ExperienceForm(ModelForm):
     def clean_date_created(self):
         date_created = self.cleaned_data.get('date_created')
         if not date_created:
-            date_created = datetime.now()
+            date_created = timezone.now()
         return date_created
 
     def clean_experience(self):

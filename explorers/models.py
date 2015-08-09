@@ -2,11 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.core.signals import request_finished
 
 from photologue.models import Gallery
-from datetime import datetime
 from experiences.models import Experience
 
 
@@ -43,7 +43,7 @@ class Explorer(AbstractBaseUser):
     brief = models.TextField(null=True, blank=True, help_text=_('Short bio about you'))
     email = models.EmailField(max_length=254, null=False, blank=False, unique=True, help_text=_('Email addresses are used for resetting passwords and notifications. Privacy is protected and confidential.'))
     birthdate = models.DateField(null=True, blank=True)
-    date_joined = models.DateTimeField(default=datetime.now)
+    date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

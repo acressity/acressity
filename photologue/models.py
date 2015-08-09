@@ -12,6 +12,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 from django.utils.encoding import smart_str, force_unicode
 from django.utils.functional import curry
 from django.utils.importlib import import_module
@@ -153,8 +154,8 @@ IMAGE_FILTERS_HELP_TEXT = _('Chain multiple filters using the following \
 
 class Gallery(models.Model):
     date_added = models.DateTimeField(_('date published'),
-                                      default=datetime.now)
-    title = models.CharField(_('title'), max_length=100, unique=False)
+                                      default=timezone.now)
+    title = models.CharField(_('title'), max_length=255, unique=False)
     title_slug = models.SlugField(_('title slug'),
                                   unique=False,
                                   help_text=_('A "slug" is a unique URL-\
@@ -563,7 +564,7 @@ class ImageModel(models.Model):
             except:
                 pass
         if self.date_taken is None:
-            self.date_taken = datetime.now()
+            self.date_taken = timezone.now()
         if self._get_pk_val():
             self.clear_cache()
         super(ImageModel, self).save(*args, **kwargs)
@@ -587,7 +588,7 @@ class Photo(ImageModel):
     title_slug = models.SlugField(_('slug'), unique=False,
                                   help_text=('A "slug" is a unique URL-friendly title for an object.'), blank=True)
     caption = models.TextField(_('caption'), blank=True, null=True)
-    date_added = models.DateTimeField(_('date added'), default=datetime.now, editable=False)
+    date_added = models.DateTimeField(_('date added'), default=timezone.now, editable=False)
     gallery = models.ForeignKey(Gallery, blank=False, null=False, related_name='photos')
     is_public = models.BooleanField(_('is public'), default=True, help_text=_('Public photographs will be displayed in the default views.'))
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))

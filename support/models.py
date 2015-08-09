@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_comments.signals import comment_was_posted
 from django.template import Context, Template
@@ -20,9 +21,9 @@ class Cheer(models.Model):
     '''
     Model for 'following' function
     '''
-    cheerer = models.ForeignKey(get_user_model(), related_name='cheers_from')
-    explorer = models.ForeignKey(get_user_model(), related_name='cheers_for')
-    date_cheered = models.DateTimeField(default=datetime.now)
+    cheerer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='cheers_from')
+    explorer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='cheers_for')
+    date_cheered = models.DateTimeField(default=timezone.now)
 
     def __unicode__(self):
         return '{0} is cheering for {1}'.format(self.explorer, self.cheerer)
@@ -57,7 +58,7 @@ class InvitationRequest(models.Model):
     author = models.ForeignKey(get_user_model(), related_name='experience_author', null=False, help_text='The author of the experience. Able to be the explorer who invited the recruit or potential explorer, or the person who an existing explorer is contacting to become a part of the experience.')
     recruit = models.ForeignKey(get_user_model(), related_name='experience_recruit', null=True, blank=True, help_text='References an existing explorer potentially being added to experience.')
     potential_explorer = models.ForeignKey('PotentialExplorer', null=True, blank=True, help_text='References potential new user with little information for registration provided by invitation author.', related_name='invitation_request')
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField(default=timezone.now)
     experience = models.ForeignKey(Experience, null=False)
     code = models.CharField(max_length=25, null=True, blank=True, help_text='Random code sent with the email in the url, used to confirm the uniqueness and identity of the invited explorer.')
 
@@ -104,7 +105,7 @@ def comment_handler(sender, **kwargs):
         actor_object_id=comment.user.pk,
         public=True,
         description=comment.comment,
-        timestamp=datetime.now()
+        timestamp=timezone.now()
     )
 
     newnotify.save()

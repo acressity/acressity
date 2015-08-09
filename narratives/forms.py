@@ -1,15 +1,16 @@
+from datetime import date
+
+from django import forms
 from django.forms import ModelForm
 from narratives.models import Narrative
-from django import forms
 from django.forms.extras.widgets import SelectDateWidget
-from datetime import datetime, date
 from django.utils import timezone
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 
 
 class NarrativeForm(ModelForm):
-    date_created = forms.DateField(widget=SelectDateWidget(years=range(datetime.now().year, datetime.now().year-110, -1)), required=False)
+    date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger', 'onfocus': 'if($(this).val()==this.defaultValue){$(this).val("")};', 'onblur': 'if($(this).val()==""){$(this).val(this.defaultValue)};'}))  # default value moved to views.py
 
     def __init__(self, explorer, *args, **kwargs):
@@ -19,7 +20,7 @@ class NarrativeForm(ModelForm):
     def clean_date_created(self):
         date_created = self.cleaned_data.get('date_created')
         if not date_created:
-            date_created = datetime.now()
+            date_created = timezone.now()
         return date_created
 
     def clean_narrative(self):
