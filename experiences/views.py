@@ -21,7 +21,6 @@ from notifications import notify
 from photologue.models import Gallery
 from explorers.models import Explorer
 from support.models import InvitationRequest
-from paypal.standard.forms import PayPalPaymentsForm
 
 
 @login_required
