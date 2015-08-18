@@ -95,27 +95,10 @@
 	</div>
 	{% ifequal user explorer %}
 		<div class="experience_item">
-			<h2 class="toggler" onclick="toggle_div('create_experience_div');">{% if experiences %}Add another experience to your journey{% else %}Create a new experience{% endif %} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="create_experience_div_toggle_icon" /></h2>
+			<h3 class="toggler" onclick="toggle_div('create_experience_div');">{% if experiences %}Add another experience to your journey{% else %}Create a new experience for your journey{% endif %} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="create_experience_div_toggle_icon" /></h3>
 			<div id="create_experience_div" class="toggle_div">
-				<form action="{% url 'create_experience' %}" id="create_experience" class="full_width" method="POST">
-					{% csrf_token %}
-					<div class="formatted_input">
-						{{ form.experience }}
-					</div>
-					<h4 class="toggler" onclick="toggle_div('more_options');">
-						More options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="more_options_toggle_icon" />
-					</h4>
-					<div class="toggle_div" id="more_options">
-						<div class="formatted_input">
-							Experience is public {{ form.is_public }}
-						</div>
-						<div class="formatted_input">
-							Feature this experience {{ form.make_feature }}
-						</div>
-					</div>
-					<input type="hidden" id="ajax" name="ajax" value="True" /> {# used for the create_experience view #}
-					<input type="submit" value="Create" />
-				</form>
+			    {% url 'create_experience' as url %}
+			    {% include 'experiences/forms/experience_form.html' %}
 			</div>
 		</div>
 	{% endifequal %}
