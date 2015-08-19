@@ -27,6 +27,9 @@ urlpatterns = patterns(
     url(r'^accounts/login/', login, name='login_page'),
     url(r'^contact/', 'contact', name='contact'),
     url(r'^notifications/', include('notifications.urls')),
-    # semi-primitive search for the query string provided. Allows easier accessing of objects by an identifying string. Careful though: it matches any string not grabbed by the above. I believe this needs to remain at the bottom.
+    url(r'^paypal/', include('paypal.standard.ipn.urls')),
+    # semi-primitive search for the query string provided.
+    # Allows easier accessing of objects by an identifying string.
+    # I believe this needs to remain at the bottom.
     url(r'^(?P<query_string>\w+)/$', 'handle_query_string', name='handle_query_string'),
 )
