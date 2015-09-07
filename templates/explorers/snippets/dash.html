@@ -38,17 +38,17 @@
         {% endif %}
     {% endifequal %}
     <div class="option_list">
-        <a href="{% url 'journey' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/journey-icon.png" title="Visit {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} journey" class="option_icon" /></a>
-        <a href="{% url 'profile' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} story" class="option_icon" /></a>
-        <a href="{% url 'explorers.views.board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} bulletin board" class="option_icon" /></a>
+        <a href="{% url 'journey' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/journey.png" title="Visit {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} journey" class="option_icon" /></a>
+        <a href="{% url 'profile' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/user.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} story" class="option_icon" /></a>
+        <a href="{% url 'explorers.views.board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon_grayscale.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} bulletin board" class="option_icon" /></a>
         {% if explorer.gallery.featured_photo %}
-            <a href="{% url 'pl-gallery' explorer.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} photos" class="option_icon" /></a>
+            <a href="{% url 'pl-gallery' explorer.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/images.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} photos" class="option_icon" /></a>
         {% endif %}
         {% ifequal user explorer %} 
-            <a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/new-experience-icon.png" class="option_icon" title="Create new experience" /></a>
+            <a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/add.png" class="option_icon" title="Create new experience" /></a>
         {% endifequal %}
         {% if user.is_authenticated %}
-            <a><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" onclick="toggle_div($(this).parent().parent().next());" class="option_icon" /></a>
+            <a href="javascript:void();"><img src="{{ STATIC_URL }}img/icons/tack.png" onclick="toggle_div($(this).parent().parent().next());" class="option_icon" /></a>
         {% endif %}
     </div>
     <div id="{{ explorer.id }}_note" class="comment toggle_div">

@@ -7,21 +7,21 @@
         </p>
         <a href="{% url 'narratives.views.create' experience.id %}">
             <h3>
-                <img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
+                <img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
                 Create your first narrative
             </h3>
         </a>
         <br />
         <a href="{% url 'experiences.views.edit' experience.id %}">
             <h3>
-                <img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit or write about '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
+                <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit or write about '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
             Edit, or write about your new experience
             </h3>
         </a>
         <br />
         <a href="{% url 'exp_upload_photo' experience.id %}">
             <h3>
-                <img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo as your portrait" class="option_icon" style="vertical-align: middle;" />
+                <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo as your portrait" class="option_icon" style="vertical-align: middle;" />
                 Upload a photo for your experience
             </h3>
         </a>

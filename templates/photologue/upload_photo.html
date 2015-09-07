@@ -37,8 +37,8 @@
 	</script>
 	<h2>Upload photo for {{ gallery.title }}</h2>
 	<div class="option_list">
-		<a href="{% url 'pl-gallery' gallery.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Back to gallery" class="option_icon" /></a>
-		<a href="{% url 'pl-gallery-edit' gallery.id %}"><img class="option_icon" title="Edit this gallery" src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png"></a>
+		<a href="{% url 'pl-gallery' gallery.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Back to gallery" class="option_icon" /></a>
+		<a href="{% url 'pl-gallery-edit' gallery.id %}"><img class="option_icon" title="Edit this gallery" src="{{ STATIC_URL }}img/icons/pencil.png"></a>
 	</div>
 	<div style="position:relative;">
 		<form action="{% url 'ajax_upload' %}" method="POST" id="photo_form" enctype="multipart/form-data">

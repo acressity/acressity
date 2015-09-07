@@ -11,10 +11,10 @@
     </h2>
     <div class="option_list">
         {% if object.gallery %}
-            <a href="{{ object.gallery.get_absolute_url }}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title=" Back to {{ object.gallery.title }} Gallery" class="option_icon" /></a>
+            <a href="{{ object.gallery.get_absolute_url }}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title=" Back to {{ object.gallery.title }} Gallery" class="option_icon" /></a>
             {% ifequal user object.author %} 
-                <a href="{% url 'photologue.views.gallery_edit' object.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this photo's album" class="option_icon" /></a>
-                <a href="{% url 'delete_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" onclick="return confirm('Delete this photo?');" /></a>
+                <a href="{% url 'photologue.views.gallery_edit' object.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this photo's album" class="option_icon" /></a>
+                <a href="{% url 'delete_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/delete.png" onclick="return confirm('Delete this photo?');" class="option_icon" /></a>
             {% endifequal %}
         {% endif %}
     </div>
@@ -22,7 +22,7 @@
         {% if object.get_previous_in_gallery %}
             <a href="/photologue/photo/{{ object.get_previous_in_gallery.id }}/" title="Previous Photo">
                 <div class="previous_photo">
-                    <img src="{{ STATIC_URL }}img/icons/previous-icon.png">
+                    <img src="{{ STATIC_URL }}img/icons/arrow-left.png" class="option_icon" />
                 </div>
             </a>
         {% endif %}
@@ -35,7 +35,7 @@
         {% if object.get_next_in_gallery %}
             <a href="/photologue/photo/{{ object.get_next_in_gallery.id }}/" title="Next Photo">
                 <div class="next_photo">
-                    <img src="{{ STATIC_URL }}img/icons/next-icon.png" />
+                    <img src="{{ STATIC_URL }}img/icons/arrow-right.png" class="option_icon" />
                 </div>
             </a>
         {% endif %}

@@ -100,17 +100,18 @@
                     <ul>
                         <a href="{% url 'journey' request.user.id %}"><li>{{ request.user.get_full_name }}</a>
                             <ul>
-                                <a href="{% url 'journey' request.user.id %}"><li>
-                                    <img src="{{ STATIC_URL }}img/icons/journey-icon.png" /> Your Journey
+                                <a href="{% url 'journey' request.user.id %}" class="option"><li>
+                                    <img src="{{ STATIC_URL }}img/icons/journey.png" class="option_icon" /> Your Journey
                                 </li></a>
-                                <a href="{% url 'explorers.views.board' request.user.id %}"><li>
-                                    <img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" /> Bulletin Board
+                                <a href="{% url 'explorers.views.board' request.user.id %}" class="option"><li>
+                                    <img src="{{ STATIC_URL }}img/icons/bulletin-board-icon_grayscale.png" class="option_icon" /> Bulletin
+                                    Board
                                 </li></a>
-                                <a href="{% url 'story' request.user.id %}"><li>
-                                    <img src="{{ STATIC_URL }}img/icons/profile-icon.png" /> Your Story
+                                <a href="{% url 'story' request.user.id %}" class="option"><li>
+                                    <img src="{{ STATIC_URL }}img/icons/user.png" class="option_icon" /> Your Story
                                 </li></a>
-                                <a href="{% url 'farewell' %}"><li>
-                                    <img src="{{ STATIC_URL }}img/icons/logout-icon.png" /> Log Out
+                                <a href="{% url 'farewell' %}" class="option"><li>
+                                    <img src="{{ STATIC_URL }}img/icons/power.png" class="option_icon" /> Log Out
                                 </li></a>
                             </ul>
                         </li>

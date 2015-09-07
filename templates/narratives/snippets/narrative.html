@@ -8,18 +8,18 @@
 <div class="option_list">
     {% url 'experience' narrative.experience.id as experience_path %}
     {% ifnotequal experience_path request.path %}
-        <a href="{% url 'experiences.views.index' narrative.experience.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Back to the experience page" class="option_icon" /></a>
+        <a href="{% url 'experiences.views.index' narrative.experience.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Back to the experience page" class="option_icon" /></a>
     {% endifnotequal %}
     {% if narrative.gallery %}
-        <a href="{% url 'pl-gallery' narrative.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/gallery-icon.png" class="option_icon" title="View Photos for {{ narrative }}" /></a>
+        <a href="{% url 'pl-gallery' narrative.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/images.png" class="option_icon" title="View Photos for {{ narrative }}" /></a>
     {% endif %}
     {% if author %}
-        <a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this narrative" class="option_icon" /></a>
-        <a href="/narratives/{{ narrative.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option_icon" /></a>
-        <a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this narrative" class="option_icon" /></a>
+        <a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this narrative" class="option_icon" /></a>
+        <a href="/narratives/{{ narrative.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" class="option_icon" /></a>
+        <a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this narrative" class="option_icon" /></a>
     {% endif %}
     {% if user.is_authenticated %}
-        <a onclick="toggle_div('{{ narrative.id }}_note');"><img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" class="option_icon" /></a>
+        <a onclick="toggle_div('{{ narrative.id }}_note');"><img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" class="option_icon" /></a>
     {% endif %}
 </div>
 {% get_comment_form for narrative as comment_form %}
@@ -56,17 +56,19 @@
 <div class="next_previous">
     {% if privileged %}
         {% if narrative.get_previous_narrative %}
-            <a href="{% url 'narratives.views.index' narrative.get_previous_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/previous-icon.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_narrative }}" /></a>
+            <a href="{% url 'narratives.views.index' narrative.get_previous_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/arrow-left.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_narrative }}"
+            /></a>
         {% endif %}
         {% if narrative.get_next_narrative %}
-            <a href="{% url 'narratives.views.index' narrative.get_next_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/next-icon.png" class="float_right" title="Next narrative - {{ narrative.get_next_narrative }}" /></a>
+            <a href="{% url 'narratives.views.index' narrative.get_next_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/arrow-right.png" class="float_right" title="Next narrative - {{ narrative.get_next_narrative }}" /></a>
         {% endif %}
     {% else %}
         {% if narrative.get_previous_public_narrative %}
-            <a href="{% url 'narratives.views.index' narrative.get_previous_public_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/previous-icon.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_public_narrative }}" /></a>
+            <a href="{% url 'narratives.views.index' narrative.get_previous_public_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/arrow-left.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_public_narrative }}" /></a>
         {% endif %}
         {% if narrative.get_next_public_narrative %}
-            <a href="{% url 'narratives.views.index' narrative.get_next_public_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/next-icon.png" class="float_right" title="Next narrative - {{ narrative.get_next_public_narrative }}" /></a>
+            <a href="{% url 'narratives.views.index' narrative.get_next_public_narrative.id %}"><img src="{{ STATIC_URL }}img/icons/arrow-right.png" class="float_right" title="Next narrative - {{ narrative.get_next_public_narrative }}"
+            /></a>
         {% endif %}
     {% endif %}
 </div>

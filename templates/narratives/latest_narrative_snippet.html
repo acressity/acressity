@@ -25,7 +25,7 @@
     </p>
     {% ifequal narrative.author user %} 
         <div class="option_list">
-            <a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/edit-icon.png" class="option_icon" title="Edit this narrative" /></a>
+            <a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" class="option_icon" title="Edit this narrative" /></a>
         </div>
     {% endifequal %}
 </div>

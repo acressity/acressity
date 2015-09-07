@@ -43,34 +43,45 @@
                 {% if user in experience.explorers.all %}
                     <a href="/experiences/{{ experience.id }}/narratives/create/">
                         <li class="option">
-                            <img src="{{ STATIC_URL }}img/icons/new-narrative-icon.png" title="Create a new narrative" /> Create new narrative
+                            <img src="{{ STATIC_URL }}img/icons/add.png" title="Create a new narrative" /> Create new narrative
                         </li>
                     </a>
                     <a href="{% url 'experiences.views.edit' experience.id %}">
                         <li class="option">
-                            <img src="{{ STATIC_URL }}img/icons/edit-icon.png" title="Edit this experience" class="option" />
+                            <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this experience"
+                            />
                             Edit this experience
                         </li>
                     </a>
                     <a href="{% url 'experiences.views.upload_photo' experience.id %}">
                         <li class="option">
-                            <img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload a photo" class="option" />
+                            <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" />
                             Upload a photo
                         </li>
                     </a>
                     {% ifequal user experience.author %}
                         <a href="{% url 'experience_invite' experience.id %}">
                             <li class="option">
-                                <img src="{{ STATIC_URL }}img/icons/add-user-icon.png" class="option" title="Invite a comrade to be a part of this experience" />
+                                <img src="{{ STATIC_URL }}img/icons/add-user.png" title="Invite a comrade to be a part of this experience" />
                                 Invite someone to this experience
                             </li>
                         </a>
                         <a href="{% url 'experiences.views.delete' experience.id %}">
                             <li class="option">
-                                <img src="{{ STATIC_URL }}img/icons/delete-icon.png" title="Delete this experience" class="option" />
+                                <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this experience" />
                                 Delete this experience
                             </li>
                         </a>
+                    {% else %}
+                        {% if experience.accepts_paypal %}
+                            <a href="{% url 'donate' experience.id %}">
+                                <li class="option">
+                                    <img src="{{ STATIC_URL }}img/icons/money.png" title="Donate - Become a
+                                    benefactor" />
+                                    Donate to this experience
+                                </li>
+                            </a>
+                        {% endif %}
                     {% endifequal %}
                 {% endif %}
             {% endif %}
@@ -78,7 +89,7 @@
             {% if experience.gallery %}
                 <a href="{% url 'pl-gallery' experience.gallery.id %}">
                     <li class="option">
-                        <img src="{{ STATIC_URL }}img/icons/gallery-icon.png" title="View gallery" class="option" />
+                        <img src="{{ STATIC_URL }}img/icons/images.png" title="View gallery" />
                         View gallery
                     </li>
                 </a>
@@ -87,7 +98,7 @@
             {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
                     <a href="{% url 'track_experience' experience.id %}">
                         <li class="option">
-                            <img src="{{ STATIC_URL }}img/icons/track-icon.png" title="Track this experience" class="option" />
+                            <img src="{{ STATIC_URL }}img/icons/track.png" title="Track this experience" />
                             Track this experience
                         </li>
                     </a>
@@ -95,7 +106,7 @@
                 <div onclick="toggle_div($(this).next());">
                     <a>
                         <li class="option">
-                            <img src="{{ STATIC_URL }}img/icons/tack-right-icon.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option" />
+                            <img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" />
                             Tack on a note
                         </li>
                     </a>
