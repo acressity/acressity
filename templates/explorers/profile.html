@@ -103,9 +103,6 @@
 					<input type="submit" value="Save" />
 				</div>
 			</form>
-			<p>
-				<a href="{% url 'change_password' %}">Change your password</a>
-			</p>
 		{% else %}
 			{% if explorer.brief %}
 				{{ explorer.brief }}
@@ -132,7 +129,7 @@
 			{% endif %}
 		{% endif %}
 		<p>
-			<em>Member since {{ explorer.date_joined|date:'F j, o' }}</em>
+			Member since {{ explorer.date_joined|date:'F j, o' }}
 		</p>
 	</div>
 	{% ifequal user explorer %} 

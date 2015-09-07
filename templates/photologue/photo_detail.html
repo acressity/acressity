@@ -3,7 +3,9 @@
 {% load photologue_tags %}
 {% load comments %}
 
-{% block title %} - {{ object.title }}{% endblock %}
+{% if object.title %}
+    {% block title %} - {{ object.title }}{% endblock %}
+{% endif %}
 
 {% block content %}
     <h1>{{ object.title }}</h1>

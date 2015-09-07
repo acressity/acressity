@@ -8,17 +8,17 @@
             This application is built to encourage and facilitate the exploration of new experiences.
         </p>
         <div class="formatted_input">
-            <h3>Your first name <em>required</em></h3>
+            <h3>Your first name (<em>required</em>)</h3>
             {{ form.first_name.errors }}
             <input type="text" name="first_name" id="id_first_name" value="{% if user.is_authenticated %}{{ user.first_name }}{% endif %}" />
         </div>
         <div class="formatted_input">
-            <h3>Your last name <em>required</em></h3>
+            <h3>Your last name (<em>required</em>)</h3>
             {{ form.last_name.errors }}
             <input type="text" name="last_name" id="id_last_name" value="{% if user.is_authenticated %}{{ user.last_name }}{% endif %}" />
         </div>
         <div class="formatted_input">
-            <h3>Your email <em>required</em></h3>
+            <h3>Your email (<em>required</em>)</h3>
             {{ form.email.errors }}
             <input type="text" name="email" id="id_email" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" />
         </div>
@@ -27,6 +27,9 @@
             {{ form.message.errors }}
             {{ form.message }}
         </div>
-        <input type="submit" value="Send" />
+        <div class="formatted_input align_center">
+            <input type="submit" value="Send" />
+        </div>
     </form>
+    <p>Acressity is maintained on <a href="https://github.com/acressity/acressity" target="blank"><img src="{{ STATIC_URL }}img/github/Octocat.png" style="height:1.5em;vertical-align:middle" title="GitHub" /></a></p>
 {% endblock content %}

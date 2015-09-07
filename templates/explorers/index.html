@@ -2,32 +2,6 @@
 
 {% load explorers_extras %}
 
-{% block head_insert %}
-	<script type="text/javascript">
-		$(document).ready(function(){
-			var options = {
-				resetForm: true,
-				error: errorHandler,
-				dataType: 'json',
-				success: addExperience,
-			};
-
-			$('#create_experience').submit(function(){
-				$(this).ajaxSubmit(options);
-				return false;
-			});
-
-			function addExperience(r){
-				$("#experiences_list").append(r.html);
-			}
-
-			function errorHandler(jqXHR, textStatus, errorThrown){
-				alert("There was a problem submitting the experience");
-			}
-		})
-	</script>
-{% endblock head_insert %}
-
 {% block content %}
 	
 	{% comment %}

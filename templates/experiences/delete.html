@@ -1,7 +1,8 @@
 {% extends "experiences/base.html" %}
 
 {% block content %}
-	<h2>Delete <em>{{ experience }}</em>?</h2>
+	<h2>Delete experience?</h2>
+    <h3>{{ experience }}</h3>
 	{% if experience.comrades %}
 		<p>
 			Since there are others as a part of this experience, you may elect to nominate one of them as the new author. Your membership in the experience will be removed.
@@ -19,9 +20,6 @@
 			</div>
 		{% endfor %}
 	{% endif %}
-	<p>
-		Delete <em>{{ experience }}</em>?
-	</p>
 	{% if experience.narratives.all.count > 0 %}
 		<p onclick="toggle_div('narratives');">And its narrative{{ experience.narratives.all|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narratives_toggle_icon" /></p>
 		<table class="thirds_table toggle_div" id="narratives">
@@ -43,11 +41,13 @@
 	{% if experience.gallery %}
 		<p>Deleting experience includes deleting the associated photos</p>
 	{% endif %}
-	<h3>
+	<p>
 		This action cannot be undone
-	</h3>
+	</p>
 	<form action="" method="POST">
 		{% csrf_token %}
-		<input type="submit" value="Confirm" name="confirm" />
+        <div class="formatted_input align_center">
+            <input type="submit" value="Confirm" name="confirm" />
+        </div>
 	</form>
 {% endblock content %}
