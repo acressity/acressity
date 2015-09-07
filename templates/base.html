@@ -93,14 +93,16 @@ anything lacking in efficiency or if you have any suggestions.
 									        {% ifnotequal request.path register %}
                                                 <form method="POST" action="{% url 'register' %}">
                                                     {% csrf_token %}
-                                                    Continue signing up <input type="submit" value="here" />
+                                                    <div class="formatted_input">
+                                                        <input type="submit" value="Resume signup" />
+                                                    </div>
                                                 </form>
                                             {% endifnotequal %}
                                         {% endifnotequal %}
 
 										<blockquote class="border-demilited">
 											<p>
-												Build of your imaginings a bower in the wilderness ere you build a house within the city walls.
+												Build of your imaginings a <abbr title="A pleasant shady place under trees or climbing plants in a garden or wood">bower</abbr> in the wilderness ere you build a house within the city walls.
 											</p>
 											<p>
 												For even as you have home-comings in your twilight, so has the wanderer in you, the ever distant and alone.
