@@ -5,9 +5,6 @@
 {% block content %}
 	{% include "explorers/snippets/dash.html" %}
 	<div class="explorer_item">
-		{% if explorer.brief %}
-			<p>{{ explorer.brief|linebreaks }}</p>
-		{% endif %}
 		{% if not owner and user.is_authenticated and request.user not in explorer.cheerers %}
 			<form action="/explorers/{{ explorer.id }}/cheer/" method="POST">
 				{% csrf_token %}
@@ -105,8 +102,9 @@
 			</form>
 		{% else %}
 			{% if explorer.brief %}
-				{{ explorer.brief }}
-				<br />
+			    <p>
+				    {{ explorer.brief|linebreaks }}
+				</p>
 			{% endif %}
 			{% if explorer.birthdate %}
 				<p>Birthday: {{ explorer.birthdate }}</p>
