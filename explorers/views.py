@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 
 from explorers.forms import RegistrationForm, ExplorerForm
 from support.models import InvitationRequest
@@ -56,12 +57,8 @@ def profile(request, explorer_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, _('Your information has been saved'))
-            # else:
-            #     messages.error(request, 'There was a problem saving your information')
-            # return redirect('/explorers/{0}'.format(explorer.id))
-        else:
-            messages.error(request, _('Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.'))
-            return render(request, 'acressity/message.html')
+            return redirect(reverse('profile', args=(explorer.id,)))
+        raise PermissionDenied
     if request.user.id == explorer.id:
         owner = True
         form = ExplorerForm(explorer, instance=explorer)
@@ -89,7 +86,8 @@ def board(request, explorer_id):
     else:
         eo_notes = []
     # Get the notes pertaining to all experiences
-    # What was I thinking? This will become about the most inefficient thing imagineable as (if) more experiences notes are added
+    # What was I thinking? This will become about the most inefficient thing
+    # imagineable as (if) more experiences notes are added
     experience_notes = Comment.objects.filter(content_type__model='experience')
     # Filter the results down for just the experiences pertaining to explorer
     ei_notes = []
@@ -184,7 +182,7 @@ def new_explorer(request):
                 explorer.featured_experience = first_experience
                 explorer.save()
             # Create a new gallery for the new explorer
-            gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get(model='Explorer'), object_pk=explorer.id)
+            gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get_for_model(Explorer), object_pk=explorer.id)
             gallery.save()
             gallery.explorers.add(explorer)
             explorer.gallery = gallery

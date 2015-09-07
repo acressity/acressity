@@ -13,7 +13,7 @@ class ExplorerTest(TestCase):
 
     def setUp(self):
         self.explorer = helpers.new_explorer()
-        self.gallery = Gallery.objects.create(object_pk=self.explorer.id, title="My First Gallery", content_type=ContentType.objects.get(model='Explorer'))
+        self.gallery = Gallery.objects.create(object_pk=self.explorer.id, title="My First Gallery", content_type=ContentType.objects.get_for_model(Explorer))
 
     def test_verify_explorer_created(self):
         explorer = Explorer.objects.get(trailname='MachuPikchu')

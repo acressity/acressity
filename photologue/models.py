@@ -248,13 +248,13 @@ class Gallery(models.Model):
                     photo_queryset = photo_queryset | narrative.gallery.photos.all()
             return photo_queryset
 
-        if self.content_type == ContentType.objects.get(name='Narrative'):
+        if self.content_type == ContentType.objects.get(model='Narrative'):
             return
-        if self.content_type == ContentType.objects.get(name='Experience'):
-            experience = ContentType.objects.get(name='Experience').get_object_for_this_type(pk=self.object_pk)
+        if self.content_type == ContentType.objects.get(model='Experience'):
+            experience = ContentType.objects.get(model='Experience').get_object_for_this_type(pk=self.object_pk)
             return(experience_photos(experience))
-        if self.content_type == ContentType.objects.get(name='Explorer'):
-            explorer = ContentType.objects.get(name='Explorer').get_object_for_this_type(pk=self.object_pk)
+        if self.content_type == ContentType.objects.get(model='Explorer'):
+            explorer = ContentType.objects.get(model='Explorer').get_object_for_this_type(pk=self.object_pk)
             # Initialize queryset
             photo_queryset = self.photos.none()
             for experience in explorer.experiences.filter(is_public=True):

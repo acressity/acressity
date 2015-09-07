@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password
 
-from photologue.models import Photo, Gallery
+from photologue.models import Gallery
 from acressity.utils import embed_string
 
 
@@ -23,7 +23,7 @@ class Experience(models.Model):
     The term signifying a single venture, goal, wish, exploration,
     (ad infinitum) that an explorer has expressed as being willing
     of attaining. Think of these as the titles of chapters within
-    a book about your journey.
+    a book about a journey.
     '''
 
     experience = models.CharField(max_length=255, null=False, help_text=_('Title of the experience.'))
@@ -85,7 +85,7 @@ class Experience(models.Model):
         return self.explorers.exclude(id=request.user.id)
 
     def create_gallery(self):
-        gallery = Gallery(title=self.experience, content_type=ContentType.objects.get(model='experience'), object_pk=self.id, is_public=self.is_public)
+        gallery = Gallery(title=self.experience, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)
         gallery.save()
         return gallery
 

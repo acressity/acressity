@@ -5,6 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.core.signals import request_finished
+from django.contrib.auth import get_user_model
 
 from photologue.models import Gallery
 from experiences.models import Experience
@@ -38,10 +39,28 @@ class Explorer(AbstractBaseUser):
     '''
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=60, null=False)
-    trailname = models.CharField(max_length=55, null=True, blank=True, unique=True, help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment.<br />It\'ll be displayed as John "<em>trailname</em>" Doe<br />It also allows others to find you by typing acressity.com/<em>trailname</em>'))
-    gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
+    trailname = models.CharField(
+        max_length=55,
+        null=True,
+        blank=True,
+        unique=True,
+        help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment.<br />It\'ll be displayed as John "<em>trailname</em>" Doe<br />It also allows others to find you by typing <code>acressity.com/<em>trailname</em></code>')
+    )
+    gallery = models.OneToOneField(
+        Gallery,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='story_gallery'
+    )
     brief = models.TextField(null=True, blank=True, help_text=_('Short bio about you'))
-    email = models.EmailField(max_length=254, null=False, blank=False, unique=True, help_text=_('Email addresses are used for resetting passwords and notifications. Privacy is protected and confidential.'))
+    email = models.EmailField(
+        max_length=254,
+        null=False,
+        blank=False,
+        unique=True,
+        help_text=_('Email addresses are used for resetting passwords and notifications. Privacy is protected and confidential.')
+    )
     birthdate = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)

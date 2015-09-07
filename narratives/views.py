@@ -98,15 +98,13 @@ def upload_photo(request, narrative_id):
         if narrative.gallery:
             gallery = narrative.gallery
         else:
-            gallery = Gallery(title=narrative.title[:50], content_type=ContentType.objects.get(model='narrative'), object_pk=narrative.id, is_public=narrative.experience.is_public)
+            gallery = Gallery(title=narrative.title[:50], content_type=ContentType.objects.get_for_model(Narrative), object_pk=narrative.id, is_public=narrative.experience.is_public)
             gallery.save()
             gallery.explorers.add(request.user)
             narrative.gallery = gallery
             narrative.save()
         return redirect('/photologue/gallery/{0}/upload_photo/'.format(gallery.id))
-    else:
-        messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-        return render(request, 'acressity/message.html')
+    raise PermissionDenied
 
 
 def all(request, explorer_id):
