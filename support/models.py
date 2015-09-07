@@ -91,33 +91,38 @@ def comment_handler(sender, **kwargs):
     # request = kwargs.pop('request')
 
     o = comment.content_object.model()
+    recipients = []
     if o == 'Explorer':
-        recipient = comment.content_object
+        recipients.append(comment.content_object)
     elif o == 'Experience':
-        recipient = comment.content_object.author  # This should eventually handle all explorers of the experience
-    elif o == 'Narrative' or o == 'Photo':
-        recipient = comment.content_object.author
-    newnotify = Notification(
-        recipient=recipient,
-        #sender=comment.user,
-        verb='has posted a new note',
-        actor_content_type=ContentType.objects.get_for_model(comment.user),
-        actor_object_id=comment.user.pk,
-        public=True,
-        description=comment.comment,
-        timestamp=timezone.now()
-    )
+        recipients = comment.content_object.explorers.all()
+    elif o == 'Narrative':
+        recipients = comment.content_object.experience.explorers.all()
+    elif o == 'Photo':
+        recipients.append(comment.content_object.author)
+        
+    for recipient in recipients:
+        newnotify = Notification(
+            recipient=recipient,
+            #sender=comment.user,
+            verb='has posted a new note',
+            actor_content_type=ContentType.objects.get_for_model(comment.user),
+            actor_object_id=comment.user.pk,
+            public=True,
+            description=comment.comment,
+            timestamp=timezone.now()
+        )
 
-    newnotify.save()
+        newnotify.save()
 
-    if newnotify.recipient.notify:
-        to = 'andrew.s.gaines@gmail.com'  # newnotify.recipient.email
-        from_email = 'acressity@acressity.com'
-        subject = 'New note on your Acressity journey'
-        text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
-        html_content = render_to_string('notifications/email.html', {'notice': newnotify})
-        message = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
-        message.send()
+        if newnotify.recipient.notify:
+            to = 'andrew.s.gaines@gmail.com'  # newnotify.recipient.email
+            from_email = 'acressity@acressity.com'
+            subject = 'New note on your Acressity journey'
+            text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
+            html_content = render_to_string('notifications/email.html', {'notice': newnotify})
+            message = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
+            message.send()
 
 comment_was_posted.connect(comment_handler)
