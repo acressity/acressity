@@ -23,19 +23,6 @@
         {% if experience.status %}
             <p>{{ experience.status }}</p>
         {% endif %}
-        {# Section for latest activity #}
-        {% if experience.latest_narrative %}
-            <div class="object_item">
-                {% with experience.latest_narrative as narrative %}
-                    <div onclick="toggle_div(this.nextElementSibling);">
-                        Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
-                    </div>
-                    <div class="toggle_div">
-                        {% include "narratives/snippets/dash.html" %}
-                    </div>
-                {% endwith %}
-            </div>
-        {% endif %}
     </div>
     <div {% if not stacked %}class="right"{% endif %}>
         <ul class="option_list">
@@ -120,4 +107,17 @@
         </ul>
     </div>
     <div class="clear_both"></div>
+    {# Section for latest activity #}
+    {% if experience.latest_narrative %}
+        <div class="object_item">
+            {% with experience.latest_narrative as narrative %}
+                <div onclick="toggle_div(this.nextElementSibling);">
+                    Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
+                </div>
+                <div class="toggle_div">
+                    {% include "narratives/snippets/dash.html" %}
+                </div>
+            {% endwith %}
+        </div>
+    {% endif %}
 </div>
