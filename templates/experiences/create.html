@@ -2,6 +2,6 @@
 
 {% block content %}
     <h2>New Experience</h2>
-    {% url 'journey' user.id as url %}
+    {% url 'create_experience' as url %}
     {% include "experiences/forms/experience_form.html" %}
 {% endblock content %}
