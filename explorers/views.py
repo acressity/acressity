@@ -182,7 +182,7 @@ def new_explorer(request):
                 explorer.featured_experience = first_experience
                 explorer.save()
             # Create a new gallery for the new explorer
-            gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get_for_model(Explorer), object_pk=explorer.id)
+            gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get_for_model(get_user_model()), object_pk=explorer.id)
             gallery.save()
             gallery.explorers.add(explorer)
             explorer.gallery = gallery
