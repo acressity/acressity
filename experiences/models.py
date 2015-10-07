@@ -1,10 +1,6 @@
 from django.utils import timezone
-
-from django import forms
 from django.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password

@@ -1,7 +1,3 @@
-from experiences.models import Experience
-from photologue.models import Gallery, Photo
-from acressity.utils import embed_string
-
 from django.db import models
 from django import forms
 from django.shortcuts import get_object_or_404
@@ -10,7 +6,12 @@ from django.utils import timezone
 from django.core.paginator import Paginator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.conf import settings
+
+from experiences.models import Experience
+from photologue.models import Gallery, Photo
+from acressity.utils import embed_string
 
 
 class Narrative(models.Model):
@@ -40,7 +41,7 @@ class Narrative(models.Model):
         self.__original_is_public = self.is_public
 
     class Meta:
-        #ordering = ['category']
+        # ordering = ['category']
         get_latest_by = 'date_created'
 
     def __unicode__(self):
