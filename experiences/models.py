@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 
 from photologue.models import Gallery
 from acressity.utils import embed_string
+from paypal.standard.ipn.models import PayPalIPN
 
 
 class ExperienceManager(models.Manager):
@@ -31,7 +32,26 @@ class Experience(models.Model):
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
     is_public = models.BooleanField(default=True, help_text=_('Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers and those providing a correct password if one is selected. A correct password also provides access to all private narratives. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. However, private narratives do not become public when the experience is changed from private to public.'))
     password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to the experience if it is private as well as all of the private narratives.'))
-    search_term = models.CharField(max_length=80, null=True, blank=True, unique=True, help_text=_('Short phrase or word identifying the experience, allows access by typing http://acressity.com/your_search_term_here. Needs to be unique and cannot be the same as another explorer\'s trailname'))
+    search_term = models.CharField(
+        max_length=80, null=True, blank=True, unique=True,
+        help_text=_('Short phrase or word identifying the experience, allows access by typing <code>http://acressity.com/your_search_term_here</code>. Needs to be unique and cannot be the same as another explorer\'s trailname')
+    )
+    accepts_paypal = models.BooleanField(
+        default=False, null=False, blank=True,
+        help_text=_('Check this box if you want to be able to accept PayPal donations from benefactors.')
+    )
+    donation_amount_requested = models.DecimalField(
+        default=25.00, max_digits=6, decimal_places=2, null=False, blank=True,
+        help_text=_('The amount of money requested per donation')
+    )
+    benefactors = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, related_name='benefactors',
+        help_text=_('All those who have donated to this experience')
+    )
+    donations = models.ManyToManyField(
+        PayPalIPN, blank=True, related_name='donations',
+        help_text=_('All the donations made to this experience')
+    )
 
     objects = ExperienceManager()
 
@@ -120,6 +140,9 @@ class Experience(models.Model):
 
     def embedded_brief(self):
         return embed_string(self.brief)
+
+    def donations_total(self):
+        return sum([donation.payment_gross for donation in self.donations.all() if donation.payment_status == 'Completed'])
 
 
 class FeaturedExperience(models.Model):
