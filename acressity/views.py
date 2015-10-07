@@ -12,6 +12,7 @@ from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm
 from explorers.forms import RegistrationForm, Explorer
 from acressity.forms import ContactForm
+from paypal.standard.forms import PayPalPaymentsForm
 
 
 def acressity_index(request):
@@ -92,3 +93,9 @@ class WelcomeTemplateView(TemplateView):
         context = super(WelcomeTemplateView, self).get_context_data(**kwargs)
         context['form'] = ExperienceForm()
         return context
+
+
+def explore(request):
+    bugsy = Explorer.objects.get(trailname='Bugsy')
+    iframe_url = reverse('journey', args=(bugsy.pk,))
+    return render(request, 'acressity/explore.html', {'bugsy': bugsy, 'iframe_url': iframe_url})
