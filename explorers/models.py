@@ -68,8 +68,26 @@ class Explorer(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     notify = models.BooleanField(default=True)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
-    tracking_experiences = models.ManyToManyField(Experience, related_name='tracking_explorers', blank=True, help_text=_('Experiences that the explorer has chosen to track.'))
-    featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience', help_text=_('The experience that an explorer is currently featuring. Will be displayed on explorer\'s dash for easy accessibility and will be shown alongside explorer information for others to see.'))
+    tracking_experiences = models.ManyToManyField(
+        Experience,
+        related_name='tracking_explorers',
+        blank=True,
+        help_text=_('Experiences that the explorer has chosen to track.')
+    )
+    featured_experience = models.ForeignKey(
+        Experience,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='featured_experience',
+        help_text=_('The experience that an explorer is currently featuring. Will be displayed on explorer\'s dash for easy accessibility and will be shown alongside explorer information for others to see.')
+    )
+    paypal_email_address = models.EmailField(
+        null=True,
+        blank=True,
+        unique=True,
+        help_text=_('Email address for your PayPal account. This is the email address to which donations by benefactors are made.')
+    )
 
     objects = ExplorerManager()
 
