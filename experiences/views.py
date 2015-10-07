@@ -15,9 +15,7 @@ from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm, ExperienceBriefForm
 from narratives.forms import NarrativeForm
 from notifications import notify
-from photologue.models import Gallery
-from explorers.models import Explorer
-from support.models import InvitationRequest
+from paypal.standard.forms import PayPalPaymentsForm
 
 
 @login_required
@@ -90,6 +88,21 @@ def index(request, experience_id):
     experience_brief_form = None
     if not experience.brief:
         experience_brief_form = ExperienceBriefForm(instance=experience)
+    paypal_form = None
+    if experience.accepts_paypal:
+        paypal_dict = {
+            'business': experience.author.email,
+            'amount': "25.00",
+            'item_name': experience,
+            'invoice': 'unique-invoice-id',
+            'cmd': '_donations',
+            'bn': 'Acressity_Donate_WPS_US',
+            'alt': 'Donate',
+            'notify_url': 'https://www.example.com' + reverse('paypal-ipn'),
+            'return_url': 'https://www.example.com/your-return-location/',
+            'cancel_return': 'https://www.example.com/your-cancel-location/',
+        }
+        paypal_form = PayPalPaymentsForm(initial=paypal_dict, button_type='donate')
     context = {
         'experience': experience,
         'narratives': narratives,
@@ -97,13 +110,14 @@ def index(request, experience_id):
         'privileged': privileged,
         'narrative_form': narrative_form,
         'experience_brief_form': experience_brief_form,
+        'paypal_form': paypal_form,
     }
     return render(request, 'experiences/index.html', context)
 
 
 def edit(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if experience.is_comrade(request):
+    if request.user in experience.explorers.all():
         if request.method == 'POST':
             form = ExperienceForm(
                 request.POST,
@@ -225,6 +239,31 @@ def categorize(request, experience_id):
         )
     else:
         raise PermissionDenied
+
+
+def donate(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    paypal_form = None
+    if experience.accepts_paypal:
+        paypal_dict = {
+            'business': experience.author.email,
+            'amount': experience.donation_amount_requested,
+            'item_name': experience,
+            'invoice': 'unique-invoice-id',
+            'cmd': '_donations',
+            'bn': 'Acressity_Donate_WPS_US',
+            'alt': 'Donate',
+            'notify_url': reverse('paypal-ipn'),
+            # 'return': reverse('paypal_return'),
+            'cancel_return': reverse('experience', args=(experience.id,)),
+        }
+        paypal_form = PayPalPaymentsForm(initial=paypal_dict, button_type='donate')
+    return render(request, 'experiences/donate.html', {'experience': experience, 'paypal_form': paypal_form})
+
+
+def paypal_return(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    return redirect(reverse('index'))
 
 
 def featured(request):
