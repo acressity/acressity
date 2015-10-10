@@ -138,3 +138,41 @@ def view_invitation(request, code):
             messages.success(request, 'You have declined the invitation')
             return redirect(reverse('acressity_index'))
     return render(request, 'support/view_invitation.html', {'invitation_request': invitation_request})
+
+
+def donate(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    paypal_form = None
+    if experience.accepts_paypal:
+        try:
+            url = settings.NGROK_URL
+        except ImportError:
+            url = ''
+        paypal_dict = {
+            'business': experience.author.paypal_email_address,
+            'amount': experience.donation_amount_requested,
+            'item_name': 'Experience: {0}'.format(experience),
+            'cmd': '_donations',
+            'bn': 'Acressity_Donate_WPS_US',
+            'alt': 'Donate',
+            'notify_url': url + reverse('paypal-ipn'),
+            'return_url': url + reverse('paypal_return', args=(experience_id,)),
+            'cancel_return': url + reverse('paypal_cancel', args=(experience_id,)),
+            # Returned by PayPal so it can be used in event handler
+            'item_number': experience_id,
+        }
+        paypal_form = PayPalPaymentsForm(initial=paypal_dict, button_type='donate')
+    return render(request, 'support/donate.html', {'experience': experience, 'paypal_form': paypal_form})
+
+
+@csrf_exempt
+def paypal_return(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    return render(request, 'support/paypal_return.html', {'experience': experience})
+
+
+@csrf_exempt
+def paypal_cancel(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    messages.success(request, 'You cancelled and did not donate to the experience "{0}"'.format(experience))
+    return redirect(reverse('experience', args=(experience_id,)))

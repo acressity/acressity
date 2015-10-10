@@ -9,4 +9,7 @@ urlpatterns = patterns(
     url(r'^experience_invite/(?P<experience_id>\d+)/$', 'experience_invite', name='experience_invite'),
     url(r'^view_invitation/(?P<code>\w{25})/$', 'view_invitation', name='view_invitation'),
     url(r'^handle_invitation_request/(?P<invitation_request_id>\d+)/$', 'handle_invitation_request', name='handle_invitation_request'),
+    url(r'^experience/(?P<experience_id>\d+)/donate/$', 'donate', name='donate'),
+    url(r'^experience/(?P<experience_id>\d+)/paypal_return/$', 'paypal_return', name='paypal_return'),
+    url(r'^experience/(?P<experience_id>\d+)/paypal_cancel/$', 'paypal_cancel', name='paypal_cancel'),
 )

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>All Narratives</h2>
+    {% for narrative in all_public_narratives %}
+        {% include "narratives/snippets/dash.html" %}
+    {% endfor %}
+    {% with '/narratives/' as url %}
+        {% include "snippets/pagination.html" %}
+    {% endwith %}
+{% endblock content %}
