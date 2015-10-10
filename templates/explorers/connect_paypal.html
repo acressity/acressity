@@ -1,0 +1,26 @@
+{% extends 'explorers/base.html' %}
+
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="formatted_input">
+            <h3>Your PayPal email address</h3>
+            {{ form.paypal_email_address }}
+            {{ form.paypal_email_addres.errors }}
+            <div class="help-text">
+                {{ form.paypal_email_address.help_text }}
+            </div>
+        </div>
+        <div class="formatted_input">
+            <h3>Accept PayPal donations {{ form.accepts_paypal }}</h3>
+            <div class="help-text">
+                {{ form.accepts_paypal.help_text }}
+            </div>
+            {{ form.accepts_paypal.errors }}
+        </div>
+        <div class="formatted_input align_center">
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+
+{% endblock content %}
