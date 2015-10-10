@@ -18,10 +18,9 @@ from django.core.exceptions import PermissionDenied
 from explorers.forms import RegistrationForm, ExplorerForm
 from support.models import InvitationRequest
 from notifications import notify
-from experiences.models import Experience, FeaturedExperience
-from photologue.models import Gallery, Photo
+from experiences.models import Experience
+from photologue.models import Gallery
 from experiences.forms import ExperienceForm
-from narratives.models import Narrative
 from support.models import Cheer
 
 
@@ -169,7 +168,8 @@ def new_explorer(request):
             explorer.set_password(form.cleaned_data['password1'])
             explorer.first_name = form.cleaned_data['first_name']
             explorer.last_name = form.cleaned_data['last_name']
-            # explorer.email = form.cleaned_data['email']
+            if form.cleaned_data['trailname']:
+                explorer.trailname = form.cleaned_data['trailname']
             explorer.save()
             explorer = authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password1'])
             # Log them in
@@ -187,10 +187,13 @@ def new_explorer(request):
             gallery.explorers.add(explorer)
             explorer.gallery = gallery
             explorer.save()
-            # Welcome and send them on introductory tour?
-            messages.success(request, 'Welcome aboard, {0}'.format(explorer.get_full_name()))
+            # Welcome and send them on introductory tour
+            messages.success(request, 'Welcome aboard, {0}!'.format(explorer.get_full_name()))
             notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
-            return redirect(reverse('journey', args=(explorer.id,)))
+            if first_experience:
+                return redirect(reverse('new_experience', args=(first_experience.id,)))
+            else:
+                return redirect(reverse('journey', args=(explorer.id,)))
         # else:
         #     messages.error(request, 'Please provide an experience you wish to have')
         #     return redirect(request.META.get('HTTP_REFERER'))

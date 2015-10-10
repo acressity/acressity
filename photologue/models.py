@@ -584,7 +584,7 @@ class ImageModel(models.Model):
 
 
 class Photo(ImageModel):
-    title = models.CharField(_('title'), max_length=50, unique=False, blank=True)
+    title = models.CharField(_('title'), max_length=50, unique=False, blank=True, null=False)
     title_slug = models.SlugField(_('slug'), unique=False,
                                   help_text=('A "slug" is a unique URL-friendly title for an object.'), blank=True)
     caption = models.TextField(_('caption'), blank=True, null=True)
@@ -604,7 +604,7 @@ class Photo(ImageModel):
         verbose_name_plural = _("photos")
 
     def __unicode__(self):
-        return self.title
+        return self.title if self.title != '' else '#{0}'.format(self.pk)
 
     def __str__(self):
         return self.__unicode__()

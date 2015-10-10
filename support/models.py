@@ -1,15 +1,11 @@
-from datetime import datetime
-
 from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_comments.signals import comment_was_posted
-from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponse
 
 from experiences.models import Experience
 from notifications.models import Notification

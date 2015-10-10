@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, url
+from django.views.generic import ListView
+from narratives.models import Narrative
 
 urlpatterns = patterns(
     'narratives.views',
-    url(r'^$', 'index', name='experience_homepage'),
+    url(r'^$', ListView.as_view(queryset=Narrative.objects.exclude(is_public=False), context_object_name='all_public_narratives', template_name='narratives/all.html', paginate_by=10), name='narrative_homepage'),
     url(r'^(?P<narrative_id>\d+)/$', 'index', name='narrative'),
     url(r'^create/$', 'create', name='create_narrative'),
     url(r'^edit/(?P<narrative_id>\d+)/$', 'edit'),

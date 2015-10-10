@@ -8,11 +8,7 @@
 	<h1>{{ object.title }}</h1>
 	<h2>Published {{ object.date_added|date:"l, F jS, Y" }}</h2>
 	<div class="option_list">
-		{% if request.user in object.explorers.all %}
-			<a href="{% url 'photologue.views.upload_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload photo for {{ object.title }}" class="option_icon" /></a>
-			<a href="{% url 'pl-gallery-edit' object.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this Album" class="option_icon" /></a>
-		{% endif %}
-		{% ifequal object.content_type.model 'experience' %}
+	    {% ifequal object.content_type.model 'experience' %}
 			<a href="{% url 'experiences.views.index' object.experience.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to experience" class="option_icon" /></a>
 		{% else %}
 			{% ifequal object.content_type.model 'narrative' %}
@@ -23,6 +19,10 @@
 				{% endfor %}
 			{% endifequal %}
 		{% endifequal %}
+		{% if request.user in object.explorers.all %}
+			<a href="{% url 'photologue.views.upload_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload photo for {{ object.title }}" class="option_icon" /></a>
+			<a href="{% url 'pl-gallery-edit' object.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this Album" class="option_icon" /></a>
+		{% endif %}
 	</div>
 	{% if object.description %}<p>{{ object.description }}</p>{% endif %}
 	<div class="photo-gallery">

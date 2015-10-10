@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import simplejson
+import json
 
 from photologue.models import Photo, Gallery
 from photologue.forms import GalleryForm, GalleryPhotoForm
@@ -14,10 +14,8 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
 
 
 def upload_photo(request, gallery_id):
@@ -60,7 +58,7 @@ def ajax_upload(request):
             for comrade in gallery.explorers.exclude(id=request.user.id):
                 notify.send(sender=request.user, recipient=comrade, target=photo, verb='has uploaded a new photo')
             data = {'url': photo.get_icon_url(), 'photo_id': photo.id}
-            return HttpResponse(simplejson.dumps(data))
+            return HttpResponse(json.dumps(data))
         else:
             # Here's the problem with the images not uploading properly
             return HttpResponse('Please fill out the form correctly')
@@ -95,8 +93,8 @@ def update_photo(request):
         d['yack'] = 'There was a failure saving your photo'
     else:
         d['yack'] = 'Your photo has been saved successfully'
-    json = simplejson.dumps(d)
-    return HttpResponse(json, mimetype='application/json')
+    json_response = json.dumps(d)
+    return HttpResponse(json_response)
 
 
 @login_required

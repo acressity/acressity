@@ -1,4 +1,3 @@
-# All functions related to the relationship between an explorer and another object will be placed here.
 import random
 import string
 
@@ -10,30 +9,30 @@ from django.core.mail import send_mail
 from django.core.exceptions import PermissionDenied
 from django_comments.models import Comment
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
+from acressity import settings
 from experiences.models import Experience
 from notifications import notify
-from support.models import InvitationRequest, PotentialExplorer
+from support.models import InvitationRequest
 from support.forms import PotentialExplorerForm
-from explorers.forms import RegistrationForm
+from paypal.standard.forms import PayPalPaymentsForm
 
 
+@login_required
 def track_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    # Hmmm, really not sure if this is necessary. Might have been all along...
-    if request.user.is_authenticated():
-        # Keep explorer from tracking their own experiences
-        # Perhaps this logic should be in the model manager save() method?
-        if experience in request.user.experiences.all():
-            messages.error(request, 'Sorry, you cannot track your own experiences')
-        elif experience in request.user.tracking_experiences.all():
-            messages.error(request, 'You are already tracking {0}'.format(experience))
-        else:
-            request.user.tracking_experiences.add(experience)
-            #notif.send(experience.explorers.all(), 'following', {'follower': request.user})
-            messages.success(request, 'You are now tracking the experience {0}'.format(experience))
-            notify.send(sender=request.user, recipient=experience.author, target=experience, verb='is tracking your experience')
+    # Keep explorer from tracking their own experiences
+    # Perhaps this logic should be in the model manager save() method?
+    if experience in request.user.experiences.all():
+        messages.error(request, 'Sorry, you cannot track your own experiences')
+    elif experience in request.user.tracking_experiences.all():
+        messages.error(request, 'You are already tracking {0}'.format(experience))
+    else:
+        request.user.tracking_experiences.add(experience)
+        # notif.send(experience.explorers.all(), 'following', {'follower': request.user})
+        messages.success(request, 'You are now tracking the experience {0}'.format(experience))
+        notify.send(sender=request.user, recipient=experience.author, target=experience, verb='is tracking your experience')
     return redirect(reverse('tracking_experiences', args=(request.user.id,)))
 
 

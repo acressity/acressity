@@ -1,11 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.shortcuts import get_object_or_404
-from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.core.signals import request_finished
-from django.contrib.auth import get_user_model
 
 from photologue.models import Gallery
 from experiences.models import Experience
