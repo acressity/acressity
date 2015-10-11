@@ -69,25 +69,23 @@
 				        <form action="/photologue/photo/{{ photo.id }}/edit_photo/" method="POST" onsubmit="return update_photo(this);">
 				        	{% csrf_token %}
 				        	<div class="formatted_input">
-				    			<label for="id_title">
-				    				<h3>Title</h3>
-				    			</label>
-				    			{{ form.title.errors }}
+                                <h3>Title</h3>
 				    			{{ form.title }}
-				    		</div>
+                                {{ form.title.errors }}
+                            </div>
 				    		<div class="formatted_input">
 					    		<label for="id_description">
 					    			<h3>Photo Description</h3>
 					    		</label>
-					    		{{ form.caption.errors }}
 					    		{{ form.caption }}
-					    	</div>
+                                {{ form.caption.errors }}
+                            </div>
 					    	<input type="hidden" id="id_id" value="{{ photo.id }}" />
 				    		<input type="submit" value="Update" />
 						</form>
 						<form action="{% url 'delete_photo' photo.id %}" method="POST">
 							{% csrf_token %}
-							<input type="submit" value="Delete" class="delete-button" onclick="return confirm('Delete this photo?');" />
+							<input type="submit" value="Delete" onclick="return confirm('Delete this photo?');" />
 						</form>
 					{% else %}
 						<em>This photo can only be edited by {{ photo.author }}</em>

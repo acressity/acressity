@@ -1,6 +1,7 @@
 from django import forms
-from django.forms import ModelForm, extras
+from django.forms import ModelForm
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 
 from photologue.models import Photo, Gallery
 from narratives.models import Narrative
@@ -10,6 +11,12 @@ class GalleryPhotoForm(ModelForm):
     class Meta:
         model = Photo
         exclude = ('title_slug', 'author', 'gallery')
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if not title:
+            title = timezone.now()
+        return title
 
 
 class GalleryForm(ModelForm):

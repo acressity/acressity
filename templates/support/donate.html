@@ -26,17 +26,17 @@
         Payments go directly to the experience's author <a href="{% url 'journey' experience.author.id %}">{{ experience.author.get_full_trailname }}</a>
     </p>
     <p>
-        <label for="id_donation_amount_requested">
-            Amount requested by {{ experience.author.get_full_trailname }}: $
+        <label for="id_donation_amount_suggested">
+            Suggested amount: $
         </label>
-        <input type="text" id="id_donation_amount_requested" value="{{ experience.donation_amount_requested }}" />
+        <input type="text" id="id_donation_amount_suggested" value="25.00" />
     </p>
     <div style="text-align: center;">
         {{ paypal_form.render }}
     </div>
 
     <script>
-        $("#id_donation_amount_requested").keyup(function() {
+        $("#id_donation_amount_suggested").keyup(function() {
             $("#id_amount").val($(this).val());
         });
     </script>
