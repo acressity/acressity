@@ -247,7 +247,7 @@ def donate(request, experience_id):
     if experience.accepts_paypal:
         paypal_dict = {
             'business': experience.author.email,
-            'amount': experience.donation_amount_requested,
+            'amount': 25.00,
             'item_name': experience,
             'invoice': 'unique-invoice-id',
             'cmd': '_donations',

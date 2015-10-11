@@ -40,10 +40,6 @@ class Experience(models.Model):
         default=False, null=False, blank=True,
         help_text=_('Check this box if you want to be able to accept PayPal donations from benefactors.')
     )
-    donation_amount_requested = models.DecimalField(
-        default=25.00, max_digits=6, decimal_places=2, null=False, blank=True,
-        help_text=_('The amount of money requested per donation')
-    )
     benefactors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, related_name='benefactors',
         help_text=_('All those who have donated to this experience')

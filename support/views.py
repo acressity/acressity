@@ -150,7 +150,7 @@ def donate(request, experience_id):
             url = ''
         paypal_dict = {
             'business': experience.author.paypal_email_address,
-            'amount': experience.donation_amount_requested,
+            'amount': 25.00,
             'item_name': 'Experience: {0}'.format(experience),
             'cmd': '_donations',
             'bn': 'Acressity_Donate_WPS_US',
