@@ -174,6 +174,7 @@ def new_explorer(request):
             explorer = authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password1'])
             # Log them in
             login(request, explorer)
+            first_experience = None
             if request.POST.get('experience'):
                 # Save their experience
                 first_experience = Experience(experience=request.POST.get('experience'), author=explorer)
@@ -194,9 +195,6 @@ def new_explorer(request):
                 return redirect(reverse('new_experience', args=(first_experience.id,)))
             else:
                 return redirect(reverse('journey', args=(explorer.id,)))
-        # else:
-        #     messages.error(request, 'Please provide an experience you wish to have')
-        #     return redirect(request.META.get('HTTP_REFERER'))
     else:
         form = RegistrationForm()
     return render(request, 'registration/register.html', {'form': form, 'experience': request.POST.get('experience'), 'min_password_len': settings.MIN_PASSWORD_LEN})
