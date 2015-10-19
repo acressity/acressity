@@ -29,7 +29,7 @@ urlpatterns = patterns(
         r'^lexicon/$',
         TemplateView.as_view(template_name='acressity/lexicon.html'),
         name='lexicon'),
-    url(r'^explore/$', 'explore', name='explore'),
+    url(r'^example/$', 'example', name='example'),
     # Patching to work with Django logout...
     url(r'^accounts/login/', login, name='login_page'),
     url(r'^contact/', 'contact', name='contact'),

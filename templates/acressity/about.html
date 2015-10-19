@@ -8,32 +8,24 @@
             <em>"the quality or state of being at the peak of existence"</em>
         </h3>
     </div>
-    <div class="featured_photo"><img src="{{ STATIC_URL }}img/logo.jpg"
-                                     style="width: 200px; float:right; margin: 10px;"/></div>
+    <hr />
+    <div class="featured_photo"><img src="{{ STATIC_URL }}img/logo.jpg" style="width: 200px; float:right; margin: 10px;"/></div>
+
+    <h3>See an example <a href="{% url 'example' %}" target="_blank">here</a></h3>
+
     <div>
         <p>
-            The most direct means of knowing yourself and the universe is through experience. This
-            website is built to facilitate experiencing those things on your <abbr
-                title="List of special experiences being sought">bucketlist</abbr>. Create a list of things you want
-            to experience and let this be the canvas upon which you&#8212;the explorer&#8212;paint your journey. Each
-            thing on your list, referred to
-            as an experience, allows you to write narratives to log your progress and thoughts, upload and display
-            photos, and network with others by sharing your experience with them or creating a joint experience where
-            each explorer involved can make their own contributions.
+            We are all about creating desired experiences and following through on that desire, recording the development and progress here for your safekeeping and sharing with others (should you choose to make them public). You will draw power from bringing the desire for these experiences into a more tangible place and from the support of others experiencing your public experiences vicariously and supporting your pursuits.
         </p>
 
         <p>
-            Use this application as a tool for hoisting yourself towards your goals, transcending your comfort zone
-            in favor of experiencing life truly.
-            Let it be the map upon which you chart your adventure, the platform from which you announce your
-            intentions to the rest of the world,
-            the photo album
-            where you record
-            images of your
-            experiences, and the paper upon which you compose your narratives which immortilize your experiences. Use
-            it as a private journal or as a public forum&#8212;sharing your experiences with
-            the
-            rest of the world so they may experience vicariously through you.
+            The most direct means of knowing yourself and the universe is through experience. This
+            website is built to facilitate experiencing those things on your <abbr title="List of special experiences being sought">bucketlist</abbr>. Create a list of things you want to experience and let this be the canvas upon which you&#8212;the explorer&#8212;paint your journey. Each thing on your list, referred to as an experience, allows you to write narratives to log your progress and thoughts, upload and display photos, and network with others by sharing your experience with them or creating a joint experience where each explorer involved can make their own contributions.
+        </p>
+
+        <p>
+            Use this application as a tool for hoisting yourself towards your goals, transcending your comfort zone in favor of experiencing life truly. Let it be the map upon which you chart your adventure, the platform from which you announce your intentions to the rest of the world, the photo album where you record images of your experiences, and the paper upon which you compose your narratives which immortilize your experiences. Use it as a private journal or as a public forum&#8212;sharing your experiences with
+            the rest of the world so they may experience vicariously through you. It is for those who wish to experience the world and feel drawn to a home for the persistence of their memories--the digital simulacrum of their consciousness.
         </p>
 
         <p>
@@ -96,6 +88,9 @@
             and be adventurous who truly experience what it means to be alive and therein cross into the extraordinary.
         </p>
     </div>
+    {% if not user.is_authenticated %}
+        {% include 'experiences/forms/first_experience_form.html' %}
+    {% endif %}
     {% comment %}
 	<h2>Give Me the Facts: Purpose of Website</h2>
 	<p>
