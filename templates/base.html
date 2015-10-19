@@ -74,17 +74,7 @@ anything lacking in efficiency or if you have any suggestions.
 											<h3>A bucketlist for the exploration of new experiences</h3>
 											<a href="{% url 'about' %}">learn more</a>
 										</blockquote>
-										<form action="{% url 'step_two' %}" method="POST" class="full_width main_color" style="position:relative;" onsubmit="return validateFirstExperience(this);">
-											{% csrf_token %}
-											<input type="hidden" name="initial" />
-											<h3>What do <em>you</em> wish to experience?</h3>
-											<div class="formatted_input">
-												<textarea type="text"  id="id_experience" name="experience" onfocus="setUp(this);"></textarea>
-											</div>
-											<div class="formatted_input align_center">
-											    <input type="submit" value="Create" />
-											    </div>
-										</form>
+										{% include 'experiences/forms/first_experience_form.html' %}
 									{% else %}
 									    {% url 'step_two' as step_two %}
 									    {% url 'register' as register %}
