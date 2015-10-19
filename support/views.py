@@ -144,10 +144,7 @@ def donate(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     paypal_form = None
     if experience.accepts_paypal:
-        try:
-            url = settings.NGROK_URL
-        except ImportError:
-            url = ''
+        url = settings.PAYPAL_RETURN_URL
         paypal_dict = {
             'business': experience.author.paypal_email_address,
             'amount': 25.00,
