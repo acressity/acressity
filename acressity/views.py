@@ -95,7 +95,6 @@ class WelcomeTemplateView(TemplateView):
         return context
 
 
-def explore(request):
+def example(request):
     bugsy = Explorer.objects.get(trailname='Bugsy')
-    iframe_url = reverse('journey', args=(bugsy.pk,))
-    return render(request, 'acressity/explore.html', {'bugsy': bugsy, 'iframe_url': iframe_url})
+    return render(request, 'acressity/example.html', {'bugsy': bugsy})
