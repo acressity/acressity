@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Meet {{ bugsy.get_full_trailname }}</h2>
+    <h2>Meet <a href="{% url 'journey' bugsy.id %}">{{ bugsy.get_full_trailname }}</a></h2>
     <p>
-        {{ bugsy.trailname }} is a dummy example explorer profile used in the development of this website. When he is not assisting in the building of this site, he dreams big; rainforests and the North Pole being other aspirations for exploration. Having always dreamed of having these experiences, good ol' {{ bugsy.first_name }} decided to take the first step by composing a list of them on his journey page. Below is a picture of his journey page on this site.
+        {{ bugsy.trailname }} is a dummy example explorer profile used in the development of this website. When he is not assisting in the building of this site, he dreams big; rainforests and the North Pole being other aspirations for exploration. Having always dreamed of having these experiences, good ol' {{ bugsy.trailname }} decided to take the first step by composing a list of them on his journey page. Below is a picture of his journey page on this site.
     </p>
     <div class="featured_photo">
         <a href="{{ STATIC_URL }}img/example_journey.png">

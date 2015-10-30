@@ -97,4 +97,5 @@ class WelcomeTemplateView(TemplateView):
 
 def example(request):
     bugsy = Explorer.objects.get(trailname='Bugsy')
-    return render(request, 'acressity/example.html', {'bugsy': bugsy})
+    featured_explorer = Explorer.objects.get(pk=1)
+    return render(request, 'acressity/example.html', {'bugsy': bugsy, 'featured_explorer': featured_explorer})
