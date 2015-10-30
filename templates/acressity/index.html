@@ -10,13 +10,36 @@
             background-color: rgba(0, 0, 0, 0);
         }
     </style>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#explore_main_wrapper').on('click', function() {
+                $('#explore_what_wrapper').show(800);
+                $('#explore_why_wrapper').show(800);
+            });
+        });
+    </script>
 {% endblock head_insert %}
 
 {% block content %}
     
-    <a href="{% url 'about' %}">
-        <div id="explore_button">
+    <a href="javascript:void(0)" id="explore_main_wrapper">
+        <div id="explore_main">
             <p>Explore</p>
+        </div>
+    </a>
+
+    <a href="{% url 'what' %}" id="explore_what_wrapper" class="hidden">
+        <div id="explore_what">
+            <p>What</p>
+            <p>is Acressity?</p>
+        </div>
+    </a>
+
+    <a href="{% url 'why' %}" id="explore_why_wrapper" class="hidden">
+        <div id="explore_why">
+            <p>Why</p>
+            <p>Acressity?</p>
         </div>
     </a>
     
