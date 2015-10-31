@@ -15,7 +15,7 @@ urlpatterns = patterns(
     url(r'^edit/(?P<experience_id>\d+)/$', 'edit', name='edit_experience'),
     url(r'^create/$', 'create', name='create_experience'),
     url(r'^(?P<experience_id>\d+)/delete/$', 'delete', name='delete_experience'),
-    url(r'^(?P<experience_id>\d+)/brief/$', 'brief'),
+    url(r'^(?P<experience_id>\d+)/brief/$', 'brief', name='experience_brief'),
     url(r'^(?P<experience_id>\d+)/categorize/$', 'categorize'),
     url(r'^freshest/$',
         ListView.as_view(

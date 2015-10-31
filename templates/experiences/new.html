@@ -1,33 +1,83 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <script type="text/javascript">
+        function submit_brief(form){
+            var brief_data = {
+                "brief": $(form).find("#id_brief").val()
+            };
+
+            $.ajax({
+                url: "{% url 'experience_brief' experience.id %}",
+                data: brief_data,
+                dataType: 'json',
+            })
+            .done(function(a, b, c){
+                ajax_message("Your brief has been saved");
+                toggle_options();
+            })
+            .fail(function(a, b, c){
+                ajax_message("Sorry, there was an error saving your brief");
+            })
+
+            return false;
+        }
+
+        function toggle_options() {
+            $("#add_brief").hide(800);
+            $("#other_options").show(800);
+        }
+
+        $(document).ready(function() {
+            $("#skip_for_now").on("click", toggle_options);
+        });
+    </script>
     <div>
-        <p>
-            With your new experience <em>{{ experience }}</em>, you can get started with the following options:
-        </p>
-        <a href="{% url 'narratives.views.create' experience.id %}">
+        <h1>{{ experience }}</h1>
+
+        <div id="add_brief">
+            <p>
+                Central to making this experience more real, start by writing a brief about what this experience entails. What are your hopes and aspirations?
+            </p>
+            <form action="{% url 'experience_brief' experience.id %}" method="POST" onsubmit="return submit_brief(this)">
+                <div class="formatted_input">
+                    {{ form.brief }}
+                </div>
+                <div class="formatted_input align_center">
+                    <input type="submit" value="Submit" />
+                </div>
+            </form>
+            <a href="javascript:void(0)" id="skip_for_now">skip for now</a>
+        </div>
+
+        <div id="other_options" class="hidden">
             <h3>
-                <img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
-                Create your first narrative
+                Continue developing this experience with the following options:
             </h3>
-        </a>
-        <br />
-        <a href="{% url 'experiences.views.edit' experience.id %}">
+            <a href="{% url 'narratives.views.create' experience.id %}">
+                <h3>
+                    <img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
+                    Create your first narrative
+                </h3>
+            </a>
+            <br />
+            <a href="{% url 'experiences.views.edit' experience.id %}">
+                <h3>
+                    <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit or write about '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
+                Edit, or write about your new experience
+                </h3>
+            </a>
+            <br />
+            <a href="{% url 'exp_upload_photo' experience.id %}">
+                <h3>
+                    <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo as your portrait" class="option_icon" style="vertical-align: middle;" />
+                    Upload a photo for your experience
+                </h3>
+            </a>
+            <br />
             <h3>
-                <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit or write about '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
-            Edit, or write about your new experience
+                Or go to your <a href="{% url 'journey' user.id %}">journey page</a>
             </h3>
-        </a>
-        <br />
-        <a href="{% url 'exp_upload_photo' experience.id %}">
-            <h3>
-                <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo as your portrait" class="option_icon" style="vertical-align: middle;" />
-                Upload a photo for your experience
-            </h3>
-        </a>
-        <br />
-        <h3>
-            Or go to your <a href="{% url 'journey' user.id %}">journey page</a>
-        </h3>        
+        </div>     
     </div>
 {% endblock content %}
