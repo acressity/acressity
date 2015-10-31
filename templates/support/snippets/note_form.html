@@ -23,7 +23,7 @@
       {# Allow for next variable #}
       {# Following looks horrible because of white space considerations... Maybe template tag exists to facilitat this?? {% spaceless %} only works for white space between html tags #}
       <input type="hidden" name="next" value="{% if next_url_name %}{% if next_url_pk %}{% url next_url_name next_url_pk %}{% else %}{% url next_url_name %}{% endif %}{% endif %}">
-      <p>
+      <div class="formatted_input align_center">
             <input type="submit" value="Submit Note" />
-      </p>      
+      </div>      
 </form>
