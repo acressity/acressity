@@ -6,7 +6,7 @@
         {
 			first_name = document.getElementById("id_first_name").value;
 			if (first_name) {
-				$("#first_name_positive_feedback").text("Hello, " + first_name);
+				$("#first_name_positive_feedback").text("Hello, " + first_name + "!");
 			} else {
                 $("#first_name_positive_feedback").text("");
             }
@@ -30,7 +30,6 @@
 				$("#password2_negative_feedback").html("Your passwords don't match");
 				$("#password2_positive_feedback").html("");
 			} else {
-				$("#password2_positive_feedback").html("Passwords match");
 				$("#password2_negative_feedback").html("");
 			}
 		}
@@ -66,6 +65,7 @@
 {% endblock head_insert %}
 
 {% block content %}
+    <h2>Register</h2>
 	{{ form.non_field_errors }}
 	<form action="" method="POST">
 		{% csrf_token %}
