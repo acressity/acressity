@@ -152,13 +152,18 @@ def edit(request, experience_id):
 
 def brief(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
+    if request.is_ajax():
+        form = ExperienceBriefForm(request.GET, instance=experience)
+        if form.is_valid():
+            form.save()
+            return HttpResponse(json.dumps({'success': True, 'brief': form.cleaned_data.get('brief')}))
     if request.method == 'POST':
         form = ExperienceBriefForm(request.POST, instance=experience)
         if form.is_valid():
             form.save()
             messages.success(
                 request, _('Experience brief was successfully added'))
-            return redirect('/experiences/{0}'.format(experience.id))
+            return redirect(reverse('experience', args=(experience_id,)))
     else:
         form = None
     if not experience.brief:
@@ -328,8 +333,9 @@ def check_password(request, experience_id):
 
 def new_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
+    form = ExperienceBriefForm(instance=experience)
     assert request.user == experience.author
-    return render(request, 'experiences/new.html', {'experience': experience})
+    return render(request, 'experiences/new.html', {'experience': experience, 'form': form})
 
 
 def ajax_thing(request):

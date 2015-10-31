@@ -3,6 +3,29 @@
 {% load comments %}
 
 {% block content %}
+	<script type="text/javascript">
+		function submit_brief(form){
+            var brief_data = {
+                "brief": $(form).find("#id_brief").val()
+            };
+
+            $.ajax({
+                url: "{% url 'experience_brief' experience.id %}",
+                data: brief_data,
+                dataType: 'json',
+            })
+            .done(function(a, b, c){
+                ajax_message("Your brief has been saved");
+                $("#write_a_brief").hide(800);
+                $("#experience_brief").html("<p>" + a['brief'] + "</p>");
+            })
+            .fail(function(a, b, c){
+                ajax_message("Sorry, there was an error saving your brief");
+            })
+
+            return false;
+        }
+	</script>
 	<div class="experience_item">
 		<h2>{{ experience }}</h2>
 		<div class="featured_photo">
@@ -80,14 +103,6 @@
 					{% for explorer in experience.explorers.all %}
 						<td>
 							{% include "explorers/snippets/dash.html" %}
-							{% comment %}
-								<div class="object_item thirds_item explorer_item dash_item">
-									{% if explorer.gallery.featured_photo %}
-										<img src="{{ explorer.gallery.featured_photo.get_icon_url }}" title="{{ explorer.get_full_name }}" />
-									{% endif %}
-									<a href="{% url 'journey' explorer.id %}"><h3>{{ explorer.get_full_name }}</h3></a>
-								</div>
-							{% endcomment %}
 						</td>
 					{% endfor %}
 				</tr>
@@ -95,24 +110,27 @@
 			</table>
 		</div>
 	</div>
-	{% if experience.brief %}
-		<div class="experience_item">
-			<h3>Experience brief</h3>
+	<h3>Experience brief</h3>
+	<div class="experience_item" id="experience_brief">
+		{% if experience.brief %}
 			{{ experience.embedded_brief|safe|linebreaks }}
-		</div>
-	{% else %}
-		{% if request.user in experience.explorers.all %}
-			<h3>Write a brief <em>(introduction to the experience)</em></h3>
-			<form action="{% url 'experiences.views.brief' experience.id %}" method="POST">
-				{% csrf_token %}
-				{{ experience_brief_form.brief }}
-				<input type="hidden" name="explorer_id" value="{{ experience.explorer_id }}" />
-				<input type="submit" value="Submit" />
-			</form>
 		{% else %}
-			{{ block.super }}
+			{% if request.user in experience.explorers.all %}
+				<div id="write_a_brief">
+					<form action="{% url 'experiences.views.brief' experience.id %}" method="POST" onsubmit="return submit_brief(this)">
+						{% csrf_token %}
+						{{ experience_brief_form.brief }}
+						<input type="hidden" name="explorer_id" value="{{ experience.explorer_id }}" />
+						<div class="formatted_input align_center">
+							<input type="submit" value="Submit" />
+						</div>
+					</form>
+				</div>
+			{% else %}
+				{{ block.super }}
+			{% endif %}
 		{% endif %}
-	{% endif %}
+	</div>
 	{% if experience.latest_narrative %} {# This also checks for public status #}
 		<h3>Latest narrative</h3>
 		<div class="narrative_item">
