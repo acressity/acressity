@@ -63,8 +63,12 @@ anything lacking in efficiency or if you have any suggestions.
 								<div class="experience_item">
 									{% if not request.session.signing_up %}
 										<blockquote id="welcome_quote">
-											<h2>Acressity</h2>
-											<h3>A bucketlist for the exploration of new experiences</h3>
+											<h2>
+												Acressity
+											</h2>
+											<h3>
+												A bucketlist for the exploration of new experiences
+											</h3>
 											<a href="{% url 'about' %}">learn more</a>
 										</blockquote>
 										{% include 'experiences/forms/first_experience_form.html' %}
@@ -75,7 +79,7 @@ anything lacking in efficiency or if you have any suggestions.
 									        {% ifnotequal request.path register %}
                                                 <form method="POST" action="{% url 'register' %}">
                                                     {% csrf_token %}
-                                                    <div class="formatted_input">
+                                                    <div class="formatted_input align_center">
                                                         <input type="submit" value="Resume signup" />
                                                     </div>
                                                 </form>
