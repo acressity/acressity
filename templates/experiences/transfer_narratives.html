@@ -1,0 +1,52 @@
+{% extends 'experiences/base.html' %}
+
+{% block content %}
+    <h2>Transfer narratives</h2>
+        <form action="{% url 'transfer_narratives' experience.id %}" method="POST">
+            <table class="full_width">  
+                <td class="experience_item">
+                    <h3>From <em>{{ experience }}</em></h3>
+                    {% for narrative_form in narrative_forms %}
+                        <div>
+                            <div class="left">
+                                {% with narrative_form.instance as narrative %}
+                                    {% include 'narratives/snippets/dash.html' %}
+                                {% endwith %}
+                            </div>
+                            <div class="right">
+                                {{ narrative_form.potential_actions }}
+                                <input type="hidden" name="narrative_ids" value="{{ narrative_form.instance.id }}" />
+                            </div>
+                        </div>
+                        <div class="clear_both"></div>
+                    {% endfor %}
+                </td>
+                <td class="experience_item" style="vertical-align: top;">
+                    <h3>To</h3>
+                        <ul>
+                            <li style="margin-bottom: 35px;">
+                                <h3>Existing experience</h3>
+                                <select name="to_experience_id">
+                                    <option value="">-----</option>
+                                    {% for experience in other_experiences %}
+                                        <option value="{{ experience.id }}">{{ experience }}</option>
+                                    {% endfor %}
+                                </select>
+                            </li>
+                            <li>
+                                <label for="toggle_new_experience_form">
+                                    <h3>New experience <input type="checkbox" name="new_experience" id="toggle_new_experience_form" onclick="toggle_div('new_experience_form');" /></h3>
+                                </label>
+                                <div id="new_experience_form" class="formatted_input toggle_div">
+                                    <h4>Title</h4>
+                                    {{ new_experience_form.experience }}
+                                </div>
+                            </li>
+                        </ul>
+                </td>
+            </table>
+            <div class="formatted_input align_center">
+                <input type="submit" value="Transfer" />
+            </div>
+        </form>
+{% endblock content %}
