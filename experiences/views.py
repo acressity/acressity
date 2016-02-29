@@ -10,10 +10,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.forms import modelform_factory
 
 from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm, ExperienceBriefForm
-from narratives.forms import NarrativeForm
+from narratives.models import Narrative
+from narratives.forms import NarrativeForm, NarrativeTransferForm, TRANSFER_ACTION_CHOICES
 from notifications import notify
 from paypal.standard.forms import PayPalPaymentsForm
 
@@ -26,7 +28,7 @@ def create(request):
             form.save(commit=False)
             form.instance.author = request.user
             new_experience = form.save()
-            form.instance.explorers.add(request.user)
+            new_experience.explorers.add(request.user)
             if form.cleaned_data['make_feature']:
                 request.user.featured_experience = form.instance
                 request.user.save()
@@ -64,8 +66,8 @@ def index(request, experience_id):
     privileged = request.user in experience.explorers.all()
     if request.get_signed_cookie('experience_password', salt='personal_domain', default=False):
         if (
-            request.get_signed_cookie('experience_password', salt='personal_domain')
-            == str(experience_id)
+            request.get_signed_cookie('experience_password', salt='personal_domain') ==
+            str(experience_id)
         ):
             privileged = True
     if not experience.is_public:
@@ -279,6 +281,52 @@ def featured(request):
         'experiences/featured.html',
         {'featured_experiences': featured_experiences}
     )
+
+
+@login_required
+def transfer_narratives(request, experience_id):
+    from_experience = get_object_or_404(Experience, pk=experience_id)
+    assert request.user in from_experience.explorers.all()
+    other_experiences = request.user.experiences.exclude(pk=experience_id)
+    NewExperienceForm = modelform_factory(Experience, form=ExperienceForm, fields=('experience',))
+
+    if request.method == 'POST':
+        if request.POST.get('new_experience'):
+            new_experience_form = NewExperienceForm(request.POST, request=request)
+            new_experience_form.save(commit=False)
+            new_experience_form.instance.author = request.user
+            to_experience = new_experience_form.save()
+            to_experience.explorers.add(request.user)
+            redirect_url_name = 'edit_experience'
+        else:
+            to_experience = get_object_or_404(Experience, pk=request.POST.get('to_experience_id'))
+            redirect_url_name = 'experience'
+
+        assert request.user in to_experience.explorers.all()
+        action_choices = {index: value for index, value in TRANSFER_ACTION_CHOICES[1:]}
+
+        for narrative_id, action_index in zip(request.POST.getlist('narrative_ids'), request.POST.getlist('potential_actions')):
+            if action_index:
+                action = action_choices[int(action_index)]
+                narrative = get_object_or_404(Narrative, pk=int(narrative_id))
+                assert narrative in from_experience.narratives.all()
+                if action == 'Transfer':
+                    to_experience.narratives.add(narrative)
+                elif action == 'Copy':
+                    # Fairly obscure way of copying the object
+                    narrative.pk = None
+                    narrative.experience = to_experience
+                    narrative.save()
+        return redirect(reverse(redirect_url_name, args=(to_experience.id,)))
+
+    narrative_forms = [NarrativeTransferForm(instance=n) for n in from_experience.narratives.all()]
+    context = {
+        'experience': from_experience,
+        'other_experiences': other_experiences,
+        'narrative_forms': narrative_forms,
+        'new_experience_form': NewExperienceForm(),
+    }
+    return render(request, 'experiences/transfer_narratives.html', context)
 
 
 def gallery(request, experience_id):
