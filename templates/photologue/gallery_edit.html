@@ -81,11 +81,15 @@
                                 {{ form.caption.errors }}
                             </div>
 					    	<input type="hidden" id="id_id" value="{{ photo.id }}" />
-				    		<input type="submit" value="Update" />
+				    		<div class="formatted_input align_center">
+				    			<input type="submit" value="Update" />
+				    		</div>
 						</form>
 						<form action="{% url 'delete_photo' photo.id %}" method="POST">
 							{% csrf_token %}
-							<input type="submit" value="Delete" onclick="return confirm('Delete this photo?');" />
+							<div class="formatted_input align_center">
+								<input type="submit" value="Delete" class="align_center" onclick="return confirm('Delete this photo?');" />
+							</div>
 						</form>
 					{% else %}
 						<em>This photo can only be edited by {{ photo.author }}</em>
