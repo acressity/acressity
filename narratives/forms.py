@@ -1,16 +1,22 @@
 from datetime import date
 
 from django import forms
-from django.forms import ModelForm
 from narratives.models import Narrative
 from django.forms.extras.widgets import SelectDateWidget
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 
+TRANSFER_ACTION_CHOICES = (
+    ('', '-----'),
+    (1, _('Transfer')),
+    (2, _('Copy')),
+)
 
-class NarrativeForm(ModelForm):
-    date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
+
+class NarrativeForm(forms.ModelForm):
+    date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year - 110, -1)), required=False)
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger', 'onfocus': 'if($(this).val()==this.defaultValue){$(this).val("")};', 'onblur': 'if($(this).val()==""){$(this).val(this.defaultValue)};'}))  # default value moved to views.py
 
     def __init__(self, explorer, *args, **kwargs):
@@ -32,3 +38,11 @@ class NarrativeForm(ModelForm):
     class Meta:
         model = Narrative
         exclude = ('gallery', 'author')
+
+
+class NarrativeTransferForm(forms.ModelForm):
+    potential_actions = forms.ChoiceField(choices=TRANSFER_ACTION_CHOICES, required=False)
+
+    class Meta:
+        model = Narrative
+        fields = ('title',)
