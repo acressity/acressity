@@ -3,3 +3,15 @@ settings.py
 static/
 checklist.txt
 .sass_cache/
+explorers/migrations/
+experiences/migrations/
+photologue/migrations/
+support/migrations/
+narratives/migrations/
+notifications/migrations/
+bin/
+lib/
+local/
+include/
+pip-selfcheck.json
+
