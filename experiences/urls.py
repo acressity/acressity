@@ -41,4 +41,5 @@ urlpatterns = patterns(
     url(r'^(?P<experience_id>\d+)/donate/$', 'donate', name='donate'),
     url(r'^(?P<experience_id>\d+)/paypal_return/$', 'paypal_return', name='paypal_return'),
     url(r'^ajax_thing/$', 'ajax_thing'),
+    url(r'^(?P<experience_id>\d+)/transfer_narratives/$', 'transfer_narratives', name='transfer_narratives'),
 )
