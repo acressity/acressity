@@ -30,6 +30,9 @@
 
         $(document).ready(function() {
             $("#skip_for_now").on("click", toggle_options);
+            if ("{{ experience.brief }}") {
+                toggle_options();
+            }
         });
     </script>
     <div>
