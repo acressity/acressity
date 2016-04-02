@@ -15,7 +15,7 @@ class GalleryPhotoForm(ModelForm):
     def clean_title(self):
         title = self.cleaned_data.get('title')
         if not title:
-            title = timezone.now()
+            title = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
         return title
 
 
