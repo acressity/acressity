@@ -29,9 +29,6 @@ class Narrative(models.Model):
     category = models.CharField(max_length=50, null=True, blank=True, help_text='Optional information used to classify and order the narratives within the experience.')
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)
     is_public = models.BooleanField(null=False, default=True, help_text='Public narratives will be displayed in the default views. Private ones are only seen by yourself and the other explorers in the narrative\'s experience. Changing the status of the narrative also changes the status of the photo gallery.')
-    # location = models.ForeignKey(GeoLocation)  # Something like this would be nice
-    # lat = models.FloatField(null=True, help_text='Voluntarily saved latitude associated with the narrative')
-    # long = models.FloatField(null=True, help_text='Voluntarily saved longitude associated with the narrative')
     password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to this narrative if it is private.'))
 
     def __init__(self, *args, **kwargs):
