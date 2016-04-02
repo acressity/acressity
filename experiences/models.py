@@ -30,7 +30,7 @@ class Experience(models.Model):
     brief = models.TextField(blank=True, null=True, help_text=_('Written description of the experience to provide a little insight.'))
     status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
-    is_public = models.BooleanField(default=True, help_text=_('Changing public and private status is only available to the experience\'s author. Private experiences are only seen by its explorers and those providing a correct password if one is selected. A correct password also provides access to all private narratives. Making an experience private will also set all of it\'s narratives to being private. Changing the status of the experience changes the status of the experience\'s gallery. However, private narratives do not become public when the experience is changed from private to public.'))
+    is_public = models.BooleanField(default=False, help_text=_('It is recommended to keep an experience private until you are ready to announce it to the world. Private experiences are only seen by its explorers and those providing a correct password if one is selected, so you can choose to share this experience with just a few people and make it public later if you\'d like.'))
     password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to the experience if it is private as well as all of the private narratives.'))
     search_term = models.CharField(
         max_length=80, null=True, blank=True, unique=True,
