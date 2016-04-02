@@ -89,4 +89,9 @@
 			<img src="{{ STATIC_URL }}img/gifs/ajax-loader.gif" id="ajax-loader" style="display:none;" />
 		</div>
 	</div>
+    <div class="align_center">
+        <a href="{% url 'pl-gallery' gallery.id %}">
+            <button>Finished</button>
+        </a>
+    </div>
 {% endblock content %}
