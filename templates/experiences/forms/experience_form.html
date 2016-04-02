@@ -8,6 +8,26 @@
         {{ form.experience }}
     </div>
     <div class="formatted_input">
+        <label for="id_is_public">    
+            <h3>Public? {{ form.is_public }}</h3>
+            <script type="text/javascript">
+                e = document.getElementById("id_is_public");
+                d = document.getElementById("password_div");
+                e.onclick = function(){
+                    toggle_div("password_div");
+                };
+            </script>
+        </label>
+        <div class="about_this">
+            <div onclick="toggle_div('about_public_experiences');" class="smaller">
+                <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" /></strong>
+            </div>
+            <div id="about_public_experiences" class="toggle_div help-text">
+                {{ form.is_public.help_text}}
+            </div>
+        </div>
+    </div>
+    <div class="formatted_input">
         <h3>Status <em>(optional)</em></h3>
         {{ form.status.errors }}
         {{ form.status }}
@@ -54,26 +74,6 @@
                 </div>
                 <div id="about_featured_experience" class="toggle_div help-text">
                     {{ form.make_feature.help_text }}
-                </div>
-            </div>
-        </div>
-        <div class="formatted_input">
-            <label for="id_is_public">    
-                <h3>Public? {{ form.is_public }}</h3>
-                <script type="text/javascript">
-                    e = document.getElementById("id_is_public");
-                    d = document.getElementById("password_div");
-                    e.onclick = function(){
-                        toggle_div("password_div");
-                    };
-                </script>
-            </label>
-            <div class="about_this">
-                <div onclick="toggle_div('about_public_experiences');" class="smaller">
-                    <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" /></strong>
-                </div>
-                <div id="about_public_experiences" class="toggle_div help-text">
-                    {{ form.is_public.help_text}}
                 </div>
             </div>
         </div>
