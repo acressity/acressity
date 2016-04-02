@@ -27,6 +27,7 @@
         		html += "</a>";
         		html += "</div>";
         		$("#photo_form_feedback").append(html);
+                $("#no-photos").remove();
         	}
 
         	function what(jqXHR, textStatus, errorThrown){
@@ -77,6 +78,14 @@
 			<input type="submit" value="Upload" />
 		</form>
 		<div id="photo_form_feedback">
+            <h3>Uploaded photos</h3>
+            {% for photo in gallery.photos.all %}
+                <a href="{% url 'pl-photo' photo.id %}">
+                    <img src="{{ photo.get_icon_url }}" />
+                </a>
+            {% empty %}
+                <h4 id="no-photos">No photos yet</h4>
+            {% endfor %}
 			<img src="{{ STATIC_URL }}img/gifs/ajax-loader.gif" id="ajax-loader" style="display:none;" />
 		</div>
 	</div>
