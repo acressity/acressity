@@ -12,9 +12,4 @@ photologue/migrations/
 support/migrations/
 narratives/migrations/
 notifications/migrations/
-bin/
-lib/
-local/
-include/
-pip-selfcheck.json
-
+venv/
