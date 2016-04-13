@@ -1,0 +1,158 @@
+{% extends "explorers/base.html" %}
+
+{% load comments %}
+
+{% block content %}
+	{% include "explorers/snippets/dash.html" %}
+	<div class="explorer_item">
+		{% if not owner and user.is_authenticated and request.user not in explorer.cheerers %}
+			<form action="/explorers/{{ explorer.id }}/cheer/" method="POST">
+				{% csrf_token %}
+				<input type="hidden" name="explorer" value="{{ explorer.get_full_name }}" />
+				<input type="submit" name="cheer" value="Cheer" title="Subscribe to {{ explorer.get_full_name }}" onclick="var a = verify('Subscribe to {{ explorer.get_full_name }}?'); return a;" />
+			</form>
+		{% endif %}
+		{% if owner %}
+			{% if form.errors %}
+				<p>Problem with saving</p>
+				{% for error in form.errors %}
+					{{ error }}
+				{% endfor %}
+			{% endif %}
+			<form method="POST">
+                {% csrf_token %}
+                <div class="formatted_input">
+                    <label>
+                        <h3>First name</h3>
+                    </label>
+                    {{ form.first_name.errors }}
+                    {{ form.first_name }}
+                </div>
+                <div class="formatted_input">
+                    <label>
+                        <h3>Last name</h3>
+                    </label>
+                    {{ form.last_name.errors }}
+                    {{ form.last_name }}
+                </div>
+                <div class="formatted_input">
+                    <label>
+                        <h3>Trailname</h3>
+                    </label>
+                    {{ form.trailname.errors }}
+                    {{ form.trailname }}
+                    <div class="about_this">
+                        <span onclick="toggle_div('about_trailname');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" /></span>
+                        <div id="about_trailname" class="toggle_div help-text">
+                            {{ form.trailname.help_text|safe }}
+                        </div>
+                    </div>
+                </div>
+                <div class="formatted_input">
+                    <label for="id_featured_experience">
+                        <h3>Featured experience</h3>
+                    </label>
+                    {{ form.featured_experience.errors }}
+                    {{ form.featured_experience }}
+                </div>
+                <div class="formatted_input">
+                    <label>
+                        <h3>Brief</h3>
+                    </label>
+                    {{ form.brief.errors }}
+                    {{ form.brief}}
+                    <div class="about_this">
+                        <span onclick="toggle_div('about_brief');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_brief_toggle_icon" /></span>
+                        <div id="about_brief" class="toggle_div help-text">
+                            {{ form.brief.help_text }}
+                        </div>
+                    </div>
+                </div>
+                <div class="formatted_input">
+                    <label>
+                        <h3>Email</h3>
+                    </label>
+                    {{ form.email.errors }}
+                    {{ form.email }}
+                    <div class="about_this">
+                        <span onclick="toggle_div('about_email');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_email_toggle_icon" /></span>
+                        <div id="about_email" class="help-text toggle_div">
+                            {{ form.email.help_text }}
+                        </div>
+                    </div>
+                </div>
+                <div class="formatted_input">
+                    {# Having label for this doesn't make sense: no obvious first input #}
+                    <h3>Be notified of new activity on your journey? {{ form.notify }}</h3>
+                    {{ form.notify.errors }}
+                </div>
+                <div class="formatted_input">
+                    {# Having label for this doesn't make sense: no obvious first input #}
+                    <h3>Birthdate</h3>
+                    {{ form.birthdate.errors }}
+                    {{ form.birthdate }}
+                </div>
+                <div class="formatted_input">
+                    <h3>Your PayPal email address</h3>
+                    {{ form.paypal_email_addres.errors }}
+                    {{ form.paypal_email_address }}
+                    <div class="about_this">
+                        <span onclick="toggle_div('about_paypal_email_address');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_paypal_email_address_toggle_icon" /></span>
+                        <div id="about_paypal_email_address" class="toggle_div help-text">
+                            {{ form.paypal_email_address.help_text }}
+                        </div>
+                    </div>
+                    <div class="help-text">
+                        If you do not yet have a PayPal account, you can create one <a href="https://www.paypal.com/us/signup/account" target="blank">here</a>
+                    </div>
+                </div>
+                <p>
+                    <a href="{% url 'change_password' %}">Change your password</a>
+                </p>
+                <div class="formatted_input align_center">
+                    <input type="submit" value="Save" />
+                </div>
+			</form>
+		{% else %}
+			{% if explorer.brief %}
+			    <p>
+				    {{ explorer.brief|linebreaks }}
+				</p>
+			{% endif %}
+			{% if explorer.birthdate %}
+				<p>Birthday: {{ explorer.birthdate }}</p>
+			{% endif %}
+			{% if user.is_authenticated %}
+				{% get_comment_form for explorer as expl_comment_form %}
+				<form action="{% comment_form_target %}" method="POST" class="note_form">
+					<h3>Leave {{ explorer.get_full_name }} a note</h3>
+					{% csrf_token %}
+					{{ expl_comment_form.comment }}
+					{{ expl_comment_form.honeypot }}
+					{{ expl_comment_form.object_pk }}
+					{{ expl_comment_form.content_type }}
+				    {{ expl_comment_form.timestamp }}
+				    {{ expl_comment_form.security_hash }}
+					<br />
+					<input type="hidden" name="next" value="{% url 'story' explorer.id %}">
+					<input type="submit" value="Submit note" />
+				</form>
+			{% endif %}
+		{% endif %}
+		<p>
+			Member since {{ explorer.date_joined|date:'F j, o' }}
+		</p>
+	</div>
+	{% ifequal user explorer %} 
+		{% get_comment_count for explorer as exp_comment_count %}
+		{% if exp_comment_count > 0 %}
+			<h4 title="Click to expand" onclick="toggle_div('exp_comment_list');">{{ exp_comment_count }} Note{{ exp_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="exp_comment_list_toggle_icon" /></h4>
+			<div class="comment_list" id="exp_comment_list">
+				{% get_comment_list for explorer as exp_comment_list %}
+				{% for note in exp_comment_list reversed %}
+					{% include "support/snippets/note.html" %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endifequal %}
+{% endblock content %}

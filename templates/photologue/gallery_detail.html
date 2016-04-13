@@ -1,78 +1,79 @@
 {% extends "photologue/root.html" %}
 
+{% load explorers_extras %}
+
 {% block title %} - Gallery: {{ object.title }}{% endblock %}
 
 {% block content %}
-
-<h1>{{ object.title }}</h1>
-<h2>Published {{ object.date_added|date:"l, F jS, Y" }}</h2>
-<div class="option_list">
-	{% if request.user in object.explorers.all %}
-		<a href="{% url 'photologue.views.upload_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/image-upload-icon.png" title="Upload photo for {{ object.title }}" class="float_left" /></a>
-		<a href="{% url 'pl-gallery-edit' object.id %}"><img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit this Album" class="option_icon" /></a>
-	{% endif %}
-	{% ifequal object.content_type.model 'experience' %}
-		<a href="{% url 'experiences.views.index' object.experience.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Go back to experience" class="option_icon" /></a>
-	{% else %}
-		{% ifequal object.content_type.model 'narrative' %}
-			<a href="{% url 'narratives.views.index' object.narrative.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Go back to narrative" class="option_icon" /></a>
+	<h1>{{ object.title }}</h1>
+	<h2>Published {{ object.date_added|date:"l, F jS, Y" }}</h2>
+	<div class="option_list">
+	    {% ifequal object.content_type.model 'experience' %}
+			<a href="{% url 'experiences.views.index' object.experience.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to experience" class="option_icon" /></a>
 		{% else %}
-			{% for explorer in object.explorers.all %}
-				<a href="{% url 'journey' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/back-icon.png" title="Go back to {{ explorer.get_full_name }}'s Journey" class="option_icon" /></a>
-			{% endfor %}
-		{% endifequal %}
-	{% endifequal %}
-</div>
-{% if object.description %}<p>{{ object.description }}</p>{% endif %}
-<div class="photo-gallery">
-	<table class="thirds_table">
-		<tr>
-		    {% for photo in object.photos.all %}
-		    	<td>
-				    <div class="object_item thirds_item">
-				    	<div class="photo_feature">
-				        	<a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" /></a>
-				        	{% if photo.title %}
-				        		<span class="caption">{{ photo.title }}</span>
-				        	{% endif %}
-				        </div>
-				    </div>
-		    	</td>
-				{% if forloop.counter|divisibleby:'3' %}
-					{% if not forloop.last %}
-						</tr>
-						<tr>
-					{% endif %}
-				{% endif %}
-			{% empty %}
-		    	<p>There are no photos uploaded for this gallery yet</p>
-		    {% endfor %}
-		</tr>
-	</table>
-	{% if object.children_photos %}
-		<table class="thirds_table">
-			{% ifequal object.content_type.model 'explorer' %}
-				<h3>Photos from explorer's experiences and narratives</h3>
+			{% ifequal object.content_type.model 'narrative' %}
+				<a href="{% url 'narratives.views.index' object.narrative.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to narrative" class="option_icon" /></a>
 			{% else %}
-				{% ifequal object.content_type.model 'experience' %}
-					<h3>Photos from the narratives</h3>
-				{% endifequal %}
+				{% for explorer in object.explorers.all %}
+					<a href="{% url 'journey' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to {{ explorer.get_full_name }}'s Journey" class="option_icon" /></a>
+				{% endfor %}
 			{% endifequal %}
-		    {% for photo in children_photos %}
-				<td>
-				    <div class="object_item thirds_item">
-				        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
-				    </div>
-				</td>
-				{% if forloop.counter|divisibleby:'3' %}
-					{% if not forloop.last %}
-						</tr>
-						<tr>
+		{% endifequal %}
+		{% if request.user in object.explorers.all %}
+			<a href="{% url 'photologue.views.upload_photo' object.id %}"><img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload photo for {{ object.title }}" class="option_icon" /></a>
+			<a href="{% url 'pl-gallery-edit' object.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this Album" class="option_icon" /></a>
+		{% endif %}
+	</div>
+	{% if object.description %}<p>{{ object.description }}</p>{% endif %}
+	<div class="photo-gallery">
+		<table class="thirds_table">
+			<tr>
+			    {% for photo in object.photos.all %}
+			    	<td>
+					    <div class="object_item thirds_item featured_photo">
+				        	{% include "photologue/snippets/photo_dash.html" %}
+					    </div>
+			    	</td>
+					{% if forloop.counter|divisibleby:'3' %}
+						{% if not forloop.last %}
+							</tr>
+							<tr>
+						{% endif %}
 					{% endif %}
-				{% endif %}
-			{% endfor %}
+				{% empty %}
+			    	<p>There are no photos uploaded for this gallery yet</p>
+			    {% endfor %}
+			</tr>
 		</table>
-	{% endif %}
-</div>
-
+		{% if object.children_photos %}
+			<table class="thirds_table">
+				{% ifequal object.content_type.model 'explorer' %}
+					<h3>Photos from 
+					{% ifequal user object.object %} 
+						your
+					{% else %}
+						{{ object.object.get_full_name|possessive }}
+					{% endifequal %}
+					experiences and narratives</h3>
+				{% else %}
+					{% ifequal object.content_type.model 'experience' %}
+						<h3>Photos from the narratives</h3>
+					{% endifequal %}
+				{% endifequal %}
+			    {% for photo in children_photos %}
+					<td>
+					    <div class="object_item thirds_item featured_photo">
+					        {% include "photologue/snippets/photo_dash.html" %}
+					    </div>
+					</td>
+					{% if forloop.counter|divisibleby:'3' %}
+						{% if not forloop.last %}
+							</tr>
+							<tr>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</table>
+		{% endif %}
+	</div>
 {% endblock %}

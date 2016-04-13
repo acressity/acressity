@@ -1,0 +1,28 @@
+{# Assumes there is a comment object passed in with name `note` #}
+
+{% with note.content_type.model as model %}
+    <div class="{{ model }}_note">
+        <p>{{ note.comment }}</p>
+        <div class="help-text">
+            <p><a href="{% url 'profile' note.user_id %}">{{ note.user_name }}</a></p>
+            {% ifnotequal model 'explorer'  %}
+                {% ifnotequal model 'photo' %}
+                    <p>
+                         Regarding <a href="{% url note.content_type.model note.content_object.id %}">{{ note.content_object }}</a>
+                    </p>
+                {% else %}
+                    <p>
+                        On photo <a href="{% url 'pl-photo' note.content_object.id %}">{{ note.content_object }}</a>
+                    </p>
+                {% endifnotequal %}
+            {% endifnotequal %}
+            {{ note.submit_date|timesince }} ago
+            {% ifequal user note.user %} 
+                <form action="{% url 'remove_note' note.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" class="delete-button" value="Remove" />
+                </form>
+            {% endifequal %}
+        </div>
+    </div>
+{% endwith %}

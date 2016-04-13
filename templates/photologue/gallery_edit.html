@@ -4,46 +4,99 @@
 {% block title %} - Edit: {{ object.title }}{% endblock %}
 
 {% block content %}
+	<script type="text/javascript">
+		function update_photo(form){
+			var photo_data = {
+				"photo_id": $(form).find("#id_id").val(),
+				"title": $(form).find("#id_title").val(),
+				"caption": $(form).find("#id_caption").val()
+			};
+
+			$.ajax({
+				url: "{% url 'update_photo' %}",
+				data: photo_data,
+				dataType: 'json',
+				//error: function(ts) { alert(ts.responseText) }
+			})
+			.done(function(a, b, c){
+				ajax_message("Your photo has been saved");
+			})
+			.fail(function(a, b, c){
+				ajax_message("Sorry, there was an error saving your photo");
+			})
+			//alert(data["id"]);
+
+
+			return false;
+		}
+	</script>
 	<div class="object_item">
-		<form action="" method="POST">
+		<form action="" method="POST" class="full_width">
 			{% csrf_token %}
-			<h2>Album name: {{ form.title }}</h2>
-			<h3>Published {{ form.date_added }}</h3>
-			<label for="id_description">Description:</label>
-			<p>
+			<div class="formatted_input">
+				<h2>Album name</h2>
+				{{ form.title.errors }}
+				{{ form.title }}
+			</div>
+			<div class="formatted_input">
+				<h3>Published {{ form.date_added }}</h3>
+			</div>
+			<div class="formatted_input">
+				<label for="id_description">
+					<h3>Description</h3>
+				</label>
+				{{ form.description.errors }}
 				{{ form.description }}
-			</p>
-			Select photo to feature:
-			{{ form.featured_photo }}
-			<br />
+			</div>
+			<div class="formatted_input">
+				<label for="id_featured_photo">
+					<h3>Select photo to feature</h3>
+				</label>
+				{{ form.featured_photo.errors }}
+				{{ form.featured_photo }}
+			</div>
 			<input type="submit" value="Update" />
 		</form>
 	</div>
 	<div class="photo-gallery">
 	    {% for photo, form in photos_forms %}
 		    <div class="gallery_photo_item">
-		    	<div class="left">
+		    	<div class="left featured_photo">
 		        	<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
 		        </div>
 		        <div class="right">
 			        {% ifequal request.user photo.author %}
-				        <form action="/photologue/photo/{{ photo.id }}/edit_photo/" method="POST">
+				        <form action="/photologue/photo/{{ photo.id }}/edit_photo/" method="POST" onsubmit="return update_photo(this);">
 				        	{% csrf_token %}
-				    		<h3>Title: {{ form.title }}</h3>
-				    		Photo Description:
-				    		{{ form.caption }}
-				    		<input type="submit" value="Update" />
+				        	<div class="formatted_input">
+                                <h3>Title</h3>
+				    			{{ form.title }}
+                                {{ form.title.errors }}
+                            </div>
+				    		<div class="formatted_input">
+					    		<label for="id_description">
+					    			<h3>Photo Description</h3>
+					    		</label>
+					    		{{ form.caption }}
+                                {{ form.caption.errors }}
+                            </div>
+					    	<input type="hidden" id="id_id" value="{{ photo.id }}" />
+				    		<div class="formatted_input align_center">
+				    			<input type="submit" value="Update" />
+				    		</div>
 						</form>
-						<form action="{% url 'photologue.views.delete_photo' photo.id %}" method="POST">
+						<form action="{% url 'delete_photo' photo.id %}" method="POST">
 							{% csrf_token %}
-							<input type="submit" value="Delete" class="delete-button" onclick="return confirm('Delete this photo?');" />
+							<div class="formatted_input align_center">
+								<input type="submit" value="Delete" class="align_center" onclick="return confirm('Delete this photo?');" />
+							</div>
 						</form>
 					{% else %}
-						This photo can only be edited by {{ photo.author }}
+						<em>This photo can only be edited by {{ photo.author }}</em>
 					{% endifequal %}
 				</div>
+				<div class="clear_both"></div>
 		    </div>
-		    <hr />
 	    {% empty %}
 	    	<p>There are no photos uploaded for this gallery yet</p>
 	    {% endfor %}
@@ -58,8 +111,8 @@
 				{% endifequal %}
 			    {% for photo in object.children_photos %}
 					<td>
-					    <div class="object_item thirds_item">
-					        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+					    <div class="object_item thirds_item featured_photo">
+					        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" /></a>
 					        <div>
 					        	<h4>{{ photo.title }}</h4>
 					        </div>

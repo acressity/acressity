@@ -1,0 +1,51 @@
+{% load comments %}
+
+{% comment %}
+    HTML for the narrative items currently being used in several templates.
+    Assumes that the object is passed in as context `narrative`
+{% endcomment %}
+
+<div class="narrative_dash">
+    {% if not narrative.is_public %}
+        <strong>Private narrative</strong>
+    {% endif %}
+    <a href="/narratives/{{ narrative.id }}/" title="View this narrative">
+        <div>
+            <h3>{{ narrative.title }}</h3>
+            {% if narrative.gallery.featured_photo %}
+                <div class="featured_photo">
+                    <img src="{{ narrative.gallery.featured_photo.get_thumbnail_url }}" />
+                </div>
+            {% endif %}
+        </div>
+    </a>
+    <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle narrative taste">
+        Short taste <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narrative_{{ narrative.id }}_taste_toggle_icon" />
+    </div>
+    <div id="narrative_{{ narrative.id }}_taste" class="narrative_taste">
+        {{ narrative.taste|linebreaks }}
+    </div>
+    {% if narrative.category %}
+        <strong>Narrative category</strong>
+        <p>{{ narrative.category }}</p>
+    {% endif %}
+    <p>{{ narrative.date_created|timesince }} ago</p>
+    <p>
+        By <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a>
+    </p>
+    {% if user.is_authenticated %}
+        {% ifequal narrative.author request.user %}
+            <div class="option_list">
+                <a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this narrative" class="option_icon" /></a>
+                <a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this narrative" class="option_icon" /></a>
+                <a onclick="toggle_div($(this).parent().next());"><img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" class="option_icon" /></a>
+            </div>
+        {% endifequal %}
+        {% get_comment_form for narrative as comment_form %}
+        <div id="something" class="comment toggle_div">
+            {% with next_url_name='narrative' next_url_pk=narrative.id %}
+                {% include "support/snippets/note_form.html" %}
+            {% endwith %}
+        </div>
+    {% endif %}
+</div>

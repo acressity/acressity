@@ -1,4 +1,4 @@
-{% extends "narratives/narr_base.html" %}
+{% extends "narratives/base.html" %}
 
 {% block content %}
 	<h2>Confirm you want to delete your narrative:</h2>
@@ -6,6 +6,7 @@
 	<p>
 		{{ narrative.taste }}
 	</p>
+    <h3>This action can't be undone</h3>
 	<form action="" method="POST">
 		{% csrf_token %}
 		<input type="submit" value="Confirm" name="confirm" />

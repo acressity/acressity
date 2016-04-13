@@ -1,41 +1,46 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block head_insert %}
+    <style type="text/css">
+        #content {
+            padding: 0px;
+            -moz-box-shadow: 0 0 0px 0px #000;
+            -webkit-box-shadow: 0 0 0px 0px #000;
+            box-shadow: 0 0 0px 0px #000;
+            background-color: rgba(0, 0, 0, 0);
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#explore_main_wrapper').on('click', function() {
+                $('#explore_what_wrapper').show(800);
+                $('#explore_why_wrapper').show(800);
+            });
+        });
+    </script>
+{% endblock head_insert %}
 
 {% block content %}
-	<img src="{{ STATIC_URL }}img/outset.jpg" class="full_width" />
-	<blockquote id="welcome_quote">
-		<h2>
-			Expand your life's domain by journeying in pursuit of experiences of which you dream. Allow this website to be a tool with which to chart your venture, sharing the experiences of your journey with others.
-		</h2>
-	</blockquote>
-	<hr />
-	<p>
-		{% if request.user.is_authenticated %}
-			<form action="/experiences/create/" method="POST" class="full_width">
-				{% csrf_token %}
-				<label for="id_experience"><h3>Add an experience to your journey</h3></label>
-				{{ form.experience }}
-				<input type="hidden" name="explorer_id" value="{{ request.user.id }}" />
-		{% else %}
-			<form action="{% url 'step_two' %} " method="POST" class="full_width" onsubmit="return validateFirstExperience(this);">
-				{% csrf_token %}
-				<label for="id_experience"><h3>Write down an experience you wish to pursue to begin your journey...</h3></label>
-				<input type="hidden" name="initial" />
-				{{ form.experience }}
-		{% endif %}
-		<input type="submit" value="Shout it!" />
-	</form>
-	Or <a href="{% url 'about' %}">learn more</a>
-	</p>
-{% endblock content %}
+    
+    <a href="javascript:void(0)" id="explore_main_wrapper">
+        <div id="explore_main">
+            <p>Explore</p>
+        </div>
+    </a>
 
-{% block right_content %}
-	<h3>Other Featured Experiences:</h3>
-	{% for explorer, experience in explorer_experience %}
-		<div class="object_item experience_item">
-			{% if experience.gallery.featured_photo %}
-				<img src="{{ experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.gallery.featured_photo.title }}"/>
-			{% endif %}
-			<a href="/experiences/{{ experience.id }}"><h3>{{ experience }}</h3></a> by {{ explorer.get_full_name }}
-		</div>
-	{% endfor %}	
-{% endblock right_content %}
+    <a href="{% url 'what' %}" id="explore_what_wrapper" class="hidden">
+        <div id="explore_what">
+            <p>What</p>
+            <p>is Acressity?</p>
+        </div>
+    </a>
+
+    <a href="{% url 'why' %}" id="explore_why_wrapper" class="hidden">
+        <div id="explore_why">
+            <p>Why</p>
+            <p>Acressity?</p>
+        </div>
+    </a>
+    
+{% endblock content %}

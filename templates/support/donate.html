@@ -1,0 +1,43 @@
+{% extends 'experiences/base.html' %}
+
+{% block content %}
+    <h2>Become a Benefactor</h2>
+    <p>
+        You will be donating to support the experience
+        {% include 'experiences/snippets/dash.html' %}
+    </p>
+    {% if experience.explorers.count > 1 %}
+        <div class="explorer_item">
+            Your donation will support these explorers <img src="{{ STATIC_URL }}img/icons/expand-icon.png"
+                                                            class="toggle_icon" id="exp_explorer_list_toggle_icon"
+                                                            onclick="toggle_div('exp_explorer_list');" />
+            <div class="toggle_div" id="exp_explorer_list">
+                {% for explorer in experience.explorers.all %}
+                    {% include 'explorers/snippets/dash.html' %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    <p>
+        Donations are handled through PayPal. You will be directed to PayPal's website when you click the
+        <code>Donate</code> button below. If you do not have an account, you can create one easily on their website.
+    </p>
+    <p>
+        Payments go directly to the experience's author <a href="{% url 'journey' experience.author.id %}">{{ experience.author.get_full_trailname }}</a>
+    </p>
+    <p>
+        <label for="id_donation_amount_suggested">
+            Suggested amount: $
+        </label>
+        <input type="text" id="id_donation_amount_suggested" value="25.00" />
+    </p>
+    <div style="text-align: center;">
+        {{ paypal_form.render }}
+    </div>
+
+    <script>
+        $("#id_donation_amount_suggested").keyup(function() {
+            $("#id_amount").val($(this).val());
+        });
+    </script>
+{% endblock content %}

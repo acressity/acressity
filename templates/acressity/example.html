@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Meet <a href="{% url 'journey' bugsy.id %}">{{ bugsy.get_full_trailname }}</a></h2>
+    <p>
+        {{ bugsy.trailname }} is a dummy example explorer profile used in the development of this website. When he is not assisting in the building of this site, he dreams big; rainforests and the North Pole being other aspirations for exploration. Having always dreamed of having these experiences, good ol' {{ bugsy.trailname }} decided to take the first step by composing a list of them on his journey page. Below is a picture of his journey page on this site.
+    </p>
+    <div class="featured_photo">
+        <a href="{{ STATIC_URL }}img/example_journey.png">
+            <img src="{{ STATIC_URL }}img/example_journey.png" style="width: 75%; cursor: -moz-zoom-in; cursor: -webkit-zoom-in; cursor: zoom-in;">
+        </a>
+    </div>
+    <p>
+        As you can see, he has a little panel about himself on the right (called an " explorer dash") when he's logged in. His journey page lists all the experiences he wishes to have. He's currently featuring his experience <a href="{% url 'experience' bugsy.featured_experience.id %}">{{ bugsy.featured_experience }}</a>, meaning he is focusing on achieving this experience at the present moment. His dash provides quick actions on this experience. Others will see this featured experience when seeing his profile listed anywhere on the site. If {{ bugsy.trailname }} wishes to keep any experience private, he has the ability of doing so.
+    </p>
+    <p>
+        Each experience he creates or participates in (there can be multiple explorers to any one experience) will show up on his journey page, each with their own " experience dash". Of course, private experiences will not show up for anyone without permission. Currently, he can develop these experiences by writing narratives (basically blog posts/updates), uploading images, inviting other explorers, creating a brief (short bio), and establishing means of accepting monetary donations from benefactors. This list will expand in the future to include greater coverage of how experiences are realized, recorded, preserved, and evolve&#8212;the simulacrum of consciousness.
+    </p>
+    <p>
+        Now let's talk about <em>you</em>. Like everyone else on this planet, you have high aspirations. These aspirations, like a muffled voice in the distance encouraging you to explore and experience life, pulls you towards greatnes and fulfillment. Yet these calls from the distance are too easily forgotten or surrendered for any number of reasons. This app aims to keep this tarnishing from becoming inhibition. It encourages <em>you</em> to pursue your dreams, to have you be set ablaze for the rest of the world to behold, to rage against the dying of the light, to rise and stand up for your beliefs.
+    </p>
+    <p>
+        Compose a list of experiences you wish to have and notice how simply writing them down makes them somehow more real. Draw from this newly created power to charge yourself to following through on realizing these desires of the heart. Use this app to hoist yourself beyond your comfort zone into the realm of growth and thriving.
+    </p>
+    <p>
+        See an example of a real explorer <a href="{% url 'journey' featured_explorer.id %}">here</a>
+    </p>
+    <p>
+        More <a href="{% url 'about' %}">about</a> this app
+    </p>
+    {% include 'experiences/forms/first_experience_form.html' %}
+{% endblock content %}

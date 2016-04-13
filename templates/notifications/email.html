@@ -1,0 +1,21 @@
+{% with domain='http://www.acressity.com' %} {# hacky, yes... #}
+    <h3>From your Acressity journey</h3>
+
+    <p>
+        <a href="{{ domain }}{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
+    </p>
+      
+    {% if notice.target %}
+        {% ifequal notice.target_content_type.model 'invitationrequest' %}
+            <a href="{{ domain }}{% url 'experience' notice.target.experience.id %}">{{ notice.target.experience }}</a>
+        {% else %}
+            <a href="{{ domain }}{% url notice.target_content_type.model notice.target.id %}">{{ notice.target }}</a>
+        {% endifequal %}
+    {% endif %}
+
+    {% if notice.description %}
+        <p>
+            {{ notice.description|linebreaksbr }}
+        </p>
+    {% endif %}
+{% endwith %}

@@ -1,22 +1,48 @@
+from django.utils import timezone
+
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
 from django.forms import ModelForm
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+
 from experiences.models import Experience
 from photologue.models import Photo
 from explorers.models import Explorer
 
 
 class ExperienceForm(ModelForm):
-    experience = forms.CharField(initial="New experience...", widget=forms.TextInput(attrs={'onclick': 'setUp(this);', 'class': 'larger'}), max_length=200)
-    make_feature = forms.BooleanField(required=False, initial=False)
-    # explorers = forms.ModelMultipleChoiceField(queryset=Explorer.objects.all())
-
-    # def __init__(self, experience, *args, **kwargs):
-    #     super(ExperienceForm, self).__init__(*args, **kwargs)
-    #     self.fields['featured_photo'].queryset = experience.get_photos()
+    experience = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger'}))
+    make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
+    date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
 
     class Meta:
         model = Experience
-        exclude = ('date_created', 'author', 'gallery', 'make_feature')
+        exclude = ('author', 'gallery', 'make_feature')
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ExperienceForm, self).__init__(*args, **kwargs)
+
+    def clean_date_created(self):
+        date_created = self.cleaned_data.get('date_created')
+        if not date_created:
+            date_created = timezone.now()
+        return date_created
+
+    def clean_experience(self):
+        experience = self.cleaned_data.get('experience')
+        if len(experience) < 3:
+            raise forms.ValidationError('Make the experience name a little more descriptive')
+        return experience
+
+    def clean_search_term(self):
+        # search_term = self.cleaned_data.get('search_term')
+        # if search_term is None:
+        #     if get_user_model().objects.filter(trailname=search_term):
+        #         raise forms.ValidationError('This is already someone else\'s trailname')
+        return self.cleaned_data.get('search_term') or None
 
 
 class ExperienceBriefForm(ModelForm):
@@ -29,6 +55,3 @@ class ExperiencePhotoForm(ModelForm):
     class Meta:
         model = Photo
         exclude = ('title_slug',)
-
-# class QuickExperience(forms.Form):
-# 	experience = forms.CharField(max_length=200)

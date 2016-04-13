@@ -1,15 +1,14 @@
-from photologue.models import Gallery
-from datetime import datetime
-from experiences.models import Experience
-
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.shortcuts import get_object_or_404
-from django.conf import settings
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from photologue.models import Gallery
+from experiences.models import Experience
 
 
 class ExplorerManager(BaseUserManager):
+    # Following is currently not being used
     def create_user(self, first_name, last_name, trailname, password):
         if not trailname:
             # Make unique trailname, as close to the user's real name as possible
@@ -24,6 +23,9 @@ class ExplorerManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def get_random(self, num=1):
+        return self.order_by('?')[:num]
+
 
 class Explorer(AbstractBaseUser):
     '''
@@ -32,22 +34,60 @@ class Explorer(AbstractBaseUser):
     from the Django User model.
     '''
     first_name = models.CharField(max_length=50, null=False)
-    last_name = models.CharField(max_length=50, null=False)
-    trailname = models.CharField(max_length=50, unique=True, db_index=True, help_text='The nickname given to each explorer of this website, inspired by the tradition common with Appalachian Trail hikers. Explorers are encouraged to create a trailname that describes an aspect of their journey at the moment.')
-    gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL, related_name='story_gallery')
-    brief = models.TextField(null=True, blank=True)
-    email = models.EmailField(max_length=254, null=True, blank=True)
+    last_name = models.CharField(max_length=60, null=False)
+    trailname = models.CharField(
+        max_length=55,
+        null=True,
+        blank=True,
+        unique=True,
+        help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment.<br />It\'ll be displayed as John "<em>trailname</em>" Doe<br />It also allows others to find you by typing <code>acressity.com/<em>trailname</em></code>')
+    )
+    gallery = models.OneToOneField(
+        Gallery,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='story_gallery'
+    )
+    brief = models.TextField(null=True, blank=True, help_text=_('Short bio about you'))
+    email = models.EmailField(
+        max_length=254,
+        null=False,
+        blank=False,
+        unique=True,
+        help_text=_('Email addresses are used for resetting passwords and notifications. Privacy is protected and confidential.')
+    )
     birthdate = models.DateField(null=True, blank=True)
-    date_joined = models.DateTimeField(default=datetime.now)
+    date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+    notify = models.BooleanField(default=True)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
-    featured_experience = models.ForeignKey(Experience, null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_experience')  # Consider altering this to keep from having no experience featured...?
+    tracking_experiences = models.ManyToManyField(
+        Experience,
+        related_name='tracking_explorers',
+        blank=True,
+        help_text=_('Experiences that the explorer has chosen to track.')
+    )
+    featured_experience = models.ForeignKey(
+        Experience,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='featured_experience',
+        help_text=_('The experience that an explorer is currently featuring. Will be displayed on explorer\'s dash for easy accessibility and will be shown alongside explorer information for others to see.')
+    )
+    paypal_email_address = models.EmailField(
+        null=True,
+        blank=True,
+        unique=True,
+        help_text=_('Email address for your PayPal account. This is the email address to which donations by benefactors are made.')
+    )
 
     objects = ExplorerManager()
 
-    USERNAME_FIELD = 'trailname'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'password']
 
     def __unicode__(self):
@@ -57,37 +97,55 @@ class Explorer(AbstractBaseUser):
         return self.__class__.__name__
 
     def ordered_experiences(self):
-        return sorted(self.experiences.exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
+        from itertools import chain
+
+        def sort_experience(experience):
+            if experience.latest_narrative():
+                return experience.latest_narrative().date_created
+            else:
+                return experience.date_created
+
+        return list(chain(self.experiences.filter(experience=self.featured_experience), sorted(self.experiences.exclude(experience=self.featured_experience).order_by('-date_created'), key=sort_experience, reverse=True)))
 
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
 
+    def get_full_trailname(self):
+        if self.trailname:
+            return '{0} "{1}" {2}'.format(self.first_name, self.trailname, self.last_name)
+        else:
+            return self.get_full_name()
+
+    # Following not used, but I think it's necessary with the extended user model?
     def get_short_name(self):
-        return self.trailname
+        return self.first_name
 
     def cheering_for(self):
         return [c.explorer for c in self.cheers_from.all()]
 
+    def top_cheerers(self):
+        return self.cheering_for()[:3]
+
     def cheerers(self):
         return [c.cheerer for c in self.cheers_for.all()]
 
+    def public_experiences(self):
+        return self.experiences.filter(is_public=True)
+
+    def private_experiences(self):
+        return self.experiences.filter(is_public=False)
+
+    # Don't think this is currently being used...phasing it out in favor of returning all experiences in a sorted fashion
     def shelved_experiences(self):
         return sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 
     def top_five(self):
-        return list(sorted(self.experiences.exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True)))[:5]  # Ugly...
+        return self.ordered_experiences()[:5]
+
+    # Wanting to have only 3 to keep topbar dropdown less cluttered. Need top_five for backwards compatibility
+    def top_three(self):
+        return self.ordered_experiences()[:3]
 
     def latest_narrative(self):
         if self.narratives.exists():
             return self.narratives.latest('date_created')
-
-
-# To be modified to a class that will be neutral to whether the request is by
-# the current owner/author and the recruit
-class Request(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_author')
-    recruit = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_recruit')
-    experience = models.ForeignKey(Experience)
-
-    def __unicode__(self):
-        return '{0} invitation'.format(self.experience)

@@ -1,40 +1,46 @@
-from explorers.forms import RegistrationForm, ExplorerForm
-from explorers.models import Request
-from experiences.models import Experience, FeaturedExperience
-from photologue.models import Gallery, Photo
-from experiences.forms import ExperienceForm
-from narratives.models import Narrative
-from support.models import Cheer
+import json
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.contrib.comments import Comment
+from django_comments.models import Comment
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.contrib.auth import logout
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
 
-# Dajaxice tutorial:
-
-from explorers.forms import ContactForm
-
-
-def contact_form(request):
-    return render(request, "explorers/contact_form.html", {'form': ContactForm()})
+from explorers.forms import RegistrationForm, ExplorerForm
+from support.models import InvitationRequest
+from notifications import notify
+from experiences.models import Experience
+from photologue.models import Gallery
+from experiences.forms import ExperienceForm
+from support.models import Cheer
 
 
 def journey(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     owner = explorer == request.user
+    form = None
     if owner:
+        experiences = explorer.ordered_experiences()
         form = ExperienceForm()
     else:
-        form = None
-    return render(request, 'explorers/index.html', {'explorer': explorer, 'owner': owner, 'form': form})
+        # Damn, this is hacky...
+        # To start fixing this ugliness, must first have ordered_experiences() return a queryset instead of list
+        experiences = []
+        for experience in explorer.ordered_experiences():
+            if experience.is_public:
+                experiences += [experience]
+            elif request.user.is_authenticated() and experience in request.user.experiences.all():
+                experiences += [experience]
+    return render(request, 'explorers/index.html', {'explorer': explorer, 'experiences': experiences, 'owner': owner, 'form': form})
 
 
 @login_required
@@ -42,28 +48,32 @@ def my_journey(request):
     return redirect(reverse('journey', args=(request.user.id,)))
 
 
-def story(request, explorer_id):
+def profile(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.method == 'POST':
         if request.user == explorer:
             form = ExplorerForm(explorer, request.POST, instance=explorer)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Your information has been saved')
-            else:
-                messages.error(request, 'There was a problem saving your information')
-            return redirect('/explorers/{0}'.format(explorer.id))
-        else:
-            messages.error(request, 'Nice try on security breach! I would, however, love it if you did inform me of a website security weakness should (when) you find one.')
-            return render(request, 'acressity/message.html')
+                messages.success(request, _('Your information has been saved'))
+            return redirect(reverse('profile', args=(explorer.id,)))
+        raise PermissionDenied
+    if request.user.id == explorer.id:
+        owner = True
+        form = ExplorerForm(explorer, instance=explorer)
     else:
-        if request.user.id == explorer.id:
-            owner = True
-            form = ExplorerForm(explorer, instance=explorer)
-        else:
-            form = None
-            owner = False
-        return render(request, 'explorers/story.html', {'explorer': explorer, 'owner': owner, 'form': form})
+        form = None
+        owner = False
+    return render(request, 'explorers/profile.html', {'explorer': explorer, 'owner': owner, 'form': form})
+
+
+def story(request, explorer_id):
+    explorer = get_object_or_404(get_user_model(), pk=explorer_id)
+    if request.user == explorer:
+        narratives = explorer.narratives.all()
+    else:
+        narratives = explorer.narratives.filter(is_public=True)
+    return render(request, 'explorers/story.html', {'narratives': narratives})
 
 
 def board(request, explorer_id):
@@ -75,6 +85,8 @@ def board(request, explorer_id):
     else:
         eo_notes = []
     # Get the notes pertaining to all experiences
+    # What was I thinking? This will become about the most inefficient thing
+    # imagineable as (if) more experiences notes are added
     experience_notes = Comment.objects.filter(content_type__model='experience')
     # Filter the results down for just the experiences pertaining to explorer
     ei_notes = []
@@ -86,20 +98,25 @@ def board(request, explorer_id):
     # Filter the results down for just the experiences pertaining to explorer
     nr_notes = []
     for nr_note in narrative_notes:
-        if explorer == nr_note.content_object.author:
-            nr_notes.append(nr_note)
+        if nr_note.content_object:
+            if explorer == nr_note.content_object.author:
+                nr_notes.append(nr_note)
     # Any requests pertaining to the explorer
-    requests = Request.objects.filter(recruit=explorer)
+    requests = InvitationRequest.objects.filter(recruit=explorer)
     if request.method == 'POST' and request.user == explorer:
-        invitation_request = requests.get(experience_id=request.POST.get('experience_id'))
+        invitation_request_id = request.POST.get('invitation_request_id')
         if 'accept' in request.POST:
-            invitation_request.experience.explorers.add(explorer)
-            invitation_request.experience.gallery.explorers.add(explorer)
-            invitation_request.delete()
-            return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
+            return redirect(reverse('accept_invitation_request', args=(request.user.id,)))
         elif 'decline' in request.POST:
-            invitation_request.delete()
-    return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'owner': owner})
+            return redirect(reverse('decline_invitation_request', args=(request.user.id, invitation_request_id)))
+    nothing = not (ei_notes or nr_notes or requests)
+    notifications = explorer.notifications.unread()
+    return render(request, 'explorers/bulletin_board.html', {'explorer': explorer, 'eo_notes': eo_notes, 'ei_notes': ei_notes, 'nr_notes': nr_notes, 'requests': requests, 'nothing': nothing, 'owner': owner, 'notifications': notifications})
+
+
+@login_required
+def past_notifications(request, explorer_id):
+    return render(request, 'explorers/past_notifications.html')
 
 
 # For subscription relationships
@@ -112,9 +129,10 @@ def cheer(request, explorer_id):
             cheer = Cheer(explorer=explorer, cheerer=request.user)
             cheer.save()
             messages.success(request, 'You are now cheering for {0}'.format(explorer.get_full_name()))
+            notify.send(sender=request.user, recipient=explorer, verb='is now cheering for you')
             return redirect(reverse('journey', args=(explorer.id,)))
         else:
-            messages.error(request, 'You are already cheering for {0}'.format(explorer.get_full_name()))
+            messages.error(request, _('You are already cheering for {0}'.format(explorer.get_full_name())))
     return redirect(reverse('journey', args=(request.user.id,)))
 
 
@@ -129,6 +147,12 @@ def cheerers(request, explorer_id):
     return render(request, 'explorers/cheerers.html', {'explorer': explorer})
 
 
+# I'm going to get a generic view serving this sometime...
+def tracking_experiences(request, explorer_id):
+    tracking_experiences = request.user.tracking_experiences.all()
+    return render(request, 'explorers/tracking_experiences.html', {'tracking_experiences': tracking_experiences})
+
+
 # This is to redirect user to their journey if the generic '/journey' url is called
 @login_required
 def explorer_journey(request):
@@ -136,49 +160,52 @@ def explorer_journey(request):
 
 
 def new_explorer(request):
-    if request.method == 'POST' and not 'initial' in request.POST:
+    if request.method == 'POST' and 'initial' not in request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
             # The person correctly filled out the form. Register them
-            explorer = get_user_model()(trailname=form.cleaned_data['trailname'])
+            explorer = get_user_model()(email=form.cleaned_data.get('email'))
             explorer.set_password(form.cleaned_data['password1'])
             explorer.first_name = form.cleaned_data['first_name']
             explorer.last_name = form.cleaned_data['last_name']
-            # explorer.email = form.cleaned_data['email']
+            if form.cleaned_data['trailname']:
+                explorer.trailname = form.cleaned_data['trailname']
             explorer.save()
-            explorer = authenticate(username=form.cleaned_data['trailname'], password=form.cleaned_data['password1'])
+            explorer = authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password1'])
             # Log them in
             login(request, explorer)
-            if request.POST['experience']:
+            first_experience = None
+            if request.POST.get('experience'):
                 # Save their experience
-                first_experience = Experience(experience=request.POST['experience'], author=explorer)
+                first_experience = Experience(experience=request.POST.get('experience'), author=explorer)
                 first_experience.save()
                 explorer.experiences.add(first_experience)
                 explorer.featured_experience = first_experience
                 explorer.save()
-                # messages.success(request, 'Your first experience is {0}'.format(first_experience))
             # Create a new gallery for the new explorer
-            gallery = Gallery(title=explorer.trailname, title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get(model='Explorer'), object_pk=explorer.id)
+            gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get_for_model(get_user_model()), object_pk=explorer.id)
             gallery.save()
             gallery.explorers.add(explorer)
             explorer.gallery = gallery
             explorer.save()
-            # Send them on introductory tour
-            return redirect(reverse('welcome'))
-
-            # Welcome the new explorer
-            # messages.success(request, 'Go on, your journey awaits!')
+            # Welcome and send them on introductory tour
+            messages.success(request, 'Welcome aboard, {0}!'.format(explorer.get_full_name()))
+            notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
+            if first_experience:
+                return redirect(reverse('new_experience', args=(first_experience.id,)))
+            else:
+                return redirect(reverse('journey', args=(explorer.id,)))
     else:
         form = RegistrationForm()
-    return render(request, 'acressity/register.html', {'form': form, 'experience': request.POST['experience']})
+    return render(request, 'registration/register.html', {'form': form, 'experience': request.POST.get('experience'), 'min_password_len': settings.MIN_PASSWORD_LEN})
 
 
 # Settings page for the explorer
 @login_required
-def settings(request, explorer_id):
+def explorer_settings(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.user == explorer:
-        return render(request, 'explorers/settings.html', {'explorer': explorer})
+        return render(request, 'explorers/explorer_settings.html', {'explorer': explorer})
 
 
 def random(request):
@@ -191,3 +218,54 @@ def farewell(request):
     featured_experience = request.user.featured_experience
     logout(request)
     return render(request, 'explorers/farewell.html', {'featured_experience': featured_experience})
+
+
+@login_required
+def change_password(request):
+    from explorers.forms import PasswordChangeForm
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.POST, request=request)
+        if form.is_valid():
+            if request.user.check_password(form.cleaned_data.get('current_password')):
+                request.user.set_password(form.cleaned_data.get('new_password1'))  # For some reason unable to set to new_password2 because variable currently returning None. Kinda pissed/confused and wanting to move on...
+                request.user.save()
+                messages.success(request, _('You have successfully changed your password'))
+            else:
+                messages.success(request, _('Your attempt to change your password failed...'))
+            return redirect(reverse('journey', args=(request.user.id,)))
+    else:
+        form = PasswordChangeForm
+    return render(request, 'explorers/change_password.html', {'form': form})
+
+
+def site_login(request):
+    if request.GET.get('next') == '/explorers/logout/' or request.POST.get('next') == '/explorers/logout/' or request.META.get('HTTP_REFERER') == request.build_absolute_uri(reverse('acressity_index')):
+        next_url = reverse('my_journey')
+    else:
+        next_url = request.GET.get('next') or request.POST.get('next') or 'my_journey'
+    username_provided = request.POST.get('username')
+    if username_provided is None:
+        messages.error(request, _('Please provide either your email or optional trailname for logging in'))
+        return redirect('/accounts/login')
+    password_provided = request.POST.get('password')
+    # Site allows one to login with either email address or created trailname
+    if get_user_model().objects.filter(email=username_provided):
+        explorer = authenticate(username=username_provided, password=password_provided)
+        if explorer:
+            login(request, explorer)
+            return redirect(next_url)
+    if get_user_model().objects.filter(trailname=username_provided):
+        explorer = get_user_model().objects.get(trailname=username_provided)
+        explorer = authenticate(username=explorer.email, password=password_provided)
+        if explorer:
+            login(request, explorer)
+            # return HttpResponse(next_url)
+            return redirect(next_url)
+    # Login failed
+    messages.error(request, _('There was a problem with your username or password'))
+    return redirect('/accounts/login')
+
+
+def check_trailname(request):
+    trailname = request.GET.get('trailname')
+    return HttpResponse(json.dumps({'found': bool(get_user_model().objects.filter(trailname=trailname))}))

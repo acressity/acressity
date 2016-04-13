@@ -1,0 +1,119 @@
+{% load comments %}
+
+{% comment %}
+    HTML for the experience items currently being used in several templates.
+{% endcomment %}
+
+<div class="experience_dash">
+    <div {% if not stacked %}class="left"{% endif %}>
+        <a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
+            <div class="object_item">
+                <h3 style="text-align: center;">{{ experience }}</h3>
+                {% if experience.gallery.featured_photo %}
+                    <div class="featured_photo">
+                        <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
+                    </div>
+                {% endif %}
+            </div>
+        </a>
+        {% if experience.status %}
+            <p>{{ experience.status }}</p>
+        {% endif %}
+    </div>
+    <div {% if not stacked %}class="right"{% endif %}>
+        <ul class="option_list">
+            {% if user.is_authenticated %}
+                {% if user in experience.explorers.all %}
+                    <a href="/experiences/{{ experience.id }}/narratives/create/">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/add.png" title="Create a new narrative" /> Create new narrative
+                        </li>
+                    </a>
+                    <a href="{% url 'experiences.views.edit' experience.id %}">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this experience"
+                            />
+                            Edit this experience
+                        </li>
+                    </a>
+                    <a href="{% url 'experiences.views.upload_photo' experience.id %}">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" />
+                            Upload a photo
+                        </li>
+                    </a>
+                    {% ifequal user experience.author %}
+                        <a href="{% url 'experience_invite' experience.id %}">
+                            <li class="option">
+                                <img src="{{ STATIC_URL }}img/icons/add-user.png" title="Invite a comrade to be a part of this experience" />
+                                Invite someone to this experience
+                            </li>
+                        </a>
+                        <a href="{% url 'experiences.views.delete' experience.id %}">
+                            <li class="option">
+                                <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this experience" />
+                                Delete this experience
+                            </li>
+                        </a>
+                    {% else %}
+                        {% if experience.accepts_paypal %}
+                            <a href="{% url 'donate' experience.id %}">
+                                <li class="option">
+                                    <img src="{{ STATIC_URL }}img/icons/money.png" title="Donate - Become a
+                                    benefactor" />
+                                    Donate to this experience
+                                </li>
+                            </a>
+                        {% endif %}
+                    {% endifequal %}
+                {% endif %}
+            {% endif %}
+            {# This little insertion between checking for user being logged in is necessary...I think #}
+            {% if experience.gallery %}
+                <a href="{% url 'pl-gallery' experience.gallery.id %}">
+                    <li class="option">
+                        <img src="{{ STATIC_URL }}img/icons/images.png" title="View gallery" />
+                        View gallery
+                    </li>
+                </a>
+            {% endif %}
+            {% if user.is_authenticated %}
+            {% if experience not in user.experiences.all and experience not in user.tracking_experiences.all %}
+                    <a href="{% url 'track_experience' experience.id %}">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/track.png" title="Track this experience" />
+                            Track this experience
+                        </li>
+                    </a>
+                {% endif %}
+                <div onclick="toggle_div($(this).next());">
+                    <a>
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" />
+                            Tack on a note
+                        </li>
+                    </a>
+                </div>
+                <div class="toggle_div comment">
+                    {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
+                        {% include "support/snippets/note_form.html" %}
+                    {% endwith %}
+                </div>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="clear_both"></div>
+    {# Section for latest activity #}
+    {% if experience.latest_narrative %}
+        <div class="object_item">
+            {% with experience.latest_narrative as narrative %}
+                <div onclick="toggle_div(this.nextElementSibling);">
+                    Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
+                </div>
+                <div class="toggle_div">
+                    {% include "narratives/snippets/dash.html" %}
+                </div>
+            {% endwith %}
+        </div>
+    {% endif %}
+</div>

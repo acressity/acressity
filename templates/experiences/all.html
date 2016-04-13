@@ -2,30 +2,11 @@
 
 {% block content %}
 	<h2>All Experiences</h2>
-	{% for experience in all_experiences %}
-		<div class="experience_dash">
-			<div class="left">
-				{% if experience.gallery.featured_photo %}
-					<a href="{{ experience.gallery.featured_photo.get_absolute_url }}" title="{{ experience.gallery.featured_photo.title }}"><img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="{{ experience.gallery.featured_photo.title }}"/></a>
-					<br />
-				{% endif %}
-				<a href="{% url 'experiences.views.index' experience.id %}" title="Explore this Experience"><h3>{{ experience.experience|escape }}</h3></a>
-				{% if experience.author.gallery.featured_photo %}
-					<img src="{{ experience.author.gallery.featured_photo.get_icon_url }}" />
-					<br />
-				{% endif %}
-				By: <a href="{% url 'explorers.views.story' experience.author.id %}" title="View this explorer's page">{{ experience.author.get_full_name }}</a>
-			</div>
-			<div class="right">
-				{% comment %}
-				{% if user.is_authenticated and user not in experience.explorers.all %}
-					<div id="hurrah_{{ experience.id }}_errors">
-						{# Place for errors returned from ajax callback function #}
-					</div>
-					<input type="button" name="hurrah_button" id="hurrah_{{ experience.id }}_button" value="Hurrah!" onclick="hurrah({{ experience.id }});" />
-				{% endif %}
-				{% endcomment %}
-			</div>
-		</div>
+    <a href="{% url 'freshest_experiences' %}">Newest experiences first</a>
+	{% for experience in all_public_experiences %}
+		{% include "experiences/snippets/dash.html" %}
 	{% endfor %}
+    {% with '/experiences/' as url %}
+        {% include "snippets/pagination.html" %}
+    {% endwith %}
 {% endblock content %}

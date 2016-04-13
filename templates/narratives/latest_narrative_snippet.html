@@ -1,0 +1,31 @@
+{% load comments %}
+
+{# Section for latest activity #}
+{# Assumes narrative object named narrative is passed in #}
+
+<h4 id="expand_explorer_latest_narrative" title="Click to toggle latest narrative" onclick="toggle_div('experience_{{ experience.id }}_latest_narrative');">
+    Latest Narrative 
+    <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="experience_{{ experience.id }}_latest_narrative_toggle_icon" />
+</h4>
+<div class="latest_narrative" id="experience_{{ experience.id }}_latest_narrative">
+    {% if narrative.gallery.featured_photo %}
+        <div class="featured_photo">
+            <img src="{{ narrative.gallery.featured_photo.get_thumbnail_url }}" />
+        </div>
+    {% endif %}
+    <a href="{% url 'narrative' narrative.id %}"><strong>{{ narrative }}</strong></a>
+    <p>
+        {{ narrative.narrative|linebreaks }}
+    </p>
+    <p>
+        by {{ narrative.author }}
+    </p>
+    <p>
+        {{ narrative.date_created|timesince }} ago
+    </p>
+    {% ifequal narrative.author user %} 
+        <div class="option_list">
+            <a href="{% url 'narratives.views.edit' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" class="option_icon" title="Edit this narrative" /></a>
+        </div>
+    {% endifequal %}
+</div>

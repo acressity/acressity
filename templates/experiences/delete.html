@@ -1,18 +1,53 @@
-{% extends "experiences/exp_base.html" %}
+{% extends "experiences/base.html" %}
 
 {% block content %}
-	<h2>Confirm you wish to delete</h2>
-	<h3 class="experience_item">{{ experience }}</h3>
-	{% if experience.narratives.all.count > 0 %}
-		<h3>And the following narrative{{ experience.narratives.all|pluralize }}</h3>
-		{% for narrative in experience.narratives.all %}
-			<div class="narrative_item">
-				{{ narrative }}
+	<h2>Delete experience?</h2>
+    <h3>{{ experience }}</h3>
+	{% if experience.comrades %}
+		<p>
+			Since there are others as a part of this experience, you may elect to nominate one of them as the new author. Your membership in the experience will be removed.
+		</p>
+		{% for explorer in experience.comrades %}
+			<div class="object_item">
+				{% include "explorers/snippets/dash.html" %}
+				<div>
+					<form action="" method="POST">
+						{% csrf_token %}
+						<input type="hidden" name="explorer_id" value="{{ explorer.id }}" />
+						<input type="submit" name="nominate" value="Nominate {{ explorer.get_full_name }}" />
+					</form>
+				</div>
 			</div>
 		{% endfor %}
 	{% endif %}
+	{% if experience.narratives.all.count > 0 %}
+		<p onclick="toggle_div('narratives');">And its narrative{{ experience.narratives.all|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="narratives_toggle_icon" /></p>
+		<table class="thirds_table toggle_div" id="narratives">
+			<tr>
+				{% for narrative in experience.ordered_narratives %}
+					<td>
+						{% include "narratives/snippets/dash.html" %}
+					</td>
+					{% if forloop.counter|divisibleby:'3' %}
+						{% if not forloop.last %}
+							</tr>
+							<tr>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</tr>
+		</table>
+	{% endif %}
+	{% if experience.gallery %}
+		<p>Deleting experience includes deleting the associated photos</p>
+	{% endif %}
+	<p>
+		This action cannot be undone
+	</p>
 	<form action="" method="POST">
 		{% csrf_token %}
-		<input type="submit" value="Confirm" name="confirm" />
+        <div class="formatted_input align_center">
+            <input type="submit" value="Confirm" name="confirm" />
+        </div>
 	</form>
 {% endblock content %}

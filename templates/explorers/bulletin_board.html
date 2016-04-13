@@ -1,66 +1,88 @@
-{% extends "explorers/expl_base.html" %}
+{% extends "explorers/base.html" %}
 
 {% load explorers_extras %}
+{% load comments %}
 
 {% block content %}
 	<div id="bulletin_board">
 		<div id="bulletin_board_background"></div>
 		<h2><a href="{% url 'journey' explorer.id %}" title="To {{ explorer.get_full_name|possessive }} journey">{{ explorer.get_full_name|possessive }}</a> Bulletin Board</h2>
-		{% if requests %}
-			<h3>Requests:</h3>
-			{% for request in requests %}
-				{% if owner %}You have{% else %}{{ explorer.get_full_name}} has{% endif %} been invited to be a part of
-				<h3>
-					<a href="{% url 'experiences.views.index' request.experience.id %}">{{ request }}</a>
-				</h3>
-				by {{ request.author.get_full_name }}
-				{% if owner %}
-					<p>
-						<form action="" name="invite_respond" method="POST">
-							{% csrf_token %}
-							<input type="hidden" name="from_explorer_id" value="{{ request.from_explorer.id }}" />
-							<input type="hidden" name="to_explorer_id" value="{{ request.to_explorer.id }}" />
-							<input type="hidden" name="experience_id" value="{{ request.experience.id }}" />
-							<input type="submit" name="accept" value="Accept" />
-							<input type="submit" name="decline" value="Decline" />
-						</form>
-					</p>
-				{% endif %}
-			{% endfor %}
+		{% ifnotequal user explorer %} 
+			{% include "explorers/snippets/dash.html" %}
+			<div class="object_item">
+				<p>
+	                Leave a note
+	            </p>
+	            <div class="comment">
+	                {% get_comment_form for explorer as comment_form %}
+	                {% with next_url_name='board' next_url_pk=explorer.id %}
+	                	{% include "support/snippets/note_form.html" %}
+	                {% endwith %}
+	            </div>
+	        </div>
+		{% endifnotequal %}
+		{% if explorer.notifications.unread %}
+			<h2>Notifications</h2>
+			{% include 'notifications/list.html' %}
+		{% else %}
+			<div class="note">
+				<p>
+					No new notifications
+				</p>
+			</div>
 		{% endif %}
+		{% if explorer.notifications.read %}
+			<p>
+				<a href="{% url 'past_notifications' explorer.id %}">Past notifications</a>
+			</p>
+		{% endif %}
+		{% comment %}
+			{% if requests %}
+				<h3>Requests:</h3>
+				{% for request in requests %}
+					<div class="request_dash">
+						{% if owner %}You have{% else %}{{ explorer.get_full_name }} has{% endif %} been invited to be a part of
+						<h3>
+							<a href="{% url 'experiences.views.index' request.experience.id %}">{{ request }}</a>
+						</h3>
+						by {{ request.author.get_full_name }}
+						{% if owner %}
+							<p>
+								<form action="" name="invite_respond" method="POST">
+									{% csrf_token %}
+									<input type="hidden" name="from_explorer_id" value="{{ request.from_explorer.id }}" />
+									<input type="hidden" name="to_explorer_id" value="{{ request.to_explorer.id }}" />
+									<input type="hidden" name="experience_id" value="{{ request.experience.id }}" />
+									<input type="hidden" name="invitation_request_id" value="{{ request.id }}" />
+									<input type="submit" name="accept" value="Accept" />
+									<input type="submit" name="decline" value="Decline" />
+								</form>
+							</p>
+						{% endif %}
+					</div>
+				{% endfor %}
+			{% endif %}
 		{% if eo_notes %}
-			<h2>Your Personal Notes:</h2>
-			{% for eo_note in eo_notes %}
-				<div class="explorer_note">
-					<p><em>{{ eo_note.comment }}</em></p>
-					-<a href="{% url 'story' eo_note.user_id %}">{{ eo_note.user_name }}</a>
-					<p>{{ eo_note.submit_date }}</p>
-				</div>
+			<h2>Your Personal Notes</h2>
+			{% for note in eo_notes %}
+				{% include "support/snippets/note.html" %}
 			{% endfor %}
 		{% endif %}
 		{% if ei_notes %}
-			<h2>Experience Notes:</h2>
-			{% for ei_note in ei_notes %}
-				<div class="experience_note">
-					<p><a href="{% url 'story' ei_note.user_id %}">{{ ei_note.user_name }}</a>:</p>
-					<p>{{ ei_note.comment }}</p>
-					Regarding <a href="{% url 'experiences.views.index' ei_note.content_object.id %}">{{ ei_note.content_object }}</a>
-					<br />
-					{{ ei_note.submit_date }}
-				</div>
+			<h2>Experience Notes</h2>
+			{% for note in ei_notes %}
+				{% include "support/snippets/note.html" %}
 			{% endfor %}
 		{% endif %}
 		{% if nr_notes %}
-			<h2>Narrative Notes:</h2>
-			{% for nr_note in nr_notes %}
-				<div class="narrative_note">
-					<p><a href="{% url 'story' nr_note.user_id %}">{{ nr_note.user_name }}</a>:</p>
-					<p>{{ nr_note.comment }}</p>
-					Regarding <a href="{% url 'narratives.views.index' nr_note.content_object.id %}">{{ nr_note.content_object }}</a>
-					<br />
-					{{ nr_note.submit_date }}
-				</div>
+			<h2>Narrative Notes</h2>
+			{% for note in nr_notes %}
+				{% include "support/snippets/note.html" %}
 			{% endfor %}
 		{% endif %}
+		{% if nothing %}
+			<h2>There is nothing here at the moment</h2>
+		{% endif %}
+		{% endcomment %}
 	</div>
 {% endblock content %}

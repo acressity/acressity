@@ -1,5 +1,9 @@
 settings.py
 *.pyc
+*.swp
+logs/
+TODO
+DEPLOY
 static/
 checklist.txt
 .sass_cache/
@@ -14,4 +18,4 @@ lib/
 local/
 include/
 pip-selfcheck.json
-
+venv/

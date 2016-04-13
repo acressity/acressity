@@ -1,40 +1,101 @@
-from experiences.models import Experience, FeaturedExperience
-from experiences.forms import ExperienceForm
-from explorers.forms import RegistrationForm
-
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.http import Http404
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+# from django.contrib.auth.decorators import login_required
+from django.utils.html import escape
+from django.views.generic import TemplateView
+
+from experiences.models import Experience, FeaturedExperience
+from experiences.forms import ExperienceForm
+from explorers.forms import RegistrationForm, Explorer
+from acressity.forms import ContactForm
+from paypal.standard.forms import PayPalPaymentsForm
 
 
-def index(request):
-    explorer_experience = []
-    featured_experiences = FeaturedExperience.objects.get_random(5)
-    for featured_experience in featured_experiences:
-        explorer = get_user_model().objects.get(pk=featured_experience.experience.author_id)
-        explorer_experience.append((explorer, featured_experience.experience))
-    # Form for experience
-    form = ExperienceForm()
-    return render(request, 'acressity/index.html', {'form': form, 'explorer_experience': explorer_experience})
+def acressity_index(request):
+    if request.user.is_authenticated():
+        return redirect(reverse('journey', args=(request.user.id,)))
+    else:
+        return render(
+            request, 'acressity/index.html',
+            {
+                'featured_experiences': FeaturedExperience.objects.get_random(3),
+                'explorers': Explorer.objects.get_random(3)
+            }
+        )
 
 
 def step_two(request):
+    request.session['signing_up'] = 0
     if request.method == 'POST':
-        form = ExperienceForm(request.POST)
+        exp_form = ExperienceForm(request.POST)
+        if exp_form.is_valid():
+            # Store the data in case they wish to peruse for a bit
+            request.session['experience'] = exp_form.cleaned_data['experience']
+            request.session['signing_up'] = 1
+            reg_form = RegistrationForm()
+            return render(
+                request, 'registration/step_two.html',
+                {
+                    'experience': exp_form.cleaned_data['experience'],
+                    'form': reg_form
+                }
+            )
+    return redirect('/')
+    return redirect(request.META['HTTP_REFERER'])
+
+
+def handle_query_string(request, query_string):
+    query_string = escape(query_string)
+    if get_user_model().objects.filter(trailname=query_string):
+        # Someone is requesting journey by trailname
+        return redirect(
+            reverse('journey', args=(get_user_model().objects.get(trailname=query_string).id,))
+        )
+    elif Experience.objects.filter(search_term=query_string):
+        return redirect(
+            reverse(
+                'experience',
+                args=(Experience.objects.get(search_term=query_string).id,))
+        )
+    else:
+        raise Http404
+
+
+def contact(request):
+    # View handling the contact page
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
         if form.is_valid():
-            experience = form.cleaned_data['experience']
-            form = RegistrationForm()
-            return render(request, 'acressity/step_two.html', {'experience': experience, 'form': form})
+            send_mail(
+                'Message from {0} {1}'.format(
+                    form.cleaned_data['first_name'],
+                    form.cleaned_data['last_name']
+                ),
+                form.cleaned_data['message'],
+                'acressity@acressity.com',
+                ['andrew.s.gaines@gmail.com']
+            )
+            messages.success(request, 'Thank you for your message')
+            return redirect(reverse('contact'))
+    else:
+        form = ContactForm()
+    return render(request, 'acressity/contact.html', {'form': form})
 
 
-def journey_by_trailname(request, trailname):
-    # Pathetically primitive search algorithm...of sorts
-    explorer = get_object_or_404(get_user_model(), trailname=trailname)
-    return redirect(reverse('journey', args=(explorer.id,)))
+class WelcomeTemplateView(TemplateView):
+    template_name = 'registration/welcome.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(WelcomeTemplateView, self).get_context_data(**kwargs)
+        context['form'] = ExperienceForm()
+        return context
 
 
-def journey(request, explorer_id):
-    return HttpResponse('This form of linking to explorer has been deprecated')
+def example(request):
+    bugsy = Explorer.objects.get(trailname='Bugsy')
+    featured_explorer = Explorer.objects.get(pk=1)
+    return render(request, 'acressity/example.html', {'bugsy': bugsy, 'featured_explorer': featured_explorer})

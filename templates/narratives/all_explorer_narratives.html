@@ -1,0 +1,16 @@
+{% extends "narratives/base.html" %}
+
+{% load explorers_extras %}
+
+{% block content %}
+    <h2>{{ explorer.get_full_name|possessive }} narratives</h2>
+    {% for narrative in page_obj %}
+        {% include "narratives/snippets/dash.html" %}
+    {% empty %}
+        There are currently no narratives
+    {% endfor %}
+
+    {% with '/narratives/all/'|add:explorer.id as url %}
+        {% include "snippets/pagination.html" %}
+    {% endwith %}
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Congratulations, you are now a benefactor!</h2>
+    <p>
+        You and {{ experience.author }} will both be notified once PayPal has finished processing your donation.
+    </p>
+    <p>
+        Thank you for supporting their experience.
+        {% include 'experiences/snippets/dash.html' %}
+    </p>
+{% endblock content %}

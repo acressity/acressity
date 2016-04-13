@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Welcome, {{ request.user.get_full_name }}!</h1>
+    {% comment %}
+        <p>
+            This application encourages you to follow through on the experiences you add to your journey. With each experience you create being comparable to the chapter titles of a favorite book, you're encouraged to fill them with as many narratives and photos, and invite as many fellow explorers to each experience as you please.
+        </p>
+    {% endcomment %}
+    <p>
+        It's good to have you here! This application is designed to help you explore new experiences, with each experience being an item in your bucketlist.
+    </p>
+    <p>
+        On the right is your dash information. It displays the picture by which you choose to be recognized, and gives you quick access to your featured experience.
+    </p>
+    <div>
+        {% if user.featured_experience %}
+            <p>
+                With your new experience <em>{{ user.featured_experience }}</em>, you can get started with the following options:
+            </p>
+            <a href="{% url 'narratives.views.create' user.featured_experience.id %}">
+                <h3>
+                    <img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ user.featured_experience }}'" class="option_icon" style="vertical-align: middle;" />
+                    Create your first narrative
+                </h3>
+            </a>
+            <br />
+            <a href="{% url 'experiences.views.edit' user.featured_experience.id %}">
+                <h3>
+                    <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit or write about '{{ user.featured_experience }}'" class="option_icon" style="vertical-align: middle;" />
+                    Edit, or write about your new experience
+                </h3>
+            </a>
+            <br />
+            <a href="/photologue/gallery/{{ user.gallery.id }}/upload_photo/">
+                <h3>
+                    <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo as your portrait" class="option_icon" style="vertical-align: middle;" />
+                    Upload a photo for your portrait
+                </h3>
+            </a>
+            <br />
+            <h3>
+                Or go straight to your <a href="{% url 'journey' user.id %}">journey page</a>
+            </h3>
+        {% else %}
+            {# User created new journey without an experience #}
+            <h2>Create your first experience</h2>
+            <form action="{% url 'create_experience' %}" class="larger full_width" method="POST">
+                {% csrf_token %}
+                <div class="formatted_input">
+                    {{ form.experience }}
+                </div>
+                <input type="submit" value="Create" />
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}

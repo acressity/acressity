@@ -3,12 +3,6 @@
 {% block content %}
     <h2>All Explorers</h2>
 	{% for explorer in all_explorers %}
-        <div class="explorer_item">
-            {% if explorer.gallery.featured_photo %}
-                <img src="{{ explorer.gallery.featured_photo.get_icon_url }}" />
-            {% endif %}
-    		<a href="{% url 'journey' explorer.id %}" title="Visit this Journey"><h3>{{ explorer.get_full_name }}</h3></a>
-    		<p>Featured experience: <a href="{% url 'experiences.views.index' explorer.featured_experience.id %}" title="Check out this experience">{{ explorer.featured_experience }}</a></p>
-        </div>
+        {% include "explorers/snippets/dash.html" %}
 	{% endfor %}
 {% endblock content %}

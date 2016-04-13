@@ -17,10 +17,9 @@
     	<p>There are no photos uploaded for this gallery yet</p>
     {% endfor %}
 </div>
+<p><a href="/{{ object.get_explorer.id }}">Back to {{ object.get_explorer.get_full_name }}'s Journey</a></p>
 {% ifequal request.user object.get_explorer %}
 	<p><a href="/photologue/gallery/{{ object.id }}/edit">Edit this Album</a></p>	
 {% endifequal %}
-
-<p><a href="/{{ object.get_explorer.id }}">Back to {{ object.get_explorer.get_full_name }}'s Journey</a></p>
 
 {% endblock %}

@@ -2,10 +2,10 @@
 
 {% block head_insert %}
 	{# Load the image for the featured experience since this is generic #}
-	{% if user.featured_experience.gallery.featured_photo %}
+	{% if experience.gallery.featured_photo %}
 		<style type="text/css">
 			html {
-				background-image: url({{ user.featured_experience.gallery.featured_photo.image.url }});
+				background-image: url({{ experience.gallery.featured_photo.image.url }});
 			}
 		</style>
 	{% else %}
@@ -14,19 +14,71 @@
 {% endblock head_insert %}
 
 {% block content %}
+	<h2>{{ experience }}</h2>
 	<form action="/experiences/{{ experience.id }}/narratives/create/" method="POST" class="full_width">
 		{% csrf_token %}
-		<h2>New narrative for</h2>
-		{{ form.experience }}
-		{# {{ form.date_created }} #}
-		<h3><label for="id_narrative">Narrative</label></h3>
-		{{ form.narrative }}
-		<h3><label for="id_title">Title (optional)</label></h3>
-		{{ form.title }}
-		<h3><label for="id_category">Categorize (optional)</label></h3>
-		{{ form.category }}
+		<div class="formatted_input">
+			<h3><label for="id_title">Title</label></h3>
+			{{ form.title.errors }}
+			{{ form.title }}
+		</div>
+		<div class="formatted_input">
+			<h3><label for="id_narrative">Narrative</label></h3>
+			{{ form.narrative.errors }}
+			{{ form.narrative }}
+		</div>
+		<div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
+        <div id="additional_options" class="toggle_div">
+        	<div class="formatted_input">
+				<h2>New narrative for experience</h2>
+				{{ form.experience.errors }}
+				{{ form.experience }}
+			</div>
+			<div class="formatted_input">
+				<h3>Date Created (leave blank for today)</h3>
+				{{ form.date_created.errors }}
+				{{ form.date_created }}
+			</div>
+			<div class="formatted_input">
+				<h3><label for="id_category">Categorize (optional)</label></h3>
+				{{ form.category.errors }}
+				{{ form.category }}
+			</div>
+			<div class="formatted_input">
+				<h3 id="id_is_public">Public? {{ form.is_public }}</h3>
+				{{ form.is_public.errors }}
+				<div onclick="toggle_div('is_public_help_text');">
+					<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="is_public_help_text_toggle_icon" /></strong>
+				</div>
+				<div class="toggle_div help-text" id="is_public_help_text">
+					{{ form.is_public.help_text }}
+				</div>
+			</div>
+			{% comment %}
+				A start on getting individual narratives password-protected
+				{# Hide the password field if the experience is public #}
+				{# Toggle the password field when is_public is toggled #}
+				<div id="password_div" class="formatted_input {% if form.is_public %}hidden{% endif %}">
+					<script type="text/javascript">
+						e = document.getElementById("id_is_public");
+						d = document.getElementById("password_div");
+						e.onclick = function(){
+							toggle_div("password_div");
+						};
+					</script>
+					<h3>Password</h3>
+					{{ form.password.errors }}
+					{{ form.password }}
+					<div onclick="toggle_div('password_help_text');">
+						<strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
+					</div>
+					<div class="toggle_div help-text" id="password_help_text">
+						{{ form.password.help_text }}
+					</div>
+				</div>
+			{% endcomment %}
+		</div>
 		<input type="hidden" name="experience_id" value="{{ experience.id }}" />
-		<br />
 		<input type="submit" value="Add narrative" />
 	</form>
 {% endblock content %}

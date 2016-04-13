@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block head_insert %}
+	<script type="text/javascript">
+		function say_hello()
+        {
+			first_name = document.getElementById("id_first_name").value;
+			if (first_name) {
+				$("#first_name_positive_feedback").text("Hello, " + first_name + "!");
+			} else {
+                $("#first_name_positive_feedback").text("");
+            }
+		}
+
+		function check_password1()
+		{
+			password1 = document.getElementById("id_password1").value;
+			if (password1 && password1.length < {{ min_password_len }}) {
+				$("#password1_negative_feedback").html("Your password needs to be at least {{ min_password_len }} characters long");
+			} else {
+				$("#password1_negative_feedback").html("");
+			}
+		}
+
+		function check_password2()
+		{
+			password1 = document.getElementById("id_password1").value;
+			password2 = document.getElementById("id_password2").value;
+			if (password2 && password1 !== password2) {
+				$("#password2_negative_feedback").html("Your passwords don't match");
+				$("#password2_positive_feedback").html("");
+			} else {
+				$("#password2_negative_feedback").html("");
+			}
+		}
+		function check_trailname()
+		{
+			// Check if the trailname has already been chosen by another explorer
+			// This function automatically called by the explorer form association upon blur event of text field
+			trailname = $("#id_trailname").val();
+			trailname_negative_feedback = $("#trailname_negative_feedback");
+            trailname_positive_feedback = $("#trailname_positive_feedback");
+			if (trailname.length > 2) {
+				$.ajax({
+					url: "{% url 'check_trailname' %}",
+					dataType: 'json',
+					data: {"trailname": trailname},
+				})
+				.always(function(a){
+					if (a.found){
+						trailname_negative_feedback.html("That trailname has already been chosen");
+						trailname_positive_feedback.html("");
+					} else {
+						trailname_positive_feedback.html("Trailname available. Proceed, " + trailname)
+						trailname_negative_feedback.html("")
+					}
+				})
+			} else {
+				trailname_negative_feedback.html("Trailname must be a little longer");
+				trailname_positive_feedback.html("");
+			}
+		}
+	</script>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/registration.css" />
+{% endblock head_insert %}
+
+{% block content %}
+    <h2>Register</h2>
+	{{ form.non_field_errors }}
+	<form action="" method="POST">
+		{% csrf_token %}
+        <table class="register-table">
+            <tr>
+                <div id="register_experience" class="register_input">
+                    <p>
+                        <label for="id_experience">What do you wish to experience?</label>
+                    </p>
+                    <input type="text" name="experience" id="id_experience" value="{{ request.session.experience }}" />
+                </div>
+            </tr>
+
+            <tr>
+                <td class="register_input">
+                    <p>
+                        <label for="id_first_name">Your first name</label>
+                    </p>
+                    <p>
+                        {# Following activates `say_hello()` when onblur() event occurs. Defined in explorer form #}
+                        {{ form.first_name }}
+                        <div id="first_name_positive_feedback" class="success"></div>
+                        <div id="first_name_negative_feedback" class="error"></div>
+                    </p>
+                    {% if form.first_name.errors %}
+                        <p>
+                            <span class="error">First name is required</span>
+                        </p>
+                    {% endif %}
+                </td>
+
+                <td class="register_input">
+                    <p>
+                        <label for="id_last_name">Last name</label>
+                    </p>
+                    <p>
+                        {{ form.last_name }}
+                    </p>
+                    {% if form.last_name.errors %}
+                        <p>
+                            <span class="error">Last name is required</span>
+                        </p>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="register_input">
+                    <p>
+                        <label for="id_trailname">Create a <abbr title="Creative username to describe your journey">trailname</abbr> <em>(optional)</em></label>
+                    </p>
+                    <p>
+                        {# Following activates `check_trailname()` when onblur() event occurs. Defined in explorer form #}
+                        {{ form.trailname }}
+                        <div id="trailname_negative_feedback" class="errorlist"></div>
+                        <div id="trailname_positive_feedback" class="successlist"></div>
+                    </p>
+                    <div class="help-text">
+                        <p id="expand_about_trailname" onclick="toggle_div('about_trailname');" title="Click to toggle description of trailname">
+                            <strong>About trailname</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_trailname_toggle_icon" />
+                        </p>
+                        <div id="about_trailname" class="toggle_div">
+                            {{ form.trailname.help_text|safe }}
+                        </div>
+                    </div>
+                    {% if form.trailname.errors %}
+                        <p>
+                            <span class="error">
+                                A trailname is required
+                            </span>
+                        </p>
+                    {% endif %}
+                </td>
+
+                <td class="register_input">
+                    <p>
+                        <label for="id_email">Email address</label>
+                    </p>
+                    <p>
+                        {{ form.email }}
+                    </p>
+                    <div class="help-text">
+                        <p id="expand_about_email" onclick="toggle_div('about_email');" title="Click to toggle information concerning collection of email addresses">
+                            <strong>Concerning email</strong> <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_email_toggle_icon" />
+                        </p>
+                        <div id="about_email" class="toggle_div">
+                            {{ form.email.help_text }}
+                        </div>
+                    </div>
+                    {% if form.email.errors %}
+                        <p>
+                            <span class="error">Please enter valid email</span>
+                        </p>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="register_input">
+                    <p>
+                        <label for="id_password1">Password</label>
+                    </p>
+                    <p>
+                        {{ form.password1 }}
+                        <div id="password1_positive_feedback" class="successlist"></div>
+                        <div id="password1_negative_feedback" class="errorlist"></div>
+                    </p>
+                    <p>
+                        {{ form.password1.errors }}
+                    </p>
+                </td>
+
+                <td class="register_input">
+                    <p>
+                        <label for="id_password2">Verify password</label>
+                    </p>
+                    <p>
+                        {{ form.password2 }}
+                        <div id="password2_positive_feedback" class="successlist"></div>
+                        <div id="password2_negative_feedback" class="errorlist"></div>
+                    </p>
+                    <p>
+                        {{ form.password2.errors }}
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+		<div id="register_submit">
+			<input type="submit" value="Register" />
+		</div>
+	</form>
+{% endblock content %}

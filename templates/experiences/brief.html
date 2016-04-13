@@ -1,4 +1,4 @@
-{% extends "experiences/exp_base.html" %}
+{% extends "experiences/base.html" %}
 
 {% block content %}
 	{% if experience.brief %}
@@ -10,7 +10,9 @@
 		<p>or <a href="{% url 'experiences.views.index' experience.id %}">begin writing a narrative!</a></p>
 		<form action="" method="POST">
 			{% csrf_token %}
-			{{ form.brief }}
+			<div class="formatted_input">
+				{{ form.brief }}
+			</div>
 			<input type="hidden" name="explorer_id" value="{{ experience.explorer_id }}" />
 			<input type="submit" value="Submit" />
 		</form>

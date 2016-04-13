@@ -1,0 +1,7 @@
+{% extends "experiences/base.html" %}
+
+{% block content %}
+    <h2>New Experience</h2>
+    {% url 'create_experience' as url %}
+    {% include "experiences/forms/experience_form.html" %}
+{% endblock content %}

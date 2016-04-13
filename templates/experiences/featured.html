@@ -1,15 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Featured Experiences by Explorer:</h2>
-	{% for explorer, experience in explorer_experience %}
-        <div class="experience_item">
-            {% if experience.experience.gallery.featured_photo %}
-                <img src="{{ experience.experience.gallery.featured_photo.get_icon_url }}" title="{{ experience.experience.gallery.featured_photo.title }}"/>
-            {% endif %}
-    		<a href="{% url 'experiences.views.index' experience.experience.id %}"><h3>{{ experience }}</h3></a>
-    		<br />
-    		By <a href="{% url 'journey' explorer.id %}">{{ explorer.get_full_name }}</a>
-        </div>
+	<h1>Featured Experiences</h1>
+	{% for experience in featured_experiences %}
+        {# Following is necessary to supercede the experience/trackexperience relationship #}
+        {% with experience.experience as experience %}
+            {% include "experiences/snippets/dash.html" %}
+        {% endwith %}
 	{% endfor %}
 {% endblock content %}

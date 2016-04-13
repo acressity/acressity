@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block head_insert %}
+	{% if experience.gallery.featured_photo %}
+		<style type="text/css">
+			html {
+				background-image: url({{ experience.gallery.featured_photo.image.url }});
+			}
+		</style>
+	{% else %}
+		{{ block.super }}
+	{% endif %}
+    <script src="{{ STATIC_URL }}js/experiences/functions.js"></script>
+{% endblock head_insert %}

@@ -5,6 +5,7 @@ import zipfile
 
 from datetime import datetime
 from inspect import isclass
+from importlib import import_module
 
 from django.db import models
 from django.db.models.signals import post_init
@@ -12,9 +13,9 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 from django.utils.encoding import smart_str, force_unicode
 from django.utils.functional import curry
-from django.utils.importlib import import_module
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -36,13 +37,16 @@ except ImportError:
         from PIL import ImageFilter
         from PIL import ImageEnhance
     except ImportError:
-        raise ImportError('Photologue was unable to import the Python Imaging Library. Please confirm it`s installed and available on your current Python path.')
+        raise ImportError('Photologue was unable to import the Python \
+            Imaging Library. Please confirm it`s installed and available \
+            on your current Python path.')
 
 # attempt to load the django-tagging TagField from default location,
 # otherwise we substitude a dummy TagField.
 try:
     from tagging.fields import TagField
-    tagfield_help_text = _('Separate tags with spaces, put quotes around multiple-word tags.')
+    tagfield_help_text = _('Separate tags with spaces, \
+        put quotes around multiple-word tags.')
 except ImportError:
     class TagField(models.CharField):
         def __init__(self, **kwargs):
@@ -52,7 +56,8 @@ except ImportError:
 
         def get_internal_type(self):
             return 'CharField'
-    tagfield_help_text = _('Django-tagging was not found, tags will be treated as plain text.')
+    tagfield_help_text = _('Django-tagging was not found, \
+        tags will be treated as plain text.')
 
     # Tell South how to handle this custom field.
     from south.modelsinspector import add_introspection_rules
@@ -69,13 +74,19 @@ LATEST_LIMIT = getattr(settings, 'PHOTOLOGUE_GALLERY_LATEST_LIMIT', None)
 SAMPLE_SIZE = getattr(settings, 'GALLERY_SAMPLE_SIZE', 3)
 
 # max_length setting for the ImageModel ImageField
-IMAGE_FIELD_MAX_LENGTH = getattr(settings, 'PHOTOLOGUE_IMAGE_FIELD_MAX_LENGTH', 100)
+IMAGE_FIELD_MAX_LENGTH = getattr(settings,
+                                 'PHOTOLOGUE_IMAGE_FIELD_MAX_LENGTH',
+                                 100)
 
 # Path to sample image
-SAMPLE_IMAGE_PATH = getattr(settings, 'SAMPLE_IMAGE_PATH', os.path.join(os.path.dirname(__file__), 'res', 'sample.jpg'))  # os.path.join(settings.PROJECT_PATH, 'photologue', 'res', 'sample.jpg'
+SAMPLE_IMAGE_PATH = getattr(settings,
+                            'SAMPLE_IMAGE_PATH',
+                            os.path.join(os.path.dirname(__file__),
+                                         'res',
+                                         'sample.jpg'))
 
 # Modify image file buffer size.
-ImageFile.MAXBLOCK = getattr(settings, 'PHOTOLOGUE_MAXBLOCK', 256 * 2 ** 10)
+ImageFile.MAXBLOCK = getattr(settings, 'PHOTOLOGUE_MAXBLOCK', 512 * 2 ** 10)
 
 # Photologue image path relative to media root
 PHOTOLOGUE_DIR = getattr(settings, 'PHOTOLOGUE_DIR', 'photologue')
@@ -131,29 +142,50 @@ WATERMARK_STYLE_CHOICES = (
 filter_names = []
 for n in dir(ImageFilter):
     klass = getattr(ImageFilter, n)
-    if isclass(klass) and issubclass(klass, ImageFilter.BuiltinFilter) and hasattr(klass, 'name'):
-            filter_names.append(klass.__name__)
-IMAGE_FILTERS_HELP_TEXT = _('Chain multiple filters using the following pattern "FILTER_ONE->FILTER_TWO->FILTER_THREE". Image filters will be applied in order. The following filters are available: %s.' % (', '.join(filter_names)))
+    if (isclass(klass) and
+        issubclass(klass, ImageFilter.BuiltinFilter) and
+            hasattr(klass, 'name')):
+        filter_names.append(klass.__name__)
+IMAGE_FILTERS_HELP_TEXT = _('Chain multiple filters using the following \
+    pattern "FILTER_ONE->FILTER_TWO->FILTER_THREE". Image filters will \
+    be applied in order. The following filters are available: \
+    %s.' % (', '.join(filter_names)))
 
 
 class Gallery(models.Model):
-    date_added = models.DateTimeField(_('date published'), default=datetime.now)
-    title = models.CharField(_('title'), max_length=80, unique=False)
-    title_slug = models.SlugField(_('title slug'), unique=False,
-                                  help_text=_('A "slug" is a unique URL-friendly title for an object.'))
+    date_added = models.DateTimeField(_('date published'),
+                                      default=timezone.now)
+    title = models.CharField(_('title'), max_length=255, unique=False)
+    title_slug = models.SlugField(_('title slug'),
+                                  unique=False,
+                                  help_text=_('A "slug" is a unique URL-\
+                                    friendly title for an object.'))
     description = models.TextField(_('description'), blank=True)
-    is_public = models.BooleanField(_('is public'), default=True,
-                                    help_text=_('Public galleries will be displayed in the default views.'))
-    photos = models.ManyToManyField('Photo', related_name='galleries', verbose_name=_('photos'),
-                                    null=True, blank=True)
+    is_public = models.BooleanField(_('is public'), default=True)
+    # photos = models.ManyToManyField('Photo',
+    #                                  related_name='galleries',
+    #                                  verbose_name=_('photos'),
+    #                                  null=True,
+    #                                  blank=True)
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))
     # Every gallery is owned by an explorer.
     # For purposes of universal photo upload script
-    # explorer = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='owner')
-    explorers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='galleries')
-    featured_photo = models.ForeignKey('Photo', blank=True, null=True, on_delete=models.SET_NULL)
-    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
-    object_pk = models.TextField(_('object ID'), null=True)
+    # explorer = models.ForeignKey(settings.AUTH_USER_MODEL,
+    #                              blank=True,
+    #                              null=True,
+    #                              related_name='owner')
+    explorers = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                       related_name='galleries')
+    featured_photo = models.ForeignKey('Photo',
+                                       blank=True,
+                                       null=True,
+                                       on_delete=models.SET_NULL,
+                                       related_name='gallery_',
+                                       help_text='The featured photo is the symbol for the gallery.')
+    content_type = models.ForeignKey(ContentType,
+                                     verbose_name=_('content type'),
+                                     related_name="content_type_set_for_%(class)s")
+    object_pk = models.IntegerField(_('object ID'), null=True)
 
     class Meta:
         ordering = ['-date_added']
@@ -168,7 +200,8 @@ class Gallery(models.Model):
         return self.__unicode__()
 
     def object(self):
-        return ContentType.objects.get(pk=self.content_type_id).get_object_for_this_type(pk=self.object_pk)
+        return ContentType.objects.get(pk=self.content_type_id)\
+            .get_object_for_this_type(pk=self.object_pk)
 
     def save(self, *args, **kwargs):
         if self.title_slug is None:
@@ -208,26 +241,25 @@ class Gallery(models.Model):
 
     def children_photos(self):
         def experience_photos(ei):
-            photo_queryset = self.photos.all()
+            # Initialize queryset
+            photo_queryset = self.photos.none()
             for narrative in ei.narratives.all():
-                if narrative.gallery:
+                if narrative.gallery and narrative.is_public:
                     photo_queryset = photo_queryset | narrative.gallery.photos.all()
             return photo_queryset
 
-        if self.content_type == ContentType.objects.get(name='Narrative'):
+        if self.content_type == ContentType.objects.get(model='Narrative'):
             return
-        if self.content_type == ContentType.objects.get(name='Experience'):
-            experience = ContentType.objects.get(name='Experience').get_object_for_this_type(pk=self.object_pk)
+        if self.content_type == ContentType.objects.get(model='Experience'):
+            experience = ContentType.objects.get(model='Experience').get_object_for_this_type(pk=self.object_pk)
             return(experience_photos(experience))
-        if self.content_type == ContentType.objects.get(name='Explorer'):
-            explorer = ContentType.objects.get(name='Explorer').get_object_for_this_type(pk=self.object_pk)
-
-            photo_queryset = self.photos.all()
-            for experience in explorer.experiences.all():
+        if self.content_type == ContentType.objects.get(model='Explorer'):
+            explorer = ContentType.objects.get(model='Explorer').get_object_for_this_type(pk=self.object_pk)
+            # Initialize queryset
+            photo_queryset = self.photos.none()
+            for experience in explorer.experiences.filter(is_public=True):
                 if experience.gallery:
                     photo_queryset = photo_queryset | experience.gallery.photos.all()
-                # if experience_photos(experience):
-                #     photos += experience_photos(experience)
             return photo_queryset
 
     def photo_count(self, public=True):
@@ -532,7 +564,7 @@ class ImageModel(models.Model):
             except:
                 pass
         if self.date_taken is None:
-            self.date_taken = datetime.now()
+            self.date_taken = timezone.now()
         if self._get_pk_val():
             self.clear_cache()
         super(ImageModel, self).save(*args, **kwargs)
@@ -552,23 +584,27 @@ class ImageModel(models.Model):
 
 
 class Photo(ImageModel):
-    title = models.CharField(_('title'), max_length=50, unique=False, blank=True)
+    title = models.CharField(_('title'), max_length=50, unique=False, blank=True, null=False)
     title_slug = models.SlugField(_('slug'), unique=False,
                                   help_text=('A "slug" is a unique URL-friendly title for an object.'), blank=True)
     caption = models.TextField(_('caption'), blank=True, null=True)
-    date_added = models.DateTimeField(_('date added'), default=datetime.now, editable=False)
+    date_added = models.DateTimeField(_('date added'), default=timezone.now, editable=False)
+    gallery = models.ForeignKey(Gallery, blank=False, null=False, related_name='photos')
     is_public = models.BooleanField(_('is public'), default=True, help_text=_('Public photographs will be displayed in the default views.'))
     tags = TagField(help_text=tagfield_help_text, verbose_name=_('tags'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
 
+    def model(self):
+        return self.__class__.__name__
+
     class Meta:
-        ordering = ['-date_added']
+        ordering = ['date_added']
         get_latest_by = 'date_added'
         verbose_name = _("photo")
         verbose_name_plural = _("photos")
 
     def __unicode__(self):
-        return self.title
+        return self.title if self.title != '' else '#{0}'.format(self.pk)
 
     def __str__(self):
         return self.__unicode__()
@@ -583,21 +619,20 @@ class Photo(ImageModel):
     def get_absolute_url(self):
         return reverse('pl-photo', args=[self.id])
 
-    def public_galleries(self):
-        """Return the public galleries to which this photo belongs."""
-        return self.galleries.filter(is_public=True)
+    # Phasing this out, photo no longer in many-to-many relationship
+    # def public_galleries(self):
+    #     """Return the public galleries to which this photo belongs."""
+    #     return self.galleries.filter(is_public=True)
 
     def get_previous_in_gallery(self):
         try:
-            return self.get_previous_by_date_added(galleries__exact=self.galleries.latest(),
-                                                   is_public=True)
+            return self.get_previous_by_date_added(gallery__exact=self.gallery)
         except Photo.DoesNotExist:
             return None
 
     def get_next_in_gallery(self):
         try:
-            return self.get_next_by_date_added(galleries__exact=self.galleries.latest(),
-                                               is_public=True)
+            return self.get_next_by_date_added(gallery__exact=self.gallery)
         except Photo.DoesNotExist:
             return None
 
