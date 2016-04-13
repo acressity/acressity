@@ -50,9 +50,18 @@
 		</div>
 		<div class="option_list">
 			{% if request.user in experience.explorers.all %} 
-				<a href="{% url 'create_narrative' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add.png" title="Create a new narrative" class="option_icon" /></a>
-				<a href="{% url 'experiences.views.edit' experience.id %}"><img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this experience" class="option_icon" /></a>
-				<a href="{% url 'experiences.views.upload_photo' experience.id %}"><img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" class="option_icon" /></a>
+				<a href="{% url 'create_narrative' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/add.png" title="Create a new narrative" class="option_icon" />
+                </a>
+				<a href="{% url 'experiences.views.edit' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this experience" class="option_icon" />
+                </a>
+				<a href="{% url 'experiences.views.upload_photo' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" class="option_icon" />
+                </a>
+                <a href="{% url 'transfer_narratives' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/transfer.png" title="Transfer chosen narratives to another experience" class="option_icon" />
+                </a>
 			{% else %}
 				{% if user.is_authenticated %}
 					{% if experience not in user.tracking_experiences.all %}
@@ -69,11 +78,17 @@
 				{% endif %}
 			{% endif %}
 			{% if experience.gallery %}
-				<a href="{% url 'pl-gallery' experience.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/images.png" class="option_icon" title="View Photos for {{ experience }}" /></a>
+				<a href="{% url 'pl-gallery' experience.gallery.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/images.png" class="option_icon" title="View photos for this experience" />
+                </a>
 			{% endif %}
 			{% if author %}
-				<a href="{% url 'experience_invite' experience.id %}"><img src="{{ STATIC_URL }}img/icons/add-user.png" class="option_icon" title="Invite a comrade to be a part of this experience" /></a>
-				<a href="{% url 'experiences.views.delete' experience.id %}"><img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this experience" class="option_icon" /></a>
+				<a href="{% url 'experience_invite' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/add-user.png" class="option_icon" title="Invite a comrade to be a part of this experience" />
+                </a>
+				<a href="{% url 'experiences.views.delete' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this experience" class="option_icon" />
+                </a>
 			{% endif %}
 			{% if user.is_authenticated %}
 				<a onclick="toggle_div('{{ experience.id }}_comment');">
