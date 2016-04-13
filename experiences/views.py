@@ -11,6 +11,7 @@ from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.forms import modelform_factory
+from django.db import InternalError
 
 from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm, ExperienceBriefForm
@@ -286,7 +287,10 @@ def featured(request):
 @login_required
 def transfer_narratives(request, experience_id):
     from_experience = get_object_or_404(Experience, pk=experience_id)
-    assert request.user in from_experience.explorers.all()
+
+    if request.user not in from_experience.explorers.all():
+        raise PermissionDenied
+
     other_experiences = request.user.experiences.exclude(pk=experience_id)
     NewExperienceForm = modelform_factory(Experience, form=ExperienceForm, fields=('experience',))
 
@@ -302,16 +306,25 @@ def transfer_narratives(request, experience_id):
             to_experience = get_object_or_404(Experience, pk=request.POST.get('to_experience_id'))
             redirect_url_name = 'experience'
 
-        assert request.user in to_experience.explorers.all()
+        if request.user not in to_experience.explorers.all():
+            raise PermissionDenied
+
         action_choices = {index: value for index, value in TRANSFER_ACTION_CHOICES[1:]}
 
         for narrative_id, action_index in zip(request.POST.getlist('narrative_ids'), request.POST.getlist('potential_actions')):
             if action_index:
                 action = action_choices[int(action_index)]
                 narrative = get_object_or_404(Narrative, pk=int(narrative_id))
-                assert narrative in from_experience.narratives.all()
+
+                if narrative not in from_experience.narratives.all():
+                    raise PermissionDenied
+
                 if action == 'Transfer':
-                    to_experience.narratives.add(narrative)
+                    try:
+                        to_experience.narratives.add(narrative)
+                        num_transfers += 1
+                    except:
+                        raise InternalError('Sorry, something went wrong')
                 elif action == 'Copy':
                     # Fairly obscure way of copying the object
                     narrative.pk = None
