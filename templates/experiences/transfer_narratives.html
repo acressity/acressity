@@ -2,7 +2,12 @@
 
 {% block content %}
     <h2>Transfer narratives</h2>
+    {% if narrative_forms %}
+    <p>
+        Select "transfer" or "copy" from drop-down menu on the left for the narratives you want to transfer. Those left blank won't be affected. Select experience you want to transfer of check box for new experience on the right.
+    </p>
         <form action="{% url 'transfer_narratives' experience.id %}" method="POST">
+            {% csrf_token %}
             <table class="full_width">  
                 <td class="experience_item">
                     <h3>From <em>{{ experience }}</em></h3>
