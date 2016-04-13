@@ -28,7 +28,7 @@
 	{% else %}
 		<h1 style="text-align: center;">Your Journey</h1>
 	{% endifnotequal %}
-	<div id="experiences_list">
+	<div id="experiences_list" class="experience_item">
 		{% for experience in experiences %}
 			{% if forloop.first %}
 				{% ifequal experience explorer.featured_experience %}
@@ -46,15 +46,17 @@
 				{% endif %}
 			{% endif %}
 			{% if not forloop.last %}
-				<hr />
+                {% if not forloop.first %}
+				    <hr />
+                {% endif %}
 			{% endif %}
 		{% empty %}
 			{% ifnotequal user explorer %}
 				{{ explorer }} doesn't currently have any public experiences
 			{% else %}
 				<div class="post_it">
-					<p>
-				        It's good to have you here! This application is designed to help you explore new experiences, with each experience being an item in your bucketlist.
+                    <h2>It's good to have you here!</h2>
+                    <p>This application is designed to help you explore new experiences, with each experience being an item in your bucketlist.
 				    </p>
 				    <h3>Begin by</h3>
 				    <ul>
@@ -69,7 +71,14 @@
 	</div>
 	{% ifequal user explorer %}
 		<div class="experience_item">
-			<h3 class="toggler" onclick="toggle_div('create_experience_div');">{% if experiences %}Add another experience to your journey{% else %}Create a new experience for your journey{% endif %} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="create_experience_div_toggle_icon" /></h3>
+			<h3 class="toggler" onclick="toggle_div('create_experience_div');">
+                {% if experiences %}
+                    Add another experience to your journey
+                {% else %}
+                    Create a new experience for your journey
+                {% endif %}
+                <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="create_experience_div_toggle_icon" />
+            </h3>
 			<div id="create_experience_div" class="toggle_div">
 			    {% url 'create_experience' as url %}
 			    {% include 'experiences/forms/experience_form.html' %}
