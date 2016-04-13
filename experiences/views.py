@@ -301,16 +301,16 @@ def transfer_narratives(request, experience_id):
             new_experience_form.instance.author = request.user
             to_experience = new_experience_form.save()
             to_experience.explorers.add(request.user)
-            redirect_url_name = 'edit_experience'
-        else:
+        elif request.POST.get('to_experience_id'):
             to_experience = get_object_or_404(Experience, pk=request.POST.get('to_experience_id'))
-            redirect_url_name = 'experience'
 
         if request.user not in to_experience.explorers.all():
             raise PermissionDenied
 
         action_choices = {index: value for index, value in TRANSFER_ACTION_CHOICES[1:]}
 
+        num_copies = 0
+        num_transfers = 0
         for narrative_id, action_index in zip(request.POST.getlist('narrative_ids'), request.POST.getlist('potential_actions')):
             if action_index:
                 action = action_choices[int(action_index)]
@@ -326,11 +326,26 @@ def transfer_narratives(request, experience_id):
                     except:
                         raise InternalError('Sorry, something went wrong')
                 elif action == 'Copy':
-                    # Fairly obscure way of copying the object
-                    narrative.pk = None
-                    narrative.experience = to_experience
-                    narrative.save()
-        return redirect(reverse(redirect_url_name, args=(to_experience.id,)))
+                    try:
+                        # Fairly obscure way of copying the object seemingly demanded by Django
+                        narrative.pk = None
+                        narrative.experience = to_experience
+                        narrative.save()
+                        num_copies += 1
+                    except:
+                        raise InternalError('Sorry, something went wrong')
+                
+        if num_copies + num_transfers > 0:
+            msg = 'Successfully '
+            if num_copies:
+                msg += 'copied {0} narrative{1} '.format(num_copies, '' if num_copies == 1 else 's')
+                if num_transfers:
+                    msg += 'and '
+            if num_transfers:
+                msg += 'transferred {0} narrative{1} '.format(num_transfers, '' if num_transfers == 1 else 's')
+            msg += 'to {0}'.format(to_experience)
+            messages.success(request, _(msg))
+            return redirect(reverse('experience', args=(to_experience.id,)))
 
     narrative_forms = [NarrativeTransferForm(instance=n) for n in from_experience.narratives.all()]
     context = {
