@@ -27,7 +27,7 @@
         }
 	</script>
 	<div class="experience_item">
-		<h2>{{ experience }}</h2>
+		<h1>{{ experience }}</h1>
 		<div class="featured_photo">
 			{% if experience.gallery.featured_photo %}
 				<a href="{% url 'pl-gallery' experience.gallery.id %}">
@@ -96,7 +96,7 @@
         </div>
 	</div>
 	<div class="explorer_item">
-		<h3 onclick="toggle_div('explorers');">Explorer{{ experience.explorers.count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="explorers_toggle_icon" /></h3>
+		<h2 onclick="toggle_div('explorers');">Explorer{{ experience.explorers.count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="explorers_toggle_icon" /></h2>
 		<div id="explorers" class="toggle_div">
 			<table class="thirds_table">
 				<tr>
@@ -109,8 +109,8 @@
 			</table>
 		</div>
 	</div>
-	<h3>Experience brief</h3>
 	<div class="experience_item" id="experience_brief">
+	    <h2>Experience brief</h2>
 		{% if experience.brief %}
 			{{ experience.embedded_brief|safe|linebreaks }}
 		{% else %}
@@ -131,8 +131,8 @@
 		{% endif %}
 	</div>
 	{% if experience.latest_narrative %} {# This also checks for public status #}
-		<h3>Latest narrative</h3>
 		<div class="narrative_item">
+		    <h2>Latest narrative</h2>
 			{% with experience.latest_narrative as narrative %}
 			    {% include "narratives/snippets/narrative.html" %}
 			{% endwith %}
@@ -166,7 +166,7 @@
 
 	<div class="object_item_list">
 		{% if experience.narratives.count > 0 %}
-			<h3>Narratives</h3>
+			<h2>Narratives</h2>
 			{% if not privileged and experience.password %}
 				<h4>If you have been given a password, you may provide it here</h4>
 				<form action="{% url 'experience_check_password' experience.id %}" method="POST">
