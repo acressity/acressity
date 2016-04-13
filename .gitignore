@@ -1,5 +1,6 @@
 settings.py
 *.pyc
+*.swp
 logs/
 TODO
 DEPLOY
@@ -10,3 +11,4 @@ photologue/migrations/
 support/migrations/
 narratives/migrations/
 notifications/migrations/
+venv/
