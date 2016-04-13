@@ -8,11 +8,7 @@
     <div {% if not stacked %}class="left"{% endif %}>
         <a href="{% url 'experience' experience.id %}" title="View {{ experience }}">
             <div class="object_item">
-                <h3 style="text-align: center;">{{ experience }}
-                    {% if not experience.is_public %}
-                        <br />(Private experience)
-                    {% endif %}
-                </h3>
+                <h3 style="text-align: center;">{{ experience }}</h3>
                 {% if experience.gallery.featured_photo %}
                     <div class="featured_photo">
                         <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" title="Featured photo - {{ experience.gallery.featured_photo.title }}" />
