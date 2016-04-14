@@ -259,7 +259,7 @@ class Gallery(models.Model):
             photo_queryset = self.photos.none()
             for experience in explorer.experiences.filter(is_public=True):
                 if experience.gallery:
-                    photo_queryset = photo_queryset | experience.gallery.photos.all()
+                    photo_queryset = photo_queryset | experience.gallery.photos.all() | experience_photos(experience)
             return photo_queryset
 
     def photo_count(self, public=True):
