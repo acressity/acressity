@@ -250,7 +250,7 @@ class Gallery(models.Model):
 
         if self.content_type == ContentType.objects.get(model='Narrative'):
             return
-        if self.content_type == ContentType.objects.get(model='Experience'):
+        if self.content_type in [ContentType.objects.get(model='Experience'), ContentType.objects.get(model='FeaturedExperience')]:
             experience = ContentType.objects.get(model='Experience').get_object_for_this_type(pk=self.object_pk)
             return(experience_photos(experience))
         if self.content_type == ContentType.objects.get(model='Explorer'):
