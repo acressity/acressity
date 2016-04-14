@@ -156,9 +156,8 @@ class PhotoYearArchiveView(PhotoDateView, YearArchiveView):
 # Gallery views
 def gallery_view(request, pk):
     gallery = get_object_or_404(Gallery, pk=pk)
-    if not gallery.is_public:
-        if request.user not in gallery.explorers.all():
-            raise PermissionDenied
+    if not gallery.is_public and request.user not in gallery.explorers.all():
+        raise PermissionDenied
     children_photos = gallery.children_photos()
     return render(request, 'photologue/gallery_detail.html', {'children_photos': children_photos, 'object': gallery})
 
