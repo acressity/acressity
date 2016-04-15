@@ -59,9 +59,11 @@
 				<a href="{% url 'experiences.views.upload_photo' experience.id %}">
                     <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" class="option_icon" />
                 </a>
-                <a href="{% url 'transfer_narratives' experience.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/transfer.png" title="Transfer chosen narratives to another experience" class="option_icon" />
-                </a>
+                {% if experience.narratives.count %}
+                    <a href="{% url 'transfer_narratives' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/transfer.png" title="Transfer chosen narratives to another experience" class="option_icon" />
+                    </a>
+                {% endif %}
 			{% else %}
 				{% if user.is_authenticated %}
 					{% if experience not in user.tracking_experiences.all %}
