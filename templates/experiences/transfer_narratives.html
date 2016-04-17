@@ -14,23 +14,27 @@
                     <h3 class="experience_item">
                         {{ experience }}
                     </h3>
-                    {% for narrative_form in narrative_forms %}
-                        <hr />
-                        <div class="narrative_item">
-                            <div>
-                                <div class="left">
-                                    {% with narrative_form.instance as narrative %}
-                                        {% include 'narratives/snippets/dash.html' %}
-                                    {% endwith %}
+                    <hr />
+                    <div class="narrative_item">
+                        <h3>Select narratives to transfer or copy</h3>
+                        {% for narrative_form in narrative_forms %}
+                            <hr />
+                            <div class="narrative_item">
+                                <div>
+                                    <div class="left">
+                                        {% with narrative_form.instance as narrative %}
+                                            {% include 'narratives/snippets/dash.html' %}
+                                        {% endwith %}
+                                    </div>
+                                    <div class="right">
+                                        {{ narrative_form.potential_actions }}
+                                        <input type="hidden" name="narrative_ids" value="{{ narrative_form.instance.id }}" />
+                                    </div>
                                 </div>
-                                <div class="right">
-                                    {{ narrative_form.potential_actions }}
-                                    <input type="hidden" name="narrative_ids" value="{{ narrative_form.instance.id }}" />
-                                </div>
+                                <div class="clear_both"></div>
                             </div>
-                            <div class="clear_both"></div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </td>
                 <td class="experience_item" style="vertical-align: top;">
                     <h3>To</h3>
