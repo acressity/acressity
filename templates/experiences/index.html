@@ -183,7 +183,7 @@
 
 	<div class="object_item_list narrative_item">
 		{% if experience.narratives.count > 0 %}
-			<h2>Narratives</h2>
+			<h2>All Narratives</h2>
 			{% if not privileged and experience.password %}
 				<h4>If you have been given a password, you may provide it here</h4>
 				<form action="{% url 'experience_check_password' experience.id %}" method="POST">
