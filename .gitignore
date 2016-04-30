@@ -14,3 +14,4 @@ support/migrations/
 narratives/migrations/
 notifications/migrations/
 venv/
+tags
