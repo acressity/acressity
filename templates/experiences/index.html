@@ -28,25 +28,32 @@
 	</script>
 	<div class="experience_item">
 		<h1>{{ experience }}</h1>
-		<div class="featured_photo">
-			{% if experience.gallery.featured_photo %}
-				<a href="{% url 'pl-gallery' experience.gallery.id %}">
-					<img src="{{ experience.gallery.featured_photo.get_display_url }}" />
-				</a>
-				{% if experience.gallery.featured_photo.caption %}
-					<div class="caption">
-						{{ experience.gallery.featured_photo.caption }}
-					</div>
-				{% endif %}
-			{% else %}
-				{% if user in experience.explorers.all %}
-					<a href="{% url 'exp_upload_photo' experience.id %}" title="Upload photo for this experience">
-						<img src="{{ STATIC_URL }}img/logo.jpg" style="width: 200px;" />
-					</a>
-				{% else %}
-					<img src="{{ STATIC_URL }}img/logo.jpg" style="width: 200px;" />
-				{% endif %}
-			{% endif %}
+		<div class="position_relative">
+            {% if experience.is_fulfilled %}
+                <div class="fulfilled-award">
+                    <img src="{{ STATIC_URL }}img/icons/award.png" title="This experience has been fulfilled!" alt="Award for fulfilling this experience" />
+                </div>
+            {% endif %}
+            <div class="featured_photo">
+                {% if experience.gallery.featured_photo %}
+                    <a href="{% url 'pl-gallery' experience.gallery.id %}">
+                        <img src="{{ experience.gallery.featured_photo.get_display_url }}" />
+                    </a>
+                    {% if experience.gallery.featured_photo.caption %}
+                        <div class="caption">
+                            {{ experience.gallery.featured_photo.caption }}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    {% if user in experience.explorers.all %}
+                        <a href="{% url 'exp_upload_photo' experience.id %}" title="Upload photo for this experience">
+                            <img src="{{ STATIC_URL }}img/logo.jpg" style="width: 200px;" />
+                        </a>
+                    {% else %}
+                        <img src="{{ STATIC_URL }}img/logo.jpg" style="width: 200px;" />
+                    {% endif %}
+                {% endif %}
+            </div>
 		</div>
 		<div class="option_list">
 			{% if request.user in experience.explorers.all %} 
