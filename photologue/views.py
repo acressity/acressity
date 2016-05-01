@@ -2,10 +2,6 @@
 # -*- coding: utf-8 -*-
 import json
 
-from photologue.models import Photo, Gallery
-from photologue.forms import GalleryForm, GalleryPhotoForm
-from notifications import notify
-
 from django.views.generic.dates import ArchiveIndexView, DateDetailView, DayArchiveView, MonthArchiveView, YearArchiveView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -16,6 +12,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.template.loader import render_to_string
+
+from acressity import settings
+from photologue.models import Photo, Gallery
+from photologue.forms import GalleryForm, GalleryPhotoForm
+from notifications import notify
 
 
 def upload_photo(request, gallery_id):
@@ -156,10 +159,21 @@ class PhotoYearArchiveView(PhotoDateView, YearArchiveView):
 # Gallery views
 def gallery_view(request, pk):
     gallery = get_object_or_404(Gallery, pk=pk)
+    photos_per_page = 25
     if not gallery.is_public and request.user not in gallery.explorers.all():
         raise PermissionDenied
-    children_photos = gallery.children_photos()
-    return render(request, 'photologue/gallery_detail.html', {'children_photos': children_photos, 'object': gallery})
+    paginator = Paginator(gallery.photos.reverse(), photos_per_page)
+    page = request.GET.get('page')
+    try: 
+        photos = paginator.page(page)
+    except PageNotAnInteger:
+        # Deliver the first page
+        photos = paginator.page(1)
+    except:
+        # Deliver last page
+        photos = paginator.page(paginator.num_pages)
+    return render(request, 'photologue/gallery_detail.html', {'photos': photos,
+        'object': gallery, 'is_paginated': paginator.num_pages > 1})
 
 
 @login_required
