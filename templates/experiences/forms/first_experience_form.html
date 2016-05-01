@@ -1,4 +1,4 @@
-<form action="{% url 'step_two' %}" method="POST" class="full_width main_color" style="position:relative;" onsubmit="return validateFirstExperience(this);">
+<form action="{% url 'step_two' %}" method="POST" class="main_color" style="position:relative;" onsubmit="return validateFirstExperience(this);">
     {% csrf_token %}
     <input type="hidden" name="initial" />
     <h3>What do <em>you</em> wish to experience?</h3>
