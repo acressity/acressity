@@ -46,6 +46,7 @@ def upload_photo(request, gallery_id):
 
 def ajax_upload(request):
     gallery = get_object_or_404(Gallery, pk=request.POST.get('gallery_id'))
+    assert request.user in gallery.explorers.all()
     if request.method == 'POST':
         form = GalleryPhotoForm(request.POST, request.FILES)
         if form.is_valid():
