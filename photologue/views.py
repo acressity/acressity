@@ -61,7 +61,7 @@ def ajax_upload(request):
                 gallery.save()
             for comrade in gallery.explorers.exclude(id=request.user.id):
                 notify.send(sender=request.user, recipient=comrade, target=photo, verb='has uploaded a new photo')
-            data = {'url': photo.get_icon_url(), 'photo_id': photo.id}
+            data = {'html': render_to_string('photologue/snippets/photo_dash.html', {'photo': photo, 'user': request.user, 'STATIC_URL': settings.STATIC_URL })}
             return HttpResponse(json.dumps(data))
         else:
             # Here's the problem with the images not uploading properly
