@@ -6,7 +6,7 @@
 {% endcomment %}
 
 <div class="narrative_dash">
-    <a href="/narratives/{{ narrative.id }}/" title="View this narrative">
+    <a href="{% url 'narrative' narrative.id %}" title="View this narrative">
         <div>
             <h3>{{ narrative.title }}</h3>
             {% if narrative.gallery.featured_photo %}
