@@ -59,9 +59,7 @@ class Experience(models.Model):
         self.__original_is_public = self.is_public
 
     def __unicode__(self):
-        if not self.is_public:
-            return self.experience + ' (Private Experience)'
-        return self.experience
+        return self.experience if self.is_public else self.experience + ' (Private)'
 
     def __str__(self):
         return self.__unicode__()
