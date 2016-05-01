@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block head_insert %}
-	{% if experience.gallery.featured_photo %}
-		<style type="text/css">
-			html {
-				background-image: url({{ experience.gallery.featured_photo.image.url }});
-			}
-		</style>
-	{% else %}
-		{{ block.super }}
-	{% endif %}
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/experiences/style.css" />
+    {% if experience.gallery.featured_photo %}
+        <style type="text/css">
+            html {
+                background-image: url({{ experience.gallery.featured_photo.image.url }});
+            }
+        </style>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/experiences/style.css" />
     <script src="{{ STATIC_URL }}js/experiences/functions.js"></script>
 {% endblock head_insert %}

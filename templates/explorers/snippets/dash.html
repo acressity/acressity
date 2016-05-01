@@ -56,17 +56,21 @@
             {% include "support/snippets/note_form.html" %}
         {% endwith %}
     </div>
-    {% if explorer.featured_experience %}
-        {% url 'experience' explorer.featured_experience.id as featured_experience_path %}
-        {% ifnotequal featured_experience_path request.path %}
-            <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
-                Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
-            </div>
-            <div class="toggle_div">
-                {% with experience=explorer.featured_experience stacked=True %}
-                    {% include "experiences/snippets/dash.html" %}
-                {% endwith %}
-            </div>
-        {% endifnotequal %}
-    {% endif %}
 </div>
+{% if explorer.featured_experience %}
+    {% url 'experience' explorer.featured_experience.id as featured_experience_path %}
+    {% ifnotequal featured_experience_path request.path %}
+        {% if explorer.featured_experience.is_public or user == explorer %}
+            <div class="experience_item">
+                <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
+                    Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" class="valign_middle" />
+                </div>
+                <div class="toggle_div">
+                    {% with experience=explorer.featured_experience stacked=True %}
+                        {% include "experiences/snippets/dash.html" %}
+                    {% endwith %}
+                </div>
+            </div>
+        {% endif %}
+    {% endifnotequal %}
+{% endif %}

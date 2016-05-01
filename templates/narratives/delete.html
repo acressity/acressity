@@ -1,14 +1,17 @@
 {% extends "narratives/base.html" %}
 
 {% block content %}
-	<h2>Confirm you want to delete your narrative:</h2>
-	<em><h3>{{ narrative.title }}</h3></em>
-	<p>
-		{{ narrative.taste }}
-	</p>
+    <h1>Confirm you want to delete</h1>
+    <div class="narrative_item">
+        <h3>{{ narrative.title }}</h3>
+        <p>
+            {{ narrative.taste }}
+        </p>
+    </div>
+    
     <h3>This action can't be undone</h3>
-	<form action="" method="POST">
-		{% csrf_token %}
-		<input type="submit" value="Confirm" name="confirm" />
+	<form action="" method="POST" class="align_center">
+            {% csrf_token %}
+            <input type="submit" value="Confirm" name="confirm" />
 	</form>
 {% endblock content %}
