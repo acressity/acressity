@@ -3,13 +3,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Freshest Experiences</h2>
-	{% for experience in freshest_experiences %}
-		{% include "experiences/snippets/dash.html" %}
-	{% empty %}
-		There are currently no experiences
-	{% endfor %}
-	{% with '/experiences/freshest' as url %}
-	    {% include "snippets/pagination.html" %}
-	{% endwith %}
+    <div class="experience_item">
+        <h2>Freshest Experiences</h2>
+        <a href="{% url 'all_experiences' %}">Oldest experiences first</a>
+        {% for experience in freshest_experiences %}
+            {% include "experiences/snippets/dash.html" %}
+        {% empty %}
+            There are currently no experiences
+        {% endfor %}
+        {% with '/experiences/freshest' as url %}
+            {% include "snippets/pagination.html" %}
+        {% endwith %}
+    </div>
 {% endblock content %}
