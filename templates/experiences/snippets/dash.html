@@ -94,30 +94,30 @@
                             Track this experience
                         </li>
                     </a>
+                    <div onclick="toggle_div($(this).next());">
+                        <a href="javascript:void()">
+                            <li class="option">
+                                <img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" />
+                                Tack on a note
+                            </li>
+                        </a>
+                    </div>
+                    <div class="toggle_div comment">
+                        {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
+                            {% include "support/snippets/note_form.html" %}
+                        {% endwith %}
+                    </div>
                 {% endif %}
-                <div onclick="toggle_div($(this).next());">
-                    <a>
-                        <li class="option">
-                            <img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" />
-                            Tack on a note
-                        </li>
-                    </a>
-                </div>
-                <div class="toggle_div comment">
-                    {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
-                        {% include "support/snippets/note_form.html" %}
-                    {% endwith %}
-                </div>
             {% endif %}
         </ul>
     </div>
     <div class="clear_both"></div>
 
     {% if experience.latest_narrative %}
-        <div class="object_item">
+        <div class="narrative_item">
             {% with experience.latest_narrative as narrative %}
                 <div onclick="toggle_div(this.nextElementSibling);">
-                    Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" />
+                    Latest narrative <img src="{{ STATIC_URL }}img/icons/expand-icon.png" class="valign_middle" />
                 </div>
                 <div class="toggle_div">
                     {% include "narratives/snippets/dash.html" %}

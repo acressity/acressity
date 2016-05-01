@@ -19,9 +19,9 @@
             </script>
         </label>
         <div class="about_this">
-            <div onclick="toggle_div('about_public_experiences');" class="smaller">
-                <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" /></strong>
-            </div>
+            <p onclick="toggle_div('about_public_experiences');" class="smaller">
+                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" class="valign_middle" />
+            </p>
             <div id="about_public_experiences" class="toggle_div help-text">
                 {{ form.is_public.help_text}}
             </div>
@@ -33,7 +33,7 @@
         {{ form.status }}
         <div class="about_this">
             <p onclick="toggle_div('status_help_text');">
-                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="status_help_text_toggle_icon" />
+                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="status_help_text_toggle_icon" class="valign_middle" />
             </p>
             <div class="toggle_div help-text" id="status_help_text">
                 {{ form.status.help_text }}
@@ -46,14 +46,14 @@
         {{ form.brief }}
         <div class="about_this">
             <p onclick="toggle_div('brief_help_text');">
-                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="brief_help_text_toggle_icon" />
+                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="brief_help_text_toggle_icon" class="valign_middle" />
             </p>
             <div class="toggle_div help-text" id="brief_help_text">
                 {{ form.brief.help_text }}
             </div>
         </div>
     </div>
-    <div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" /></h3></div>
+    <div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" class="valign_middle" /></h3></div>
     <div id="additional_options" class="toggle_div">
         <div class="formatted_input">
             <h3>Is this experience fulfilled? {{ form.is_fulfilled }}</h3>
@@ -80,9 +80,9 @@
                 <h3>Make this experience your featured experience? {{ form.make_feature }}</h3>
             </label>
             <div class="about_this">
-                <div onclick="toggle_div('about_featured_experience');" class="smaller">
-                    <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_featured_experience_toggle_icon" /></strong>
-                </div>
+                <p onclick="toggle_div('about_featured_experience');" class="smaller">
+                    About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_featured_experience_toggle_icon" class="valign_middle" />
+                </p>
                 <div id="about_featured_experience" class="toggle_div help-text">
                     {{ form.make_feature.help_text }}
                 </div>
@@ -94,9 +94,9 @@
             <strong>Password</strong>
             {{ form.password.errors }}
             {{ form.password }}
-            <div onclick="toggle_div(this.nextElementSibling);">
-                <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" /></strong>
-            </div>
+            <p onclick="toggle_div(this.nextElementSibling);">
+                About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="password_help_text_toggle_icon" class="valign_middle" />
+            </p>
             <div class="toggle_div help-text" id="password_help_text">
                 {{ form.password.help_text }}
             </div>
@@ -108,9 +108,9 @@
                 {{ form.search_term }}
             </label>
             <div class="about_this">
-                <div onclick="toggle_div('about_search_term');" class="smaller">
-                    <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" /></strong>
-                </div>
+                <p onclick="toggle_div('about_search_term');" class="smaller">
+                    About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_search_term_toggle_icon" class="valign_middle" />
+                </p>
                 <div id="about_search_term" class="toggle_div help-text">
                     {{ form.search_term.help_text|safe }}
                 </div>
@@ -122,9 +122,9 @@
                     <h3>Accept PayPal donations {{ form.accepts_paypal }}</h3>
                 </label>
                 <div class="about_this">
-                    <div onclick="toggle_div('about_accepts_paypal');" class="smaller">
-                        <strong>About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_accepts_paypal_toggle_icon" /></strong>
-                    </div>
+                    <p onclick="toggle_div('about_accepts_paypal');" class="smaller">
+                        About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_accepts_paypal_toggle_icon" class="valign_middle" />
+                    </p>
                     <div id="about_accepts_paypal" class="toggle_div help-text">
                         {{ form.accepts_paypal.help_text|safe }}
                     </div>
