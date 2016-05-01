@@ -4,7 +4,7 @@
     <div id="top_bar_left" class="my_nav">
         <span id="logo">
             <img src="{{ STATIC_URL }}img/favicon_black.ico" /><em>Explore New Experiences</em>
-        </span></a>
+        </span>
         <ul>
             <li><a href="/">Acressity</a>
                 <ul>
@@ -100,7 +100,8 @@
             {% block login_header %}
                 {% if request.user.is_authenticated %}
                     <ul>
-                        <a href="{% url 'journey' request.user.id %}"><li>{{ request.user.get_full_name }}</a>
+                        <li>
+                            <a href="{% url 'journey' request.user.id %}">{{ request.user.get_full_name }}</a>
                             <ul>
                                 <a href="{% url 'journey' request.user.id %}" class="option"><li>
                                     <img src="{{ STATIC_URL }}img/icons/journey.png" class="option_icon" /> Your Journey
@@ -120,7 +121,8 @@
                     </ul>
                 {% else %}
                     <ul>
-                        <li><a onclick="window.location.href='/accounts/login';">Login</a>
+                        <li>
+                            <a onclick="window.location.href='/accounts/login';">Login</a>
                             <ul>
                                 <li id="top_bar_login" class="smaller">
                                     <form action="/explorers/login/?next={{ request.path }}" method="POST" class="full_width">
