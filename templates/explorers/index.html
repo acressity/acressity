@@ -77,7 +77,8 @@
                 {% else %}
                     Create a new experience for your journey
                 {% endif %}
-                <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="create_experience_div_toggle_icon" />
+                <img src="{{ STATIC_URL }}img/icons/expand-icon.png"
+                class="valign_middle" id="create_experience_div_toggle_icon" />
             </h3>
 			<div id="create_experience_div" class="toggle_div">
 			    {% url 'create_experience' as url %}
