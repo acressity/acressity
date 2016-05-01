@@ -30,6 +30,7 @@ class Narrative(models.Model):
     gallery = models.OneToOneField(Gallery, on_delete=models.SET_NULL, null=True)
     is_public = models.BooleanField(null=False, default=True, help_text='Public narratives will be displayed in the default views. Private ones are only seen by yourself and the other explorers in the narrative\'s experience. Changing the status of the narrative also changes the status of the photo gallery.')
     password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to this narrative if it is private.'))
+    taste_len = 250
 
     def __init__(self, *args, **kwargs):
         # Allows the quicker check of whether or not a particular field has changed
@@ -53,11 +54,14 @@ class Narrative(models.Model):
     def get_experience_author(self):
         return get_user_model().objects.get(pk=self.experience.author_id)
 
-    def taste(self, chars=250):
-        if len(self.narrative) > chars:
-            return u'{0}...'.format(self.narrative[:chars])
+    def taste(self):
+        if self.needs_shortening():
+            return u'{0}...'.format(self.narrative[:self.taste_len])
         else:
             return self.narrative
+
+    def needs_shortening(self):
+        return len(self.narrative) > self.taste_len
 
     def is_author(self, request):
         if request.user.is_authenticated():
