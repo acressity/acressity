@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block head_insert %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/photologue/style.css" />
+    <script src="{{ STATIC_URL }}js/photologue/functions.js"></script>
     {% if gallery.featured_photo %}
         <style type="text/css">
             html {
