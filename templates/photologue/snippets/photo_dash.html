@@ -14,7 +14,14 @@
 {% if user.is_authenticated %}
     {% load comments %}
     <div class="option_list">
-        <a onclick="toggle_div('{{ photo.id }}_note');"><img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" class="option_icon" /></a>
+        <a onclick="toggle_div('{{ photo.id }}_note');">
+            <img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" class="option_icon" />
+        </a>
+        {% if user in photo.gallery.explorers.all %}
+            <a href="{% url 'pl-gallery-edit' photo.gallery.id %}#{{ photo.id }}">
+                <img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit photo" class="option_icon" />
+            </a>
+        {% endif %}
     </div>
 {% get_comment_form for photo as comment_form %}
     <div id="{{ photo.id }}_note" class="comment" style="display: none;">
