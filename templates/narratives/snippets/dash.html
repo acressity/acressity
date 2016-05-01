@@ -24,7 +24,7 @@
             {{ narrative.narrative|linebreaks }}
         </div>
         {% if narrative.needs_shortening %}
-        <a href="{% url 'narrative' narrative.id %}">See rest of narrative <img src="{{ STATIC_URL }}img/icons/next-icon.png" class="valign_middle" /></a>
+        <a href="{% url 'narrative' narrative.id %}"><h4>Rest of narrative <img src="{{ STATIC_URL }}img/icons/next-icon.png" class="valign_middle" /></h4></a>
         {% endif %}
     </div>
     {% if narrative.category %}
