@@ -103,6 +103,9 @@ class Experience(models.Model):
     def comrades(self, request):
         return self.explorers.exclude(id=request.user.id)
 
+    def is_fulfilled(self):
+        return self.percent_fulfilled == 100
+
     def create_gallery(self):
         gallery = Gallery(title=self.experience, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)
         gallery.save()
