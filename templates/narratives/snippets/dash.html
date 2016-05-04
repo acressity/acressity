@@ -42,11 +42,5 @@
                 <a href="{% url 'narratives.views.delete' narrative.id %}"><img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this narrative" class="option_icon" /></a>
             </div>
         {% endifequal %}
-        {% get_comment_form for narrative as comment_form %}
-        <div id="something" class="comment toggle_div">
-            {% with next_url_name='narrative' next_url_pk=narrative.id %}
-                {% include "support/snippets/note_form.html" %}
-            {% endwith %}
-        </div>
     {% endif %}
 </div>
