@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.db import models
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password
@@ -31,7 +32,12 @@ class Experience(models.Model):
     status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
     is_public = models.BooleanField(default=False, help_text=_('It is recommended to keep an experience private until you are ready to announce it to the world. Private experiences are only seen by its explorers and those providing a correct password if one is selected, so you can choose to share this experience with just a few people and make it public later if you\'d like.'))
-    is_fulfilled = models.BooleanField(default=False, help_text=_('Check this box when you have experienced what you set out to do!'))
+    percent_fulfilled = models.IntegerField(default=0,
+            validators=[MinValueValidator(0), MaxValueValidator(100)],
+            blank=True,
+            help_text=_('''The fraction complete the experience is, from beginning
+            to end. Rough estimates are fine if there\'s no clear way to
+            determine this percentage'''))
     password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to the experience if it is private as well as all of the private narratives.'))
     search_term = models.CharField(
         max_length=80, null=True, blank=True, unique=True,
@@ -96,6 +102,9 @@ class Experience(models.Model):
 
     def comrades(self, request):
         return self.explorers.exclude(id=request.user.id)
+
+    def is_fulfilled(self):
+        return self.percent_fulfilled == 100
 
     def create_gallery(self):
         gallery = Gallery(title=self.experience, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)

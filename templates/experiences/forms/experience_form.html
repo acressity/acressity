@@ -1,11 +1,16 @@
 {# Expects `url` and `form` to be passed in by including file #}
 
-<form action="{{ url }}" method="POST" class="full_width">
+<form action="{{ url }}" method="POST">
     {% csrf_token %}
     <div class="formatted_input">
         <h3>Title</h3>
         {{ form.experience.errors }}
         {{ form.experience }}
+    </div>
+    <div class="formatted_input">
+        <h3>Percent fulfilled: <span id="percent_fulfilled_display">{{ form.percent_fulfilled.value }}</span>%</h3>
+        {{ form.percent_fulfilled.errors }}
+        {{ form.percent_fulfilled }}
     </div>
     <div class="formatted_input">
         <label for="id_is_public">    
@@ -55,17 +60,6 @@
     </div>
     <div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" class="valign_middle" /></h3></div>
     <div id="additional_options" class="toggle_div">
-        <div class="formatted_input">
-            <h3>Is this experience fulfilled? {{ form.is_fulfilled }}</h3>
-            <div class="about_this">
-                <p onclick="toggle_div('about_is_fulfilled');" class="smaller">
-                    About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_is_fulfilled_toggle_icon" class="valign_middle" />
-                </p>
-                <div id="about_is_fulfilled" class="toggle_div help-text">
-                    {{ form.is_fulfilled.help_text }}
-                </div>
-            </div>
-        </div>
         <div class="formatted_input">
             <h3>Date created (leave blank for today)</h3>
             {{ form.date_created.errors }}
