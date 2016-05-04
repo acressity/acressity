@@ -1,6 +1,6 @@
 {# Expects `url` and `form` to be passed in by including file #}
 
-<form action="{{ url }}" method="POST" class="full_width">
+<form action="{{ url }}" method="POST">
     {% csrf_token %}
     <div class="formatted_input">
         <h3>Title</h3>
