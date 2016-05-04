@@ -38,6 +38,9 @@ def create(request):
                     _('Your featured experience is now {0}'.format(
                         form.instance.experience))
                 )
+            elif form.cleaned_data['unfeature']:
+                request.user.featured_experience = None
+                request.user.save()
             notify.send(
                 sender=request.user,
                 recipient=get_user_model().objects.get(pk=1),
@@ -134,6 +137,9 @@ def edit(request, experience_id):
                     messages.success(
                         request,
                         _('Your featured experience is now {0}'.format(form.instance)))
+                elif form.cleaned_data['unfeature']:
+                    request.user.featured_experience = None
+                    request.user.save()
                 if 'is_public' in request.POST:
                     if experience.author != request.user:
                         raise PermissionDenied
