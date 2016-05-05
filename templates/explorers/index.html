@@ -45,11 +45,6 @@
 					{% endifequal %}
 				{% endif %}
 			{% endif %}
-			{% if not forloop.last %}
-                {% if not forloop.first %}
-				    <hr />
-                {% endif %}
-			{% endif %}
 		{% empty %}
 			{% ifnotequal user explorer %}
 				{{ explorer }} doesn't currently have any public experiences
