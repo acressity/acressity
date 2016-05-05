@@ -184,9 +184,15 @@ def gallery_edit(request, gallery_id):
         if request.method == 'POST':
             for field in request.POST:
                 if field == 'featured_photo':
-                    setattr(gallery, field, Photo.objects.get(pk=request.POST[field]))
+                    if request.POST[field]:
+                        photo = Photo.objects.get(pk=request.POST.get(field))
+                        if photo not in gallery.photos.all():
+                            raise PermissionDenied
+                        setattr(gallery, field, photo)
+                    else:
+                        setattr(gallery, field, None)
                 else:
-                    setattr(gallery, field, request.POST[field])
+                    setattr(gallery, field, request.POST.get(field))
             gallery.save()
             messages.success(request, 'Gallery has been updated')
             return redirect('/photologue/gallery/{0}'.format(gallery_id))
@@ -196,7 +202,8 @@ def gallery_edit(request, gallery_id):
             form = GalleryPhotoForm(instance=photo)
             photos_forms.append((photo, form))
         form = GalleryForm(gallery=gallery, instance=gallery)
-        return render(request, 'photologue/gallery_edit.html', {'object': gallery, 'form': form, 'photos_forms': photos_forms})
+        return render(request, 'photologue/gallery_edit.html', {'object':
+            gallery, 'form': form, 'photos_forms': photos_forms})
     else:
         raise PermissionDenied
 
