@@ -19,7 +19,7 @@
         </a>
         {% if user in photo.gallery.explorers.all %}
             <a href="{% url 'pl-gallery-edit' photo.gallery.id %}#{{ photo.id }}">
-                <img src="{{ STATIC_URL }}img/icons/edit-gallery-icon.png" title="Edit photo" class="option_icon" />
+                <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit photo" class="option_icon" />
             </a>
         {% endif %}
     </div>
