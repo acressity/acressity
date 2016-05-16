@@ -30,18 +30,20 @@
 		<p><em>This information is used responsibly. It will only be used for the invitation request.</em></p>
 		<input type="submit" value="Invite" name="invite" class="invite-button" />
 	</form>
-	<h3>Or select from registered explorers</h3>
-	{% for explorer in explorers %}
-		<div class="explorer_item">
-			{% include "explorers/snippets/dash.html" %}
-			<form action="" method="POST">
-				{% csrf_token %}
-				<input type="submit" value="Invite {{ explorer.first_name }}" class="invite-button" />
-				<input type="hidden" name="explorer_id" value="{{ explorer.id }}">
-				<input type="hidden" name="existing_explorer" />
-			</form>
-		</div>
-	{% endfor %}
+    {% if explorers.count > 0 %}
+        <h3>Or select from registered explorers</h3>
+        {% for explorer in explorers %}
+            <div class="explorer_item">
+                {% include "explorers/snippets/dash.html" %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Invite {{ explorer.first_name }}" class="invite-button" />
+                    <input type="hidden" name="explorer_id" value="{{ explorer.id }}">
+                    <input type="hidden" name="existing_explorer" />
+                </form>
+            </div>
+        {% endfor %}
+    {% endif %}
 	{% comment %}
 	<form action="" method="POST">
 		{% csrf_token %}
