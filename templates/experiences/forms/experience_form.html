@@ -2,6 +2,22 @@
 
 <form action="{{ url }}" method="POST">
     {% csrf_token %}
+    {% if experience.gallery.featured_photo %}
+        <div class="formatted_input">
+            <h3>Featured photo</h3>
+            <div class="featured_photo">
+                <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" />
+            </div>
+            <div class="option_list">
+                <a href="{% url 'upload_photo' experience.gallery.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/camera.png" class="option_icon" title="Upload new photo to be featured" />
+                </a>
+                <a href="{% url 'pl-gallery-edit' experience.gallery.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/pencil.png" class="option_icon" title="Choose another uploaded photo to be featured" />
+                </a>
+            </div>
+        </div>
+    {% endif %}
     <div class="formatted_input">
         <h3>Title</h3>
         {{ form.experience.errors }}
