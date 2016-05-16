@@ -201,28 +201,20 @@
 					<input type="submit" value="Submit" />
 				</form>
 			{% endif %}
-			<table class="thirds_table">
-				<tr>
-					{% for narrative in narratives %}
-						<td>
-							{% include "narratives/snippets/dash.html" %}
-						</td>
-						{% if forloop.counter|divisibleby:'3' %}
-							{% if not forloop.last %}
-								</tr>
-								<tr>
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				</tr>
-			</table>
-		{% else %}
-			<div class="narrative_item">
-				<h2>There are currently no narratives</h2>
-				{% if user in experience.explorers.all %}
-					<h3 class="option"><img style="vertical-align:middle;" src="{{ STATIC_URL }}img/icons/add.png" /><a href="{% url 'create_narrative' experience.id %}">Create new narrative</a></h3>
-				{% endif %}
+			<div class="thirds_table">
+                            {% for narrative in narratives %}
+				<div class="cell">
+                                    {% include "narratives/snippets/dash.html" %}
+                                </div>
+                            {% endfor %}
 			</div>
+		{% else %}
+                    <div class="narrative_item">
+                        <h2>There are currently no narratives</h2>
+                        {% if user in experience.explorers.all %}
+                            <h3 class="option"><img style="vertical-align:middle;" src="{{ STATIC_URL }}img/icons/add.png" /><a href="{% url 'create_narrative' experience.id %}">Create new narrative</a></h3>
+                        {% endif %}
+                    </div>
 		{% endif %}
 	</div>
 	{% get_comment_count for experience as exp_comment_count %}
