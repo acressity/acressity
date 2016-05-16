@@ -1,16 +1,22 @@
 {% extends "experiences/base.html" %}
 
 {% block content %}
-	<script type="text/javascript">
-	$(document).ready(function(){
-		e = document.getElementById("id_is_public");
-		d = document.getElementById("password_div");
-		if (e.checked){
-			$(d).css("display", "none");  {# If this initial setting is correct, the toggling of the password div should be on par with future checking and unchecking. Is my logic flawed???? #}
-		}
-	})
-	</script>
-	<h2>Editing experience <em>{{ experience }}</em></h2>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            e = document.getElementById("id_is_public");
+            d = document.getElementById("password_div");
+            if (e.checked){
+                $(d).css("display", "none");  {# If this initial setting is correct, the toggling of the password div should be on par with future checking and unchecking. Is my logic flawed???? #}
+            }
+        })
+    </script>
+
+    <h1>Editing experience {{ experience }}</h3>
+    <div class="option_list">
+        <a href="{% url 'experience' experience.id %}">
+            <img src="{{ STATIC_URL }}img/icons/go-back.png" class="option_icon" title="Back to experience home page" />
+        </a>
+    </div>
     {% with '' as url %}
         {% include 'experiences/forms/experience_form.html' %}
     {% endwith %}
