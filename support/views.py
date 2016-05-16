@@ -87,7 +87,10 @@ def handle_invitation_request(request, invitation_request_id):
         if invitation_request.experience.gallery:
             invitation_request.experience.gallery.explorers.add(explorer)
         messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos.'.format(invitation_request.experience))
-        notify.send(sender=explorer, recipient=invitation_request.experience.author, verb='has accepted your request to be a part your experience', target=invitation_request.experience)
+        notify.send(sender=explorer,
+                recipient=invitation_request.experience.author,
+                verb='has accepted your request and is now a part your experience',
+                target=invitation_request.experience)
         invitation_request.delete()
         return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
     else:
@@ -173,3 +176,4 @@ def paypal_cancel(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     messages.success(request, 'You cancelled and did not donate to the experience "{0}"'.format(experience))
     return redirect(reverse('experience', args=(experience_id,)))
+
