@@ -1,11 +1,25 @@
 {% extends "explorers/base.html" %}
 
 {% block content %}
-    <h1>Experiences {{ user }} is Tracking</h1>
-    {% for experience in tracking_experiences %}
-        {% include "experiences/snippets/dash.html" %}
-        <form action="{% url 'untrack_experience' experience.id %}" method="POST">
-            <input type="submit" value="Untrack" title="Untrack {{ experience }}" />
-        </form>
+    <h1>
+        Experiences 
+        {% ifequal user explorer %}
+            you are
+        {% else %}
+            {{ explorer }} is
+        {% endifequal %} tracking
+    </h1>
+    {% for experience in explorer.tracking_experiences.all %}
+        <div class="experience_item">
+            {% include "experiences/snippets/dash.html" %}
+            <form action="{% url 'untrack_experience' experience.id %}"
+                method="POST">
+                <div class="align_center">
+                    <input type="submit" value="Untrack" title="Untrack {{ experience }}" />
+                </div>
+            </form>
+        </div>
+    {% empty %}
+        {% ifequal user explorer %}You are not{% else %}{{ explorer }} is not {% endifequal %} currently tracking any experiences
     {% endfor %}
 {% endblock content %}
