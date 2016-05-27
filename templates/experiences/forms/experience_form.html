@@ -19,18 +19,18 @@
         </div>
     {% endif %}
     <div class="formatted_input">
-        <h3>Title</h3>
+        <h3>{{ form.experience.label_tag }}</h3>
         {{ form.experience.errors }}
         {{ form.experience }}
     </div>
     <div class="formatted_input">
-        <h3>Percent fulfilled: <span id="percent_fulfilled_display">{{ form.percent_fulfilled.value }}</span>%</h3>
+        <h3>{{ form.percent_fulfilled.label_tag }}: <span id="percent_fulfilled_display">{{ form.percent_fulfilled.value }}</span>%</h3>
         {{ form.percent_fulfilled.errors }}
         {{ form.percent_fulfilled }}
     </div>
     <div class="formatted_input">
-        <label for="id_is_public">    
-            <h3>Public? {{ form.is_public }}</h3>
+        {% ifequal experience.author user %}
+            <h3>{{ form.is_public.label_tag }} {{ form.is_public }}</h3>
             <script type="text/javascript">
                 e = document.getElementById("id_is_public");
                 d = document.getElementById("password_div");
@@ -38,7 +38,9 @@
                     toggle_div("password_div");
                 };
             </script>
-        </label>
+        {% else %}
+            <p>Only {{ experience.author }} can change privacy settings</p>
+        {% endifequal %}
         <div class="about_this">
             <p onclick="toggle_div('about_public_experiences');" class="smaller">
                 About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" class="valign_middle" />
@@ -49,7 +51,7 @@
         </div>
     </div>
     <div class="formatted_input">
-        <h3>Status <em>(optional)</em></h3>
+        <h3>{{ form.status.label_tag }}</h3>
         {{ form.status.errors }}
         {{ form.status }}
         <div class="about_this">
@@ -62,7 +64,7 @@
         </div>
     </div>
     <div class="formatted_input">
-        <h3>Brief <em>(optional)</em></h3>
+        <h3>{{ form.brief.label_tag }}</h3>
         {{ form.brief.errors }}
         {{ form.brief }}
         <div class="about_this">
@@ -77,7 +79,7 @@
     <div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" class="valign_middle" /></h3></div>
     <div id="additional_options" class="toggle_div">
         <div class="formatted_input">
-            <h3>Date created (leave blank for today)</h3>
+            <h3><label for='{{ form.date_created.id_for_label }}'>Date created (blank for today)</label></h3>
             {{ form.date_created.errors }}
             {{ form.date_created }}
         </div>
@@ -114,7 +116,7 @@
         {# No need to check whether user is author #}
         {# By default, the password field is hidden since default state for is_public is false #}
         <div id="password_div" class="formatted_input hidden">
-            <strong>Password</strong>
+            <h3>{{ form.password.label_tag }}</h3>
             {{ form.password.errors }}
             {{ form.password }}
             <p onclick="toggle_div(this.nextElementSibling);">
@@ -126,7 +128,7 @@
         </div>
         <div class="formatted_input">
             <label for="id_search_term">
-                <h3>Search term</h3>
+                <h3>{{ form.search_term.label_tag }}</h3>
                 {{ form.search_term.errors }}
                 {{ form.search_term }}
             </label>
