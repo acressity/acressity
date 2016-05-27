@@ -1,5 +1,5 @@
 from django.utils import timezone
-
+from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
 from django.forms import ModelForm
@@ -11,19 +11,31 @@ from experiences.models import Experience
 from photologue.models import Photo
 from explorers.models import Explorer
 
+class ImprovedModelForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('label_suffix', '')
+        super(ImprovedModelForm, self).__init__(*args, **kwargs)
 
-class ExperienceForm(ModelForm):
-    experience = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger'}))
+class ExperienceForm(ImprovedModelForm):
+    experience = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'larger'}))
     make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     unfeature = forms.BooleanField(required=False, initial=False)
     date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
-    percent_fulfilled = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'type': 'range', 'max': 100,
+    percent_fulfilled = forms.IntegerField(label='Percent fulfilled', initial=0, widget=forms.NumberInput(attrs={'type': 'range', 'max': 100,
         'min': 0, 'step': 1, 'oninput':
         '$("#percent_fulfilled_display").html(this.value);', 'onchange': '$("#percent_fulfilled_display").html(this.value);'}))
+
 
     class Meta:
         model = Experience
         exclude = ('author', 'gallery', 'make_feature')
+        labels = {
+            'is_public': _('Public?'),
+            'status': _('Status (optional)'),
+            'brief': _('Brief (optional)'),
+            'password': _('Password'),
+            'search_term': _('Search term'),
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
