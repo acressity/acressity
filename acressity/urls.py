@@ -16,10 +16,7 @@ urlpatterns = patterns(
     url(r'^photologue/', include('photologue.urls')),
     url(r'^support/', include('support.urls')),
     url(r'^comments/', include('django_comments.urls')),
-    url(
-        r'^why/$',
-        TemplateView.as_view(template_name='acressity/why.html'),
-        name='why'),
+    url(r'^why/$', 'why', name='why'),
     url(
         r'^what/$',
         TemplateView.as_view(template_name='acressity/what.html'),
