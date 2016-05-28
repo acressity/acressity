@@ -12,7 +12,7 @@ anything lacking in efficiency or if you have any suggestions.
 		{% load notifications_tags %}
 	{% endif %}
 	<head profile="http://www.w3.org/2005/10/profile">
-		<title>Acressity{% block title %}{% endblock title %}{% if user.is_authenticated %}{% notifications_unread as unread_count %}{% if unread_count %}({{ unread_count }}){% endif %}{% endif %}</title>
+		<title>Acressity {% block title %}{% endblock title %}{% if user.is_authenticated %}{% notifications_unread as unread_count %}{% if unread_count %}({{ unread_count }}){% endif %}{% endif %}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<meta name="og:description" content="{% block meta_description %}This social application is designed to be a tool with which to chart your journey into new experiences{% endblock %}" />
 		<meta name="og:title" content="Acressity - Explore New Experiences" />
