@@ -65,25 +65,25 @@
 {% endblock head_insert %}
 
 {% block content %}
-    <h2>Register</h2>
+    <h1>Register</h1>
 	{{ form.non_field_errors }}
 	<form action="" method="POST">
 		{% csrf_token %}
         <table class="register-table">
             <tr>
                 <div id="register_experience" class="register_input">
-                    <p>
-                        <label for="id_experience">What do you wish to experience?</label>
-                    </p>
+                    <h3>
+                        <label for="id_experience">What do you want to experience?</label>
+                    </h3>
                     <input type="text" name="experience" id="id_experience" value="{{ request.session.experience }}" />
                 </div>
             </tr>
 
             <tr>
                 <td class="register_input">
-                    <p>
+                    <h3>
                         <label for="id_first_name">Your first name</label>
-                    </p>
+                    </h3>
                     <p>
                         {# Following activates `say_hello()` when onblur() event occurs. Defined in explorer form #}
                         {{ form.first_name }}
@@ -98,9 +98,9 @@
                 </td>
 
                 <td class="register_input">
-                    <p>
+                    <h3>
                         <label for="id_last_name">Last name</label>
-                    </p>
+                    </h3>
                     <p>
                         {{ form.last_name }}
                     </p>
@@ -114,9 +114,9 @@
 
             <tr>
                 <td class="register_input">
-                    <p>
+                    <h3>
                         <label for="id_trailname">Create a <abbr title="Creative username to describe your journey">trailname</abbr> <em>(optional)</em></label>
-                    </p>
+                    </h3>
                     <p>
                         {# Following activates `check_trailname()` when onblur() event occurs. Defined in explorer form #}
                         {{ form.trailname }}
@@ -141,9 +141,9 @@
                 </td>
 
                 <td class="register_input">
-                    <p>
+                    <h3>
                         <label for="id_email">Email address</label>
-                    </p>
+                    </h3>
                     <p>
                         {{ form.email }}
                     </p>
@@ -165,9 +165,9 @@
 
             <tr>
                 <td class="register_input">
-                    <p>
+                    <h3>
                         <label for="id_password1">Password</label>
-                    </p>
+                    </h3>
                     <p>
                         {{ form.password1 }}
                         <div id="password1_positive_feedback" class="successlist"></div>
@@ -179,9 +179,9 @@
                 </td>
 
                 <td class="register_input">
-                    <p>
+                    <h3>
                         <label for="id_password2">Verify password</label>
-                    </p>
+                    </h3>
                     <p>
                         {{ form.password2 }}
                         <div id="password2_positive_feedback" class="successlist"></div>
