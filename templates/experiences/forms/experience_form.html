@@ -2,22 +2,28 @@
 
 <form action="{{ url }}" method="POST">
     {% csrf_token %}
-    {% if experience.gallery.featured_photo %}
-        <div class="formatted_input">
-            <h3>Featured photo</h3>
-            <div class="featured_photo">
+    <div class="formatted_input">
+        <h3>Featured photo</h3>
+        <div class="featured_photo">
+            {% if experience.gallery.featured_photo %}
                 <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" />
-            </div>
-            <div class="option_list">
-                <a href="{% url 'upload_photo' experience.gallery.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/camera.png" class="option_icon" title="Upload new photo to be featured" />
-                </a>
-                <a href="{% url 'pl-gallery-edit' experience.gallery.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/pencil.png" class="option_icon" title="Choose another uploaded photo to be featured" />
-                </a>
-            </div>
+            {% else %}
+                <img src="{{ STATIC_URL }}img/logo.png" style="width: 200px" title="Placeholder until you upload an image to feature" />
+            {% endif %}
         </div>
-    {% endif %}
+        <div class="option_list">
+            {% if experience %}
+                <a href="{% url 'exp_upload_photo' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/camera.png" class="option_icon" title="Upload new photo to be featured for this experience" />
+                </a>
+            {% endif %}
+            {% if experience.gallery %}
+                <a href="{% url 'pl-gallery-edit' experience.gallery.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/pencil.png" class="option_icon" title="Choose another uploaded photo to be featured for this experience" />
+                </a>
+            {% endif %}
+        </div>
+    </div>
     <div class="formatted_input">
         <h3>{{ form.experience.label_tag }}</h3>
         {{ form.experience.errors }}
