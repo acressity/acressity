@@ -16,7 +16,8 @@ class RegistrationForm(ModelForm):
 
     class Meta:
         model = Explorer
-        exclude = ('experiences', 'last_login', 'date_joined', 'password')
+        exclude = ('experiences', 'last_login', 'date_joined', 'password',
+        'paypal_email_address')
 
     def __init__(self, *args, **kwargs):
         # This needs to be done here to avoid overwriting the trailname.help_text attribute inherited from the model
