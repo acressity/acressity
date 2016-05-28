@@ -53,12 +53,13 @@
                     <h2>It's good to have you here!</h2>
                     <p>This application is designed to help you explore new experiences, with each experience being an item in your bucketlist.
 				    </p>
-				    <h3>Begin by</h3>
+                    <p>Begin by <a href="{% url 'create_experience' %}">creating experiences</a> you wish to have</p>
 				    <ul>
-				    	<li>Creating a list of experiences you wish to have</li>
-				    	<li>Featuring one experience upon which you're currently focusing</li>
-				    	<li>Writing narratives to record your progress for each experience</li>
-				    	<li><a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/">Uploading</a> a photo to be displayed beside your journey</li>
+				    	<li>Feature one experience which you're currently focusing</li>
+				    	<li>Write narratives to record your progress for each experience</li>
+                        {% if not user.gallery.featured_photo %}
+				    	    <li><a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/">Upload</a> a photo to be displayed beside your journey</li>
+                        {% endif %}
 				    </ul>
 				</div>
 			{% endifnotequal %}
