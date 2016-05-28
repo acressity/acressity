@@ -35,7 +35,7 @@
         {{ form.percent_fulfilled }}
     </div>
     <div class="formatted_input">
-        {% ifequal experience.author user %}
+        {% if experience.author == user or not experience %}
             <h3>{{ form.is_public.label_tag }} {{ form.is_public }}</h3>
             <script type="text/javascript">
                 e = document.getElementById("id_is_public");
@@ -46,7 +46,7 @@
             </script>
         {% else %}
             <p>Only {{ experience.author }} can change privacy settings</p>
-        {% endifequal %}
+        {% endif %}
         <div class="about_this">
             <p onclick="toggle_div('about_public_experiences');" class="smaller">
                 About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_public_experiences_toggle_icon" class="valign_middle" />
