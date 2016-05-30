@@ -239,7 +239,7 @@ def change_password(request):
 
 
 def site_login(request):
-    if request.GET.get('next') == '/explorers/logout/' or request.POST.get('next') == '/explorers/logout/' or request.META.get('HTTP_REFERER') == request.build_absolute_uri(reverse('acressity_index')):
+    if request.GET.get('next') == '/explorers/logout/' or request.GET.get('next') == '/accounts/login/' or request.POST.get('next') == '/explorers/logout/' or request.META.get('HTTP_REFERER') == request.build_absolute_uri(reverse('acressity_index')):
         next_url = reverse('my_journey')
     else:
         next_url = request.GET.get('next') or request.POST.get('next') or 'my_journey'
