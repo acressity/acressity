@@ -53,7 +53,9 @@ class ExplorerForm(ModelForm):
 
     class Meta:
         model = Explorer
-        exclude = ('experiences', 'password', 'gallery', 'date_joined', 'is_active', 'is_superuser', 'is_staff', 'last_login')
+        exclude = ('experiences', 'password', 'gallery', 'date_joined',
+                'is_active', 'is_superuser', 'is_staff', 'last_login',
+                'paypal_email_address')
 
 
 class ContactForm(forms.Form):
