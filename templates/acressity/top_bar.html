@@ -128,7 +128,7 @@
                                     <form action="/explorers/login/?next={{ request.path }}" method="POST" class="full_width">
                                         {% csrf_token %}
                                         <div class="formatted_input">
-                                            <label for="username">Email/<abbr title="Creative username to describe your journey">Trailname</abbr></label>
+                                            <label for="username">Email or <abbr title="Creative username to describe your journey">Trailname</abbr></label>
                                             <input type="text" class="smaller" name="username" id="username"
                                                    size="10" />
                                         </div>
