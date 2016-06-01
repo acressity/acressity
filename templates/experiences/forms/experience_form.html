@@ -2,10 +2,6 @@
 
 <form action="{{ url }}" method="POST">
     {% csrf_token %}
-    <div class="formatted_input">
-        <h3>Featured photo</h3>
-        <div class="featured_photo">
-            {% if experience.gallery.featured_photo %}
     {% if form.errors %}
         <div class="error">
             Please correct {{ form.errors|length }} error{{ form.errors|length|pluralize }} below
