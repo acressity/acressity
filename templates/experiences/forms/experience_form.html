@@ -6,6 +6,15 @@
         <h3>Featured photo</h3>
         <div class="featured_photo">
             {% if experience.gallery.featured_photo %}
+    {% if form.errors %}
+        <div class="error">
+            Please correct {{ form.errors|length }} error{{ form.errors|length|pluralize }} below
+        </div>
+    {% endif %}
+    {% if experience.gallery.featured_photo %}
+        <div class="formatted_input">
+            <h3>Featured photo</h3>
+            <div class="featured_photo">
                 <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" />
             {% else %}
                 <img src="{{ STATIC_URL }}img/logo.png" style="width: 200px" title="Placeholder until you upload an image to feature" />
@@ -88,6 +97,27 @@
             <h3><label for='{{ form.date_created.id_for_label }}'>Date created (blank for today)</label></h3>
             {{ form.date_created.errors }}
             {{ form.date_created }}
+            <div class="about_this">
+                <p onclick="toggle_div('date_created_help_text');">
+                    About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="date_created_help_text_toggle_icon" class="valign_middle" />
+                </p>
+                <div class="toggle_div help-text" id="date_created_help_text">
+                    {{ form.date_created.help_text }}
+                </div>
+            </div>
+        </div>
+        <div class="formatted_input">
+            <h3>Intended completion date</h3>
+            {{ form.intended_completion_date.errors }}
+            {{ form.intended_completion_date }}
+            <div class="about_this">
+                <p onclick="toggle_div('intended_completion_date_help_text');">
+                    About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="intended_completion_date_help_text_toggle_icon" class="valign_middle" />
+                </p>
+                <div class="toggle_div help-text" id="intended_completion_date_help_text">
+                    {{ form.intended_completion_date.help_text }}
+                </div>
+            </div>
         </div>
         <div class="formatted_input">
             {% if user.featured_experience %}

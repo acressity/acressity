@@ -25,7 +25,6 @@ class ExperienceForm(ImprovedModelForm):
         'min': 0, 'step': 1, 'oninput':
         '$("#percent_fulfilled_display").html(this.value);', 'onchange': '$("#percent_fulfilled_display").html(this.value);'}))
 
-
     class Meta:
         model = Experience
         exclude = ('author', 'gallery', 'make_feature')
@@ -35,6 +34,12 @@ class ExperienceForm(ImprovedModelForm):
             'brief': _('Brief (optional)'),
             'password': _('Password'),
             'search_term': _('Search term'),
+        }
+        widgets = {
+            'intended_completion_date': SelectDateWidget(years=range(timezone.now().year,
+                timezone.now().year+110, 1)),
+            'date_created': SelectDateWidget(years=range(timezone.now().year,
+                timezone.now().year-110, -1)),
         }
 
     def __init__(self, *args, **kwargs):

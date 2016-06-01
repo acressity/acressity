@@ -28,6 +28,9 @@
         {% if experience.status %}
             <p>{{ experience.status }}</p>
         {% endif %}
+        {% if experience.intended_completion_date and not experience.is_fulfilled %}
+            <p>Goal: {{ experience.intended_completion_date|timeuntil }} left</p>
+        {% endif %}
     </div>
     <div {% if not stacked %}class="right"{% endif %}>
         <ul class="option_list">
