@@ -13,10 +13,8 @@ from explorers.models import Explorer
 
 
 class ExperienceForm(ModelForm):
-    experience = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger'}))
     make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     unfeature = forms.BooleanField(required=False, initial=False)
-    date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
     percent_fulfilled = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'type': 'range', 'max': 100,
         'min': 0, 'step': 1, 'oninput':
         '$("#percent_fulfilled_display").html(this.value);', 'onchange': '$("#percent_fulfilled_display").html(this.value);'}))
@@ -24,6 +22,12 @@ class ExperienceForm(ModelForm):
     class Meta:
         model = Experience
         exclude = ('author', 'gallery', 'make_feature')
+        widgets = {
+            'intended_completion_date': SelectDateWidget(years=range(timezone.now().year,
+                timezone.now().year+110, 1)),
+            'date_created': SelectDateWidget(years=range(timezone.now().year,
+                timezone.now().year-110, -1)),
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
