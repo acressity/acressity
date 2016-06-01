@@ -55,6 +55,9 @@
                 {% endif %}
             </div>
         </div>
+        {% if experience.intended_completion_date and not experience.is_fulfilled %}
+            <p>Goal: {{ experience.intended_completion_date|timeuntil }} left</p>
+        {% endif %}
         <div class="option_list">
             {% if request.user in experience.explorers.all %} 
                 <a href="{% url 'create_narrative' experience.id %}">
