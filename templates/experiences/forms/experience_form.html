@@ -7,10 +7,10 @@
             Please correct {{ form.errors|length }} error{{ form.errors|length|pluralize }} below
         </div>
     {% endif %}
-    {% if experience.gallery.featured_photo %}
-        <div class="formatted_input">
-            <h3>Featured photo</h3>
-            <div class="featured_photo">
+    <div class="formatted_input">
+        <h3>Featured photo</h3>
+        <div class="featured_photo">
+            {% if experience.gallery.featured_photo %}
                 <img src="{{ experience.gallery.featured_photo.get_thumbnail_url }}" />
             {% else %}
                 <img src="{{ STATIC_URL }}img/logo.png" style="width: 200px" title="Placeholder until you upload an image to feature" />
