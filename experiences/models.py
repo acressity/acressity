@@ -57,6 +57,12 @@ class Experience(models.Model):
         PayPalIPN, blank=True, related_name='donations',
         help_text=_('All the donations made to this experience')
     )
+    intended_completion_date = models.DateField(blank=True,
+            null=True, help_text=_('''Optional date by which you intend to be
+                finished. Take care if choosing to set a date, as this feature
+                can be demotivating if used improperly. Leave blank if you do
+                not want this to be displayed or if not relevant.''')
+    )
 
     objects = ExperienceManager()
 
