@@ -26,7 +26,9 @@ class Experience(models.Model):
 
     experience = models.CharField(max_length=255, null=False, help_text=_('Title of the experience.'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text=_('Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.'))
-    date_created = models.DateTimeField(default=timezone.now, null=False, blank=True)
+    date_created = models.DateTimeField(default=timezone.now, null=False,
+            blank=True, help_text=_('''The day you committed to achieving this
+                experience. Leave blank for today'''))
     date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
     brief = models.TextField(blank=True, null=True, help_text=_('Written description of the experience to provide a little insight.'))
     status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
