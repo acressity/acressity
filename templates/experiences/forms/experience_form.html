@@ -2,6 +2,11 @@
 
 <form action="{{ url }}" method="POST">
     {% csrf_token %}
+    {% if form.errors %}
+        <div class="error">
+            Please correct {{ form.errors|length }} error{{ form.errors|length|pluralize }} below
+        </div>
+    {% endif %}
     {% if experience.gallery.featured_photo %}
         <div class="formatted_input">
             <h3>Featured photo</h3>
@@ -77,9 +82,30 @@
     <div onclick="toggle_div('additional_options')"><h3>More Options <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="additional_options_toggle_icon" class="valign_middle" /></h3></div>
     <div id="additional_options" class="toggle_div">
         <div class="formatted_input">
-            <h3>Date created (leave blank for today)</h3>
+            <h3>Date created</h3>
             {{ form.date_created.errors }}
             {{ form.date_created }}
+            <div class="about_this">
+                <p onclick="toggle_div('date_created_help_text');">
+                    About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="date_created_help_text_toggle_icon" class="valign_middle" />
+                </p>
+                <div class="toggle_div help-text" id="date_created_help_text">
+                    {{ form.date_created.help_text }}
+                </div>
+            </div>
+        </div>
+        <div class="formatted_input">
+            <h3>Intended completion date</h3>
+            {{ form.intended_completion_date.errors }}
+            {{ form.intended_completion_date }}
+            <div class="about_this">
+                <p onclick="toggle_div('intended_completion_date_help_text');">
+                    About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="intended_completion_date_help_text_toggle_icon" class="valign_middle" />
+                </p>
+                <div class="toggle_div help-text" id="intended_completion_date_help_text">
+                    {{ form.intended_completion_date.help_text }}
+                </div>
+            </div>
         </div>
         <div class="formatted_input">
             {% if user.featured_experience %}
