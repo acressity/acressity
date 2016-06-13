@@ -5,6 +5,10 @@ from django.contrib.auth.views import login
 
 from acressity.views import WelcomeTemplateView
 
+handler404 = 'acressity.views.handler404'
+handler500 = 'acressity.views.handler500'
+handler403 = 'acressity.views.handler403'
+
 admin.autodiscover()
 
 urlpatterns = patterns(
