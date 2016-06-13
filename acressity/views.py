@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.contrib.auth import get_user_model
 from django.http import Http404
 from django.core.urlresolvers import reverse
@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 # from django.contrib.auth.decorators import login_required
 from django.utils.html import escape
 from django.views.generic import TemplateView
+from django.template import RequestContext
 
 from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm
@@ -109,3 +110,21 @@ def example(request):
     bugsy = Explorer.objects.get(trailname='Bugsy')
     featured_explorer = Explorer.objects.get(pk=1)
     return render(request, 'acressity/example.html', {'bugsy': bugsy, 'featured_explorer': featured_explorer})
+
+
+def handler404(request):
+    response = render_to_response('acressity/404.html', {}, context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+
+def handler500(request):
+    response = render_to_response('acressity/500.html', {}, context_instance=RequestContext(request))
+    response.status_code = 500
+    return response
+
+
+def handler403(request):
+    response = render_to_response('acressity/403.html', {}, context_instance=RequestContext(request))
+    response.status_code = 403
+    return response
