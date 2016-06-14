@@ -83,7 +83,8 @@ def contact(request):
                     'acressity@acressity.com',
                     [admin[1]]
                 )
-            messages.success(request, 'Thank you for your message')
+            messages.success(request, '''Thank you for your message. It has been
+                    sent successfully and will be viewed shortly.''')
             return redirect(reverse('contact'))
     else:
         form = ContactForm()
