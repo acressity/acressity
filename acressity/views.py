@@ -76,7 +76,8 @@ def contact(request):
                     form.cleaned_data['first_name'],
                     form.cleaned_data['last_name']
                 ),
-                form.cleaned_data['message'],
+                form.cleaned_data['message'] + '\n' +
+                form.cleaned_data['email'],
                 'acressity@acressity.com',
                 ['andrew.s.gaines@gmail.com']
             )
