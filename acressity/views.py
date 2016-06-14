@@ -9,6 +9,7 @@ from django.utils.html import escape
 from django.views.generic import TemplateView
 from django.template import RequestContext
 
+from acressity import settings
 from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm
 from explorers.forms import RegistrationForm, Explorer
@@ -71,16 +72,17 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            send_mail(
-                'Message from {0} {1}'.format(
-                    form.cleaned_data['first_name'],
-                    form.cleaned_data['last_name']
-                ),
-                form.cleaned_data['message'] + '\n' +
-                form.cleaned_data['email'],
-                'acressity@acressity.com',
-                ['andrew.s.gaines@gmail.com']
-            )
+            for admin in settings.ADMINS:
+                send_mail(
+                    'Message from {0} {1}'.format(
+                        form.cleaned_data['first_name'],
+                        form.cleaned_data['last_name']
+                    ),
+                    form.cleaned_data['message'] + '\n' +
+                    form.cleaned_data['email'],
+                    'acressity@acressity.com',
+                    [admin[1]]
+                )
             messages.success(request, 'Thank you for your message')
             return redirect(reverse('contact'))
     else:
