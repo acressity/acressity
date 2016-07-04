@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.db import IntegrityError
 
 from explorers.models import Explorer
 from photologue.models import Gallery
@@ -23,3 +24,9 @@ class ExplorerTest(TestCase):
     def test_assign_gallery(self):
         self.assertIsNotNone(self.gallery)
         self.assertEqual(self.gallery.object(), self.explorer)
+
+    def test_duplicate_trailname_fails(self):
+        with self.assertRaises(IntegrityError):
+            new_explorer = Explorer.objects.create(first_name='Lorraine',
+                last_name='Tristane', trailname='MachuPikchu')
+            new_explorer.save()
