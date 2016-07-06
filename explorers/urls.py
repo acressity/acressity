@@ -5,14 +5,14 @@ from django.contrib.auth import get_user_model
 
 urlpatterns = patterns(
     'explorers.views',
-    url(r'^(?P<explorer_id>\d+)/$', 'journey', name='journey'),
+    url(r'^(?P<explorer_id>\d+)/$', 'index', name='journey'),
     url(r'^journey/$', 'my_journey', name='my_journey'),
     url(r'^story/(?P<explorer_id>\d+)/$', 'story', name='story'),
     url(r'^profile/(?P<explorer_id>\d+)/$', 'profile', name='profile'),
     url(r'^login/$', 'site_login', name='login'),
     url(r'^logout/$', 'farewell', name='farewell'),
     url(r'^journey/$', 'explorer_journey'),
-    url(r'^new_explorer/$', 'new_explorer', name='register'),
+    url(r'^new_explorer/$', 'create', name='register'),
     url(r'^(?P<explorer_id>\d+)/explorer_settings/$', 'explorer_settings', name='explorer_settings'),
     url(r'^(?P<explorer_id>\d+)/board/$', 'board', name='board'),
     url(r'^(?P<explorer_id>\d+)/past_notifications/$', 'past_notifications', name='past_notifications'),

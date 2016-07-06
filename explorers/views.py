@@ -24,7 +24,7 @@ from experiences.forms import ExperienceForm
 from support.models import Cheer
 
 
-def journey(request, explorer_id):
+def index(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     owner = explorer == request.user
     form = None
@@ -159,7 +159,7 @@ def explorer_journey(request):
     return redirect(reverse('journey', args=(request.user.id,)))
 
 
-def new_explorer(request):
+def create(request):
     if request.method == 'POST' and 'initial' not in request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
