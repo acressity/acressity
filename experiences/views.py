@@ -21,50 +21,6 @@ from notifications import notify
 from paypal.standard.forms import PayPalPaymentsForm
 
 
-@login_required
-def create(request):
-    if request.method == 'POST':
-        form = ExperienceForm(request.POST, request=request)
-        if form.is_valid():
-            form.save(commit=False)
-            form.instance.author = request.user
-            new_experience = form.save()
-            new_experience.explorers.add(request.user)
-            if form.cleaned_data['make_feature']:
-                request.user.featured_experience = form.instance
-                request.user.save()
-                messages.success(
-                    request,
-                    _('Your featured experience is now {0}'.format(
-                        form.instance.experience))
-                )
-            elif form.cleaned_data['unfeature']:
-                request.user.featured_experience = None
-                request.user.save()
-            notify.send(
-                sender=request.user,
-                recipient=get_user_model().objects.get(pk=1),
-                target=new_experience, verb='has created a new experience'
-            )
-            if 'ajax' in request.POST:
-                html = '<hr />'
-                html += render_to_string(
-                    'experiences/snippets/dash.html',
-                    {
-                        'experience': new_experience,
-                        'user': request.user,
-                        'STATIC_URL': settings.STATIC_URL
-                    }
-                )
-                data = {'html': html}
-                return HttpResponse(json.dumps(data))
-            messages.success(request, _('Experience successfully added'))
-            return redirect(reverse('new_experience', args=(new_experience.id,)))
-    else:
-        form = ExperienceForm()
-    return render(request, 'experiences/create.html', {'form': form})
-
-
 def index(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     privileged = request.user in experience.explorers.all()
@@ -119,6 +75,50 @@ def index(request, experience_id):
         'paypal_form': paypal_form,
     }
     return render(request, 'experiences/index.html', context)
+
+
+@login_required
+def create(request):
+    if request.method == 'POST':
+        form = ExperienceForm(request.POST, request=request)
+        if form.is_valid():
+            form.save(commit=False)
+            form.instance.author = request.user
+            new_experience = form.save()
+            new_experience.explorers.add(request.user)
+            if form.cleaned_data['make_feature']:
+                request.user.featured_experience = form.instance
+                request.user.save()
+                messages.success(
+                    request,
+                    _('Your featured experience is now {0}'.format(
+                        form.instance.experience))
+                )
+            elif form.cleaned_data['unfeature']:
+                request.user.featured_experience = None
+                request.user.save()
+            notify.send(
+                sender=request.user,
+                recipient=get_user_model().objects.get(pk=1),
+                target=new_experience, verb='has created a new experience'
+            )
+            if 'ajax' in request.POST:
+                html = '<hr />'
+                html += render_to_string(
+                    'experiences/snippets/dash.html',
+                    {
+                        'experience': new_experience,
+                        'user': request.user,
+                        'STATIC_URL': settings.STATIC_URL
+                    }
+                )
+                data = {'html': html}
+                return HttpResponse(json.dumps(data))
+            messages.success(request, _('Experience successfully added'))
+            return redirect(reverse('new_experience', args=(new_experience.id,)))
+    else:
+        form = ExperienceForm()
+    return render(request, 'experiences/create.html', {'form': form})
 
 
 def edit(request, experience_id):
