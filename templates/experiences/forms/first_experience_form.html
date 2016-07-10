@@ -1,9 +1,8 @@
 <form action="{% url 'step_two' %}" method="POST" class="main_color" style="position:relative;" onsubmit="return validateFirstExperience(this);">
     {% csrf_token %}
     <input type="hidden" name="initial" />
-    <h3>What do you want to experience?</h3>
     <div class="formatted_input">
-        <textarea type="text"  id="id_experience" name="experience" onfocus="setUp(this);"></textarea>
+        <input type="text" placeholder="What do you want to experience?" id="id_experience" name="experience" onfocus="setUp(this);" />
     </div>
     <div class="formatted_input align_center">
         <input type="submit" value="Create" />
