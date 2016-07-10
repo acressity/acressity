@@ -135,11 +135,7 @@
                         </div>
                     </div>
                     {% if form.trailname.errors %}
-                        <p>
-                            <span class="error">
-                                A trailname is required
-                            </span>
-                        </p>
+						{{ form.trailname.errors }}
                     {% endif %}
                 </td>
 
