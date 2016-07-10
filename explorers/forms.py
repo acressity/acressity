@@ -40,6 +40,11 @@ class RegistrationForm(ModelForm):
             raise forms.ValidationError(_('Name too short'))
         return first_name
 
+    def clean_trailname(self):
+        # Store NULL in field instead of ''
+        # Required for trailname to be unique
+        return self.cleaned_data['trailname'] or None
+
 
 class ExplorerForm(ModelForm):
     birthdate = forms.DateField(widget=forms.extras.widgets.SelectDateWidget(years=range(datetime.now().year-110, datetime.now().year-2)))
