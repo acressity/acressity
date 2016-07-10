@@ -204,6 +204,8 @@ def explorer_settings(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.user == explorer:
         return render(request, 'explorers/explorer_settings.html', {'explorer': explorer})
+    else:
+        raise PermissionDenied
 
 
 def random(request):
