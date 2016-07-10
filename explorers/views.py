@@ -215,9 +215,9 @@ def random(request):
 
 @login_required
 def farewell(request):
-    featured_experience = request.user.featured_experience
+    explorer = request.user
     logout(request)
-    return render(request, 'explorers/farewell.html', {'featured_experience': featured_experience})
+    return render(request, 'explorers/farewell.html', {'explorer': explorer})
 
 
 @login_required
