@@ -45,7 +45,18 @@ class ExperienceForm(ImprovedModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.author = kwargs.pop('author', None)
         super(ExperienceForm, self).__init__(*args, **kwargs)
+    
+    def save(self, commit=True):
+        instance = super(ExperienceForm, self).save(commit=False)
+        if self.author:
+            instance.author = self.author
+        if commit:
+            instance.save()
+            if self.author:
+                instance.explorers.add(self.author)
+        return instance
 
     def clean_date_created(self):
         date_created = self.cleaned_data.get('date_created')

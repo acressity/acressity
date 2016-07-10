@@ -80,12 +80,10 @@ def index(request, experience_id):
 @login_required
 def create(request):
     if request.method == 'POST':
-        form = ExperienceForm(request.POST, request=request)
+        form = ExperienceForm(request.POST, request=request,
+                author=request.user)
         if form.is_valid():
-            form.save(commit=False)
-            form.instance.author = request.user
             new_experience = form.save()
-            new_experience.explorers.add(request.user)
             if form.cleaned_data['make_feature']:
                 request.user.featured_experience = form.instance
                 request.user.save()
@@ -302,11 +300,8 @@ def transfer_narratives(request, experience_id):
 
     if request.method == 'POST':
         if request.POST.get('new_experience'):
-            new_experience_form = NewExperienceForm(request.POST, request=request)
-            new_experience_form.save(commit=False)
-            new_experience_form.instance.author = request.user
-            to_experience = new_experience_form.save()
-            to_experience.explorers.add(request.user)
+            to_experience = NewExperienceForm(request.POST, request=request,
+                    author=request.user).save()
         elif request.POST.get('to_experience_id'):
             to_experience = get_object_or_404(Experience, pk=request.POST.get('to_experience_id'))
 
