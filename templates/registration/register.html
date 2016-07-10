@@ -55,6 +55,9 @@
 						trailname_negative_feedback.html("")
 					}
 				})
+			} else if (!trailname.length) {
+				trailname_negative_feedback.html("");
+				trailname_positive_feedback.html("");
 			} else {
 				trailname_negative_feedback.html("Trailname must be a little longer");
 				trailname_positive_feedback.html("");
