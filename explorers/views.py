@@ -24,7 +24,7 @@ from experiences.forms import ExperienceForm
 from support.models import Cheer
 
 
-def journey(request, explorer_id):
+def index(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     owner = explorer == request.user
     form = None
@@ -159,30 +159,28 @@ def explorer_journey(request):
     return redirect(reverse('journey', args=(request.user.id,)))
 
 
-def new_explorer(request):
+def create(request):
     if request.method == 'POST' and 'initial' not in request.POST:
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
+        explorer_form = RegistrationForm(request.POST)
+        if explorer_form.is_valid():
             # The person correctly filled out the form. Register them
-            explorer = get_user_model()(email=form.cleaned_data.get('email'))
-            explorer.set_password(form.cleaned_data['password1'])
-            explorer.first_name = form.cleaned_data['first_name']
-            explorer.last_name = form.cleaned_data['last_name']
-            if form.cleaned_data['trailname']:
-                explorer.trailname = form.cleaned_data['trailname']
-            explorer.save()
-            explorer = authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password1'])
-            # Log them in
+            explorer_form.save(commit=False)
+            explorer_form.instance.set_password(explorer_form.cleaned_data['password1'])
+            explorer = explorer_form.save()
+            explorer = authenticate(
+                username=explorer_form.cleaned_data['email'],
+                password=explorer_form.cleaned_data['password1']
+            )
+            # Log new explorer in
             login(request, explorer)
             first_experience = None
             if request.POST.get('experience'):
                 # Save their experience
-                first_experience = Experience(experience=request.POST.get('experience'), author=explorer)
-                first_experience.save()
-                explorer.experiences.add(first_experience)
+                first_experience = ExperienceForm(request.POST,
+                        author=explorer).save()
                 explorer.featured_experience = first_experience
                 explorer.save()
-            # Create a new gallery for the new explorer
+            # Create a gallery for the new explorer
             gallery = Gallery(title=explorer.get_full_name(), title_slug=slugify(explorer.trailname), content_type=ContentType.objects.get_for_model(get_user_model()), object_pk=explorer.id)
             gallery.save()
             gallery.explorers.add(explorer)
@@ -196,8 +194,8 @@ def new_explorer(request):
             else:
                 return redirect(reverse('journey', args=(explorer.id,)))
     else:
-        form = RegistrationForm()
-    return render(request, 'registration/register.html', {'form': form, 'experience': request.POST.get('experience'), 'min_password_len': settings.MIN_PASSWORD_LEN})
+        explorer_form = RegistrationForm()
+    return render(request, 'registration/register.html', {'form': explorer_form, 'experience': request.POST.get('experience'), 'min_password_len': settings.MIN_PASSWORD_LEN})
 
 
 # Settings page for the explorer
@@ -206,6 +204,8 @@ def explorer_settings(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.user == explorer:
         return render(request, 'explorers/explorer_settings.html', {'explorer': explorer})
+    else:
+        raise PermissionDenied
 
 
 def random(request):
@@ -215,9 +215,9 @@ def random(request):
 
 @login_required
 def farewell(request):
-    featured_experience = request.user.featured_experience
+    explorer = request.user
     logout(request)
-    return render(request, 'explorers/farewell.html', {'featured_experience': featured_experience})
+    return render(request, 'explorers/farewell.html', {'explorer': explorer})
 
 
 @login_required

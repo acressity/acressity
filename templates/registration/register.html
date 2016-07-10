@@ -4,7 +4,7 @@
 	<script type="text/javascript">
 		function say_hello()
         {
-			first_name = document.getElementById("id_first_name").value;
+			var first_name = document.getElementById("id_first_name").value;
 			if (first_name) {
 				$("#first_name_positive_feedback").text("Hello, " + first_name + "!");
 			} else {
@@ -14,7 +14,7 @@
 
 		function check_password1()
 		{
-			password1 = document.getElementById("id_password1").value;
+			var password1 = document.getElementById("id_password1").value;
 			if (password1 && password1.length < {{ min_password_len }}) {
 				$("#password1_negative_feedback").html("Your password needs to be at least {{ min_password_len }} characters long");
 			} else {
@@ -24,8 +24,8 @@
 
 		function check_password2()
 		{
-			password1 = document.getElementById("id_password1").value;
-			password2 = document.getElementById("id_password2").value;
+			var password1 = document.getElementById("id_password1").value;
+			var password2 = document.getElementById("id_password2").value;
 			if (password2 && password1 !== password2) {
 				$("#password2_negative_feedback").html("Your passwords don't match");
 				$("#password2_positive_feedback").html("");
@@ -37,9 +37,9 @@
 		{
 			// Check if the trailname has already been chosen by another explorer
 			// This function automatically called by the explorer form association upon blur event of text field
-			trailname = $("#id_trailname").val();
-			trailname_negative_feedback = $("#trailname_negative_feedback");
-            trailname_positive_feedback = $("#trailname_positive_feedback");
+			var trailname = $("#id_trailname").val();
+			var trailname_negative_feedback = $("#trailname_negative_feedback");
+            var trailname_positive_feedback = $("#trailname_positive_feedback");
 			if (trailname.length > 2) {
 				$.ajax({
 					url: "{% url 'check_trailname' %}",
@@ -55,6 +55,9 @@
 						trailname_negative_feedback.html("")
 					}
 				})
+			} else if (!trailname.length) {
+				trailname_negative_feedback.html("");
+				trailname_positive_feedback.html("");
 			} else {
 				trailname_negative_feedback.html("Trailname must be a little longer");
 				trailname_positive_feedback.html("");
@@ -132,11 +135,7 @@
                         </div>
                     </div>
                     {% if form.trailname.errors %}
-                        <p>
-                            <span class="error">
-                                A trailname is required
-                            </span>
-                        </p>
+						{{ form.trailname.errors }}
                     {% endif %}
                 </td>
 

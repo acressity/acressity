@@ -13,6 +13,7 @@ from explorers.models import Explorer
 
 class ImprovedModelForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        # Remove `:` from suffix display default
         kwargs.setdefault('label_suffix', '')
         super(ImprovedModelForm, self).__init__(*args, **kwargs)
 
@@ -21,7 +22,7 @@ class ExperienceForm(ImprovedModelForm):
     make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     unfeature = forms.BooleanField(required=False, initial=False)
     date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
-    percent_fulfilled = forms.IntegerField(label='Percent fulfilled', initial=0, widget=forms.NumberInput(attrs={'type': 'range', 'max': 100,
+    percent_fulfilled = forms.IntegerField(required=False, label='Percent fulfilled', initial=0, widget=forms.NumberInput(attrs={'type': 'range', 'max': 100,
         'min': 0, 'step': 1, 'oninput':
         '$("#percent_fulfilled_display").html(this.value);', 'onchange': '$("#percent_fulfilled_display").html(this.value);'}))
 
@@ -44,13 +45,27 @@ class ExperienceForm(ImprovedModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.author = kwargs.pop('author', None)
         super(ExperienceForm, self).__init__(*args, **kwargs)
+    
+    def save(self, commit=True):
+        instance = super(ExperienceForm, self).save(commit=False)
+        if self.author:
+            instance.author = self.author
+        if commit:
+            instance.save()
+            if self.author:
+                instance.explorers.add(self.author)
+        return instance
 
     def clean_date_created(self):
         date_created = self.cleaned_data.get('date_created')
         if not date_created:
             date_created = timezone.now()
         return date_created
+
+    def clean_percent_fulfilled(self):
+        return self.cleaned_data['percent_fulfilled'] or 0
 
     def clean_experience(self):
         experience = self.cleaned_data.get('experience')
