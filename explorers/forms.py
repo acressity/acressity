@@ -12,19 +12,16 @@ from experiences.models import Experience
 class RegistrationForm(ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password1()'}), label='password1')
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password2()'}), label='password2')
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'onblur': 'say_hello();'}))
 
     class Meta:
         model = Explorer
         exclude = ('experiences', 'last_login', 'date_joined', 'password',
         'paypal_email_address')
-
-    def __init__(self, *args, **kwargs):
-        # This needs to be done here to avoid overwriting the trailname.help_text attribute inherited from the model
-        super(RegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['trailname'].widget = forms.TextInput(attrs={
-            'onblur': 'check_trailname();'
-        })
+        widgets = {
+            'first_name': forms.TextInput(attrs={'onblur': 'say_hello();'}),
+            'trailname': forms.TextInput(attrs={'onblur':
+                'check_trailname();'}),
+        }
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
