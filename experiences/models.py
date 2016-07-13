@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import curry
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password
 
@@ -30,7 +31,7 @@ class Experience(models.Model):
             blank=True, help_text=_('''The day you committed to achieving this
                 experience. Leave blank for today'''))
     date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
-    brief = models.TextField(blank=True, null=True, help_text=_('Written description of the experience to provide a little insight.'))
+    brief = models.TextField(blank=True, null=True, help_text=_('Central to making this experience more real, write a brief about what this experience entails. What are your hopes and aspirations? This is a way for others to understand your intention and for you to get some clarity.'))
     status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
     is_public = models.BooleanField(default=False, help_text=_('It is recommended to keep an experience private until you are ready to announce it to the world. Private experiences are only seen by its explorers and those providing a correct password if one is selected, so you can choose to share this experience with just a few people and make it public later if you\'d like.'))
@@ -72,6 +73,14 @@ class Experience(models.Model):
         super(Experience, self).__init__(*args, **kwargs)
         self.__original_is_public = self.is_public
 
+        # Add method names for accessing help text from class object instances
+        for field in self._meta.fields:
+            method_name = 'get_{0}_help_text'.format(field.name)
+            # Use curry to create the method with a pre-defined argument
+            curried_method = curry(self._get_help_text, field=field.name)
+            # Add method to instance of class
+            setattr(self, method_name, curried_method)
+
     def __unicode__(self):
         return self.experience if self.is_public else self.experience + ' (Private)'
 
@@ -80,6 +89,11 @@ class Experience(models.Model):
 
     def model(self):
         return self.__class__.__name__
+
+    def _get_help_text(self, field):
+        for f in self._meta.fields:
+            if field == f.name:
+                return f.help_text
 
     def get_photos(self):
         queryset = self.gallery.photos.none()
