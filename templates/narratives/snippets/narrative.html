@@ -2,10 +2,12 @@
 {% load narrative_extras %}
 
 <div class="narrative_item">
-    <h2>{{ narrative.title }}</h2>
-    {% if not narrative.is_public %}
-        <strong>This is a private narrative. It can only be viewed by the explorers of the narrative's experience{% if narrative.experience.password %} and those who provide the correct password{% endif %}.</strong>
-    {% endif %}
+    <h1>
+		{{ narrative.title }}
+		{% if not narrative.is_public %}
+			<img src="{{ STATIC_URL }}img/icons/lock.png" class="option_icon" title="This narrative is private" />
+		{% endif %}
+	</h1>
     <div class="option_list">
         {% url 'experience' narrative.experience.id as experience_path %}
         {% ifnotequal experience_path request.path %}

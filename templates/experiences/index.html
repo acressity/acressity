@@ -27,7 +27,12 @@
         }
     </script>
     <div class="experience_item">
-        <h1>{{ experience }}</h1>
+        <h1>
+			{{ experience }}
+			{% if not experience.is_public %}
+				<img src="{{ STATIC_URL }}img/icons/lock.png" class="option_icon" title="This experience is private" />
+			{% endif %}
+		</h1>
         <div class="position_relative">
             {% if experience.is_fulfilled %}
                 <div class="fulfilled-award">
