@@ -417,7 +417,7 @@ def new_experience(request, experience_id):
 
 def ajax_thing(request):
     experience = Experience.objects.get(pk=request.GET['exp_id'])
-    d = {'thing_two': experience.experience}
+    d = {'thing_two': experience.title}
 
     json_val = json.dumps(d)
     return HttpResponse(json_val, mimetype='application/json')

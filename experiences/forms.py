@@ -18,7 +18,7 @@ class ImprovedModelForm(ModelForm):
         super(ImprovedModelForm, self).__init__(*args, **kwargs)
 
 class ExperienceForm(ImprovedModelForm):
-    experience = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'larger'}))
+    title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'larger'}))
     make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     unfeature = forms.BooleanField(required=False, initial=False)
     date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
@@ -67,11 +67,11 @@ class ExperienceForm(ImprovedModelForm):
     def clean_percent_fulfilled(self):
         return self.cleaned_data['percent_fulfilled'] or 0
 
-    def clean_experience(self):
-        experience = self.cleaned_data.get('experience')
-        if len(experience) < 3:
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if len(title) < 3:
             raise forms.ValidationError('Make the experience name a little more descriptive')
-        return experience
+        return title
 
     def clean_search_term(self):
         # search_term = self.cleaned_data.get('search_term')

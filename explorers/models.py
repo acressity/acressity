@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from itertools import chain
 
 from photologue.models import Gallery
 from experiences.models import Experience
@@ -97,7 +98,6 @@ class Explorer(AbstractBaseUser):
         return self.__class__.__name__
 
     def ordered_experiences(self):
-        from itertools import chain
 
         def sort_experience(experience):
             # Sort only by most recent public experience if not privileged
@@ -109,7 +109,7 @@ class Explorer(AbstractBaseUser):
                     return experience.latest_public_narrative().date_created
             return experience.date_created
 
-        return list(chain(self.experiences.filter(experience=self.featured_experience), sorted(self.experiences.exclude(experience=self.featured_experience).order_by('-date_created'), key=sort_experience, reverse=True)))
+        return list(chain([self.featured_experience], sorted(self.experiences.exclude(pk=self.featured_experience.id).order_by('-date_created'), key=sort_experience, reverse=True)))
 
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
