@@ -126,6 +126,29 @@
 	{# Guides explorers through developing new experience #}
 	{% include 'experiences/snippets/checklist.html' %}
 
+	{% if experience.brief %}
+		<div class="experience_item" id="experience_brief">
+			<h2>Experience brief</h2>
+			{{ experience.embedded_brief|safe|linebreaks }}
+		</div>
+	{% endif %}
+
+    <div class="explorer_item">
+        <h2 onclick="toggle_div('explorers');">Explorer{{ experience.explorers.count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="explorers_toggle_icon" /></h2>
+        <div id="explorers" class="toggle_div">
+            <table class="thirds_table">
+                <tr>
+                    {% for explorer in experience.explorers.all %}
+                        <td>
+                            {% include "explorers/snippets/dash.html" %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
 	{% if request.user in experience.explorers.all %}
 		{% if experience.narratives.count %}
 			{% with narrative=experience.latest_narrative %}
@@ -200,6 +223,36 @@
             </div>
         {% endif %}
     </div>
+
+	{% if not experience.brief %}
+		{% if request.user in experience.explorers.all %}
+			{# Provide a form for writing one #}
+			<div class="experience_item">
+				<h2>Experience brief</h2>
+				<div class="about_this">
+					<div onclick="toggle_div('about_brief');">
+						About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_brief_toggle_icon" class="valign_middle" />
+					</div>
+					<div id="about_brief" class="toggle_div help-text">
+						{{ experience.get_brief_help_text }}
+					</div>
+				</div>
+				<div id="write_a_brief">
+					<form action="{% url 'experiences.views.brief' experience.id %}" method="POST" onsubmit="return submit_brief(this)">
+						{% csrf_token %}
+						{{ experience_brief_form.brief }}
+						<input type="hidden" name="explorer_id" value="{{ experience.explorer_id }}" />
+						<div class="formatted_input align_center">
+							<input type="submit" value="Submit" />
+						</div>
+					</form>
+				</div>
+			</div>
+		{% else %}
+			{{ block.super }}
+		{% endif %}
+	{% endif %}
+
     {% get_comment_count for experience as exp_comment_count %}
     {% if exp_comment_count > 0 %}
         <h4 title="Click to expand" onclick="toggle_div('exp_comment_list');">{{ exp_comment_count }} Note{{ exp_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="exp_comment_list_toggle_icon" /></h4>
