@@ -7,22 +7,22 @@ from explorers.tests import helpers
 
 
 class ExperienceTest(TestCase):
-    experience_string = 'Walk on the Moon'
+    experience_title = 'Walk on the Moon'
 
     def setUp(self):
         self.explorer = helpers.new_explorer()
-        self.experience = Experience.objects.create(experience=self.experience_string,
+        self.experience = Experience.objects.create(title=self.experience_title,
                 author=self.explorer, is_public=True)
         self.explorer.experiences.add(self.experience)
 
     def test_experience_created(self):
-        self.assertEqual(self.experience_string, str(self.experience))
+        self.assertEqual(self.experience_title, str(self.experience))
 
     def test_explorer_has_experience(self):
         self.assertTrue(self.experience in self.explorer.experiences.all())
 
     def test_experience_form_submit(self):
-        exp_form_context = {'experience': self.experience_string}
+        exp_form_context = {'title': self.experience_title}
         exp_form = ExperienceForm(exp_form_context, author=self.explorer)
         self.assertTrue(exp_form.is_valid())
         experience = exp_form.save()

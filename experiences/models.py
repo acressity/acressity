@@ -25,7 +25,7 @@ class Experience(models.Model):
     a book about a journey.
     '''
 
-    experience = models.CharField(max_length=255, null=False, help_text=_('Title of the experience.'))
+    title = models.CharField(max_length=255, null=False, help_text=_('Title of the experience.'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text=_('Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.'))
     date_created = models.DateTimeField(default=timezone.now, null=False,
             blank=True, help_text=_('''The day you committed to achieving this
@@ -82,7 +82,7 @@ class Experience(models.Model):
             setattr(self, method_name, curried_method)
 
     def __unicode__(self):
-        return self.experience
+        return self.title
 
     def __str__(self):
         return self.__unicode__()
@@ -117,7 +117,7 @@ class Experience(models.Model):
         return self.percent_fulfilled == 100
 
     def create_gallery(self):
-        gallery = Gallery(title=self.experience, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)
+        gallery = Gallery(title=self.title, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)
         gallery.save()
         return gallery
 
@@ -171,4 +171,4 @@ class FeaturedExperience(models.Model):
     objects = ExperienceManager()
 
     def __unicode__(self):
-        return self.experience.experience
+        return self.experience.title
