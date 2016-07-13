@@ -2,40 +2,38 @@
 	Used to guide explorers through developing new experience, displayed on experience index page
 {% endcomment %}
 
-{% if user in experience.explorers.all %}
-	{% if not experience.narratives.count or not experience.gallery.featured_photo %}
-		{% with first_narrative_prompt="Develop your experience by writing your first narrative" featured_photo_prompt="Upload a photo to be featured with your experience" %}
-		<div class="experience_item">
-			<h3>
-				Experience development checklist
-			</h3>
-			{% if not experience.narratives.count %}
-				<a href="{% url 'narratives.views.create' experience.id %}">
-					<p>
-						<img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
-						{{ first_narrative_prompt }}
-					</p>
-				</a>
-			{% else %}
+{% if not experience.narratives.count or not experience.gallery.featured_photo %}
+	{% with first_narrative_prompt="Develop your experience by writing your first narrative" featured_photo_prompt="Upload a photo to be featured with your experience" %}
+	<div class="experience_item">
+		<h3>
+			Experience development checklist
+		</h3>
+		{% if not experience.narratives.count %}
+			<a href="{% url 'narratives.views.create' experience.id %}">
 				<p>
-					<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have successfully written your first narrative" class="option_icon" style="vertical-align: middle;" />
+					<img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
 					{{ first_narrative_prompt }}
 				</p>
-			{% endif %}
-			{% if not experience.gallery.featured_photo %}
-				<a href="{% url 'exp_upload_photo' experience.id %}">
-					<p>
-						<img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo to be featured for this experience" class="option_icon" style="vertical-align: middle;" />
-						{{ featured_photo_prompt }}
-					</p>
-				</a>
-			{% else %}
+			</a>
+		{% else %}
+			<p>
+				<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have successfully written your first narrative" class="option_icon" style="vertical-align: middle;" />
+				{{ first_narrative_prompt }}
+			</p>
+		{% endif %}
+		{% if not experience.gallery.featured_photo %}
+			<a href="{% url 'exp_upload_photo' experience.id %}">
 				<p>
-					<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have already selected a photo to be featured" class="option_icon" style="vertical-align: middle;" />
+					<img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo to be featured for this experience" class="option_icon" style="vertical-align: middle;" />
 					{{ featured_photo_prompt }}
 				</p>
-			{% endif %}
-		</div>
-		{% endwith %}
-	{% endif %}
+			</a>
+		{% else %}
+			<p>
+				<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have already selected a photo to be featured" class="option_icon" style="vertical-align: middle;" />
+				{{ featured_photo_prompt }}
+			</p>
+		{% endif %}
+	</div>
+	{% endwith %}
 {% endif %}

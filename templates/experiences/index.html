@@ -123,8 +123,10 @@
         </div>
     </div>
 
-	{# Guides explorers through developing new experience #}
-	{% include 'experiences/snippets/checklist.html' %}
+	{% if user in experience.explorers.all %}
+		{# Guides explorers through developing new experience #}
+		{% include 'experiences/snippets/checklist.html' %}
+	{% endif %}
 
 	{% if experience.brief %}
 		<div class="experience_item" id="experience_brief">
