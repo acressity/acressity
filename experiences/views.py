@@ -113,7 +113,7 @@ def create(request):
                 data = {'html': html}
                 return HttpResponse(json.dumps(data))
             messages.success(request, _('Experience successfully added'))
-            return redirect(reverse('new_experience', args=(new_experience.id,)))
+            return redirect(reverse('experience', args=(new_experience.id,)))
     else:
         form = ExperienceForm()
     return render(request, 'experiences/create.html', {'form': form})

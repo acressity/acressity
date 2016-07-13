@@ -122,49 +122,29 @@
             {% endwith %}
         </div>
     </div>
-    <div class="explorer_item">
-        <h2 onclick="toggle_div('explorers');">Explorer{{ experience.explorers.count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="explorers_toggle_icon" /></h2>
-        <div id="explorers" class="toggle_div">
-            <table class="thirds_table">
-                <tr>
-                    {% for explorer in experience.explorers.all %}
-                        <td>
-                            {% include "explorers/snippets/dash.html" %}
-                        </td>
-                    {% endfor %}
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="experience_item" id="experience_brief">
-        <h2>Experience brief</h2>
-        {% if experience.brief %}
-            {{ experience.embedded_brief|safe|linebreaks }}
-        {% else %}
-            {% if request.user in experience.explorers.all %}
-                <div id="write_a_brief">
-                    <form action="{% url 'experiences.views.brief' experience.id %}" method="POST" onsubmit="return submit_brief(this)">
-                        {% csrf_token %}
-                        {{ experience_brief_form.brief }}
-                        <input type="hidden" name="explorer_id" value="{{ experience.explorer_id }}" />
-                        <div class="formatted_input align_center">
-                            <input type="submit" value="Submit" />
-                        </div>
-                    </form>
-                </div>
-            {% else %}
-                {{ block.super }}
-            {% endif %}
-        {% endif %}
-    </div>
-    {% if experience.latest_narrative %} {# This also checks for public status #}
-        <div class="narrative_item">
-            <h2>Latest narrative</h2>
-            {% with experience.latest_narrative as narrative %}
-                {% include "narratives/snippets/narrative.html" %}
-            {% endwith %}
-        </div>
-    {% endif %}
+
+	{# Guides explorers through developing new experience #}
+	{% include 'experiences/snippets/checklist.html' %}
+
+	{% if request.user in experience.explorers.all %}
+		{% if experience.narratives.count %}
+			{% with narrative=experience.latest_narrative %}
+				<div class="narrative_item">
+					<h2>Latest narrative</h2>
+						{% include "narratives/snippets/narrative.html" %}
+				</div>
+			{% endwith %}
+		{% endif %}
+	{% else %}
+		{% if experience.public_narratives.count %}
+			{% with narrative=experience.latest_public_narrative %}
+				<div class="narrative_item">
+					<h2>Latest narrative</h2>
+						{% include "narratives/snippets/narrative.html" %}
+				</div>
+			{% endwith %}
+		{% endif %}
+	{% endif %}
 
     {% comment %} {# Tried this temporarily, wasn't too impressed...yet %}
     {% if narratives %}
