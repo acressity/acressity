@@ -105,22 +105,10 @@ class Experience(models.Model):
         return queryset
 
     def is_author(self, request):
-        if request.user.is_authenticated():
-            if request.user == self.author:
-                return True
-            else:
-                return False
-        else:
-            return False
+        return request.user.is_authenticated() and request.user == self.author
 
     def is_comrade(self, request):
-        if request.user.is_authenticated():
-            if request.user in self.explorers.all():
-                return True
-        return False
-
-    def ordered_narratives(self):
-        return self.narratives.order_by('-date_created')
+        return request.user.is_authenticated() and request.user in self.explorers.all()
 
     def comrades(self, request):
         return self.explorers.exclude(id=request.user.id)
@@ -134,13 +122,11 @@ class Experience(models.Model):
         return gallery
 
     def get_galleries(self):
-        object_list = []
-        for narrative in self.narratives.all():
-            if narrative.gallery:
-                object_list.append(narrative.gallery)
+        galleries = [narrative.gallery for narrative in self.narratives.all()
+                if narrative.gallery]
         if self.gallery:
-            object_list.append(self.gallery)
-        return object_list
+            galleries.append(self.gallery)
+        return galleries
 
     def latest_narrative(self):
         if self.narratives.exists() and self.narratives.filter(is_public=True):
