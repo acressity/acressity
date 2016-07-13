@@ -43,7 +43,7 @@ class Narrative(models.Model):
         get_latest_by = 'date_created'
 
     def __unicode__(self):
-        return self.title if self.is_public else self.title + ' (Private)'
+        return self.title
 
     def __str__(self):
         return self.__unicode__()
