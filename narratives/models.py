@@ -55,10 +55,7 @@ class Narrative(models.Model):
         return get_user_model().objects.get(pk=self.experience.author_id)
 
     def taste(self):
-        if self.needs_shortening():
-            return u'{0}...'.format(self.narrative[:self.taste_len])
-        else:
-            return self.narrative
+        return u'{0}...'.format(self.narrative[:self.taste_len]) if self.needs_shortening() else self.narrative
 
     def needs_shortening(self):
         return len(self.narrative) > self.taste_len
