@@ -107,14 +107,14 @@
                     <img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" />
                 </a>
             {% endif %}
-                {% ifnotequal user experience.author %}
+                {% if user != experience.author %}
                     {% if experience.accepts_paypal %}
                         <a href="{% url 'donate' experience.id %}">
                             <img src="{{ STATIC_URL }}img/icons/money.png" class="option_icon"
                  title="Donate - Become a benefactor" />
                         </a>
                     {% endif %}
-                {% endifnotequal %}
+                {% endif %}
         </div>
         <div id="{{ experience.id }}_comment" class="comment" style="display: none;">
             {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
