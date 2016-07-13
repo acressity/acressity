@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
+from django.utils.functional import curry
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password
 
@@ -30,7 +31,7 @@ class Experience(models.Model):
             blank=True, help_text=_('''The day you committed to achieving this
                 experience. Leave blank for today'''))
     date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
-    brief = models.TextField(blank=True, null=True, help_text=_('Written description of the experience to provide a little insight.'))
+    brief = models.TextField(blank=True, null=True, help_text=_('Central to making this experience more real, write a brief about what this experience entails. What are your hopes and aspirations? This is a way for others to understand your intention and for you to get some clarity.'))
     status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
     is_public = models.BooleanField(default=False, help_text=_('It is recommended to keep an experience private until you are ready to announce it to the world. Private experiences are only seen by its explorers and those providing a correct password if one is selected, so you can choose to share this experience with just a few people and make it public later if you\'d like.'))
@@ -72,6 +73,14 @@ class Experience(models.Model):
         super(Experience, self).__init__(*args, **kwargs)
         self.__original_is_public = self.is_public
 
+        # Add method names for accessing help text from class object instances
+        for field in self._meta.fields:
+            method_name = 'get_{0}_help_text'.format(field.name)
+            # Use curry to create the method with a pre-defined argument
+            curried_method = curry(self._get_help_text, field=field.name)
+            # Add method to instance of class
+            setattr(self, method_name, curried_method)
+
     def __unicode__(self):
         return self.experience if self.is_public else self.experience + ' (Private)'
 
@@ -80,6 +89,11 @@ class Experience(models.Model):
 
     def model(self):
         return self.__class__.__name__
+
+    def _get_help_text(self, field):
+        for f in self._meta.fields:
+            if field == f.name:
+                return f.help_text
 
     def get_photos(self):
         queryset = self.gallery.photos.none()
@@ -91,22 +105,10 @@ class Experience(models.Model):
         return queryset
 
     def is_author(self, request):
-        if request.user.is_authenticated():
-            if request.user == self.author:
-                return True
-            else:
-                return False
-        else:
-            return False
+        return request.user.is_authenticated() and request.user == self.author
 
     def is_comrade(self, request):
-        if request.user.is_authenticated():
-            if request.user in self.explorers.all():
-                return True
-        return False
-
-    def ordered_narratives(self):
-        return self.narratives.order_by('-date_created')
+        return request.user.is_authenticated() and request.user in self.explorers.all()
 
     def comrades(self, request):
         return self.explorers.exclude(id=request.user.id)
@@ -120,21 +122,24 @@ class Experience(models.Model):
         return gallery
 
     def get_galleries(self):
-        object_list = []
-        for narrative in self.narratives.all():
-            if narrative.gallery:
-                object_list.append(narrative.gallery)
+        galleries = [narrative.gallery for narrative in self.narratives.all()
+                if narrative.gallery]
         if self.gallery:
-            object_list.append(self.gallery)
-        return object_list
+            galleries.append(self.gallery)
+        return galleries
 
-    def latest_narrative(self):
-        if self.narratives.exists() and self.narratives.filter(is_public=True):
-            return self.public_narratives().latest('date_created')
+    def ordered_narratives(self):
+        return self.narratives.order_by('-date_created')
 
     def public_narratives(self):
         'Return an ordered queryset of all the public narratives in this experience'
         return self.ordered_narratives().filter(is_public=True)
+
+    def latest_public_narrative(self):
+        return self.narratives.filter(is_public=True).latest('date_created')
+
+    def latest_narrative(self):
+        return self.narratives.latest('date_created')
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)

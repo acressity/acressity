@@ -100,10 +100,14 @@ class Explorer(AbstractBaseUser):
         from itertools import chain
 
         def sort_experience(experience):
-            if experience.latest_narrative():
-                return experience.latest_narrative().date_created
-            else:
-                return experience.date_created
+            # Sort only by most recent public experience if not privileged
+            # Keeps from revealing a private experience with recent activity
+            if experience.narratives.count():
+                if self in experience.explorers.all():
+                    return experience.latest_narrative().date_created
+                elif experience.public_narratives().count():
+                    return experience.latest_public_narrative().date_created
+            return experience.date_created
 
         return list(chain(self.experiences.filter(experience=self.featured_experience), sorted(self.experiences.exclude(experience=self.featured_experience).order_by('-date_created'), key=sort_experience, reverse=True)))
 
