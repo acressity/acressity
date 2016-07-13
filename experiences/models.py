@@ -82,7 +82,7 @@ class Experience(models.Model):
             setattr(self, method_name, curried_method)
 
     def __unicode__(self):
-        return self.experience if self.is_public else self.experience + ' (Private)'
+        return self.experience
 
     def __str__(self):
         return self.__unicode__()
