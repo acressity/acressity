@@ -20,7 +20,7 @@ class Narrative(models.Model):
     within a chapter; they are the sustenance of the experience. Examples of narratives include a note,
     update, thought, plan, itinerary, journal entry, publication, (ad infinitum) about the experience...
     '''
-    narrative = models.TextField(help_text=_('The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.'), null=False)
+    body = models.TextField(help_text=_('The content of narrative. Where information regarding any thoughts, feelings, updates, etc can be added.'), null=False)
     title = models.CharField(max_length=255, blank=True, null=True, help_text=_('Title of the narrative. If none given, defaults to date created.'))
     experience = models.ForeignKey(Experience, related_name='narratives')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='narratives', null=False)
@@ -55,10 +55,10 @@ class Narrative(models.Model):
         return get_user_model().objects.get(pk=self.experience.author_id)
 
     def taste(self):
-        return u'{0}...'.format(self.narrative[:self.taste_len]) if self.needs_shortening() else self.narrative
+        return u'{0}...'.format(self.body[:self.taste_len]) if self.needs_shortening() else self.body
 
     def needs_shortening(self):
-        return len(self.narrative) > self.taste_len
+        return len(self.body) > self.taste_len
 
     def is_author(self, request):
         if request.user.is_authenticated():
@@ -106,4 +106,4 @@ class Narrative(models.Model):
         return narrative
 
     def embedded_narrative(self):
-        return embed_string(self.narrative)
+        return embed_string(self.body)

@@ -29,11 +29,11 @@ class NarrativeForm(forms.ModelForm):
             date_created = timezone.now()
         return date_created
 
-    def clean_narrative(self):
-        narrative = self.cleaned_data.get('narrative')
-        if len(narrative) < 3:
-            raise forms.ValidationError('Narrative needs a little more extrapolation')
-        return narrative
+    def clean_body(self):
+        body = self.cleaned_data.get('body')
+        if len(body) < 3:
+            raise forms.ValidationError('The narrative body needs a little more extrapolation')
+        return body
 
     class Meta:
         model = Narrative
