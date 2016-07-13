@@ -11,7 +11,7 @@ class ExperienceTest(TestCase):
 
     def setUp(self):
         self.explorer = helpers.new_explorer()
-        self.experience = Experience.objects.create(experience=self.experience_string,
+        self.experience = Experience.objects.create(title=self.experience_string,
                 author=self.explorer, is_public=True)
         self.explorer.experiences.add(self.experience)
 
@@ -22,7 +22,7 @@ class ExperienceTest(TestCase):
         self.assertTrue(self.experience in self.explorer.experiences.all())
 
     def test_experience_form_submit(self):
-        exp_form_context = {'experience': self.experience_string}
+        exp_form_context = {'title': self.experience_string}
         exp_form = ExperienceForm(exp_form_context, author=self.explorer)
         self.assertTrue(exp_form.is_valid())
         experience = exp_form.save()
