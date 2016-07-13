@@ -128,13 +128,18 @@ class Experience(models.Model):
             galleries.append(self.gallery)
         return galleries
 
-    def latest_narrative(self):
-        if self.narratives.exists() and self.narratives.filter(is_public=True):
-            return self.public_narratives().latest('date_created')
+    def ordered_narratives(self):
+        return self.narratives.order_by('-date_created')
 
     def public_narratives(self):
         'Return an ordered queryset of all the public narratives in this experience'
         return self.ordered_narratives().filter(is_public=True)
+
+    def latest_public_narrative(self):
+        return self.narratives.filter(is_public=True).latest('date_created')
+
+    def latest_narrative(self):
+        return self.narratives.latest('date_created')
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
