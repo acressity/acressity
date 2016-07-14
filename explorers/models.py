@@ -109,7 +109,10 @@ class Explorer(AbstractBaseUser):
                     return experience.latest_public_narrative().date_created
             return experience.date_created
 
-        return list(chain([self.featured_experience], sorted(self.experiences.exclude(pk=self.featured_experience.id).order_by('-date_created'), key=sort_experience, reverse=True)))
+        if self.featured_experience:
+            # We need to place the featured experience at front
+            return list(chain([self.featured_experience], sorted(self.experiences.exclude(pk=self.featured_experience.id).order_by('-date_created'), key=sort_experience, reverse=True)))
+        return self.experiences.order_by('-date_created')
 
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
@@ -141,7 +144,7 @@ class Explorer(AbstractBaseUser):
 
     # Don't think this is currently being used...phasing it out in favor of returning all experiences in a sorted fashion
     def shelved_experiences(self):
-        return sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
+        return sorted(self.experiences.exclude(title=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 
     def top_five(self):
         return self.ordered_experiences()[:5]
