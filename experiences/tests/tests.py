@@ -28,10 +28,9 @@ class ExperienceTest(TestCase):
         self.assertTrue(experience in self.explorer.experiences.all())
         self.assertTrue(experience.author == self.explorer)
 
-
     def test_latest_narratives(self):
         narr1 = Narrative.objects.create(experience=self.experience,
-                author=self.explorer, narrative='''There were two astronauts
+                author=self.explorer, body='''There were two astronauts
                 lucky enough to make it into space today!''')
         self.assertTrue(self.experience.public_narratives().count() == 1)
         self.assertTrue(self.experience.narratives.count() == 1)
@@ -39,7 +38,7 @@ class ExperienceTest(TestCase):
         self.assertEqual(self.experience.latest_public_narrative(), narr1)
 
         narr2 = Narrative.objects.create(experience=self.experience,
-                author=self.explorer, narrative='''There was a full moon
+                author=self.explorer, body='''There was a full moon
                 tonight''', is_public=False)
         self.assertTrue(self.experience.public_narratives().count() == 1)
         self.assertTrue(self.experience.narratives.count() == 2)
