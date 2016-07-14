@@ -144,7 +144,7 @@ class Explorer(AbstractBaseUser):
 
     # Don't think this is currently being used...phasing it out in favor of returning all experiences in a sorted fashion
     def shelved_experiences(self):
-        return sorted(self.experiences.exclude(experience=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
+        return sorted(self.experiences.exclude(title=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 
     def top_five(self):
         return self.ordered_experiences()[:5]
