@@ -109,7 +109,10 @@ class Explorer(AbstractBaseUser):
                     return experience.latest_public_narrative().date_created
             return experience.date_created
 
-        return list(chain([self.featured_experience], sorted(self.experiences.exclude(pk=self.featured_experience.id).order_by('-date_created'), key=sort_experience, reverse=True)))
+        if self.featured_experience:
+            # We need to place the featured experience at front
+            return list(chain([self.featured_experience], sorted(self.experiences.exclude(pk=self.featured_experience.id).order_by('-date_created'), key=sort_experience, reverse=True)))
+        return self.experiences.order_by('-date_created')
 
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
