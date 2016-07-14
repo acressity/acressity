@@ -13,13 +13,12 @@ class ExperienceTest(TestCase):
         self.explorer = helpers.new_explorer()
         self.experience = Experience.objects.create(title=self.experience_title,
                 author=self.explorer, is_public=True)
-        self.explorer.experiences.add(self.experience)
 
     def test_experience_created(self):
         self.assertEqual(self.experience_title, str(self.experience))
 
     def test_explorer_has_experience(self):
-        self.assertTrue(self.experience in self.explorer.experiences.all())
+        self.assertIn(self.experience, self.explorer.experiences.all())
 
     def test_experience_form_submit(self):
         exp_form_context = {'title': self.experience_title}

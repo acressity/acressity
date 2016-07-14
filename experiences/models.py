@@ -156,6 +156,7 @@ class Experience(models.Model):
                 self.gallery.is_public = self.is_public
                 self.gallery.save()
         super(Experience, self).save(*args, **kwargs)
+        self.author.experiences.add(self)
 
     def embedded_brief(self):
         return embed_string(self.brief)

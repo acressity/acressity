@@ -54,8 +54,6 @@ class ExperienceForm(ImprovedModelForm):
             instance.author = self.author
         if commit:
             instance.save()
-            if self.author:
-                instance.explorers.add(self.author)
         return instance
 
     def clean_date_created(self):
