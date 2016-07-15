@@ -19,9 +19,22 @@ class NarrativeForm(forms.ModelForm):
     date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year - 110, -1)), required=False)
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger', 'onfocus': 'if($(this).val()==this.defaultValue){$(this).val("")};', 'onblur': 'if($(this).val()==""){$(this).val(this.defaultValue)};'}))  # default value moved to views.py
 
-    def __init__(self, explorer, *args, **kwargs):
+    class Meta:
+        model = Narrative
+        exclude = ('gallery', 'author')
+
+    def __init__(self, *args, **kwargs):
+        self.author = kwargs.pop('author', None)
         super(NarrativeForm, self).__init__(*args, **kwargs)
-        self.fields['experience'].queryset = explorer.experiences.all()
+        self.fields['experience'].queryset = self.author.experiences.all()
+
+    def save(self, commit=True):
+        instance = super(NarrativeForm, self).save(commit=False)
+        if self.author:
+            instance.author = self.author
+        if commit:
+            instance.save()
+        return instance
 
     def clean_date_created(self):
         date_created = self.cleaned_data.get('date_created')
@@ -34,10 +47,6 @@ class NarrativeForm(forms.ModelForm):
         if len(body) < 3:
             raise forms.ValidationError('The narrative body needs a little more extrapolation')
         return body
-
-    class Meta:
-        model = Narrative
-        exclude = ('gallery', 'author')
 
 
 class NarrativeTransferForm(forms.ModelForm):
