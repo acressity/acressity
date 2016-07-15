@@ -46,7 +46,7 @@ def index(request, experience_id):
         narratives = experience.ordered_narratives()
     narrative_form = None
     if request.user in experience.explorers.all():
-        narrative_form = NarrativeForm(request.user)
+        narrative_form = NarrativeForm(author=request.user)
     experience_brief_form = None
     if not experience.brief:
         experience_brief_form = ExperienceBriefForm(instance=experience)
@@ -242,7 +242,7 @@ def categorize(request, experience_id):
         else:
             narratives_forms = []
             for narrative in narratives:
-                form = NarrativeForm(experience.author, instance=narrative)
+                form = NarrativeForm(author=experience.author, instance=narrative)
                 narratives_forms.append((narrative, form))
         return render(
             request,

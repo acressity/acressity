@@ -38,17 +38,17 @@ def index(request, narrative_id):
 def create(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if request.method == 'POST' and experience.is_comrade(request):
-        form = NarrativeForm(request.user, request.POST)
+        form = NarrativeForm(request.POST, author=request.user)
         if form.is_valid():
-            form.save(commit=False)
-            form.instance.author = request.user
             new_narrative = form.save()
             messages.success(request, 'Your narrative has been added')
             for explorer in set(chain(experience.comrades(request), experience.tracking_explorers.all())):
                 notify.send(recipient=explorer, sender=request.user, target=new_narrative, verb='has written a new narrative for experience {0}'.format(experience))
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
-        form = NarrativeForm(request.user, initial={'experience': experience.id, 'is_public': experience.is_public, 'title': datetime.now().strftime('%B %d, %Y')})
+        narr_form_context = {'experience': experience.id, 'is_public':
+                experience.is_public, 'title': datetime.now().strftime('%B %d, %Y')}
+        form = NarrativeForm(author=request.user, initial=narr_form_context)
     return render(request, 'narratives/create.html', {'form': form, 'experience': experience})
 
 
@@ -64,7 +64,7 @@ def edit(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
     if narrative.author == request.user:
         if request.method == 'POST':
-            form = NarrativeForm(narrative.author, request.POST, instance=narrative)
+            form = NarrativeForm(request.POST, author=narrative.author, instance=narrative)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Narrative successfully updated')
@@ -72,7 +72,7 @@ def edit(request, narrative_id):
                     notify.send(recipient=explorer, sender=request.user, target=narrative, verb='edited a narrative')
                 return redirect('/narratives/{0}'.format(narrative.id))
         else:
-            form = NarrativeForm(narrative.author, instance=narrative)
+            form = NarrativeForm(author=narrative.author, instance=narrative)
         return render(request, 'narratives/edit.html', {'form': form, 'narrative': narrative})
     else:
         raise PermissionDenied
