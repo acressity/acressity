@@ -111,7 +111,7 @@ class Explorer(AbstractBaseUser):
 
         if self.featured_experience:
             # We need to place the featured experience at front
-            return list(chain([self.featured_experience], sorted(self.experiences.exclude(pk=self.featured_experience.id).order_by('-date_created'), key=sort_experience, reverse=True)))
+            return list(chain([self.featured_experience], sorted(self.experiences.exclude(pk=self.featured_experience.pk).order_by('-date_created'), key=sort_experience, reverse=True)))
         return self.experiences.order_by('-date_created')
 
     def get_full_name(self):
