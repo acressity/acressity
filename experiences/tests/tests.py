@@ -3,14 +3,14 @@ from django.test import TestCase
 from experiences.models import Experience
 from narratives.models import Narrative
 from experiences.forms import ExperienceForm
-from explorers.tests import helpers
+from explorers.tests import helpers as explorer_helpers
 
 
 class ExperienceTest(TestCase):
     experience_title = 'Walk on the Moon'
 
     def setUp(self):
-        self.explorer = helpers.new_explorer()
+        self.explorer = explorer_helpers.new_explorer()
         self.experience = Experience.objects.create(title=self.experience_title,
                 author=self.explorer, is_public=True)
 
@@ -45,3 +45,11 @@ class ExperienceTest(TestCase):
         self.assertEqual(self.experience.latest_narrative(), narr2)
         self.assertEqual(self.experience.latest_public_narrative(), narr1)
 
+    def test_default_privacy(self):
+        experience = Experience.objects.create(author=self.explorer,
+                title='Swim beside a dolphin')
+        self.assertFalse(experience.is_public)
+
+        public_experience = Experience.objects.create(author=self.explorer,
+                title='Have a pet dog', is_public=True)
+        self.assertTrue(public_experience.is_public)
