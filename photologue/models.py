@@ -262,6 +262,9 @@ class Gallery(models.Model):
                     photo_queryset = photo_queryset | experience.gallery.photos.all() | experience_photos(experience)
             return photo_queryset
 
+    def unfeatured_photos(self):
+        return self.photos.all() if not self.featured_photo else self.photos.exclude(pk=self.featured_photo.pk)
+
     def photo_count(self, public=True):
         """Return a count of all the photos in this gallery."""
         if public:
