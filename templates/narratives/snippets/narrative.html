@@ -22,11 +22,11 @@
 	{% endif %}
     <div class="option_list">
         {% url 'experience' narrative.experience.id as experience_path %}
-        {% ifnotequal experience_path request.path %}
+        {% if experience_path != request.path %}
             <a href="{% url 'experiences.views.index' narrative.experience.id %}">
                 <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Back to the experience page" class="option_icon" />
             </a>
-        {% endifnotequal %}
+        {% endif %}
         {% if narrative.gallery %}
             <a href="{% url 'pl-gallery' narrative.gallery.id %}">
                 <img src="{{ STATIC_URL }}img/icons/images.png" class="option_icon" title="View Photos for {{ narrative }}" />
@@ -107,11 +107,11 @@
             {% endif %}
         {% endif %}
     </div>
-    {% ifnotequal experience_path request.path %}
+    {% if experience_path != request.path %}
         <div class="experience_item">
             <p>from experience <a href="{% url 'experience' narrative.experience.id %}">{{ narrative.experience }}</p></a>
         </div>
-    {% endifnotequal %}
+    {% endif %}
     <div class="explorer_item"> 
         <p>by <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a></p>
     </div>
