@@ -8,6 +8,18 @@
 			<img src="{{ STATIC_URL }}img/icons/lock.png" class="option_icon" title="This narrative is private" />
 		{% endif %}
 	</h1>
+	{% if narrative.gallery.featured_photo %}
+		<div class="featured_photo">
+			<a href="{% url 'pl-gallery' narrative.gallery.id %}">
+				<img src="{{ narrative.gallery.featured_photo.get_display_url }}" />
+			</a>
+			{% if narrative.gallery.featured_photo.caption %}
+				<div class="caption">
+					{{ narrative.gallery.featured_photo.caption }}
+				</div>
+			{% endif %}
+		</div>
+	{% endif %}
     <div class="option_list">
         {% url 'experience' narrative.experience.id as experience_path %}
         {% ifnotequal experience_path request.path %}
@@ -46,7 +58,7 @@
     <div class="narrative_detail">
         {% if narrative.gallery.photos %}
             <div class="images_right">
-                {% for photo in narrative.gallery.photos.all %}
+                {% for photo in narrative.gallery.unfeatured_photos %}
                     <div class="narrative_photo">
                         <a href="{{ photo.get_absolute_url }}">
                             <img src="{{ photo.get_thumbnail_url }}" title="{{ photo.title }}" />
