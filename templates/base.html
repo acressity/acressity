@@ -34,17 +34,6 @@ anything lacking in efficiency or if you have any suggestions.
 	</head>
 	<body>
 		<div id="wrapper">
-			{% if messages %}
-				<div id="messages">
-					{% for message in messages %}
-						<p>{{ message }}</p>
-					{% endfor %}
-					<div id="messages_note">
-						<em>Click to remove</em>
-					</div>
-				</div>
-			{% endif %}
-
 			{% include "acressity/top_bar.html" %}
 
 			<div id="main">

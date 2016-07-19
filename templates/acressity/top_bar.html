@@ -154,3 +154,14 @@
     </div>
 
 </div>
+
+{% if messages %}
+	<div id="messages">
+		{% for message in messages %}
+			<p>{{ message }}</p>
+		{% endfor %}
+		<div id="messages_note">
+			<em>Click to dismiss</em>
+		</div>
+	</div>
+{% endif %}
