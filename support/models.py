@@ -1,3 +1,5 @@
+import pickle
+
 from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -60,6 +62,37 @@ class InvitationRequest(models.Model):
 
     def __unicode__(self):
         return '{0} invitation'.format(self.experience)
+
+
+class Quote(models.Model):
+    quote_datafile = 'support/data/quotes.dat'
+
+    body = models.TextField(null=False, blank=False)
+    author = models.CharField(max_length=100, null=False, blank=False)
+    date_created = models.DateTimeField(default=timezone.now)
+
+    CATEGORIES = (
+        ('motivational', 'motivational'),
+        ('inspirational', 'inspirational'),
+    )
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORIES,
+        default=CATEGORIES[0][0]
+    )
+
+    @classmethod
+    def load_quotes_from_data(cls, filename=quote_datafile):
+        with open(filename, 'rb') as quote_file:
+            try:
+                return pickle.load(quote_file)
+            except EOFError:
+                return []
+
+    @classmethod
+    def write_quotes_to_data(cls, data, filename=quote_datafile):
+        with open(filename, 'wb') as quote_file:
+            pickle.dump(data, quote_file, -1)
 
 
 class PotentialExplorer(models.Model):
