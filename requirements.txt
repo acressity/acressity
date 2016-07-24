@@ -3,7 +3,6 @@ decorator==4.0.9
 Django==1.8
 django-contrib-comments==1.6.2
 django-extensions==1.6.1
-django-facebook==6.0.4
 django-model-utils==2.3.1
 django-paypal==0.3
 flake8==2.5.4
