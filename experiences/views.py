@@ -407,14 +407,6 @@ def check_password(request, experience_id):
         {'experience': experience}
     )
 
-
-def new_experience(request, experience_id):
-    experience = get_object_or_404(Experience, pk=experience_id)
-    form = ExperienceBriefForm(instance=experience)
-    assert request.user == experience.author
-    return render(request, 'experiences/new.html', {'experience': experience, 'form': form})
-
-
 def ajax_thing(request):
     experience = Experience.objects.get(pk=request.GET['exp_id'])
     d = {'thing_two': experience.title}

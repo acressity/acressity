@@ -37,7 +37,6 @@ urlpatterns = patterns(
         'check_password', name='experience_check_password'
         ),
     url(r'^(?P<experience_id>\d+)/leave_experience/$', 'leave_experience', name='leave_experience'),
-    url(r'^(?P<experience_id>\d+)/new_experience/$', 'new_experience', name='new_experience'),
     url(r'^(?P<experience_id>\d+)/donate/$', 'donate', name='donate'),
     url(r'^(?P<experience_id>\d+)/paypal_return/$', 'paypal_return', name='paypal_return'),
     url(r'^ajax_thing/$', 'ajax_thing'),
