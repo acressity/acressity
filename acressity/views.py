@@ -36,13 +36,13 @@ def step_two(request):
         exp_form = ExperienceForm(request.POST)
         if exp_form.is_valid():
             # Store the data in case they wish to peruse for a bit
-            request.session['experience'] = exp_form.cleaned_data['experience']
+            request.session['experience_title'] = exp_form.cleaned_data['title']
             request.session['signing_up'] = 1
             reg_form = RegistrationForm()
             return render(
                 request, 'registration/step_two.html',
                 {
-                    'experience': exp_form.cleaned_data['experience'],
+                    'experience_title': exp_form.cleaned_data['title'],
                     'form': reg_form
                 }
             )

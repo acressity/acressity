@@ -8,7 +8,7 @@
 		<form action="{% url 'register' %}" class="full_width" method="POST">
 			{% csrf_token %}
             <div class="formatted_input">
-			    <input type="text" name="experience" class="larger" id="experience" value="{{ experience }}" />
+			    <input type="text" name="title" class="larger" id="id_title" value="{{ experience_title }}" />
             </div>
 			<input type="hidden" name="initial" />
 			<input type="submit" value="Proceed" />

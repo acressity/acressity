@@ -174,7 +174,7 @@ def create(request):
             # Log new explorer in
             login(request, explorer)
             first_experience = None
-            if request.POST.get('experience'):
+            if request.POST.get('title'):
                 # Save their experience
                 first_experience = ExperienceForm(request.POST,
                         author=explorer).save()
@@ -190,12 +190,17 @@ def create(request):
             messages.success(request, 'Welcome aboard, {0}!'.format(explorer.get_full_name()))
             notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
             if first_experience:
-                return redirect(reverse('new_experience', args=(first_experience.id,)))
+                messages.success(request, '''You can get started by developing
+                your experience a little and then making it public when ready, sharing it
+                with others and feeling the power you can draw from support 
+                along this journey.''')
+                return redirect(reverse('experience', args=(first_experience.id,)))
             else:
                 return redirect(reverse('journey', args=(explorer.id,)))
     else:
         explorer_form = RegistrationForm()
-    return render(request, 'registration/register.html', {'form': explorer_form, 'experience': request.POST.get('experience'), 'min_password_len': settings.MIN_PASSWORD_LEN})
+    return render(request, 'registration/register.html', {'form':
+        explorer_form, 'experience': request.POST.get('title'), 'min_password_len': settings.MIN_PASSWORD_LEN})
 
 
 # Settings page for the explorer
