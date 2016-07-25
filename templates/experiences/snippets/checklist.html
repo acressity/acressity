@@ -9,30 +9,38 @@
 			Experience development checklist
 		</h3>
 		{% if not experience.narratives.count %}
-			<a href="{% url 'narratives.views.create' experience.id %}">
+			<a href="{% url 'create_narrative' experience.id %}">
 				<p>
-					<img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon" style="vertical-align: middle;" />
+					<img src="{{ STATIC_URL }}img/icons/add.png" title="Creating your first narrative for '{{ experience }}'" class="option_icon valign_middle" />
 					{{ first_narrative_prompt }}
 				</p>
 			</a>
 		{% else %}
 			<p>
-				<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have successfully written your first narrative" class="option_icon" style="vertical-align: middle;" />
+				<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have successfully written your first narrative" class="option_icon valign_middle" />
 				{{ first_narrative_prompt }}
 			</p>
 		{% endif %}
 		{% if not experience.gallery.featured_photo %}
 			<a href="{% url 'exp_upload_photo' experience.id %}">
 				<p>
-					<img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo to be featured for this experience" class="option_icon" style="vertical-align: middle;" />
+					<img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo to be featured for this experience" class="option_icon valign_middle" />
 					{{ featured_photo_prompt }}
 				</p>
 			</a>
 		{% else %}
 			<p>
-				<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have already selected a photo to be featured" class="option_icon" style="vertical-align: middle;" />
+				<img src="{{ STATIC_URL }}img/icons/checked-box.png" title="You have already selected a photo to be featured" class="option_icon valign_middle" />
 				{{ featured_photo_prompt }}
 			</p>
+		{% endif %}
+		{% if not experience.is_public %}
+			<a href="{% url 'edit_experience' experience.id %}" />
+				<p>
+					<img src="{{ STATIC_URL }}img/icons/lock.png" title="Make this experience public" class="option_icon valign_middle" />
+					Make this experience public when you're ready to share
+				</p>
+			</a>
 		{% endif %}
 	</div>
 	{% endwith %}
