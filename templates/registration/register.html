@@ -74,11 +74,11 @@
 		{% csrf_token %}
         <table class="register-table">
             <tr>
-                <div id="register_experience" class="register_input">
+                <div id="register_title" class="register_input">
                     <h3>
-                        <label for="id_experience">What do you want to experience?</label>
+                        <label for="id_title">What do you want to experience?</label>
                     </h3>
-                    <input type="text" name="experience" id="id_experience" value="{{ request.session.experience }}" />
+                    <input type="text" name="title" id="id_title" value="{{ request.session.experience_title }}" />
                 </div>
             </tr>
 
