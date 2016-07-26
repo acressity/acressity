@@ -20,6 +20,7 @@ class QuoteTest(TestCase):
             author='Nelson Mandela'
         ) # quote2 not saved
 
+    def tearDown(self):
         # Empty the data file
         open(self.test_quote_datafile, 'w').close()
 
