@@ -30,15 +30,15 @@ class ExperienceTest(TestCase):
 
     def test_latest_narratives(self):
         narr1 = Narrative.objects.create(experience=self.experience,
-                author=self.explorer, body='''There were two astronauts
-                lucky enough to make it into space today!''')
+                author=self.explorer, title='To be an astronaut...', body='''There were two astronauts
+                lucky enough to make it into space today!''', is_public=True)
         self.assertTrue(self.experience.public_narratives().count() == 1)
         self.assertTrue(self.experience.narratives.count() == 1)
         self.assertEqual(self.experience.latest_narrative(), narr1)
         self.assertEqual(self.experience.latest_public_narrative(), narr1)
 
         narr2 = Narrative.objects.create(experience=self.experience,
-                author=self.explorer, body='''There was a full moon
+                author=self.explorer, title='Celestial Beauty', body='''There was a full moon
                 tonight''', is_public=False)
         self.assertTrue(self.experience.public_narratives().count() == 1)
         self.assertTrue(self.experience.narratives.count() == 2)
