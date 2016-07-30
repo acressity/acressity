@@ -27,16 +27,6 @@ class Cheer(models.Model):
         return '{0} is cheering for {1}'.format(self.explorer, self.cheerer)
 
 
-# Blahhhhh... This is being changed to a ManyToMany relationship in the explorer model. Doesn't work as well this way, though I would like to have the date_tracked information.
-# class TrackExperience(models.Model):
-#     experience = models.ForeignKey(Experience)
-#     explorer = models.ForeignKey(get_user_model(), related_name='tracking_experiences')
-#     date_tracked = models.DateTimeField(default=datetime.now)
-
-#     def __unicode__(self):
-#         return self.experience.experience
-
-
 class Hurrah(models.Model):
     '''
     Model for 'appreciating' function. No functionality atm
