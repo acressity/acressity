@@ -7,6 +7,7 @@ anything lacking in efficiency or if you have any suggestions.
 	Thanks,
 	Andrew Gaines
 -->
+{% load support_extras %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	{% if user.is_authenticated %}
 		{% load notifications_tags %}
@@ -48,52 +49,42 @@ anything lacking in efficiency or if you have any suggestions.
 								    {% include "explorers/snippets/dash.html" %}
 								{% endwith %}
 							{% else %}
-								<div class="experience_item">
-									{% if not request.session.signing_up %}
-										<blockquote id="welcome_quote">
-											<h2>
-												Acressity
-											</h2>
-											<h3>
-												A bucketlist for the exploration of new experiences
-											</h3>
-											<a href="{% url 'about' %}">learn more</a>
-										</blockquote>
-										{% include 'experiences/forms/first_experience_form.html' %}
-									{% else %}
-									    {% url 'step_two' as step_two %}
-									    {% url 'register' as register %}
-									    {% ifnotequal request.path step_two %}
-									        {% ifnotequal request.path register %}
-                                                <form method="POST" action="{% url 'register' %}">
-                                                    {% csrf_token %}
-                                                    <div class="formatted_input align_center">
-                                                        <input type="submit" value="Resume signup" />
-                                                    </div>
-                                                </form>
-                                            {% endifnotequal %}
-                                        {% endifnotequal %}
-
-										<blockquote class="border-demilited">
-											<p>
-												Build of your imaginings a <abbr title="A pleasant shady place under trees or climbing plants in a garden or wood">bower</abbr> in the wilderness ere you build a house within the city walls.
-											</p>
-											<p>
-												For even as you have home-comings in your twilight, so has the wanderer in you, the ever distant and alone.
-											</p>
-											<p>
-												Verily the lust for comfort murders the passion of the soul, and then walks grinning in the funeral.
-											</p>
-											<p>
-												Forget not that the earth delights to feel your bare feet and the winds long to play with your hair.
-											</p>
-											<p>
-												But you, children of space, you restless in rest, you shall not be trapped nor tamed.
-											</p>
-											<span class="author">-Khalil Gibran</span>
-										</blockquote>
-									{% endif %}
+								<div id="welcome_quote">
+									<h2>
+										Acressity
+									</h2>
+									<h3>
+										A bucketlist for the exploration of new experiences
+									</h3>
+									<a href="{% url 'about' %}">learn more</a>
 								</div>
+								<div class="narrative_item">
+									{% random_quote as quote %}
+									<blockquote>
+										<div class="body">
+											"{{ quote.body }}"
+										</div>
+										<div class="author">
+											{{ quote.author }}
+										</div>
+									</blockquote>
+								</div>
+								{% if not request.session.signing_up %}
+									{% include 'experiences/forms/first_experience_form.html' %}
+								{% else %}
+									{% url 'step_two' as step_two %}
+									{% url 'register' as register %}
+									{% ifnotequal request.path step_two %}
+										{% ifnotequal request.path register %}
+											<form method="POST" action="{% url 'register' %}" class="experience_item">
+												{% csrf_token %}
+												<div class="formatted_input align_center">
+													<input type="submit" value="Resume signup" />
+												</div>
+											</form>
+										{% endifnotequal %}
+									{% endifnotequal %}
+								{% endif %}
 							{% endif %}
 						{% endblock right_content %}
 					</div>

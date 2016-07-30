@@ -31,8 +31,8 @@ class ExplorerManager(BaseUserManager):
 class Explorer(AbstractBaseUser):
     '''
     The term given to describe each logged user of the website.
-    Each explorer has a unique trailname. This extends the Explorer
-    from the Django User model.
+    Each explorer has a unique trailname. This extends the
+    Django User model.
     '''
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=60, null=False)

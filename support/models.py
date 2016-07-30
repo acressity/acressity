@@ -27,16 +27,6 @@ class Cheer(models.Model):
         return '{0} is cheering for {1}'.format(self.explorer, self.cheerer)
 
 
-# Blahhhhh... This is being changed to a ManyToMany relationship in the explorer model. Doesn't work as well this way, though I would like to have the date_tracked information.
-# class TrackExperience(models.Model):
-#     experience = models.ForeignKey(Experience)
-#     explorer = models.ForeignKey(get_user_model(), related_name='tracking_experiences')
-#     date_tracked = models.DateTimeField(default=datetime.now)
-
-#     def __unicode__(self):
-#         return self.experience.experience
-
-
 class Hurrah(models.Model):
     '''
     Model for 'appreciating' function. No functionality atm
@@ -64,12 +54,19 @@ class InvitationRequest(models.Model):
         return '{0} invitation'.format(self.experience)
 
 
+class QuoteManager(models.Manager):
+    def random(self):
+        return self.order_by('?').first()
+
+
 class Quote(models.Model):
     quote_datafile = 'support/data/quotes.dat'
 
     body = models.TextField(null=False, blank=False)
     author = models.CharField(max_length=100, null=False, blank=False)
     date_created = models.DateTimeField(auto_now_add=True)
+
+    objects = QuoteManager()
 
     CATEGORIES = (
         ('motivational', 'motivational'),
@@ -120,15 +117,15 @@ def comment_handler(sender, **kwargs):
     comment = kwargs.pop('comment')
     # request = kwargs.pop('request')
 
-    o = comment.content_object.model()
+    model = comment.content_object.model()
     recipients = []
-    if o == 'Explorer':
+    if model == 'Explorer':
         recipients.append(comment.content_object)
-    elif o == 'Experience':
+    elif model == 'Experience':
         recipients = comment.content_object.explorers.all()
-    elif o == 'Narrative':
+    elif model == 'Narrative':
         recipients = comment.content_object.experience.explorers.all()
-    elif o == 'Photo':
+    elif model == 'Photo':
         recipients.append(comment.content_object.author)
         
     for recipient in recipients:
