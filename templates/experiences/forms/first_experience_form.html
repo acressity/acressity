@@ -1,4 +1,4 @@
-<form action="{% url 'step_two' %}" method="POST" class="main_color" style="position:relative;" onsubmit="return validateFirstExperience(this);">
+<form action="{% url 'step_two' %}" method="POST" class="experience_item" style="position:relative;" onsubmit="return validateFirstExperience(this);">
     {% csrf_token %}
     <input type="hidden" name="initial" />
     <div class="formatted_input">
