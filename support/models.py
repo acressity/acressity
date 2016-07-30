@@ -54,12 +54,19 @@ class InvitationRequest(models.Model):
         return '{0} invitation'.format(self.experience)
 
 
+class QuoteManager(models.Manager):
+    def random(self):
+        return self.order_by('?').first()
+
+
 class Quote(models.Model):
     quote_datafile = 'support/data/quotes.dat'
 
     body = models.TextField(null=False, blank=False)
     author = models.CharField(max_length=100, null=False, blank=False)
     date_created = models.DateTimeField(auto_now_add=True)
+
+    objects = QuoteManager()
 
     CATEGORIES = (
         ('motivational', 'motivational'),
