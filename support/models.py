@@ -117,15 +117,15 @@ def comment_handler(sender, **kwargs):
     comment = kwargs.pop('comment')
     # request = kwargs.pop('request')
 
-    o = comment.content_object.model()
+    model = comment.content_object.model()
     recipients = []
-    if o == 'Explorer':
+    if model == 'Explorer':
         recipients.append(comment.content_object)
-    elif o == 'Experience':
+    elif model == 'Experience':
         recipients = comment.content_object.explorers.all()
-    elif o == 'Narrative':
+    elif model == 'Narrative':
         recipients = comment.content_object.experience.explorers.all()
-    elif o == 'Photo':
+    elif model == 'Photo':
         recipients.append(comment.content_object.author)
         
     for recipient in recipients:
