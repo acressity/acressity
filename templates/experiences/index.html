@@ -29,16 +29,19 @@
     <div class="experience_item">
         <h1>
 			{{ experience }}
+            {% if experience.is_fulfilled %}
+				<img src="{{ STATIC_URL }}img/icons/award.png"
+					class="option_icon valign_middle"
+					title="This experience has been fulfilled!"
+					alt="Award for fulfilling this experience" />
+            {% endif %}
 			{% if not experience.is_public %}
-				<img src="{{ STATIC_URL }}img/icons/lock.png" class="option_icon" title="This experience is private" />
+				<img src="{{ STATIC_URL }}img/icons/lock.png"
+					class="option_icon valign_middle"
+					title="This experience is private" />
 			{% endif %}
 		</h1>
         <div class="position_relative">
-            {% if experience.is_fulfilled %}
-                <div class="fulfilled-award">
-                    <img src="{{ STATIC_URL }}img/icons/award.png" title="This experience has been fulfilled!" alt="Award for fulfilling this experience" />
-                </div>
-            {% endif %}
             <div class="featured_photo">
                 {% if experience.gallery.featured_photo %}
                     <a href="{% url 'pl-gallery' experience.gallery.id %}">
