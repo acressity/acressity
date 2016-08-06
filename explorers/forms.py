@@ -47,8 +47,6 @@ class RegistrationForm(ModelForm):
 
 
 class ExplorerForm(ModelForm):
-    birthdate = forms.DateField(widget=forms.extras.widgets.SelectDateWidget(years=range(datetime.now().year-110, datetime.now().year-2)))
-
     def __init__(self, explorer, *args, **kwargs):
         super(ExplorerForm, self).__init__(*args, **kwargs)
         self.fields['featured_experience'].queryset = explorer.experiences.all()
@@ -58,6 +56,12 @@ class ExplorerForm(ModelForm):
         exclude = ('experiences', 'password', 'gallery', 'date_joined',
                 'is_active', 'is_superuser', 'is_staff', 'last_login',
                 'paypal_email_address')
+        widgets = {
+            'birthdate': forms.extras.widgets.SelectDateWidget(
+                years=range(datetime.now().year-110,
+                datetime.now().year-2)
+            ),
+        }
 
 
 class ContactForm(forms.Form):
