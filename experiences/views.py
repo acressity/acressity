@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.forms import modelform_factory
 from django.db import InternalError
+from django.core.mail import EmailMultiAlternatives
 
 from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm, ExperienceBriefForm
@@ -95,11 +96,13 @@ def create(request):
             elif form.cleaned_data['unfeature']:
                 request.user.featured_experience = None
                 request.user.save()
-            notify.send(
-                sender=request.user,
-                recipient=get_user_model().objects.get(pk=1),
-                target=new_experience, verb='has created a new experience'
-            )
+            # Notify me so I can congratulate them personally!
+            to = settings.ADMINS[0][1]
+            from_email = 'acressity@acressity.com'
+            subject = 'New Experience!'
+            text_content = '{0} has created a new experience: {1}!'.format(request.user, new_experience)
+            message = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            message.send()
             if 'ajax' in request.POST:
                 html = '<hr />'
                 html += render_to_string(
@@ -119,6 +122,7 @@ def create(request):
     return render(request, 'experiences/create.html', {'form': form})
 
 
+@login_required
 def edit(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if request.user in experience.explorers.all():
@@ -178,6 +182,7 @@ def brief(request, experience_id):
     return render(request, 'experiences/brief.html', {'experience': experience, 'form': form})
 
 
+@login_required
 def delete(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if experience.author == request.user:
@@ -185,6 +190,8 @@ def delete(request, experience_id):
             if 'nominate' in request.POST:
                 new_author = get_object_or_404(
                     get_user_model(), pk=request.POST.get('explorer_id'))
+                if new_author not in experience.explorers.all():
+                    raise PermissionDenied
                 experience.author = new_author
                 experience.explorers.remove(request.user)
                 experience.save()
@@ -296,7 +303,8 @@ def transfer_narratives(request, experience_id):
         raise PermissionDenied
 
     other_experiences = request.user.experiences.exclude(pk=experience_id)
-    NewExperienceForm = modelform_factory(Experience, form=ExperienceForm, fields=('experience',))
+    NewExperienceForm = modelform_factory(Experience, form=ExperienceForm,
+            fields=('title',))
 
     if request.method == 'POST':
         if request.POST.get('new_experience'):

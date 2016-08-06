@@ -143,6 +143,14 @@
 			Member since {{ explorer.date_joined|date:'F j, o' }}
 		</p>
 	</div>
+	{% if owner %}
+		<form method="POST" action="{% url 'explorer.delete' request.user.pk %}">
+			{% csrf_token %}
+			<div class="formatted_input align_center">
+				<input type="submit" value="Delete" class="danger" />
+			</div>
+		</form>
+	{% endif %}
 	{% ifequal user explorer %} 
 		{% get_comment_count for explorer as exp_comment_count %}
 		{% if exp_comment_count > 0 %}

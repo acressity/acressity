@@ -13,6 +13,7 @@ urlpatterns = patterns(
     url(r'^logout/$', 'farewell', name='farewell'),
     url(r'^journey/$', 'explorer_journey'),
     url(r'^new_explorer/$', 'create', name='register'),
+    url(r'^(?P<explorer_pk>\d+)/delete/$', 'delete', name='explorer.delete'),
     url(r'^(?P<explorer_id>\d+)/explorer_settings/$', 'explorer_settings', name='explorer_settings'),
     url(r'^(?P<explorer_id>\d+)/board/$', 'board', name='board'),
     url(r'^(?P<explorer_id>\d+)/past_notifications/$', 'past_notifications', name='past_notifications'),

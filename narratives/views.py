@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 
 from narratives.models import Narrative
 from narratives.forms import NarrativeForm
@@ -30,14 +31,22 @@ def index(request, narrative_id):
         if narrative.experience.password:
             return redirect(reverse('check_password', args=(narrative.experience.id,)))
         else:
-            raise PermissionDenied
+            if not request.user.is_authenticated():
+                # Non-logged in user might be author/comrade. Give them chance
+                # to log in
+                return redirect(settings.LOGIN_URL + '?next=' + request.path)
+            else:
+                # This user simply does not have the privileges
+                raise PermissionDenied
     return render(request, 'narratives/index.html', {'narrative': narrative, 'privileged': privileged, 'author': narrative.is_author(request)})
 
 
 @login_required
 def create(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if request.method == 'POST' and experience.is_comrade(request):
+    if not experience.is_comrade(request):
+        raise PermissionDenied
+    if request.method == 'POST':
         form = NarrativeForm(request.POST, author=request.user)
         if form.is_valid():
             new_narrative = form.save()
@@ -62,7 +71,7 @@ def save(request, narrative_id):
 @login_required
 def edit(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
-    if narrative.author == request.user:
+    if request.user == narrative.author:
         if request.method == 'POST':
             form = NarrativeForm(request.POST, author=narrative.author, instance=narrative)
             if form.is_valid():
@@ -81,7 +90,9 @@ def edit(request, narrative_id):
 @login_required
 def delete(request, narrative_id):
     narrative = get_object_or_404(Narrative, pk=narrative_id)
-    if request.method == 'POST' and 'confirm' in request.POST and narrative.author == request.user:
+    if request.user != narrative.author:
+        raise PermissionDenied
+    if request.method == 'POST' and 'confirm' in request.POST:
         narrative.delete()
         messages.success(request, 'Your narrative was deleted')
         for comrade in narrative.experience.comrades(request):

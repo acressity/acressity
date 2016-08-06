@@ -15,6 +15,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 
+from acressity import settings
 from explorers.forms import RegistrationForm, ExplorerForm
 from support.models import InvitationRequest
 from notifications import notify
@@ -52,12 +53,13 @@ def profile(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.method == 'POST':
         if request.user == explorer:
-            form = ExplorerForm(explorer, request.POST, instance=explorer)
+            form = ExplorerForm(explorer, request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
                 messages.success(request, _('Your information has been saved'))
             return redirect(reverse('profile', args=(explorer.id,)))
-        raise PermissionDenied
+        else:
+            raise PermissionDenied
     if request.user.id == explorer.id:
         owner = True
         form = ExplorerForm(explorer, instance=explorer)
@@ -203,7 +205,21 @@ def create(request):
         explorer_form, 'experience': request.POST.get('title'), 'min_password_len': settings.MIN_PASSWORD_LEN})
 
 
-# Settings page for the explorer
+@login_required
+def delete(request, explorer_pk):
+    explorer = get_object_or_404(get_user_model(), pk=explorer_pk)
+    if request.user == explorer:
+        if request.method == 'POST':
+            if 'confirm' in request.POST:
+                explorer.delete()
+                messages.success(request, '''Your explorer profile has been
+                successfully deleted. Happy trails''')
+                return render(request, 'explorers/farewell.html', {'explorer': explorer})
+    else:
+        raise PermissionDenied
+    return render(request, 'explorers/delete.html')
+
+
 @login_required
 def explorer_settings(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
@@ -251,7 +267,7 @@ def site_login(request):
     username_provided = request.POST.get('username')
     if username_provided is None:
         messages.error(request, _('Please provide either your email or optional trailname for logging in'))
-        return redirect('/accounts/login')
+        return redirect(settings.LOGIN_URL + '?next=' + next_url)
     password_provided = request.POST.get('password')
     # Site allows one to login with either email address or created trailname
     if get_user_model().objects.filter(email=username_provided):
@@ -268,7 +284,7 @@ def site_login(request):
             return redirect(next_url)
     # Login failed
     messages.error(request, _('There was a problem with your username or password'))
-    return redirect('/accounts/login')
+    return redirect(settings.LOGIN_URL + '?next=' + next_url)
 
 
 def check_trailname(request):
