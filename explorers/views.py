@@ -58,7 +58,8 @@ def profile(request, explorer_id):
                 form.save()
                 messages.success(request, _('Your information has been saved'))
             return redirect(reverse('profile', args=(explorer.id,)))
-        raise PermissionDenied
+        else:
+            raise PermissionDenied
     if request.user.id == explorer.id:
         owner = True
         form = ExplorerForm(explorer, instance=explorer)
