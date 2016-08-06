@@ -41,7 +41,7 @@
         <ul class="option_list">
             {% if user.is_authenticated %}
                 {% if user in experience.explorers.all %}
-                    <a href="/experiences/{{ experience.id }}/narratives/create/">
+					<a href="{% url 'create_narrative' experience.pk %}">
                         <li class="option">
                             <img src="{{ STATIC_URL }}img/icons/add.png" title="Create a new narrative" /> Create new narrative
                         </li>
