@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.forms import modelform_factory
 from django.db import InternalError
+from django.core.mail import EmailMultiAlternatives
 
 from experiences.models import Experience, FeaturedExperience
 from experiences.forms import ExperienceForm, ExperienceBriefForm
@@ -95,11 +96,13 @@ def create(request):
             elif form.cleaned_data['unfeature']:
                 request.user.featured_experience = None
                 request.user.save()
-            notify.send(
-                sender=request.user,
-                recipient=get_user_model().objects.get(pk=1),
-                target=new_experience, verb='has created a new experience'
-            )
+            # Notify me so I can congratulate them personally!
+            to = settings.ADMINS[0][1]
+            from_email = 'acressity@acressity.com'
+            subject = 'New Experience!'
+            text_content = '{0} has created a new experience: {1}!'.format(request.user, new_experience)
+            message = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            message.send()
             if 'ajax' in request.POST:
                 html = '<hr />'
                 html += render_to_string(
