@@ -122,6 +122,7 @@ def create(request):
     return render(request, 'experiences/create.html', {'form': form})
 
 
+@login_required
 def edit(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if request.user in experience.explorers.all():
@@ -181,6 +182,7 @@ def brief(request, experience_id):
     return render(request, 'experiences/brief.html', {'experience': experience, 'form': form})
 
 
+@login_required
 def delete(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if experience.author == request.user:
