@@ -53,7 +53,7 @@ def profile(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
     if request.method == 'POST':
         if request.user == explorer:
-            form = ExplorerForm(explorer, request.POST, instance=explorer)
+            form = ExplorerForm(explorer, request.POST, instance=request.user)
             if form.is_valid():
                 form.save()
                 messages.success(request, _('Your information has been saved'))
