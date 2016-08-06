@@ -303,7 +303,8 @@ def transfer_narratives(request, experience_id):
         raise PermissionDenied
 
     other_experiences = request.user.experiences.exclude(pk=experience_id)
-    NewExperienceForm = modelform_factory(Experience, form=ExperienceForm, fields=('experience',))
+    NewExperienceForm = modelform_factory(Experience, form=ExperienceForm,
+            fields=('title',))
 
     if request.method == 'POST':
         if request.POST.get('new_experience'):
