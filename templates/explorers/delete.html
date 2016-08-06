@@ -1,0 +1,22 @@
+{% extends "explorers/base.html" %}
+
+{% block content %}
+	<h1>Delete your explorer profile?</h1>
+	{% with explorer=request.user %}
+		{% include 'explorers/snippets/dash.html' %}
+	{% endwith %}
+	{% if request.user.experiences.count %}
+		<h2 class="experience_item">
+			This includes your {{ request.user.experiences.count }} experience{{ request.user.experiences.all|pluralize }}
+		</h2>
+	{% endif %}
+	<p>
+		This action cannot be undone
+	</p>
+	<form action="" method="POST">
+		{% csrf_token %}
+        <div class="formatted_input align_center">
+            <input type="submit" value="Confirm" name="confirm" />
+        </div>
+	</form>
+{% endblock content %}

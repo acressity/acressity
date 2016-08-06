@@ -203,7 +203,21 @@ def create(request):
         explorer_form, 'experience': request.POST.get('title'), 'min_password_len': settings.MIN_PASSWORD_LEN})
 
 
-# Settings page for the explorer
+@login_required
+def delete(request, explorer_pk):
+    explorer = get_object_or_404(get_user_model(), pk=explorer_pk)
+    if request.user == explorer:
+        if request.method == 'POST':
+            if 'confirm' in request.POST:
+                explorer.delete()
+                messages.success(request, '''Your explorer profile has been
+                successfully deleted. Happy trails''')
+                return render(request, 'explorers/farewell.html', {'explorer': explorer})
+    else:
+        raise PermissionDenied
+    return render(request, 'explorers/delete.html')
+
+
 @login_required
 def explorer_settings(request, explorer_id):
     explorer = get_object_or_404(get_user_model(), pk=explorer_id)
