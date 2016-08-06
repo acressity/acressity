@@ -15,6 +15,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 
+from acressity import settings
 from explorers.forms import RegistrationForm, ExplorerForm
 from support.models import InvitationRequest
 from notifications import notify
@@ -265,7 +266,7 @@ def site_login(request):
     username_provided = request.POST.get('username')
     if username_provided is None:
         messages.error(request, _('Please provide either your email or optional trailname for logging in'))
-        return redirect('/accounts/login')
+        return redirect(settings.LOGIN_URL + '?next=' + next_url)
     password_provided = request.POST.get('password')
     # Site allows one to login with either email address or created trailname
     if get_user_model().objects.filter(email=username_provided):
@@ -282,7 +283,7 @@ def site_login(request):
             return redirect(next_url)
     # Login failed
     messages.error(request, _('There was a problem with your username or password'))
-    return redirect('/accounts/login')
+    return redirect(settings.LOGIN_URL + '?next=' + next_url)
 
 
 def check_trailname(request):

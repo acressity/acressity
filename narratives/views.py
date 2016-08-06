@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 
 from narratives.models import Narrative
 from narratives.forms import NarrativeForm
@@ -30,7 +31,13 @@ def index(request, narrative_id):
         if narrative.experience.password:
             return redirect(reverse('check_password', args=(narrative.experience.id,)))
         else:
-            raise PermissionDenied
+            if not request.user.is_authenticated():
+                # Non-logged in user might be author/comrade. Give them chance
+                # to log in
+                return redirect(settings.LOGIN_URL + '?next=' + request.path)
+            else:
+                # This user simply does not have the privileges
+                raise PermissionDenied
     return render(request, 'narratives/index.html', {'narrative': narrative, 'privileged': privileged, 'author': narrative.is_author(request)})
 
 
