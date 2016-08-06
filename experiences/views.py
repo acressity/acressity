@@ -190,6 +190,8 @@ def delete(request, experience_id):
             if 'nominate' in request.POST:
                 new_author = get_object_or_404(
                     get_user_model(), pk=request.POST.get('explorer_id'))
+                if new_author not in experience.explorers.all():
+                    raise PermissionDenied
                 experience.author = new_author
                 experience.explorers.remove(request.user)
                 experience.save()
