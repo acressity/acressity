@@ -5,7 +5,6 @@ fabfile.py
 logs/
 TODO
 DEPLOY
-static/
 checklist.txt
 .sass_cache/
 explorers/migrations/
