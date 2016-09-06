@@ -3,6 +3,7 @@ fabfile.py
 *.pyc
 *.swp
 logs/
+static/explorer/
 TODO
 DEPLOY
 checklist.txt
