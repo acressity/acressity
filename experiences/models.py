@@ -25,7 +25,7 @@ class Experience(models.Model):
     a book about a journey.
     '''
 
-    title = models.CharField(max_length=255, null=False, help_text=_('Title of the experience.'))
+    title = models.CharField(max_length=200, null=False, help_text=_('Title of the experience.'))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text=_('Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.'))
     date_created = models.DateTimeField(default=timezone.now, null=False,
             blank=True, help_text=_('''The day you committed to achieving this
