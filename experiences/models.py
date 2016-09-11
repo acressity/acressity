@@ -32,7 +32,7 @@ class Experience(models.Model):
                 experience. Leave blank for today'''))
     date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
     brief = models.TextField(blank=True, null=True, help_text=_('Central to making this experience more real, write a brief about what this experience entails. What are your hopes and aspirations? This is a way for others to understand your intention and for you to get some clarity.'))
-    status = models.CharField(max_length=160, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
+    status = models.CharField(max_length=200, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
     gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
     is_public = models.BooleanField(default=False, help_text=_('It is recommended to keep an experience private until you are ready to announce it to the world. Private experiences are only seen by its explorers and those providing a correct password if one is selected, so you can choose to share this experience with just a few people and make it public later if you\'d like.'))
     percent_fulfilled = models.IntegerField(default=0,
