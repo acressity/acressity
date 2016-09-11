@@ -8,11 +8,5 @@ TODO
 DEPLOY
 checklist.txt
 .sass_cache/
-explorers/migrations/
-experiences/migrations/
-photologue/migrations/
-support/migrations/
-narratives/migrations/
-notifications/migrations/
 venv/
 tags
