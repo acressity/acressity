@@ -35,7 +35,7 @@ def index(request, experience_id):
         if not privileged:
             if experience.password:
                 # Give them the option of providing password
-                return redirect(reverse('check_password', args=(experience_id,)))
+                return redirect(reverse('experience_check_password', args=(experience_id,)))
             else:
                 raise PermissionDenied
     if experience.narratives.filter(is_public=False):
