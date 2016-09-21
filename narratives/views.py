@@ -29,7 +29,7 @@ def index(request, narrative_id):
                 privileged = True
     if not privileged and (not narrative.is_public or not narrative.experience.is_public):
         if narrative.experience.password:
-            return redirect(reverse('check_password', args=(narrative.experience.id,)))
+            return redirect(reverse('experience_check_password', args=(narrative.experience.id,)))
         else:
             if not request.user.is_authenticated():
                 # Non-logged in user might be author/comrade. Give them chance
