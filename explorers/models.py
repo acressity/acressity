@@ -41,7 +41,7 @@ class Explorer(AbstractBaseUser):
         null=True,
         blank=True,
         unique=True,
-        help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment.<br />It\'ll be displayed as John "<em>trailname</em>" Doe<br />It also allows others to find you by typing <code>acressity.com/<em>trailname</em></code>')
+        help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment. It\'ll be displayed as John "<em>trailname</em>" Doe. It also allows others to find you by typing <code>acressity.com/<em>trailname</em></code>.')
     )
     gallery = models.OneToOneField(
         Gallery,
@@ -56,7 +56,7 @@ class Explorer(AbstractBaseUser):
         null=False,
         blank=False,
         unique=True,
-        help_text=_('Email addresses are used for resetting passwords and notifications. Privacy is protected and confidential.')
+        help_text=_('Email addresses are used for resetting passwords and notifications. Privacy is protected and honored.')
     )
     birthdate = models.DateField(null=True, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)

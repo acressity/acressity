@@ -4,7 +4,7 @@ Web application build to encourage and support people in overcoming the obstacle
 
 ## Purpose
 
-Acressity was birthed from http://interpopulus.com (may she rest in peace), a website designed to help its creator fulfill experiences on his bucketlist with the knowledge that doing so would bring him out of his comfort zone and transcend a lifestyle which was stagnating. It provided significant support from the community, financial resources, and a drive sourced from accountability and commitment, enriching the experiences in the process. Upon completion of the experience of riding his bicycle across America, Acressity started being developed to replace Interpopulus as a website anyone could use to being themselves to the essence of being at the peak of existence.
+Acressity was birthed from interpopulus.com (may she rest in peace), a website designed to help its creator fulfill experiences on his bucketlist with the knowledge that doing so would bring him out of his comfort zone and transcend a lifestyle which was stagnating. It provided significant support from the community, financial resources, and a drive sourced from accountability and commitment, enriching the experiences in the process. Upon completion of the experience of riding his bicycle across America, Acressity started being developed to replace Interpopulus as a website anyone could use to being themselves to the essence of being at the peak of existence.
 
 ## Tech Stack
 

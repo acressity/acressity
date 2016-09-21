@@ -1,20 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<h1 class="align_center">It Begins...</h1>
+	<hr />
 	<div class="featured_photo">
-		<img src="{{ STATIC_URL }}img/taking_off.jpg" alt="Taking Off" title="Taking Off" />
+		<img src="{{ STATIC_URL }}img/taking_off.jpg" style="width: 400px;" alt="Taking Off" title="Taking Off" />
 	</div>
+	<p>
+		You have begun a new chapter in your book which has its pages written upon this site, accessible from nearly anywhere. Create narratives to track your movement within this first experience, create a benefaction campaign to fund your expedition, publish photos regarding the experience, and share it with others or make it a private venture for yourself. Click button below to proceed by creating your profile.
+	</p>
 	<div class="main_item">
-		<form action="{% url 'register' %}" class="full_width" method="POST">
+		<form action="{% url 'register' %}" method="POST">
 			{% csrf_token %}
             <div class="formatted_input">
 			    <input type="text" name="title" class="larger" id="id_title" value="{{ experience_title }}" />
             </div>
 			<input type="hidden" name="initial" />
-			<input type="submit" value="Proceed" />
+			<div class="align_center">
+				<input type="submit" value="Proceed" />
+			</div>
 		</form>
 	</div>
-	<p>
-		You have added a new chapter to a book which has its pages written upon this site, accessible from nearly anywhere. Create narratives to track your movement within this experience, publish photos regarding the experience, and share it with others or make it a private venture for yourself.
-	</p>
 {% endblock content %}
