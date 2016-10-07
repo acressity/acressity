@@ -56,7 +56,7 @@ def create(request, experience_id):
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
         narr_form_context = {'experience': experience.id, 'is_public':
-                experience.is_public, 'title': datetime.now().strftime('%B %d, %Y')}
+                experience.is_public, 'title': datetime.now().strftime('%B %-d, %Y')}
         form = NarrativeForm(author=request.user, initial=narr_form_context)
     return render(request, 'narratives/create.html', {'form': form, 'experience': experience})
 
