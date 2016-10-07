@@ -3,7 +3,9 @@ from django import template
 register = template.Library()
 
 
-# Template tag for pluralized possessive
+# Generate possessive form of a word
+# ex: Return `Mark's` from Mark
+# ex: Return `Chavez'` from Chavez
 @register.filter(name='possessive')
 def possessive(value):
     if value[-1] in 'sz':

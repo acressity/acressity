@@ -1,32 +1,45 @@
 {% extends "base.html" %}
 
+{% load explorers_extras %}
+
 {% block content %}
-    <h2>Meet <a href="{% url 'journey' bugsy.id %}">{{ bugsy.get_full_trailname }}</a></h2>
-    <p>
-        {{ bugsy.trailname }} is a dummy example explorer profile used in the development of this website. When he is not assisting in the building of this site, he dreams big; rainforests and the North Pole being other aspirations for exploration. Having always dreamed of having these experiences, good ol' {{ bugsy.trailname }} decided to take the first step by composing a list of them on his journey page. Below is a picture of his journey page on this site.
-    </p>
-    <div class="featured_photo">
-        <a href="{{ STATIC_URL }}img/example_journey.png">
-            <img src="{{ STATIC_URL }}img/example_journey.png" style="width: 75%; cursor: -moz-zoom-in; cursor: -webkit-zoom-in; cursor: zoom-in;">
-        </a>
-    </div>
-    <p>
-        As you can see, he has a little panel about himself on the right (called an " explorer dash") when he's logged in. His journey page lists all the experiences he wishes to have. He's currently featuring his experience <a href="{% url 'experience' bugsy.featured_experience.id %}">{{ bugsy.featured_experience }}</a>, meaning he is focusing on achieving this experience at the present moment. His dash provides quick actions on this experience. Others will see this featured experience when seeing his profile listed anywhere on the site. If {{ bugsy.trailname }} wishes to keep any experience private, he has the ability of doing so.
-    </p>
-    <p>
-        Each experience he creates or participates in (there can be multiple explorers to any one experience) will show up on his journey page, each with their own " experience dash". Of course, private experiences will not show up for anyone without permission. Currently, he can develop these experiences by writing narratives (basically blog posts/updates), uploading images, inviting other explorers, creating a brief (short bio), and establishing means of accepting monetary donations from benefactors. This list will expand in the future to include greater coverage of how experiences are realized, recorded, preserved, and evolve&#8212;the simulacrum of consciousness.
-    </p>
-    <p>
-        Now let's talk about <em>you</em>. Like everyone else on this planet, you have high aspirations. These aspirations, like a muffled voice in the distance encouraging you to explore and experience life, pulls you towards greatnes and fulfillment. Yet these calls from the distance are too easily forgotten or surrendered for any number of reasons. This app aims to keep this tarnishing from becoming inhibition. It encourages <em>you</em> to pursue your dreams, to have you be set ablaze for the rest of the world to behold, to rage against the dying of the light, to rise and stand up for your beliefs.
-    </p>
-    <p>
-        Compose a list of experiences you wish to have and notice how simply writing them down makes them somehow more real. Draw from this newly created power to charge yourself to following through on realizing these desires of the heart. Use this app to hoist yourself beyond your comfort zone into the realm of growth and thriving.
-    </p>
+	<h1 class="align_center">Example Journey</h1>
+	<hr />
+	<section>
+		<h2>Meet <a href="{% url 'journey' bugsy.id %}">{{ bugsy.get_full_trailname }}</a></h2>
+		<p>
+			{{ bugsy.trailname }} is a dummy-example explorer profile used in the development of this website. When he is not assisting in the building of this site, he dreams big: rainforests and the North Pole being other aspirations for exploration. Having always dreamed of having these experiences, good ol' {{ bugsy.trailname }} decided to take the first step by composing a list of them on Acressity.
+		</p>
+	</section>
+	<section>
+		<h2>The Journey Page</h2>
+		<div class="featured_photo">
+			<a href="{{ STATIC_URL }}img/example_journey.png">
+				<img src="{{ STATIC_URL }}img/example_journey.png" style="width: 75%; cursor: -moz-zoom-in; cursor: -webkit-zoom-in; cursor: zoom-in;">
+			</a>
+			<div class="caption">A picture of {{ bugsy.trailname|possessive }} journey page</div>
+		</div>
+		<p>
+		{{ bugsy.trailname|possessive }} journey page&#8212;his homepage&#8212;lists all the experiences he wishes to fulfill. Others can see the list of experiences {{ bugsy.trailname }} has made public. He's currently featuring the experience <a href="{% url 'experience' bugsy.featured_experience.id %}">{{ bugsy.featured_experience }}</a>, meaning he is focusing on achieving this experience at the present moment. Others will see this featured experience when seeing his profile listed anywhere on the site. When logged in, he has a little panel about himself on the right (the panel is called the "explorer dash") which provides quick access to some features. If {{ bugsy.trailname }} wishes to keep any experience private, he can easily do so.
+		</p>
+		<p>
+		Each experience he creates or participates in (there can be multiple explorers to any one experience) will show up on his journey page, each with their own "experience dash". Of course, private experiences will not show up for those lacking permission. Currently, {{ bugsy.trailname }} can develop these experiences by writing narratives posts, uploading images, inviting/networking with other explorers, creating a brief (short bio), and establishing means of accepting monetary benefaction from others.
+		</p>
+	</section>
+	<section>
+		<h2>Your Turn</h2>
+		<p>
+			Now let's talk about <em>you</em>. Like everyone else on this planet, you have high aspirations. These aspirations, like a muffled voice in the distance encouraging you to explore and experience life, guide you towards potential fulfillment. Yet these calls are too easily forgotten or surrendered for any number of reasons. Acressity aims to keep this tarnishing from becoming inhibition. It encourages <em>you</em> to pursue your dreams, to have you be set ablaze for the rest of the world to behold, to rage against the dying of the light, to rise and stand up for your beliefs. It exists to help you overcome the obstacles keeping you from fulfilling the experiences on your bucketlist.
+		</p>
+		<p>
+			To depart on your own journey towards fulfillment, compose a list of experiences you wish to have. Notice how simply writing them down makes them somehow more real. You can seek monetary benefaction to fund your expeditions to experience this universe. Draw from this newly created power to charge yourself to following through on realizing these desires of the heart. Use Acressity to hoist yourself beyond your comfort zone into the realm of growth and fulfillment.
+		</p>
+	</section>
     <p>
         See an example of a real explorer <a href="{% url 'journey' featured_explorer.id %}">here</a>
     </p>
     <p>
-        More <a href="{% url 'about' %}">about this app</a>
+        More <a href="{% url 'about' %}">about Acressity</a>
     </p>
     {% include 'experiences/forms/first_experience_form.html' %}
 {% endblock content %}

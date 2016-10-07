@@ -10,13 +10,12 @@ from experiences.models import Experience
 
 
 class RegistrationForm(ModelForm):
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password1()'}), label='password1')
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password2()'}), label='password2')
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password1()'}), label='Password')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'onblur': 'check_password2()'}), label='Password (confirm)')
 
     class Meta:
         model = Explorer
-        exclude = ('experiences', 'last_login', 'date_joined', 'password',
-        'paypal_email_address')
+        fields = ('first_name', 'last_name', 'trailname', 'email')
         widgets = {
             'first_name': forms.TextInput(attrs={'onblur': 'say_hello();'}),
             'trailname': forms.TextInput(attrs={'onblur':
