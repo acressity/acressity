@@ -12,14 +12,10 @@
     {% for experience in explorer.tracking_experiences.all %}
         <div class="experience_item">
             {% include "experiences/snippets/dash.html" %}
-            <form action="{% url 'untrack_experience' experience.id %}"
-                method="POST">
-                <div class="align_center">
-                    <input type="submit" value="Untrack" title="Untrack {{ experience }}" />
-                </div>
-            </form>
         </div>
     {% empty %}
-        {% ifequal user explorer %}You are not{% else %}{{ explorer }} is not {% endifequal %} currently tracking any experiences
+        <p>
+            {% ifequal user explorer %}You are not{% else %}{{ explorer }} is not {% endifequal %} currently tracking any experiences
+        </p>
     {% endfor %}
 {% endblock content %}
