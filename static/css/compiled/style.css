@@ -46,7 +46,7 @@ em {
   font-style: italic; }
 
 html {
-  background: url("/static/img/AcressityBackground.jpg") no-repeat center center fixed;
+  background: url("../../img/AcressityBackground.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -158,38 +158,38 @@ input[type="button"], input[type="submit"], button {
   background-size: 30px; }
 
 input.expand-button {
-  background: #4A7B8A url("/static/img/favicon.ico") no-repeat left; }
+  background: #4A7B8A url("../../img/favicon.ico") no-repeat left; }
   input.expand-button:hover {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("/static/img/favicon.ico") no-repeat left;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("../../img/favicon.ico") no-repeat left;
     background: -moz-linear-gradient(center top, #fb9e25 5%, #4A7B8A 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='$button_background');
-    background-color: #fb9e25 url("/static/img/favicon.ico") no-repeat left; }
+    background-color: #fb9e25 url("../../img/favicon.ico") no-repeat left; }
 
 input.edit-button {
-  background: #4A7B8A url("/static/img/icons/edit-icon.png") no-repeat left; }
+  background: #4A7B8A url("../../img/icons/edit-icon.png") no-repeat left; }
   input.edit-button:hover {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("/static/img/favicon.ico") no-repeat left;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("../../img/favicon.ico") no-repeat left;
     background: -moz-linear-gradient(center top, #fb9e25 5%, #4A7B8A 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='$button_background');
-    background-color: #fb9e25 url("/static/img/favicon.ico") no-repeat left; }
+    background-color: #fb9e25 url("../../img/favicon.ico") no-repeat left; }
 
 input.delete-button {
-  background: #4A7B8A url("/static/img/icons/delete-icon.png") no-repeat left;
+  background: #4A7B8A url("../../img/icons/delete-icon.png") no-repeat left;
   background-size: 20px;
   /* For some reason this isn't being inherited from parent class... */ }
   input.delete-button:hover {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("/static/img/favicon.ico") no-repeat left;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("../../img/favicon.ico") no-repeat left;
     background: -moz-linear-gradient(center top, #fb9e25 5%, #4A7B8A 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='$button_background');
-    background-color: #fb9e25 url("/static/img/favicon.ico") no-repeat left; }
+    background-color: #fb9e25 url("../../img/favicon.ico") no-repeat left; }
 
 input.invite-button {
-  background: #4A7B8A url("/static/img/icons/invite-icon.png") no-repeat left; }
+  background: #4A7B8A url("../../img/icons/invite-icon.png") no-repeat left; }
   input.invite-button:hover {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("/static/img/favicon.ico") no-repeat left;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb9e25), color-stop(1, #4A7B8A)) url("../../img/favicon.ico") no-repeat left;
     background: -moz-linear-gradient(center top, #fb9e25 5%, #4A7B8A 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb9e25', endColorstr='$button_background');
-    background-color: #fb9e25 url("/static/img/favicon.ico") no-repeat left; }
+    background-color: #fb9e25 url("../../img/favicon.ico") no-repeat left; }
 
 form {
   background-color: rgba(230, 230, 255, 0.2);
@@ -225,7 +225,7 @@ input, textarea {
   box-sizing: border-box; }
 
 textarea {
-  background: url("/static/img//notepad_row.png") repeat;
+  background: url("../../img//notepad_row.png") repeat;
   line-height: 25px;
   padding: 2px 10px;
   font-family: Ubuntu, "Merriweather Sans", Helvetica, sans-serif;
@@ -349,10 +349,10 @@ textarea {
   background-color: rgba(120, 120, 120, 0.6); }
 
 .editable:hover {
-  background: url("/static/img/icons/edit-icon.png") no-repeat top right; }
+  background: url("../../img/icons/edit-icon.png") no-repeat top right; }
 
 .post_it, .note, .explorer_note, .experience_note, .narrative_note, .notifications .notice {
-  background: url("/static/img/icons/tack-right-icon.png") no-repeat top right, url("/static/img/icons/tack-left-icon.png") no-repeat top left, url("/static/img//notepad_row.png");
+  background: url("../../img/icons/tack-right-icon.png") no-repeat top right, url("../../img/icons/tack-left-icon.png") no-repeat top left, url("../../img//notepad_row.png");
   padding: 25px; }
 
 .note, .explorer_note, .experience_note, .narrative_note, .notifications .notice {
@@ -751,7 +751,7 @@ textarea {
 
 #bulletin_board_background {
   content: "";
-  background: url("/static/img/bulletin_board_background.jpg");
+  background: url("../../img/bulletin_board_background.jpg");
   opacity: .5;
   top: 0;
   left: 0;
