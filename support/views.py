@@ -22,31 +22,33 @@ from paypal.standard.forms import PayPalPaymentsForm
 @login_required
 def track_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    # Keep explorer from tracking their own experiences
-    # Perhaps this logic should be in the model manager save() method?
-    if experience in request.user.experiences.all():
-        messages.error(request, 'Sorry, you cannot track your own experiences')
-    elif experience in request.user.tracking_experiences.all():
-        messages.error(request, 'You are already tracking {0}'.format(experience))
-    else:
-        request.user.tracking_experiences.add(experience)
-        # notif.send(experience.explorers.all(), 'following', {'follower': request.user})
-        messages.success(request, 'You are now tracking the experience {0}'.format(experience))
-        notify.send(sender=request.user, recipient=experience.author, target=experience, verb='is tracking your experience')
-    return redirect(reverse('tracking_experiences', args=(request.user.id,)))
+    if request.method == 'POST':
+        if experience in request.user.experiences.all():
+            messages.error(request, 'Sorry, you cannot track your own experiences')
+        elif experience in request.user.tracking_experiences.all():
+            messages.error(request, 'You are already tracking {0}'.format(experience))
+        else:
+            request.user.tracking_experiences.add(experience)
+            # notif.send(experience.explorers.all(), 'following', {'follower': request.user})
+            messages.success(request, 'You are now tracking the experience {0}'.format(experience))
+            notify.send(sender=request.user, recipient=experience.author, target=experience, verb='is tracking your experience')
+        return redirect(reverse('experience', args=(experience.pk,)))
+    return render(request, 'support/track_experience.html', {'experience': experience})
 
 
 @login_required
 def untrack_experience(request, experience_id):
-    if request.method == 'POST':
-        experience = get_object_or_404(Experience, pk=experience_id)
-        if request.user.is_authenticated():
-            if experience in request.user.tracking_experiences.all():
+    experience = get_object_or_404(Experience, pk=experience_id)
+    if experience in request.user.tracking_experiences.all():
+        if request.method == 'POST':
+            if request.user.is_authenticated():
                 request.user.tracking_experiences.remove(experience)
                 messages.success(request, 'You are no longer tracking {0}'.format(experience))
-            else:
-                messages.error(request, 'You were not tracking that experience')
-    return redirect(reverse('journey', args=(request.user.id,)))
+        else:
+            return render(request, 'support/untrack_experience.html', {'experience': experience})
+    else:
+        messages.error(request, 'You were not tracking that experience')
+    return redirect(reverse('experience', args=(experience.pk,)))
 
 
 @login_required

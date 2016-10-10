@@ -1,0 +1,14 @@
+{% extends 'experiences/base.html' %}
+
+{% block content %}
+    <h1>Untrack {{ experience }}</h1>
+    <p>
+        Are you sure you want to untrack {{ experience }}? You will no longer receive notifications of new activity added to the experience.
+    </p>
+    <form action="{% url 'untrack_experience' experience.id %}" method="POST">
+        {% csrf_token %}
+        <div class="align_center">
+            <input type="submit" value="Confirm" />
+        </div>
+    </form>
+{% endblock content %}

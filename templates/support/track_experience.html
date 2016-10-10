@@ -1,0 +1,14 @@
+{% extends 'experiences/base.html' %}
+
+{% block content %}
+    <h1>Track {{ experience }}</h1>
+    <p>
+        Are you sure you want to track {{ experience }}? You will receive notifications of new activity added to the experience.
+    </p>
+    <form action="{% url 'track_experience' experience.id %}" method="POST">
+        {% csrf_token %}
+        <div class="align_center">
+            <input type="submit" value="Confirm" />
+        </div>
+    </form>
+{% endblock content %}

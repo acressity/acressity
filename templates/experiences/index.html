@@ -85,15 +85,13 @@
             {% else %}
                 {% if user.is_authenticated %}
                     {% if experience not in user.tracking_experiences.all %}
-                        <form action="{% url 'track_experience' experience.id %}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" value="Track" title="Add this experience to your tracking list" />
-                        </form>
+                        <a href="{% url 'track_experience' experience.id %}">
+                          <img src="{{ STATIC_URL }}img/icons/track.png" class="option_icon" title="Add this experience to your tracking list" />
+                        </a>
                     {% else %}
-                        <form action="{% url 'untrack_experience' experience.id %}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" value="Untrack" title="Remove this experience from your tracking list" />
-                        </form>
+                        <a href="{% url 'untrack_experience' experience.id %}">
+                          <img src="{{ STATIC_URL }}img/icons/untrack.png" class="option_icon" title="Remove this experience from your tracking list" />
+                        </a>
                     {% endif %}
                 {% endif %}
             {% endif %}
