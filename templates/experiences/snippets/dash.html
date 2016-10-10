@@ -115,6 +115,13 @@
                             {% include "support/snippets/note_form.html" %}
                         {% endwith %}
                     </div>
+                {% else %}
+                    <a href="{% url 'untrack_experience' experience.id %}">
+                        <li class="option">
+                            <img src="{{ STATIC_URL }}img/icons/untrack.png" title="Track this experience" />
+                            Untrack this experience
+                        </li>
+                    </a>
                 {% endif %}
             {% endif %}
         </ul>
