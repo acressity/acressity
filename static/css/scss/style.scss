@@ -4,7 +4,7 @@
 @import "reset";
 
 // image directory
-$img_dir: "/static/img/";
+$img_dir: "../../img/";
 
 html {
     background: url($img_dir + "AcressityBackground.jpg") no-repeat center center fixed;
