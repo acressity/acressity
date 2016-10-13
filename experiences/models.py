@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -163,6 +164,10 @@ class Experience(models.Model):
 
     def donations_total(self):
         return sum([donation.payment_gross for donation in self.donations.all() if donation.payment_status == 'Completed'])
+
+    def get_absolute_url(self):
+        return reverse('experience', args=[self.pk])
+
 
 
 class FeaturedExperience(models.Model):

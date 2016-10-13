@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from django import forms
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
@@ -107,3 +108,7 @@ class Narrative(models.Model):
 
     def embedded_narrative(self):
         return embed_string(self.body)
+
+    def get_absolute_url(self):
+        return reverse('narrative', args=[self.pk])
+
