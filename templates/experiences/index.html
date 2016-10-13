@@ -1,6 +1,7 @@
 {% extends "experiences/base.html" %}
 
 {% load comments %}
+{% load disqus_tags %}
 
 {% block content %}
     <script type="text/javascript">
@@ -26,6 +27,7 @@
             return false;
         }
     </script>
+
     <div class="experience_item">
         <h1>
 			{{ experience }}
@@ -108,24 +110,14 @@
                     <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this experience" class="option_icon" />
                 </a>
             {% endif %}
-            {% if user.is_authenticated %}
-                <a onclick="toggle_div('{{ experience.id }}_comment');">
-                    <img src="{{ STATIC_URL }}img/icons/tack.png" title="Tack on a note" id="{{ experience.id }}_comment_toggle_icon" class="option_icon" />
-                </a>
-            {% endif %}
-                {% if user != experience.author %}
-                    {% if experience.accepts_paypal %}
-                        <a href="{% url 'donate' experience.id %}">
-                            <img src="{{ STATIC_URL }}img/icons/money.png" class="option_icon"
-                 title="Donate - Become a benefactor" />
-                        </a>
-                    {% endif %}
+            {% if user != experience.author %}
+                {% if experience.accepts_paypal %}
+                    <a href="{% url 'donate' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/money.png" class="option_icon"
+             title="Donate - Become a benefactor" />
+                    </a>
                 {% endif %}
-        </div>
-        <div id="{{ experience.id }}_comment" class="comment" style="display: none;">
-            {% get_comment_form for experience as comment_form %}{% with next_url_name='experience' next_url_pk=experience.id %}
-                {% include "support/snippets/note_form.html" %}
-            {% endwith %}
+            {% endif %}
         </div>
     </div>
 
@@ -261,6 +253,12 @@
 		{% endif %}
 	{% endif %}
 
+    {% disqus_dev %}
+    {% set_disqus_title experience.title %}
+    {% set_disqus_identifier 'experience_' experience.pk|stringformat:"i" %}
+    {% set_disqus_url experience.get_absolute_url %}
+    {% disqus_show_comments %}
+
     {% get_comment_count for experience as exp_comment_count %}
     {% if exp_comment_count > 0 %}
         <h4 title="Click to expand" onclick="toggle_div('exp_comment_list');">{{ exp_comment_count }} Note{{ exp_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" class="valign_middle" id="exp_comment_list_toggle_icon" /></h4>
@@ -269,16 +267,6 @@
             {% for note in exp_comment_list reversed %}
                 {% include "support/snippets/note.html" %}
             {% endfor %}
-        </div>
-    {% endif %}
-    {% if user.is_authenticated %}
-        {% get_comment_form for experience as comment_form %}
-        <h4 onclick="toggle_div('{{ experience.id }}_note');">Leave a Note <img src="{{ STATIC_URL }}img/icons/expand-icon.png" class="valign_middle" id="{{ experience.id }}_note_toggle_icon" /></h4>
-        <div id="{{ experience.id }}_note" class="comment" style="display: none;">
-            {# Create context for html snippet #}
-            {% with next_url_name='experience' next_url_pk=experience.id %}
-                {% include "support/snippets/note_form.html" %}
-            {% endwith %}
         </div>
     {% endif %}
 {% endblock content %}
