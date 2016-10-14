@@ -9,7 +9,7 @@
 
     {% set_disqus_title narrative.title %}
     {% set_disqus_identifier 'narrative_' narrative.pk|stringformat:"i" %}
-    {% set_disqus_url narrative.get_absolute_url %}
+    {% set_disqus_url narrative.get_full_absolute_url %}
     {% disqus_dev %}
     {% disqus_show_comments %}
 

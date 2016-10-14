@@ -256,7 +256,7 @@
     {% disqus_dev %}
     {% set_disqus_title experience.title %}
     {% set_disqus_identifier 'experience_' experience.pk|stringformat:"i" %}
-    {% set_disqus_url experience.get_absolute_url %}
+    {% set_disqus_url experience.get_full_absolute_url %}
     {% disqus_show_comments %}
 
     {% get_comment_count for experience as exp_comment_count %}
