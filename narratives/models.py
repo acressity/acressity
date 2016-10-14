@@ -8,11 +8,12 @@ from django.core.paginator import Paginator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.conf import settings
 
 from experiences.models import Experience
 from photologue.models import Gallery, Photo
-from acressity.utils import embed_string
+from acressity.utils import embed_string, build_full_absolute_url
 
 
 class Narrative(models.Model):
@@ -110,5 +111,10 @@ class Narrative(models.Model):
         return embed_string(self.body)
 
     def get_absolute_url(self):
+        # Despite the name, returns url relative to root
         return reverse('narrative', args=[self.pk])
+
+    def get_full_absolute_url(self):
+        # Return the complete url with scheme and domain
+        return build_full_absolute_url(self.get_absolute_url())
 

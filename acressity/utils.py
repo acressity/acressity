@@ -6,6 +6,8 @@ import re
 from urlparse import urlparse
 
 from django.utils.html import escape
+from django.conf import settings
+from django.contrib.sites.models import Site
 
 
 def embed_string(string):
@@ -28,3 +30,6 @@ def embed_string(string):
             else:
                 string = string.replace(url.group(), '<a href="{0}" target="blank">{0}</a>'.format(url.group()))
     return string
+
+def build_full_absolute_url(absolute_url):
+    return settings.SCHEME + '://' + Site.objects.get_current().domain + absolute_url

@@ -9,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password
 
 from photologue.models import Gallery
-from acressity.utils import embed_string
+from acressity.utils import embed_string, build_full_absolute_url
 from paypal.standard.ipn.models import PayPalIPN
 
 
@@ -168,6 +168,8 @@ class Experience(models.Model):
     def get_absolute_url(self):
         return reverse('experience', args=[self.pk])
 
+    def get_full_absolute_url(self):
+        return build_full_absolute_url(self.get_absolute_url())
 
 
 class FeaturedExperience(models.Model):
