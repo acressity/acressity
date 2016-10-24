@@ -118,9 +118,7 @@ class Experience(models.Model):
         return self.percent_fulfilled == 100
 
     def create_gallery(self):
-        gallery = Gallery(title=self.title, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)
-        gallery.save()
-        return gallery
+        return Gallery.objects.create(title=self.title, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)
 
     def get_galleries(self):
         galleries = [narrative.gallery for narrative in self.narratives.all()
