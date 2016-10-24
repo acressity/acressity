@@ -51,7 +51,10 @@ def create(request, experience_id):
         if form.is_valid():
             new_narrative = form.save()
             messages.success(request, 'Your narrative has been added')
-            for explorer in set(chain(experience.comrades(request), experience.tracking_explorers.all())):
+            explorers_to_notify = experience.comrades(exclude=request.user)
+            if new_narrative.is_public and experience.is_public:
+                explorers_to_notify = set(chain(explorers_to_notify, experience.tracking_explorers.all()))
+            for explorer in explorers_to_notify:
                 notify.send(recipient=explorer, sender=request.user, target=new_narrative, verb='has written a new narrative for experience {0}'.format(experience))
             return redirect('/narratives/{0}'.format(new_narrative.id))
     else:
