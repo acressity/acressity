@@ -105,14 +105,14 @@ class Experience(models.Model):
             queryset = queryset | gallery.photos.all()
         return queryset
 
-    def is_author(self, request):
-        return request.user.is_authenticated() and request.user == self.author
+    def is_author(self, explorer):
+        return explorer.is_authenticated() and explorer == self.author
 
-    def is_comrade(self, request):
-        return request.user.is_authenticated() and request.user in self.explorers.all()
+    def is_comrade(self, explorer):
+        return explorer.is_authenticated() and explorer in self.explorers.all()
 
-    def comrades(self, request):
-        return self.explorers.exclude(id=request.user.id)
+    def comrades(self, exclude):
+        return self.explorers.exclude(pk=exclude.pk)
 
     def is_fulfilled(self):
         return self.percent_fulfilled == 100

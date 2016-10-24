@@ -38,13 +38,13 @@ def index(request, narrative_id):
             else:
                 # This user simply does not have the privileges
                 raise PermissionDenied
-    return render(request, 'narratives/index.html', {'narrative': narrative, 'privileged': privileged, 'author': narrative.is_author(request)})
+    return render(request, 'narratives/index.html', {'narrative': narrative, 'privileged': privileged, 'author': narrative.is_author(request.user)})
 
 
 @login_required
 def create(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if not experience.is_comrade(request):
+    if not experience.is_comrade(request.user):
         raise PermissionDenied
     if request.method == 'POST':
         form = NarrativeForm(request.POST, author=request.user)
@@ -80,7 +80,7 @@ def edit(request, narrative_id):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Narrative successfully updated')
-                for explorer in narrative.experience.comrades(request):
+                for explorer in narrative.experience.comrades(exclude=request.user):
                     notify.send(recipient=explorer, sender=request.user, target=narrative, verb='edited a narrative')
                 return redirect('/narratives/{0}'.format(narrative.id))
         else:
@@ -98,7 +98,7 @@ def delete(request, narrative_id):
     if request.method == 'POST' and 'confirm' in request.POST:
         narrative.delete()
         messages.success(request, 'Your narrative was deleted')
-        for comrade in narrative.experience.comrades(request):
+        for comrade in narrative.experience.comrades(exclude=request.user):
             notify.send(sender=request.user, recipient=comrade, verb='has deleted a narrative from the experience', target=narrative.experience)
         return redirect(reverse('experience', args=(narrative.experience.id,)))
     else:

@@ -69,7 +69,7 @@ def index(request, experience_id):
     context = {
         'experience': experience,
         'narratives': narratives,
-        'author': experience.is_author(request),
+        'author': experience.is_author(request.user),
         'privileged': privileged,
         'narrative_form': narrative_form,
         'experience_brief_form': experience_brief_form,
@@ -150,7 +150,7 @@ def edit(request, experience_id):
                     request,
                     _('Experience has been successfully edited')
                 )
-                for comrade in experience.comrades(request):
+                for comrade in experience.comrades(exclude=request.user):
                     notify.send(sender=request.user, recipient=comrade,
                                 target=experience, verb='has edited your shared experience')
                 return redirect(reverse('experience', args=(experience.id,)))
@@ -203,7 +203,7 @@ def delete(request, experience_id):
                             target=experience, verb='has made you the new author of the experience')
                 return redirect(reverse('journey', args=(request.user.id,)))
             elif 'confirm' in request.POST:
-                for comrade in experience.comrades(request):
+                for comrade in experience.comrades(exclude=request.user):
                     notify.send(sender=request.user, recipient=comrade,
                                 target=experience, verb='has deleted the experience')
                 experience.delete()
@@ -214,7 +214,10 @@ def delete(request, experience_id):
             return render(
                 request,
                 'experiences/delete.html',
-                {'experience': Experience.objects.get(pk=experience_id)}
+                {
+                    'experience': Experience.objects.get(pk=experience_id),
+                    'comrades': experience.comrades(exclude=request.user)
+                }
             )
     else:
         raise PermissionDenied

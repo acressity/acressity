@@ -4,11 +4,11 @@
 	<h1>Delete experience?</h1>
     <div class="experience_item">
         <h2>{{ experience }}</h2>
-        {% if experience.comrades %}
+        {% if comrades %}
             <p>
                 Since there are others as a part of this experience, you may elect to nominate one of them as the new author. Your membership in the experience will be removed.
             </p>
-            {% for explorer in experience.comrades %}
+            {% for explorer in comrades %}
                 <div class="object_item">
                     {% include "explorers/snippets/dash.html" %}
                     <div>
