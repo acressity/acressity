@@ -62,9 +62,9 @@ class Narrative(models.Model):
     def needs_shortening(self):
         return len(self.body) > self.taste_len
 
-    def is_author(self, request):
-        if request.user.is_authenticated():
-            if request.user.id == self.author_id:
+    def is_author(self, explorer):
+        if explorer.is_authenticated():
+            if explorer == self.author:
                 return True
         return False
 
