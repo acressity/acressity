@@ -125,6 +125,10 @@ class Explorer(AbstractBaseUser):
         else:
             return self.get_full_name()
 
+    @property
+    def username(self):
+        return self.get_full_name()
+
     # Following not used, but I think it's necessary with the extended user model?
     def get_short_name(self):
         return self.first_name
