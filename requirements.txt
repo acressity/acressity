@@ -7,7 +7,7 @@ django-bootstrap3==7.0.1
 django-braces==1.8.1
 django-contrib-comments==1.6.2
 django-countries-plus==1.1
--e git+https://github.com/acressity/django-disqus.git@632cef92900f60b10709ddcb3f4ad5f32a0ef2ea#egg=django_disqus
+django-disqus==0.5
 django-extensions==1.6.1
 django-merchant==0.2
 django-model-utils==2.3.1
