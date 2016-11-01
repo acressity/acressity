@@ -27,8 +27,9 @@ body {
 	padding-top: 50px;
 }
 
-html, body, #wrapper { height: 100%; }
-body > #wrapper { height: auto; min-height: 100%; }
+html, body {
+	height: 100%;
+}
 
 p {
     margin: 15px 5px;
@@ -303,11 +304,6 @@ textarea {
 
 .full_width {
     width: 100%;
-}
-
-#main {
-    margin-top: $top_bar_height + 5px;
-    clear: both;
 }
 
 .background_color {
