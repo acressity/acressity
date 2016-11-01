@@ -107,7 +107,7 @@ $button_background_danger: #F22;
 $button_background_danger_darker: #F00;
 
 input[type="button"], input[type="submit"], button {
-	width: 33%;
+	min-width: 33%;
     background-color:$button_background;
     -webkit-border-top-left-radius:6px;
     -moz-border-radius-topleft:6px;
