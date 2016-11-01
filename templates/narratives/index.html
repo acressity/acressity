@@ -1,17 +1,10 @@
 {% extends "narratives/base.html" %}
 
-{% load disqus_tags %}
 {% load comments %}
 
 {% block content %}
 	{# What was formerly here has been moved to a separate file so it may be reused for experience index's latest narrative #}
 	{% include "narratives/snippets/narrative.html" %}
-
-    {% set_disqus_title narrative.title %}
-    {% set_disqus_identifier 'narrative_' narrative.pk|stringformat:"i" %}
-    {% set_disqus_url narrative.get_full_absolute_url %}
-    {% disqus_dev %}
-    {% disqus_show_comments %}
 
     {% get_comment_count for narrative as narr_comment_count %}
     {% if narr_comment_count > 0 %}
