@@ -92,31 +92,4 @@
     {% if not user.is_authenticated %}
         {% include 'experiences/forms/first_experience_form.html' %}
     {% endif %}
-    {% comment %}
-	<h2>Give Me the Facts: Purpose of Website</h2>
-	<p>
-		The <span class="description" title="Term meaning 'quality or state of being at the peak of existence'">Acressity</span> application can be thought of as a collection of evolving adventure novels&#8212;called journeys&#8212;with each journey being uniquely created, written, decorated, and owned by an <span class="description" title="Registered user of the site">explorer</span>. The journeys are encouraged to be filled with as many chapters&#8212;called experiences&#8212;by the explorer as they please.
-	</p>
-	<p>
-		Any amount of pages&#8212;called narratives&#8212;and photos can be created by the explorer to chart the movement along and growth within the experience. Any aspect of the journey can be changed and rewritten by the explorer at any time, and they can choose to make each of their <span class="description" title="Chapters of the adventure book">experiences</span> public or private.
-	</p>
-	<p>
-		Social networking is encouraged by providing explorers the ability of inviting others&#8212;called comrades&#8212;to an experience, thus creating a jointly owned experience. A comrade who has accepted an invitation is granted privileges that include writing narratives and adding photos.
-	</p>
-	<h2>In Summation</h2>
-	<p>
-		Use this web application as a tool to chart your thoughts, status, and progress into new experiences with written narratives and uploaded photos. Use it as a free-standing online journal for expression of experiences of your own, invite others to become involved in a shared experience, or read about the journeys of other explorers.
-	</p>
-	{% if not user.is_authenticated %}
-		<form action="{% url 'step_two' %}" method="POST" class="full_width">
-			{% csrf_token %}
-			<input type="text" name="experience" id="id_experience" value="Start your journey by creating your first experience here" onclick="setUp(this);" class="larger" />
-			<input type="submit" value="Create experience" />
-			<input type="hidden" name="initial" />
-		</form>
-	{% endif %}
-	<hr />
-	<h3><a href="{% url 'creator_note' %}">Creator's Note</a></h3>
-	<h3><a href="{% url 'glossary' %}">Glossary</a></h3>
-	{% endcomment %}
 {% endblock content %}
