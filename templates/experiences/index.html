@@ -254,6 +254,7 @@
 	{% endif %}
 
     {% disqus_dev %}
+    {% disqus_sso %}
     {% set_disqus_title experience.title %}
     {% set_disqus_identifier 'experience_' experience.pk|stringformat:"i" %}
     {% set_disqus_url experience.get_full_absolute_url %}

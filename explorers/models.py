@@ -3,9 +3,11 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from itertools import chain
+from django.core.urlresolvers import reverse
 
 from photologue.models import Gallery
 from experiences.models import Experience
+from acressity.utils import build_full_absolute_url
 
 
 class ExplorerManager(BaseUserManager):
@@ -123,6 +125,10 @@ class Explorer(AbstractBaseUser):
         else:
             return self.get_full_name()
 
+    @property
+    def username(self):
+        return self.get_full_name()
+
     # Following not used, but I think it's necessary with the extended user model?
     def get_short_name(self):
         return self.first_name
@@ -156,3 +162,12 @@ class Explorer(AbstractBaseUser):
     def latest_narrative(self):
         if self.narratives.exists():
             return self.narratives.latest('date_created')
+
+    def get_absolute_url(self):
+        # Despite the name, returns url relative to root
+        return reverse('journey', args=[self.pk])
+
+    def get_full_absolute_url(self):
+        # Return the complete url with scheme and domain
+        return build_full_absolute_url(self.get_absolute_url())
+

@@ -201,8 +201,12 @@ def create(request):
                 return redirect(reverse('journey', args=(explorer.id,)))
     else:
         explorer_form = RegistrationForm()
-    return render(request, 'registration/register.html', {'form':
-        explorer_form, 'experience': request.POST.get('title'), 'min_password_len': settings.MIN_PASSWORD_LEN})
+    return render(request, 'registration/register.html', {
+            'form': explorer_form,
+            'experience': request.POST.get('title'),
+            'min_password_len': settings.MIN_PASSWORD_LEN,
+        }
+    )
 
 
 @login_required
