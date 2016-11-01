@@ -1,0 +1,135 @@
+<nav id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                Acressity
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {% if user.is_authenticated %}
+                    {% url 'journey' user.id as journey_url %}
+                    <li role="presentation" title="Your Journey" {% if request.path == journey_url %}class="active"{% endif %}>
+                        <a href="{% url 'journey' user.id %}">
+                            Journey
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li role="presentation" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Explore <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if user.is_authenticated %}
+                            {% if user.cheering_for %}
+                                <li><a href="{% url 'explorers.views.cheering_for' request.user.id %}">Explorers You Cheer</a></li>
+                            {% endif %}
+                            {% if user.tracking_experiences.count > 0 %}
+                                <li><a href="{% url 'tracking_experiences' user.id %}">Experiences You Track</a></li>
+                            {% endif %}
+                        {% endif %}
+                        <li><a href="{% url 'experiences.views.featured' %}">Featured Experiences</a>
+                        <li><a href="{% url 'all_explorers' %}">All Journeys</a></li>
+                        <li><a href="{% url 'explorers.views.random' %}">Random Journeys</a></li>
+                    </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        About <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'what' %}">What is Acressity</a></li>
+                        <li><a href="{% url 'why' %}">Why Acressity</a></li>
+                        <li><a href="{% url 'about' %}">About Site</a></li>
+                        <li><a href="{% url 'example' %}">Example</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        <li><a href="{% url 'creator_note' %}">Creator's Note</a></li>
+                        <li><a href="{% url 'lexicon' %}">Lexicon</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                    <li role="presentation" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            {{ request.user.get_full_name }} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{% url 'journey' request.user.id %}" class="option">
+                                    <img src="{{ STATIC_URL }}img/icons/journey.png" class="option_icon" /> Your Journey
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'explorers.views.board' request.user.id %}" class="option">
+                                    <img src="{{ STATIC_URL }}img/icons/bulletin-board-icon_grayscale.png" class="option_icon" /> Bulletin Board
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'profile' request.user.id %}" class="option">
+                                    <img src="{{ STATIC_URL }}img/icons/user.png" class="option_icon" /> Your Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'farewell' %}" class="option">
+                                    <img src="{{ STATIC_URL }}img/icons/power.png" class="option_icon" /> Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li role="presentation" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Login <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li id="top_bar_login" class="smaller">
+                                <form action="/explorers/login/?next={{ request.path }}" method="POST" class="full_width">
+                                    {% csrf_token %}
+                                    <div class="formatted_input">
+                                        <label for="username">Email or <abbr title="Creative username to describe your journey">Trailname</abbr></label>
+                                        <input type="text" class="smaller" name="username" id="username"
+                                               size="10" />
+                                    </div>
+                                    <div class="formatted_input">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="smaller" name="password" id="password"
+                                               size="10" />
+                                    </div>
+                                    <div class="formatted_input align_center">
+                                        <input type="submit" value="Log In" />
+                                    </div>
+                                </form>
+                                <div class="formatted_input align_center">
+                                    <input type="button" value="Sign up" onclick="window.location.href='{% url 'register' %}';" />
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+{% if messages %}
+	<div id="messages">
+		{% for message in messages %}
+			<p>{{ message }}</p>
+		{% endfor %}
+		<div id="messages_note">
+			<em>Click to dismiss</em>
+		</div>
+	</div>
+{% endif %}
