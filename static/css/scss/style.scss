@@ -5,6 +5,10 @@
 
 // image directory
 $img_dir: "../../img/";
+$font1: Ubuntu;
+$font2: "Merriweather Sans";
+$font3: Helvetica;
+$fontDefault: sans-serif;
 
 html {
     background: url($img_dir + "AcressityBackground.jpg") no-repeat center center fixed;
@@ -14,15 +18,12 @@ html {
     background-size: cover;
 }
 
-$font1: Ubuntu;
-$font2: "Merriweather Sans";
-$font3: Helvetica;
-$fontDefault: sans-serif;
-
 body {
-    font-family: $font1, $font2, $font3, $fontDefault;
     color: #222;
-    font-size: 107.5%;
+	background-color: transparent;
+    font-family: $font1, $font2, $font3, $fontDefault;
+    font-size: 100%;
+	padding-top: 50px;
 }
 
 html, body, #wrapper { height: 100%; }
