@@ -3,10 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from itertools import chain
-<<<<<<< HEAD
 from django.conf import settings
-=======
->>>>>>> development
 from django.core.urlresolvers import reverse
 
 from photologue.models import Gallery
