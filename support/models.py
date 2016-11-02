@@ -13,8 +13,6 @@ from experiences.models import Experience
 from notifications.models import Notification
 
 
-# I'm not satisfied with this at the moment. I want to have a model that encompasses the ability to cheer (track) an arbitrary object (such as explorer or experience). Yet I don't want to have disorganized data in the db...
-# Perhaps simply rename this to CheerExplorer to reduce ambiguity, and have experience 'support' be coordinated via TrackExperience model
 class Cheer(models.Model):
     '''
     Model for 'following' function
@@ -104,10 +102,6 @@ class PotentialExplorer(models.Model):
     def __unicode__(self):
         return '{0} {1}: potential new explorer'.format(self.first_name, self.last_name)
 
-    # def save():
-    #     'Transform this model instance into new explorer, with related experience as current feature'
-    #     pass
-
 
 def comment_handler(sender, **kwargs):
     '''
@@ -115,7 +109,6 @@ def comment_handler(sender, **kwargs):
     '''
 
     comment = kwargs.pop('comment')
-    # request = kwargs.pop('request')
 
     model = comment.content_object.model()
     recipients = []
@@ -131,7 +124,6 @@ def comment_handler(sender, **kwargs):
     for recipient in recipients:
         newnotify = Notification(
             recipient=recipient,
-            #sender=comment.user,
             verb='has posted a new note',
             actor_content_type=ContentType.objects.get_for_model(comment.user),
             actor_object_id=comment.user.pk,
