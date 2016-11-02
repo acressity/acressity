@@ -3,26 +3,6 @@
 {% load explorers_extras %}
 
 {% block content %}
-	
-	{% comment %}
-	<div class="explorer_item">
-		<h1>{{ explorer.get_full_name|possessive }} Journey</h1>
-		{% if explorer.gallery.featured_photo %}
-			<div>
-				<a href="{% url 'pl-gallery' explorer.gallery.id %}">
-					<img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" title="{{ explorer.get_full_name }}" />
-				</a>
-			</div>
-		{% endif %}
-		<h3 title="Trailname">Trailname: {{ explorer.trailname }}</h3>
-		<div class="option_list">
-			<a href="{% url 'story' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/profile-icon.png" title="{{ explorer.first_name|possessive }} Story" class="option_icon" /></a>
-			<a href="{% url 'board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon.png" title="Check out the Bulletin Board" class="option_icon" /></a>
-			
-		</div>
-	</div>
-	{% endcomment %}
-
 	{% if user != explorer %}
 		{% include "explorers/snippets/dash.html" %}
 	{% else %}
