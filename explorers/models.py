@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from itertools import chain
+from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from photologue.models import Gallery
 from experiences.models import Experience
@@ -156,3 +158,16 @@ class Explorer(AbstractBaseUser):
     def latest_narrative(self):
         if self.narratives.exists():
             return self.narratives.latest('date_created')
+
+    def get_absolute_url(self):
+        return reverse('journey', args=[self.pk])
+
+    def get_icon_url(self):
+        if self.gallery.featured_photo:
+            return self.gallery.featured_photo.get_icon_url()
+        return '{0}/img/icons/explorer-icon-small.png'.format(settings.STATIC_URL)
+
+    def get_thumbnail_url(self):
+        if self.gallery.featured_photo:
+            return self.gallery.featured_photo.get_thumbnail_url()
+        return '{0}/img/icons/explorer-icon.png'.format(settings.STATIC_URL)
