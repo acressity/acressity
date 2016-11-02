@@ -10,37 +10,26 @@
             background-color: rgba(0, 0, 0, 0);
         }
     </style>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#explore_main_wrapper').on('click', function() {
-                $('#explore_what_wrapper').show(800);
-                $('#explore_why_wrapper').show(800);
-            });
-        });
-    </script>
 {% endblock head_insert %}
 
 {% block content %}
-    
-    <a href="javascript:void(0)" id="explore_main_wrapper">
+    <a href="javascript:void();" id="explore_main_wrapper" data-toggle="collapse" data-target="#explore_what,#explore_why" aria-expanded="false" aria-controls="explore_what">
         <div id="explore_main">
             <p>Explore</p>
         </div>
     </a>
 
-    <a href="{% url 'what' %}" id="explore_what_wrapper" class="hidden">
-        <div id="explore_what">
+    <a href="{% url 'what' %}" id="explore_what_wrapper">
+        <div id="explore_what" class="collapse">
             <p>What</p>
             <p>is Acressity?</p>
         </div>
     </a>
 
-    <a href="{% url 'why' %}" id="explore_why_wrapper" class="hidden">
-        <div id="explore_why">
+    <a href="{% url 'why' %}" id="explore_why_wrapper">
+        <div id="explore_why" class="collapse">
             <p>Why</p>
             <p>Acressity?</p>
         </div>
     </a>
-    
 {% endblock content %}

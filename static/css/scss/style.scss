@@ -5,6 +5,10 @@
 
 // image directory
 $img_dir: "../../img/";
+$font1: Ubuntu;
+$font2: "Merriweather Sans";
+$font3: Helvetica;
+$fontDefault: sans-serif;
 
 html {
     background: url($img_dir + "AcressityBackground.jpg") no-repeat center center fixed;
@@ -12,21 +16,20 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-}
-
-$font1: Ubuntu;
-$font2: "Merriweather Sans";
-$font3: Helvetica;
-$fontDefault: sans-serif;
-
-body {
-    font-family: $font1, $font2, $font3, $fontDefault;
-    color: #222;
     font-size: 107.5%;
 }
 
-html, body, #wrapper { height: 100%; }
-body > #wrapper { height: auto; min-height: 100%; }
+body {
+    color: #222;
+	background-color: transparent;
+    font-family: $font1, $font2, $font3, $fontDefault;
+    font-size: 100%;
+	padding-top: 50px;
+}
+
+html, body {
+	height: 100%;
+}
 
 p {
     margin: 15px 5px;
@@ -39,6 +42,7 @@ $gold_color: #dbbf0d;
 
 $main_color: #4A7B8A;
 $main_color_darker: #1A4B6E;
+$main_color_lighter: #6A9BAA;
 
 $top_bar_height: 30px;
 
@@ -60,6 +64,7 @@ a {
     outline: 0;
     &:hover {
         color: #1A2B4E;
+		text-decoration: none;
     }
 }
 
@@ -102,7 +107,7 @@ $button_background_danger: #F22;
 $button_background_danger_darker: #F00;
 
 input[type="button"], input[type="submit"], button {
-	width: 33%;
+	min-width: 33%;
     background-color:$button_background;
     -webkit-border-top-left-radius:6px;
     -moz-border-radius-topleft:6px;
@@ -302,11 +307,6 @@ textarea {
     width: 100%;
 }
 
-#main {
-    margin-top: $top_bar_height + 5px;
-    clear: both;
-}
-
 .background_color {
     background-color: rgba(230, 230, 255, 0.92);
 }
@@ -326,21 +326,13 @@ textarea {
 #content {
     @extend .shadow_border;
     @extend .background_color;
-    position: relative;
-    float: left;
-    width: 70%;
-    padding: 5px;
 }
 
 #right_content {
     @extend .shadow_border;
     @extend .background_color;
-    padding: 5px;
-    position: fixed;
-    margin-left: 65%;
-    width: 25%;
-    overflow-y: auto;
     max-height: 90%;
+    overflow-y: auto;
 }
 
 .object_item_list {
@@ -795,11 +787,12 @@ $item_opacity: 0.6;
 }
 
 #wrapper {
-    height: 100%;
-    width: 90%;
-    margin-right: auto;
-    margin-left: auto;
-    margin-bottom: 30px;
+	min-height: 100%;
+	height: auto;
+	/* Negative indent footer by its height */
+	margin: 0 auto -50px;
+	/* Pad bottom by footer height */
+	padding: 0 0 50px;
 }
 
 #messages {
@@ -820,46 +813,48 @@ $item_opacity: 0.6;
     right: 20px;
 }
 
-#top_bar {
-    @extend .shadow_border;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-	height: $top_bar_height;
+#navbar {
     background-color: $main_color;
-    z-index: 3;
-    border-radius: 0;
 }
 
-#top_bar_left {
-    max-width: 75%;
-    float: left;
+// Overriding Bootstrap CSS
+
+.navbar-default {
+	border: none;
+	@extend .shadow_border;
 }
 
-#top_bar_right {
-    max-width: 25%;
-    position: absolute;
-    right: 200px;
+.navbar-default .navbar-nav > li > a {
+	color: #DDD;
 }
 
-#top_bar_signup {
-    position: relative;
-    top: 5px;
+.navbar-default .navbar-brand {
+	color: #DDD;
 }
 
-#logo {
-    padding: 0 30px;
-    color: #000;
-    img {
-        vertical-align: middle;
-    }
+.navbar-default .navbar-nav > li.active > a {
+	background-color: $main_color_lighter;
+	color: #DDD;
 }
 
-#logo em {
-    font-size: small;
-    position: relative;
-    bottom: 1px;
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:8px;
+	padding-bottom:0;
+    height: 40px;
+}
+
+.navbar {
+	min-height:40px;
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.6);
+	height: 40px;
+	margin-top: 10px;
+}
+
+blockquote {
+	border-left: none;
 }
 
 #main_index_header {
@@ -1039,76 +1034,3 @@ $second_two_shift_outwards: 14%;
     display: none;
 }
 
-.my_nav ul {
-    text-align: left;
-    font-weight: bold;
-    display: inline;
-    margin-right: 15px;
-    padding: 5px 9px 6px 0;
-    list-style: none;
-    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
-    li {
-        font-weight: bold;
-        display: inline-block;
-        margin-right: -12px;
-        position: relative;
-        padding: 5px;
-        cursor: pointer;
-        -webkit-transition: all 0.2s;
-        -moz-transition: all 0.2s;
-        -ms-transition: all 0.2s;
-        -o-transition: all 0.2s;
-        transition: all 0.2s;
-        a {
-            color: #000;
-        }
-    }
-}
-
-.my_nav ul li:hover {
-    background: rgb($expl_r, $expl_g, $expl_b);
-    color: #fff;
-
-}
-
-.my_nav ul li ul {
-    padding: 0;
-    position: absolute;
-    top: 28px;
-    left: 0;
-    width: 150px;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    display: none;
-    opacity: 0;
-    visibility: hidden;
-    -webkit-transiton: opacity 0.2s;
-    -moz-transition: opacity 0.2s;
-    -ms-transition: opacity 0.2s;
-    -o-transition: opacity 0.2s;
-    -transition: opacity 0.2s;
-    li {
-        background: rgb($expl_r, $expl_g, $expl_b);
-        display: block;
-        color: #fff;
-        padding: 10px;
-        width: 11em;
-        text-shadow: 0 -1px 0 #000;
-        border-top: 1px #FFF solid;
-        a {
-            color: #FFF;
-        }
-        &:hover {
-            background: rgb(84, 133, 148);
-        }
-    }
-}
-
-.my_nav ul li:hover ul {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-}
