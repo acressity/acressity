@@ -1,5 +1,25 @@
 {# Assumes there is a comment object passed in with name `note` #}
+{% load comments %}
+{% load comments_xtd %}
 
+<li class="media" id="c{{ note.id }}">
+    <div class="media-left">
+      <a href="{{ note.url }}">{{ note.user_email|xtd_comment_gravatar }}</a>
+    </div>
+    <div class="media-body">
+      <h6 class="media-heading">
+        <a class="permalink text-muted" href="{% get_comment_permalink note %}">¶</a>&nbsp;&sdot;
+        {{ note.submit_date }}&nbsp;-&nbsp;
+        {% if note.url %}<a href="{{ note.url }}" target="_new">
+        {% endif %}{{ note.name }}{% if note.url %}</a>{% endif %}
+      </h6>
+    <div class="note">
+      <p>{{ note.comment }}</p>
+    </div>
+    </div>
+  </li>
+
+  {% comment %}
 {% with note.content_type.model as model %}
     <div class="{{ model }}_note">
         <p>{{ note.comment }}</p>
@@ -26,3 +46,4 @@
         </div>
     </div>
 {% endwith %}
+{% endcomment %}
