@@ -9,14 +9,16 @@
 <div class="explorer_item">
     <div>
         <div class="featured_photo">
-            {% if explorer.gallery.featured_photo %}
-                <img src="{{ explorer.gallery.featured_photo.get_thumbnail_url }}" />
-            {% else %}
-                {% ifequal explorer user %}
-                    <a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/"><img src="{{ STATIC_URL }}img/icons/explorer-icon.png" title="Upload photo for your story" /></a>
-				{% else %}
-					<img src="{{ STATIC_URL }}img/icons/explorer-icon.png" />
-                {% endifequal %}
+            {% if not explorer.gallery.featured_photo %}
+                {% if explorer == user %}
+                    <a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/" title="Upload photo for your story" />
+                {% endif %}
+            {% endif %}
+            <img src="{{ explorer.get_thumbnail_url }}">
+            {% if not explorer.gallery.featured_photo %}
+                {% if explorer == user %}
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
         <h3 class="align_center">
