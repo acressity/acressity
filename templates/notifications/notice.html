@@ -41,7 +41,9 @@
         {% ifequal user explorer %}
             <form action="{% url 'mark_as_read' notice.id %}" method="POST">
                 {% csrf_token %}
-                <input type="submit" value="Dismiss" />
+                <div class="align_center">
+                    <input type="submit" value="Dismiss" />
+                </div>
             </form>
         {% endifequal %}
     {% endif %}
