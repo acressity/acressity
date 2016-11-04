@@ -127,7 +127,7 @@ def comment_handler(sender, **kwargs):
         recipients.append(comment.content_object.author)
         
     for recipient in recipients:
-        newnotify = Notification(
+        newnotify = Notification.objects.create(
             recipient=recipient,
             verb='has posted a new note',
             actor_content_type=ContentType.objects.get_for_model(comment.user),
@@ -136,8 +136,6 @@ def comment_handler(sender, **kwargs):
             description=comment.comment,
             timestamp=timezone.now()
         )
-
-        newnotify.save()
 
         if newnotify.recipient.notify:
             to = newnotify.recipient.email
