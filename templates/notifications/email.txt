@@ -11,5 +11,5 @@ From your Acressity Journey
         {{ notice.target.experience }}
     {% else %}
         {{ notice.target }}
-    {% endifequal %}
+    {% endif %}
 {% endif %}
