@@ -1,43 +1,7 @@
-<div class="notice alert-block alert-{{ notice.level }}">
-    {# <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i> #}
+<div class="notice alert-block">
     {% if notice.actor %}
         <p>
             <a href="{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
-        </p>
-    {% endif %}
-    {% if notice.target %}
-        <p>
-            {% ifequal notice.target_content_type.model 'photo' %}
-                {% with notice.target as photo %}
-                    <div class="object_item">
-                        {% include "photologue/snippets/photo_dash.html" %}
-                    </div>
-                {% endwith %}
-            {% else %}
-                {% ifequal notice.target_content_type.model 'invitationrequest' %}
-                    <a href="{% url 'experience' notice.target.experience.id %}">{{ notice.target.experience }}</a>
-                    <form action="{% url 'handle_invitation_request' notice.target.id %}" name="invite_respond" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="from_explorer_id" value="{{ notice.actor.id }}" />
-                        <input type="hidden" name="to_explorer_id" value="{{ notice.recipient.id }}" />
-                        <input type="hidden" name="experience_id" value="{{ notice.target.id }}" />
-                        <input type="submit" name="accept" value="Accept" />
-                        <input type="submit" name="decline" value="Decline" />
-                    </form>
-                {% else %}
-                    <a href="{% url notice.target_content_type.model notice.target.id %}">{{ notice.target }}</a>
-                {% endifequal %}
-            {% endifequal %}
-            
-            {% comment %}
-            {% ifequal notice.target_content_type.model 'narrative' %}
-                <a href="{% url 'narrative' notice.target.id %}">{{ notice.target }}</a>
-            {% else %}
-                {% ifequal notice.target_content_type.model 'experience' %}
-                    <a href="{% url 'experience' notice.target.id %}">{{ notice.target }}</a>
-                {% endifequal %}
-            {% endifequal %}
-            {% endcomment %}
         </p>
     {% endif %}
 
@@ -47,6 +11,28 @@
         </p>
     {% endif %}
   
+    {% if notice.target %}
+        <p>
+            <a href="{{ notice.target.get_absolute_url }}">{{ notice.target }}</a>
+            {% if notice.target_content_type.model == 'photo' %}
+                {% with notice.target as photo %}
+                    <div class="object_item">
+                        {% include "photologue/snippets/photo_dash.html" %}
+                    </div>
+                {% endwith %}
+            {% elif notice.target_content_type.model == 'invitationrequest' %}
+                <form action="{% url 'handle_invitation_request' notice.target.id %}" class="align_center" name="invite_respond" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="from_explorer_id" value="{{ notice.actor.id }}" />
+                    <input type="hidden" name="to_explorer_id" value="{{ notice.recipient.id }}" />
+                    <input type="hidden" name="experience_id" value="{{ notice.target.id }}" />
+                    <input type="submit" name="accept" value="Accept" />
+                    <input type="submit" name="decline" value="Decline" />
+                </form>
+            {% endif %}
+        </p>
+    {% endif %}
+
     <p>
         {{ notice.timesince }} ago
     </p>
