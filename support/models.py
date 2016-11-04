@@ -2,6 +2,7 @@ import pickle
 
 from django.db import models
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -50,6 +51,9 @@ class InvitationRequest(models.Model):
 
     def __unicode__(self):
         return '{0} invitation'.format(self.experience)
+
+    def get_absolute_url(self):
+        return reverse('experience', args=[self.experience.pk])
 
 
 class QuoteManager(models.Manager):
