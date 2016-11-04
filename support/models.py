@@ -132,6 +132,8 @@ def comment_handler(sender, **kwargs):
             verb='has posted a new note',
             actor_content_type=ContentType.objects.get_for_model(comment.user),
             actor_object_id=comment.user.pk,
+            target_content_type=comment.content_type,
+            target_object_id=comment.object_pk,
             public=True,
             description=comment.comment,
             timestamp=timezone.now()
