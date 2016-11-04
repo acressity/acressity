@@ -665,6 +665,10 @@ $item_opacity: 0.6;
     width: 200px;
 }
 
+.thumbnail-icon > img {
+	width: 60px;
+}
+
 /* div for control options regarding an object (e.g. experience: view photos, upload photo */
 .option_list {
     overflow: hidden;
