@@ -5,16 +5,18 @@ Django==1.8
 django-appconf==1.0.2
 django-bootstrap3==7.0.1
 django-braces==1.8.1
+django-comments-xtd==1.6.3
 django-contrib-comments==1.6.2
 django-countries-plus==1.1
-django-disqus==0.5
 django-extensions==1.6.1
+django-markup==1.1
 django-merchant==0.2
 django-model-utils==2.3.1
 django-oauth-toolkit==0.10.0
 django-paypal==0.3
 django-storages==1.5.0
 django-utensils==0.2
+docutils==0.12
 ecdsa==0.13
 Fabric==1.11.1
 flake8==2.5.4
@@ -24,6 +26,7 @@ ipdb==0.10.1
 ipython==4.2.0
 ipython-genutils==0.1.0
 jsonfield==1.0.3
+Markdown==2.6.7
 mccabe==0.4.0
 mock==2.0.0
 MySQL-python==1.2.5
