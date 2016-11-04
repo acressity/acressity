@@ -413,6 +413,15 @@ textarea {
     .horizontal_list a:hover {
       color: #1A4B6E; }
 
+.comment-level-1 {
+  margin-left: 100px; }
+
+.comment-level-2 {
+  margin-left: 200px; }
+
+.comment-level-3 {
+  margin-left: 300px; }
+
 .comment_list {
   font-size: smaller;
   position: relative; }
@@ -496,6 +505,9 @@ textarea {
 
 .explorer_portrait img {
   width: 200px; }
+
+.thumbnail-icon > img {
+  width: 60px; }
 
 /* div for control options regarding an object (e.g. experience: view photos, upload photo */
 .option_list {
