@@ -1,0 +1,39 @@
+{% load i18n %}
+{% load comments %}
+{% load comments_xtd %}
+
+<div class="comment">
+    <a name="c{{ comment.id }}"></a>
+    <div class="media-left thumbnail-icon">
+        {% if comment.user %}
+            <img src="{{ comment.user.get_icon_url }}" />
+        {% else %}
+            {{ comment.user_email|xtd_comment_gravatar }}
+        {% endif %}
+    </div>
+    <div class="media-body">
+        <div class="comment">
+            <h6 class="media-heading">
+                {{ comment.submit_date }}&nbsp;-&nbsp;
+                {% if comment.user %}
+                    <a href="{{ comment.user.get_absolute_url }}" target="_new">{{ comment.user.get_full_name }}</a>&nbsp;&nbsp;<a class="permalink" title="comment permalink" href="{% get_comment_permalink comment %}">¶</a>
+                {% else %}
+                    {% if comment.url and not comment.is_removed %}<a href="{{ comment.url }}" target="_new">{% endif %}{{ comment.user.get_full_name }}{% if comment.url %}</a>{% endif %}&nbsp;&nbsp;<a class="permalink" title="Comment permalink" href="{% get_comment_permalink comment %}">¶</a>
+                {% endif %}
+            </h6>
+            {% if comment.is_removed %}
+                <p>{% trans "This comment has been removed." %}</p>
+            {% else %}
+                <div class="note">
+                    {{ comment.comment|render_markup_comment }}
+                    <br/>
+                    {% if comment.allow_thread and not comment.is_removed %}
+                        <a class="small mutedlink" href="{{ comment.get_reply_url }}">
+                            {% trans "Reply" %}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

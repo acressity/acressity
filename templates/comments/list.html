@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load comments %}
+{% load comments_xtd %}
+
+<dl class="comments">
+    {% for comment in comment_list %}
+        <div class="comment-level-{{ comment.level }}">
+            {% include 'comments/comment.html' %}
+        </div>
+  {% endfor %}
+</dl>

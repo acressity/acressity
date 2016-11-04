@@ -2,6 +2,7 @@ import pickle
 
 from django.db import models
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -11,10 +12,9 @@ from django.core.mail import EmailMultiAlternatives
 
 from experiences.models import Experience
 from notifications.models import Notification
+from acressity.utils import get_site_domain
 
 
-# I'm not satisfied with this at the moment. I want to have a model that encompasses the ability to cheer (track) an arbitrary object (such as explorer or experience). Yet I don't want to have disorganized data in the db...
-# Perhaps simply rename this to CheerExplorer to reduce ambiguity, and have experience 'support' be coordinated via TrackExperience model
 class Cheer(models.Model):
     '''
     Model for 'following' function
@@ -52,6 +52,9 @@ class InvitationRequest(models.Model):
 
     def __unicode__(self):
         return '{0} invitation'.format(self.experience)
+
+    def get_absolute_url(self):
+        return reverse('experience', args=[self.experience.pk])
 
 
 class QuoteManager(models.Manager):
@@ -104,10 +107,6 @@ class PotentialExplorer(models.Model):
     def __unicode__(self):
         return '{0} {1}: potential new explorer'.format(self.first_name, self.last_name)
 
-    # def save():
-    #     'Transform this model instance into new explorer, with related experience as current feature'
-    #     pass
-
 
 def comment_handler(sender, **kwargs):
     '''
@@ -115,7 +114,6 @@ def comment_handler(sender, **kwargs):
     '''
 
     comment = kwargs.pop('comment')
-    # request = kwargs.pop('request')
 
     model = comment.content_object.model()
     recipients = []
@@ -129,25 +127,24 @@ def comment_handler(sender, **kwargs):
         recipients.append(comment.content_object.author)
         
     for recipient in recipients:
-        newnotify = Notification(
+        newnotify = Notification.objects.create(
             recipient=recipient,
-            #sender=comment.user,
             verb='has posted a new note',
             actor_content_type=ContentType.objects.get_for_model(comment.user),
             actor_object_id=comment.user.pk,
+            target_content_type=comment.content_type,
+            target_object_id=comment.object_pk,
             public=True,
             description=comment.comment,
             timestamp=timezone.now()
         )
 
-        newnotify.save()
-
         if newnotify.recipient.notify:
             to = newnotify.recipient.email
             from_email = 'acressity@acressity.com'
             subject = 'New note on your Acressity journey'
-            text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
-            html_content = render_to_string('notifications/email.html', {'notice': newnotify})
+            text_content = render_to_string('notifications/email.txt', {'notice': newnotify, 'domain': get_site_domain()})
+            html_content = render_to_string('notifications/email.html', {'notice': newnotify, 'domain': get_site_domain()})
             message = EmailMultiAlternatives(subject, text_content, from_email, [to])
             message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
             message.send()

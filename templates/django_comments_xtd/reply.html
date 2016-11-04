@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load comments %}
+{% load comments_xtd %}
+{% block title %} - {% trans "Comment Reply" %}{% endblock %}
+
+{% block content %}
+    <h1 class="page-header text-center">{% trans "Reply to Comment" %}</h1>
+    <div class="row">
+        <div class="col-lg-offset-1 col-md-offset-1 col-lg-10 col-md-10">
+            {% include 'comments/comment.html' %}
+
+            <div class="visible-lg-block visible-md-block">
+                <hr/>
+            </div>
+        </div>
+    </div>
+    <div class="well well-lg">
+        {% include "comments/form.html" %}
+    </div>
+{% endblock %}

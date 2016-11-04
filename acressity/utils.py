@@ -32,4 +32,8 @@ def embed_string(string):
     return string
 
 def build_full_absolute_url(absolute_url):
-    return settings.SCHEME + '://' + Site.objects.get_current().domain + absolute_url
+    return get_site_domain() + absolute_url
+
+def get_site_domain():
+    return settings.SCHEME + '://' + Site.objects.get_current().domain
+

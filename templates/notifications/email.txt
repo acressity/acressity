@@ -1,15 +1,15 @@
 From your Acressity Journey
 
 {{ notice.actor }} {{ notice.verb }}
+
+{% if notice.description %}
+    {{ notice.description|linebreaksbr }}
+{% endif %}
   
 {% if notice.target %}
-    {% ifequal notice.target_content_type.model 'invitationrequest' %}
+    {% if notice.target_content_type.model == 'invitationrequest' %}
         {{ notice.target.experience }}
     {% else %}
         {{ notice.target }}
     {% endifequal %}
-{% endif %}
-
-{% if notice.description %}
-    {{ notice.description|linebreaksbr }}
 {% endif %}

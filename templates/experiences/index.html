@@ -1,7 +1,7 @@
 {% extends "experiences/base.html" %}
 
 {% load comments %}
-{% load disqus_tags %}
+{% load comments_xtd %}
 
 {% block content %}
     <script type="text/javascript">
@@ -253,21 +253,18 @@
 		{% endif %}
 	{% endif %}
 
-    {% disqus_dev %}
-    {% disqus_sso %}
-    {% set_disqus_title experience.title %}
-    {% set_disqus_identifier 'experience_' experience.pk|stringformat:"i" %}
-    {% set_disqus_url experience.get_full_absolute_url %}
-    {% disqus_show_comments %}
+    <hr />
 
-    {% get_comment_count for experience as exp_comment_count %}
-    {% if exp_comment_count > 0 %}
-        <h4 title="Click to expand" onclick="toggle_div('exp_comment_list');">{{ exp_comment_count }} Note{{ exp_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" class="valign_middle" id="exp_comment_list_toggle_icon" /></h4>
-        <div class="comment_list" id="exp_comment_list">
-            {% get_comment_list for experience as exp_comment_list %}
-            {% for note in exp_comment_list reversed %}
-                {% include "support/snippets/note.html" %}
-            {% endfor %}
-        </div>
+    {% get_comment_count for experience as comment_count %}
+    <h3>
+        {{ comment_count }} Note{{ comment_count|pluralize }}
+    </h3>
+
+    {% if user.is_authenticated %}
+        {% render_comment_form for experience %}
+    {% else %}
+        <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
     {% endif %}
+
+    {% render_comment_list for experience %}
 {% endblock content %}

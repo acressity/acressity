@@ -622,11 +622,6 @@ class Photo(ImageModel):
     def get_absolute_url(self):
         return reverse('pl-photo', args=[self.id])
 
-    # Phasing this out, photo no longer in many-to-many relationship
-    # def public_galleries(self):
-    #     """Return the public galleries to which this photo belongs."""
-    #     return self.galleries.filter(is_public=True)
-
     def get_previous_in_gallery(self):
         try:
             return self.get_previous_by_date_added(gallery__exact=self.gallery)
