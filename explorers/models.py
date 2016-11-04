@@ -174,7 +174,7 @@ class Explorer(AbstractBaseUser):
         return '{0}/img/icons/explorer-icon-small.png'.format(settings.STATIC_URL)
 
     def get_thumbnail_url(self):
-        if self.gallery.featured_photo:
+        if self.gallery and self.gallery.featured_photo:
             return self.gallery.featured_photo.get_thumbnail_url()
         return '{0}/img/icons/explorer-icon.png'.format(settings.STATIC_URL)
 
