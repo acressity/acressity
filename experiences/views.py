@@ -91,7 +91,7 @@ def create(request):
                 messages.success(
                     request,
                     _('Your featured experience is now {0}'.format(
-                        form.instance.experience))
+                        form.instance))
                 )
             elif form.cleaned_data['unfeature']:
                 request.user.featured_experience = None
