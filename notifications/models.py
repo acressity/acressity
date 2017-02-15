@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 
 from notifications.signals import notify
+from acressity.utils import get_site_domain
 
 # The table fields:
 # id, level, recipient_id, unread, actor_content_type_id, actor_object_id, verb, description, target_content_type_id, target_object_id, action_object_content_type_id, action_object_object_id, timestamp, public
@@ -200,8 +201,8 @@ def notify_handler(verb, **kwargs):
             to = newnotify.recipient.email
             from_email = 'acressity@acressity.com'
             subject = 'New note on your Acressity journey'
-            text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
-            html_content = render_to_string('notifications/email.html', {'notice': newnotify})
+            text_content = render_to_string('notifications/email.txt', {'notice': newnotify, 'domain': get_site_domain()})
+            html_content = render_to_string('notifications/email.html', {'notice': newnotify, 'domain': get_site_domain()})
             message = EmailMultiAlternatives(subject, text_content, from_email, [to])
             message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
             message.send()
