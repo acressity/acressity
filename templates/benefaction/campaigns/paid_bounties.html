@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="campaign_item">
+        <div class="jumbotron">
+            <h1>All Paid Bounties</h1>
+            <h2>{{ campaign }}</h2>
+
+            <div class="option_list">
+                <a href="{% url 'campaign' campaign.pk %}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go to campaign home page" class="option_icon" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bounty_list">
+        {% for bounty in bounties %}
+            {% include 'benefaction/bounties/snippets/dash.html' %}
+        {% empty %}
+            There are currently no paid bounties
+        {% endfor %}
+    </div>
+{% endblock content %}

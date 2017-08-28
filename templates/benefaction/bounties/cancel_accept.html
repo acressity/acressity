@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h1>Confirm Cancelling Your Acceptance of this Bounty?</h1>
+	<form action="" method="POST">
+		{% csrf_token %}
+		<p>
+			Are you sure you want to cancel your acceptance this bounty? Doing so will notify the creator, {{ bounty.creator }}, who will then no longer be able to submit a payment.
+		</p>
+		<div class="align_center">
+			<input type="submit" value="Confirm Cancel" />
+		</div>
+	</form>
+{% endblock content %}

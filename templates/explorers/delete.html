@@ -1,7 +1,14 @@
 {% extends "explorers/base.html" %}
 
 {% block content %}
-	<h1>Delete your explorer profile?</h1>
+    <div class="explorer_item">
+        <div class="jumbotron">
+            <h1>Delete Journey</h1>
+        </div>
+    </div>
+    <h2>
+        Are you sure you want to delete your journey?
+    </h2>
 	{% with explorer=request.user %}
 		{% include 'explorers/snippets/dash.html' %}
 	{% endwith %}

@@ -11,7 +11,7 @@ from experiences.models import Experience
 
 
 class NarrativeEditTest(NarrativeTestCase):
-    def test_unauthorized_user_directed_login_to_edit_narrative(self):
+    def test_anonymous_user_directed_login_to_edit_narrative(self):
         response = self.client.get(reverse('edit_narrative',
             args=(self.narrative_public.id,)))
         self.assertRedirects(response, settings.LOGIN_URL + '?next=' +
@@ -70,7 +70,8 @@ class NarrativeEditTest(NarrativeTestCase):
         self.assertEqual(narrative_edited.title, title_edited)
 
     def test_experience_author_cannot_view_edit_page_when_not_author(self):
-        # Not even the author of the experience can edit
+        # Not even the author of the experience can edit non-authored
+        # narratives
         self.experience.explorers.add(self.other_explorer)
 
         narrative = Narrative.objects.create(
@@ -92,6 +93,11 @@ class NarrativeEditTest(NarrativeTestCase):
 
         title_original = 'Curiosity'
         title_edited = 'Curiosity Birthday Song'
+
+        self.assertFalse(
+            self.experience.narratives.filter(title=title_edited).exists(),
+            'Since this is tested against later, cannot yet have it exist.'
+        )
 
         narrative_original = Narrative.objects.create(
             author=self.other_explorer,

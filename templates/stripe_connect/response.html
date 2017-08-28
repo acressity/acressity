@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="stripe_item">
+        <div class="jumbotron">
+            <h1>Congratulations!</h1>
+            <h2>Stripe Authorization Successful</h2>
+        </div>
+    </div>
+
+    <div class="main_item">
+        <p>
+            You've successfully authorized Acressity to interact with your Stripe account. This will allow you to accept payments from benefactors and make payments to others if you choose to become a benefactor of their journey.
+        </p>
+        <p>
+            You'll receive notifications of activity on your account from Acressity on this site, and you can track any benefaction campaigns in which you are invested as either a recipient or a benefactor as payments are made.
+        </p>
+
+        <section>
+            <h2>Your Stripe Account</h2>
+            <p>
+                You can check your account at any time on your stripe profile dashboard. The dashboard will display all payments you have received and gives you access to controlling where the funds flow once received.
+            </p>
+            <p>
+                View <a href="{{ stripe_dashboard_url }}">Stripe dashboard</a>
+            </p>
+        </section>
+    </div>
+
+    {% if user.get_benefaction_campaigns %}
+        <section class="campaign_list">
+            <h2>Your Benefaction Campaigns</h2>
+            {% for campaign in user.get_benefaction_campaigns %}
+                <div class="campaign_item">
+                    <a href="{{ campaign.get_absolute_url }}">
+                        {{ campaign }}
+                    </a>
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+{% endblock content %}

@@ -9,6 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 from django_comments.signals import comment_was_posted
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from django.core.urlresolvers import reverse
+
+from django_comments.models import Comment
 
 from experiences.models import Experience
 from notifications.models import Notification
@@ -16,9 +19,9 @@ from acressity.utils import get_site_domain
 
 
 class Cheer(models.Model):
-    '''
+    help_text=_('''
     Model for 'following' function
-    '''
+    ''')
     cheerer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='cheers_from')
     explorer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='cheers_for')
     date_cheered = models.DateTimeField(default=timezone.now)
@@ -28,9 +31,9 @@ class Cheer(models.Model):
 
 
 class Hurrah(models.Model):
-    '''
-    Model for 'appreciating' function. No functionality atm
-    '''
+    help_text=_('''
+    Model for 'appreciating' function.
+    ''')
     explorer = models.ForeignKey(settings.AUTH_USER_MODEL)
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'), related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField(_('object ID'), null=False)
@@ -40,9 +43,9 @@ class Hurrah(models.Model):
 
 
 class InvitationRequest(models.Model):
-    '''
+    help_text=_('''
     Model attempting to be fairly universal for the potential new relationship between two people. Author refers to the explorer who created the experience. Recruit is an existing explorer, and potential_explorer is a person not yet registered, but nonetheless with some sort of interest in the experience.
-    '''
+    ''')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_author', null=False, help_text='The author of the experience. Able to be the explorer who invited the recruit or potential explorer, or the person who an existing explorer is contacting to become a part of the experience.')
     recruit = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='experience_recruit', null=True, blank=True, help_text='References an existing explorer potentially being added to experience.')
     potential_explorer = models.ForeignKey('PotentialExplorer', null=True, blank=True, help_text='References potential new user with little information for registration provided by invitation author.', related_name='invitation_request')
@@ -51,7 +54,10 @@ class InvitationRequest(models.Model):
     code = models.CharField(max_length=25, null=True, blank=True, help_text='Random code sent with the email in the url, used to confirm the uniqueness and identity of the invited explorer.')
 
     def __unicode__(self):
-        return '{0} invitation'.format(self.experience)
+        return 'Invitation to experience {0}'.format(self.experience)
+
+    def get_absolute_url(self):
+        return reverse('handle_invitation_request', args=[self.pk])
 
     def get_absolute_url(self):
         return reverse('experience', args=[self.experience.pk])
@@ -96,9 +102,9 @@ class Quote(models.Model):
 
 
 class PotentialExplorer(models.Model):
-    '''
+    help_text=_('''
     Model to represent a person being invited to be a part of an experience. Should be deleted based on reply or a timeout
-    '''
+    ''')
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=60, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False,
@@ -109,22 +115,28 @@ class PotentialExplorer(models.Model):
 
 
 def comment_handler(sender, **kwargs):
-    '''
+    help_text=_('''
     Handler function specifically designed to handle new comments being created
-    '''
+    ''')
 
     comment = kwargs.pop('comment')
 
     model = comment.content_object.model()
-    recipients = []
     if model == 'Explorer':
-        recipients.append(comment.content_object)
+        recipients = {comment.content_object}
     elif model == 'Experience':
-        recipients = comment.content_object.explorers.all()
+        recipients = set(comment.content_object.explorers.all())
     elif model == 'Narrative':
-        recipients = comment.content_object.experience.explorers.all()
+        recipients = set(comment.content_object.experience.explorers.all())
     elif model == 'Photo':
-        recipients.append(comment.content_object.author)
+        recipients = {comment.content_object.author}
+    elif model == 'Campaign':
+        recipients = set(comment.content_object.experience.explorers.all())
+    elif model == 'Bounty':
+        recipients = {comment.content_object.creator}
+
+    if comment.comment == 'reply':
+        recipients.add(Comment.objects.get(pk=comment.parent_id).user)
         
     for recipient in recipients:
         newnotify = Notification.objects.create(

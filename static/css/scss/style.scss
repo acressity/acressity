@@ -41,6 +41,9 @@ $link_color: #1A4B6E;
 $gold_color: #dbbf0d;
 
 $main_color: #4A7B8A;
+$main_color_r: 74;
+$main_color_g: 123;
+$main_color_b: 138;
 $main_color_darker: #1A4B6E;
 $main_color_lighter: #6A9BAA;
 
@@ -73,9 +76,9 @@ ul {
 }
 
 div {
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
+    //border-radius: 2px;
+    //-moz-border-radius: 2px;
+    //-webkit-border-radius: 2px;
 }
 
 textarea {
@@ -107,7 +110,6 @@ $button_background_danger: #F22;
 $button_background_danger_darker: #F00;
 
 input[type="button"], input[type="submit"], button {
-	min-width: 33%;
     background-color:$button_background;
     -webkit-border-top-left-radius:6px;
     -moz-border-radius-topleft:6px;
@@ -129,9 +131,9 @@ input[type="button"], input[type="submit"], button {
     font-size:16px;
     font-style:normal;
     line-height:27px;
-    //width:200px;
     text-decoration: none;
     text-align:center;
+	padding: 12px 35px;
     &:hover {
         background:-webkit-gradient( linear, left top, left bottom,
         color-stop(0.05, $main_color_darker), color-stop(1, $button_background) );
@@ -153,6 +155,11 @@ input[type="button"], input[type="submit"], button {
 			background-color:$button_background_danger_darker;
 		}
 	}
+}
+
+input[type="range"] {
+	cursor: pointer;
+	background: #555;
 }
 
 #large_button {
@@ -217,7 +224,7 @@ input.invite-button {
 }
 
 form {
-    background-color: rgba(230, 230, 255, 0.2);
+    //background-color: rgba(230, 230, 255, 0.2);
     padding: 3px;
 
     &.no_styling {
@@ -249,10 +256,7 @@ form {
 }
 
 .helptext {
-	display: block;
-	padding: 5px;
-	font-size: 0.8em;
-	color: rgba(0, 0, 0, 0.5);
+	@extend .help-text;
 }
 
 input, textarea {
@@ -281,7 +285,8 @@ blockquote:after {
 }
 
 blockquote .body {
-	font-style: italic;
+	text-align: center;
+	margin-bottom: 10px;
 }
 
 blockquote .author {
@@ -295,7 +300,7 @@ blockquote .author {
     background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
 }
 
-input, button {
+input {
 	padding: 5px;
 }
 
@@ -323,26 +328,24 @@ textarea {
     box-shadow: 0 0 0 0 #888;
 }
 
+.base-div {
+	@extend .shadow_border;
+	@extend .background_color;
+	overflow: hidden;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+}
+
 #content {
-    @extend .shadow_border;
-    @extend .background_color;
+    @extend .base-div;
+	margin-bottom: 15px;
 }
 
 #right_content {
-    @extend .shadow_border;
-    @extend .background_color;
+    @extend .base-div;
     max-height: 90%;
     overflow-y: auto;
-}
-
-.object_item_list {
-    position: relative;
-}
-
-.object_item {
-    position: relative;
-    padding: 5px;
-    margin: 2px;
 }
 
 .thirds_table {
@@ -354,6 +357,11 @@ textarea {
     width: 33%;
     height: 100%;
     display: inline-block;
+}
+
+.halves_table {
+    position: relative;
+    width: 100%;
 }
 
 .halves_table .cell {
@@ -380,32 +388,58 @@ textarea {
     height: 100%;
 }
 
-$item_opacity: 0.6;
+$item_opacity: 0.4;
+
+.object_item_list {
+    position: relative;
+}
+
+.object_item {
+    position: relative;
+    padding: 15px;
+    margin: 0px;
+}
 
 .main_item {
     @extend .object_item;
-    background-color: $main_color;
+    background-color: rgba($main_color_r, $main_color_g, $main_color_b, $item_opacity);
+}
+
+.explorer_background {
+    background-color: rgba($expl_r, $expl_g, $expl_b, $item_opacity);
+}
+
+.experience_background {
+    background-color: rgba($exper_r, $exper_g, $exper_b, $item_opacity);
+}
+
+.narrative_background {
+    background-color: rgba($narr_r, $narr_g, $narr_b, $item_opacity + 0.1);
 }
 
 .explorer_item {
     @extend .object_item;
-    background-color: rgba($expl_r, $expl_g, $expl_b, $item_opacity);
+	@extend .explorer_background;
 }
 
 .experience_item {
     @extend .object_item;
-    background-color: rgba($exper_r, $exper_g, $exper_b, $item_opacity);
+	@extend .experience_background;
 }
 
 .narrative_item {
     @extend .object_item;
-    background-color: rgba($narr_r, $narr_g, $narr_b, $item_opacity + 0.1);
+	@extend .narrative_background;
     word-wrap: break-word;
 }
 
 .photo_item {
     @extend .object_item;
     background-color: rgba(120, 120, 120, $item_opacity);
+}
+
+.gallery_item {
+    @extend .photo_item;
 }
 
 .campaign_item {
@@ -416,8 +450,22 @@ $item_opacity: 0.6;
 	@extend .explorer_item;
 }
 
-.bid_item {
+.stripe_item {
 	@extend .narrative_item;
+}
+
+.comment_item {
+	@extend .object_item;
+}
+
+.success_item {
+	@extend .object_item;
+    background-color: rgba(50, 175, 50, $item_opacity);
+}
+
+.warning_item {
+	@extend .object_item;
+    background-color: rgba(175, 50, 50, $item_opacity);
 }
 
 .editable {
@@ -457,6 +505,7 @@ $item_opacity: 0.6;
     position: relative;
     .option {
         margin: 5px;
+		font-size: 80%;
     }
 }
 
@@ -499,21 +548,20 @@ $item_opacity: 0.6;
 }
 
 .narrative_detail {
-    @extend .narrative_item;
-    min-height: 250px;
-}
-
-.narrative_detail .images_right {
-    float: right;
-    width: 30%;
-    text-align: center;
-    padding: 5px;
-    img {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-		max-width: 100%;
-    }
+	@extend .narrative_background;
+	padding: 25px;
+	.images_right {
+		float: right;
+		width: 30%;
+		text-align: center;
+		padding: 5px;
+		img {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 100%;
+		}
+	}
 }
 
 .object_item_interaction {
@@ -544,15 +592,15 @@ $item_opacity: 0.6;
     }
 }
 
-.comment-level-1 {
+.item-level-1 {
 	margin-left: 100px;
 }
 
-.comment-level-2 {
+.item-level-2 {
 	margin-left: 200px;
 }
 
-.comment-level-3 {
+.item-level-3 {
 	margin-left: 300px;
 }
 
@@ -579,7 +627,7 @@ $item_opacity: 0.6;
         margin-left: auto;
         margin-right: auto;
         background-color: rgba(200, 200, 200, 0.3);
-        border-radius: 0.45em;
+        border-radius: 0.2em;
     }
 }
 
@@ -645,6 +693,12 @@ $item_opacity: 0.6;
     font-size: smaller;
 }
 
+.photo-top-right {
+	position: absolute;
+	right: -1px;
+	top: -3px;
+}
+
 .caption {
     @extend .photo_caption;
 }
@@ -673,22 +727,57 @@ $item_opacity: 0.6;
 .option_list {
     overflow: hidden;
     display: table;
-    font-size: small;
+}
+
+.object_list {
+	.object_item {
+		margin: 10px;
+	}
+}
+
+.explorer_list {
+	@extend .explorer_item;
+	@extend .object_list;
+}
+
+.experience_list {
+	@extend .experience_item;
+	@extend .object_list;
+}
+
+.narrative_list {
+	@extend .narrative_item;
+	@extend .object_list;
+}
+
+.campaign_list {
+	@extend .campaign_item;
+	@extend .object_list;
+}
+
+.bounty_list {
+	@extend .bounty_item;
+	@extend .object_list;
+}
+
+.photo_list {
+	@extend .photo_item;
+	@extend .object_list;
 }
 
 // Following for vertical option lists with text
 .option {
     img {
         vertical-align: middle;
-        width: 20px;
+        width: 25px;
         margin: 1px;
         opacity: 0.5;
     }
     &:hover {
         img {
-            width: 22px;
-            position:relative;
-            margin: 0;
+            width: 27px;
+            position: relative;
+            margin: 0px;
             opacity: 1;
         }
     }
@@ -696,15 +785,15 @@ $item_opacity: 0.6;
 
 // Following for horizontal option lists
 .option_icon {
-    padding-right: 7px;
-    width: 20px;
+	padding: 3px;
+    width: 32px;
     margin: 1px;
     opacity: 0.5;
     &:hover {
-        width: 22px;
+        width: 34px;
         position:relative;
+        margin: 0;
         opacity: 1;
-        margin: 0; // hacky, but I kinda like it and it works wonderfully
     }
 }
 
@@ -752,8 +841,22 @@ $item_opacity: 0.6;
     display: none;
 }
 
+.subtle-text {
+	color: rgba(0, 0, 0, 0.5);
+	font-size: smaller;
+	background-color: #666666;
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	background-clip: text;
+	text-shadow: rgba(255,255,255,0.5) 0px 1px 1px;
+}
+
+.about_this {
+	@extend .subtle-text;
+}
+
 .help-text {
-    font-size: smaller;
+	@extend .subtle-text;
     padding: 5px;
     background-color: rgba(250, 250, 250, 0.15);
 }
@@ -803,12 +906,11 @@ $item_opacity: 0.6;
 }
 
 #wrapper {
-	min-height: 100%;
-	height: auto;
-	/* Negative indent footer by its height */
-	margin: 0 auto -50px;
-	/* Pad bottom by footer height */
-	padding: 0 0 50px;
+	//min-height: 100%;
+	//height: auto;
+	/* Margin on bottom */
+	//margin: 0 auto -5px;
+	//padding: 0 0 5px;
 }
 
 #messages {
@@ -817,7 +919,7 @@ $item_opacity: 0.6;
     position: fixed;
     width: 100%;
     text-align: center;
-    background-color: rgba(200, 200, 200, 0.7);
+    background-color: rgba(200, 200, 200, 0.9);
     z-index: 3;
     top: 30px;
     left: 0;
@@ -844,8 +946,19 @@ $item_opacity: 0.6;
 	color: #DDD;
 }
 
+.navbar-default .navbar-nav .open .dropdown-menu > li > a, .navbar-default .navbar-nav .open .dropdown-menu {
+	color: #000;
+}
+
 .navbar-default .navbar-brand {
 	color: #DDD;
+	img {
+		position: relative;
+		top: -45px;
+		max-width: 110px;
+		-webkit-filter: drop-shadow(2px 2px 2px #222);
+		filter: drop-shadow(2px 2px 2px #222);
+	}
 }
 
 .navbar-default .navbar-nav > li.active > a {
@@ -859,8 +972,20 @@ $item_opacity: 0.6;
     height: 40px;
 }
 
+//.navbar-default .navbar-toggle .icon-bar
+.navbar-default .navbar-toggle .icon-bar {
+	height: 1px;
+	background-color: #FFF;
+}
+
 .navbar {
 	min-height:40px;
+}
+
+.container .jumbotron {
+	background-color: transparent;
+	border-radius: 0;
+	margin-bottom: 0;
 }
 
 .footer {
@@ -891,15 +1016,10 @@ blockquote {
 .explore_button {
     width: 12em;
     height: 12em;
+	margin: 0 auto;
     border-radius: 50%;
-    position: absolute;
     text-align: center;
     vertical-align: middle;
-    -webkit-transition: all 0.2s;
-    -moz-transition: all 0.2s;
-    -ms-transition: all 0.2s;
-    -o-transition: all 0.2s;
-    transition: all 0.2s;
     p:first-child {
         font-size: 2em;
         font-weight: bold;
@@ -907,28 +1027,21 @@ blockquote {
     p {
         color: initial;
         position: relative;
-        top: 30%;
+        top: 35%;
     }
 }
 
 #explore_main {
     @extend .explore_button;
     background-color: rgba($exper_r, 95, 142, 1);
-    top: 150px;
-    left: 50%;
     &:hover {
         background-color: rgba($exper_r, 95, 142, 0.5);
     }
 }
 
-$second_two_shift_down: 333px;
-$second_two_shift_outwards: 14%;
-
 #explore_what {
     @extend .explore_button;
     background-color: rgba($expl_r, $expl_g, $expl_b, 1);
-    top: $second_two_shift_down;
-    left: 50% - $second_two_shift_outwards;
     &:hover {
         background-color: rgba($expl_r, $expl_g, $expl_b, 0.5);
     }
@@ -937,8 +1050,6 @@ $second_two_shift_outwards: 14%;
 #explore_why {
     @extend .explore_button;
     background-color: rgba($narr_r, $narr_g, $narr_b, 1);
-    top: $second_two_shift_down;
-    left: 50% + $second_two_shift_outwards;
     &:hover {
         background-color: rgba($narr_r, $narr_g, $narr_b, 0.5);
     }
@@ -965,7 +1076,6 @@ $second_two_shift_outwards: 14%;
     clear: both;
     height: 30px;
     background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 0;
 }
 
 #welcome_quote {
@@ -1008,6 +1118,10 @@ $second_two_shift_outwards: 14%;
     }
 }
 
+.notification-badge {
+	background-color: #F44;
+}
+
 #new_narrative_form {
     display: none;
 }
@@ -1024,7 +1138,6 @@ $second_two_shift_outwards: 14%;
     @extend .object_item;
     padding: 5px;
     margin: 10px 5px;
-    background-color: rgba(100, 100, 100, 0.1);
     input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]) {
         min-height: 1em;
         font-size: 1em;
@@ -1044,6 +1157,11 @@ $second_two_shift_outwards: 14%;
 .register-table {
     table-layout: fixed;
     width: 100%;
+}
+
+.input-range-wrapper {
+	@extend .experience_background;
+	border-radius: 5px;
 }
 
 #id_honeypot {

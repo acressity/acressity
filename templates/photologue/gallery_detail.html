@@ -5,43 +5,48 @@
 {% block title %} - Gallery: {{ object.title }}{% endblock %}
 
 {% block content %}
-    <h1>{{ object.title }}</h1>
-    <h2>Published {{ object.date_added|date:"l, F jS, Y" }}</h2>
-    <div class="option_list">
-        {% ifequal object.content_type.model 'experience' %}
-    	    <a href="{% url 'experiences.views.index' object.experience.id %}">
-                <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to experience" class="option_icon" />
-            </a>
-        {% else %}
-	    {% ifequal object.content_type.model 'narrative' %}
-	        <a href="{% url 'narratives.views.index' object.narrative.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to narrative" class="option_icon" />
-                </a>
-	    {% else %}
-		{% for explorer in object.explorers.all %}
-		    <a href="{% url 'journey' explorer.id %}">
-                        <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to {{ explorer.get_full_name }}'s Journey" class="option_icon" />
+    <div class="gallery_item">
+        <div class="jumbotron">
+            <h1>{{ object.title }}</h1>
+            <h2>Published {{ object.date_added|date:"l, F jS, Y" }}</h2>
+
+            <div class="option_list">
+                {% ifequal object.content_type.model 'experience' %}
+                    <a href="{% url 'experiences.views.index' object.experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to experience" class="option_icon" />
                     </a>
-	        {% endfor %}
-	    {% endifequal %}
-        {% endifequal %}
-	{% if request.user in object.explorers.all %}
-	    <a href="{% url 'photologue.views.upload_photo' object.id %}">
-                <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload photo for {{ object.title }}" class="option_icon" />
-            </a>
-	    <a href="{% url 'pl-gallery-edit' object.id %}">
-                <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this Album" class="option_icon" />
-            </a>
-	{% endif %}
+                {% else %}
+                    {% ifequal object.content_type.model 'narrative' %}
+                        <a href="{% url 'narratives.views.index' object.narrative.id %}">
+                                <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to narrative" class="option_icon" />
+                            </a>
+                    {% else %}
+                        {% for explorer in object.explorers.all %}
+                            <a href="{% url 'journey' explorer.id %}">
+                                        <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to {{ explorer.get_full_name }}'s Journey" class="option_icon" />
+                            </a>
+                        {% endfor %}
+                    {% endifequal %}
+                {% endifequal %}
+                {% if request.user in object.explorers.all %}
+                    <a href="{% url 'photologue.views.upload_photo' object.id %}">
+                            <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload photo for {{ object.title }}" class="option_icon" />
+                        </a>
+                    <a href="{% url 'pl-gallery-edit' object.id %}">
+                            <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this Album" class="option_icon" />
+                        </a>
+                {% endif %}
+            </div>
+        </div>
     </div>
+
     {% if object.description %}<p>{{ object.description }}</p>{% endif %}
-    <div class="photo-gallery">
+
+    <div class="photo_list">
         <div class="thirds_table">
             {% for photo in photos %}
                 <div class="cell">
-                    <div class="photo_item">
-                        {% include "photologue/snippets/photo_dash.html" %}
-                    </div>
+                    {% include "photologue/snippets/photo_dash.html" %}
                 </div>
             {% empty %}
                 <p>There are no photos uploaded for this gallery yet</p>

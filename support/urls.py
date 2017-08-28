@@ -11,5 +11,4 @@ urlpatterns = patterns(
     url(r'^handle_invitation_request/(?P<invitation_request_id>\d+)/$', 'handle_invitation_request', name='handle_invitation_request'),
     url(r'^experience/(?P<experience_id>\d+)/donate/$', 'donate', name='donate'),
     url(r'^experience/(?P<experience_id>\d+)/paypal_return/$', 'paypal_return', name='paypal_return'),
-    url(r'^experience/(?P<experience_id>\d+)/paypal_cancel/$', 'paypal_cancel', name='paypal_cancel'),
 )

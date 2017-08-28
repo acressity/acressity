@@ -21,6 +21,8 @@ class NarrativeDeleteTest(NarrativeTestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_author_can_delete_narrative(self):
+        num_narratives_start = self.experience.narratives.count()
+
         self.client.login(
             username=self.explorer.email,
             password=self.explorer.password_unhashed
@@ -44,8 +46,14 @@ class NarrativeDeleteTest(NarrativeTestCase):
                 args=(self.narrative_public.experience.pk,)
             )
         )
+        self.assertEqual(
+            self.experience.narratives.count(),
+            num_narratives_start - 1
+        )
 
     def test_non_author_cannot_delete_narrative(self):
+        num_narratives_start = self.experience.narratives.count()
+
         self.client.login(
             username=self.other_explorer.email,
             password=self.other_explorer.password_unhashed
@@ -60,6 +68,11 @@ class NarrativeDeleteTest(NarrativeTestCase):
         )
 
         self.assertEqual(response.status_code, 403)
+
+        self.assertEqual(
+            self.experience.narratives.count(),
+            num_narratives_start
+        )
 
     def test_comrade_cannot_view_delete_page(self):
         # Even if they are the author of the experience

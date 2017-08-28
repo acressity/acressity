@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load acressity_extras %}
+
+{% block content %}
+    <div class="bounty_item">
+        <div class="jumbotron">
+            <h1>Counterbid</h1>
+
+            <div class="option_list">
+                <a href="{{ bounty.get_absolute_url }}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" class="option_icon" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+	<h2>{{ form.initial.bounty.campaign }}</h2>
+	<div class="option_list">
+		<a href="{% url 'bounty' form.initial.bounty.pk %}">
+			<img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go back to bounty home page" class="option_icon" />
+		</a>
+	</div>
+	<p>
+	Change whatever aspects of the bid you like. Creating this counterbid will notify the original bidder, <a href="{{ form.initial.bidder.get_absolute_url }}">{{ form.initial.bidder }}</a>, so they can review it and choose to accept the changes or create a counterbid of their own.
+	</p>
+	{% include 'benefaction/bids/forms/bid.html' %}
+{% endblock content %}

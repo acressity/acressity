@@ -4,21 +4,20 @@
 {% load comments_xtd %}
 
 {% block content %}
-	{# What was formerly here has been moved to a separate file so it may be reused for experience index's latest narrative #}
 	{% include "narratives/snippets/narrative.html" %}
 
-    <hr />
+    <div class="comment_item">
+        {% get_comment_count for narrative as comment_count %}
+        <h3>
+            {{ comment_count }} Note{{ comment_count|pluralize }}
+        </h3>
 
-    {% get_comment_count for narrative as comment_count %}
-    <h3>
-        {{ comment_count }} Note{{ comment_count|pluralize }}
-    </h3>
+        {% if user.is_authenticated %}
+            {% render_comment_form for narrative %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
+        {% endif %}
 
-    {% if user.is_authenticated %}
-        {% render_comment_form for narrative %}
-    {% else %}
-        <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
-    {% endif %}
-
-    {% render_comment_list for narrative %}
+        {% render_comment_list for narrative %}
+    </div>
 {% endblock content %}

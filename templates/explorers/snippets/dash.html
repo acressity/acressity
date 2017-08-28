@@ -1,30 +1,49 @@
 {# Expects user object passed in as explorer #}
 {# Referring template must convert accordingly (with-as statement) #}
-{# "stacked" option allows for divs to be stacked vertically rather than horizontally (as seen on explorer index page) #}
 
 {% load explorers_extras %}
 {% load notifications_tags %}
 {% load comments %}
 
 <div class="explorer_item">
-    <div>
+    <a href="{{ explorer.get_absolute_url }}">
         <div class="featured_photo">
-            {% if not explorer.gallery.featured_photo %}
-                {% if explorer == user %}
-                    <a href="/photologue/gallery/{{ explorer.gallery.id }}/upload_photo/" title="Upload photo for your story" />
-                {% endif %}
-            {% endif %}
-            <img src="{{ explorer.get_thumbnail_url }}">
-            {% if not explorer.gallery.featured_photo %}
-                {% if explorer == user %}
-                    </a>
-                {% endif %}
-            {% endif %}
+            <img src="{{ explorer.get_thumbnail_url }}" />
         </div>
+
         <h3 class="align_center">
             {{ explorer.get_full_trailname }}
         </h3>
+    </a>
+
+    <div class="option_list">
+        <a href="{% url 'profile' explorer.id %}">
+            <img src="{{ STATIC_URL }}img/icons/user.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} profile" class="option_icon" />
+        </a>
+        <a href="{% url 'board' explorer.id %}">
+            <span class="position_relative">
+                <img src="{{ STATIC_URL }}img/icons/bulletin-board-icon_grayscale.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} bulletin board" class="option_icon" />
+
+                {% if user == explorer %}
+                    {% notifications_unread as unread_count %}
+                    {% if unread_count %}
+                        <span class="photo-top-right badge notification-badge">{{ unread_count }}</span>
+                    {% endif %}
+                {% endif %}
+            </span>
+        </a>
+        {% if explorer.gallery.featured_photo %}
+            <a href="{% url 'pl-gallery' explorer.gallery.id %}">
+                <img src="{{ STATIC_URL }}img/icons/images.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} photos" class="option_icon" />
+            </a>
+        {% endif %}
+        {% ifequal user explorer %} 
+            <a href="{% url 'create_experience' %}">
+                <img src="{{ STATIC_URL }}img/icons/add.png" class="option_icon" title="Create new experience" />
+            </a>
+        {% endifequal %}
     </div>
+
     {% if explorer.brief %}
         <div class="explorer_item">
             <div onclick="toggle_div(this.nextElementSibling);">
@@ -39,38 +58,21 @@
             </div>
         </div>
     {% endif %}
-    {% ifequal user explorer %}
-        {% notifications_unread as unread_count %}
-        {% if unread_count %}
-            <a href="{% url 'board' explorer.id %}">{{ unread_count }} new notification{{ unread_count|pluralize }}</a>
-        {% endif %}
-    {% endifequal %}
-    <div class="option_list">
-        <a href="{% url 'journey' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/journey.png" title="Visit {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} journey" class="option_icon" /></a>
-        <a href="{% url 'profile' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/user.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} story" class="option_icon" /></a>
-        <a href="{% url 'explorers.views.board' explorer.id %}"><img src="{{ STATIC_URL }}img/icons/bulletin-board-icon_grayscale.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} bulletin board" class="option_icon" /></a>
-        {% if explorer.gallery.featured_photo %}
-            <a href="{% url 'pl-gallery' explorer.gallery.id %}"><img src="{{ STATIC_URL }}img/icons/images.png" title="View {% ifequal explorer user %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} photos" class="option_icon" /></a>
-        {% endif %}
-        {% ifequal user explorer %} 
-            <a href="{% url 'create_experience' %}"><img src="{{ STATIC_URL }}img/icons/add.png" class="option_icon" title="Create new experience" /></a>
-        {% endifequal %}
-    </div>
-</div>
-{% if explorer.featured_experience %}
-    {% url 'experience' explorer.featured_experience.id as featured_experience_path %}
-    {% if featured_experience_path != request.path %}
-        {% if explorer.featured_experience.is_public or user == explorer %}
-            <div class="experience_item">
-                <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
-                    Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" class="valign_middle" />
+    {% if explorer.featured_experience %}
+        {% url 'experience' explorer.featured_experience.id as featured_experience_path %}
+        {% if featured_experience_path != request.path %}
+            {% if explorer.featured_experience.is_public or user == explorer %}
+                <div class="experience_item">
+                    <div onclick="toggle_div(this.nextElementSibling);" title="Click to toggle {% ifequal user explorer %}your{% else %}{{ explorer.get_full_name|possessive }}{% endifequal %} featured experience" style="font-weight: bold;">
+                        Featured experience <img src="{{ STATIC_URL }}img/icons/expand-icon.png" class="valign_middle" />
+                    </div>
+                    <div class="toggle_div">
+                        {% with experience=explorer.featured_experience stacked=True %}
+                            {% include "experiences/snippets/dash.html" %}
+                        {% endwith %}
+                    </div>
                 </div>
-                <div class="toggle_div">
-                    {% with experience=explorer.featured_experience stacked=True %}
-                        {% include "experiences/snippets/dash.html" %}
-                    {% endwith %}
-                </div>
-            </div>
+            {% endif %}
         {% endif %}
     {% endif %}
-{% endif %}
+</div>

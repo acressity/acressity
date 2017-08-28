@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>All Explorers</h2>
-	{% for explorer in all_explorers %}
-        {% include "explorers/snippets/dash.html" %}
-	{% endfor %}
+    <div class="explorer_item">
+        <div class="jumbotron">
+            <h1>All Explorers</h1>
+        </div>
+    </div>
+
+    <div class="explorer_list">
+        {% for explorer in all_explorers %}
+            {% include "explorers/snippets/dash.html" %}
+        {% empty %}
+            There are currently no explorers
+        {% endfor %}
+    </div>
 {% endblock content %}

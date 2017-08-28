@@ -19,6 +19,9 @@ urlpatterns = patterns(
     url(r'^narratives/', include('narratives.urls')),
     url(r'^photologue/', include('photologue.urls')),
     url(r'^support/', include('support.urls')),
+    url(r'^stripe_connect/', include('stripe_connect.urls')),
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    url(r'^soc/', include('social_django.urls', namespace='social')),
     url(r'^comments/', include('django_comments_xtd.urls')),
     url(r'^why/$', 'why', name='why'),
     url(
@@ -43,6 +46,7 @@ urlpatterns = patterns(
     url(r'^accounts/login/', login, name='login_page'),
     url(r'^contact/', 'contact', name='contact'),
     url(r'^notifications/', include('notifications.urls')),
+    url(r'^benefaction/', include('benefaction.urls')),
     url(r'^paypal/', include('paypal.standard.ipn.urls')),
     # semi-primitive search for the query string provided.
     # Allows easier accessing of objects by an identifying string.

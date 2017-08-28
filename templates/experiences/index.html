@@ -3,7 +3,7 @@
 {% load comments %}
 {% load comments_xtd %}
 
-{% block content %}
+{% block head_insert %}
     <script type="text/javascript">
         function submit_brief(form){
             var brief_data = {
@@ -27,98 +27,95 @@
             return false;
         }
     </script>
+{% endblock head_insert %}
 
+{% block content %}
     <div class="experience_item">
-        <h1>
-			{{ experience }}
-            {% if experience.is_fulfilled %}
-				<img src="{{ STATIC_URL }}img/icons/award.png"
-					class="option_icon valign_middle"
-					title="This experience has been fulfilled!"
-					alt="Award for fulfilling this experience" />
-            {% endif %}
-			{% if not experience.is_public %}
-				<img src="{{ STATIC_URL }}img/icons/lock.png"
-					class="option_icon valign_middle"
-					title="This experience is private" />
-			{% endif %}
-		</h1>
-        <div class="position_relative">
-            <div class="featured_photo">
-                {% if experience.gallery.featured_photo %}
-                    <a href="{% url 'pl-gallery' experience.gallery.id %}">
-                        <img src="{{ experience.gallery.featured_photo.get_display_url }}" />
+        <div class="jumbotron">
+            <h1>Experience</h1>
+            <h2>
+                {{ experience }}
+                {% if experience.is_fulfilled %}
+                    <img src="{{ STATIC_URL }}img/icons/award.png"
+                        class="option_icon valign_middle"
+                        title="This experience has been fulfilled!"
+                        alt="Award for fulfilling this experience" />
+                {% endif %}
+                {% if not experience.is_public %}
+                    <img src="{{ STATIC_URL }}img/icons/lock.png"
+                        class="option_icon valign_middle"
+                        title="This experience is private" />
+                {% endif %}
+            </h2>
+
+            {% include 'experiences/snippets/featured_photo.html' %}
+
+            <div class="option_list">
+                {% if request.user in experience.explorers.all %} 
+                    <a href="{% url 'create_narrative' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/add.png" title="Create a new narrative" class="option_icon" />
                     </a>
-                    {% if experience.gallery.featured_photo.caption %}
-                        <div class="caption">
-                            {{ experience.gallery.featured_photo.caption }}
-                        </div>
+                    <a href="{% url 'experiences.views.edit' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this experience" class="option_icon" />
+                    </a>
+                    <a href="{% url 'experiences.views.upload_photo' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" class="option_icon" />
+                    </a>
+                    {% if experience.narratives.count %}
+                        <a href="{% url 'transfer_narratives' experience.id %}">
+                            <img src="{{ STATIC_URL }}img/icons/transfer.png" title="Transfer chosen narratives to another experience" class="option_icon" />
+                        </a>
                     {% endif %}
                 {% else %}
-                    {% if user in experience.explorers.all %}
-                        <a href="{% url 'exp_upload_photo' experience.id %}" title="Upload photo for this experience">
-                            <img src="{{ STATIC_URL }}img/logo.png" style="width: 200px;" />
-                        </a>
-                    {% else %}
-                        <img src="{{ STATIC_URL }}img/logo.png" style="width: 200px;" />
+                    {% if user.is_authenticated %}
+                        {% if experience not in user.tracking_experiences.all %}
+                            <a href="{% url 'track_experience' experience.id %}">
+                              <img src="{{ STATIC_URL }}img/icons/track.png" class="option_icon" title="Add this experience to your tracking list" />
+                            </a>
+                        {% else %}
+                            <a href="{% url 'untrack_experience' experience.id %}">
+                              <img src="{{ STATIC_URL }}img/icons/untrack.png" class="option_icon" title="Remove this experience from your tracking list" />
+                            </a>
+                        {% endif %}
                     {% endif %}
+                {% endif %}
+                {% if experience.has_campaign %}
+                    <a href="{% url 'campaign' experience.campaign.pk %}">
+                        <img src="{{ STATIC_URL }}img/icons/crowdfunding.png" title="View benefaction campaign" class="option_icon" />
+                    </a>
+                {% else %}
+                    {% if user == experience.author %}
+                        <a href="{% url 'campaign.create' experience.pk %}">
+                            <img src="{{ STATIC_URL }}img/icons/crowdfunding.png" title="Create benefaction campaign" class="option_icon" />
+                        </a>
+                    {% endif %}
+                {% endif %}
+                {% if experience.gallery %}
+                    <a href="{% url 'pl-gallery' experience.gallery.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/images.png" class="option_icon" title="View photos for this experience" />
+                    </a>
+                {% endif %}
+                {% if author %}
+                    <a href="{% url 'experience_invite' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/add-user.png" class="option_icon" title="Invite a comrade to be a part of this experience" />
+                    </a>
+                    <a href="{% url 'experiences.views.delete' experience.id %}">
+                        <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this experience" class="option_icon" />
+                    </a>
                 {% endif %}
             </div>
         </div>
+
+        {% if experience.status %}
+            <div class="experience_item">
+                <h4>Status</h4>
+                <p>{{ experience.status }}</p>
+            </div>
+        {% endif %}
+
         {% if experience.intended_completion_date and not experience.is_fulfilled %}
             <p>Goal: {{ experience.intended_completion_date|timeuntil }} left</p>
         {% endif %}
-        <div class="option_list">
-            {% if request.user in experience.explorers.all %} 
-                <a href="{% url 'create_narrative' experience.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/add.png" title="Create a new narrative" class="option_icon" />
-                </a>
-                <a href="{% url 'experiences.views.edit' experience.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this experience" class="option_icon" />
-                </a>
-                <a href="{% url 'experiences.views.upload_photo' experience.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload a photo" class="option_icon" />
-                </a>
-                {% if experience.narratives.count %}
-                    <a href="{% url 'transfer_narratives' experience.id %}">
-                        <img src="{{ STATIC_URL }}img/icons/transfer.png" title="Transfer chosen narratives to another experience" class="option_icon" />
-                    </a>
-                {% endif %}
-            {% else %}
-                {% if user.is_authenticated %}
-                    {% if experience not in user.tracking_experiences.all %}
-                        <a href="{% url 'track_experience' experience.id %}">
-                          <img src="{{ STATIC_URL }}img/icons/track.png" class="option_icon" title="Add this experience to your tracking list" />
-                        </a>
-                    {% else %}
-                        <a href="{% url 'untrack_experience' experience.id %}">
-                          <img src="{{ STATIC_URL }}img/icons/untrack.png" class="option_icon" title="Remove this experience from your tracking list" />
-                        </a>
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-            {% if experience.gallery %}
-                <a href="{% url 'pl-gallery' experience.gallery.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/images.png" class="option_icon" title="View photos for this experience" />
-                </a>
-            {% endif %}
-            {% if author %}
-                <a href="{% url 'experience_invite' experience.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/add-user.png" class="option_icon" title="Invite a comrade to be a part of this experience" />
-                </a>
-                <a href="{% url 'experiences.views.delete' experience.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this experience" class="option_icon" />
-                </a>
-            {% endif %}
-            {% if user != experience.author %}
-                {% if experience.accepts_paypal %}
-                    <a href="{% url 'donate' experience.id %}">
-                        <img src="{{ STATIC_URL }}img/icons/money.png" class="option_icon"
-             title="Donate - Become a benefactor" />
-                    </a>
-                {% endif %}
-            {% endif %}
-        </div>
     </div>
 
 	{% if user in experience.explorers.all %}
@@ -152,8 +149,8 @@
 	{% if request.user in experience.explorers.all %}
 		{% if experience.narratives.count %}
 			{% with narrative=experience.latest_narrative %}
-				<div class="narrative_item">
-					<h2>Latest narrative</h2>
+				<div class="narrative_list">
+					<h2>Latest Narrative</h2>
 						{% include "narratives/snippets/narrative.html" %}
 				</div>
 			{% endwith %}
@@ -161,40 +158,15 @@
 	{% else %}
 		{% if experience.public_narratives.count %}
 			{% with narrative=experience.latest_public_narrative %}
-				<div class="narrative_item">
-					<h2>Latest narrative</h2>
+				<div class="narrative_list">
+					<h2>Latest Narrative</h2>
 						{% include "narratives/snippets/narrative.html" %}
 				</div>
 			{% endwith %}
 		{% endif %}
 	{% endif %}
 
-    {% comment %} {# Tried this temporarily, wasn't too impressed...yet %}
-    {% if narratives %}
-            <h2>Narratives</h2>
-            {% if not privileged and experience.password %}
-                    <h4>If you have been given a password, you may provide it here</h4>
-                    <form action="{% url 'check_password' experience.id %}" method="POST">
-                            {% csrf_token %}
-                            <div class="formatted_input">
-                                    <input type="text" name="password" />
-                            </div>
-                            <input type="submit" value="Submit" />
-                    </form>
-            {% endif %}
-            <div class="timeline">
-                    {% for narrative in narratives %}
-                            <div class="timeline_item">
-                                    {% include "narratives/snippets/dash.html" %}
-                            </div>
-                    {% endfor %}
-            </div>
-    {% else %}
-            <h2 class="narrative_item">There are currently no narratives</h2>
-    {% endif %}
-    {% endcomment %}
-
-    <div class="object_item_list narrative_item">
+    <div class="narrative_list">
         {% if narratives|length > 0 %}
             <h2>All Narratives</h2>
             {% if not privileged and experience.password %}
@@ -207,20 +179,14 @@
                     <input type="submit" value="Submit" />
                 </form>
             {% endif %}
-            <div class="thirds_table">
-                {% for narrative in narratives %}
-                    <div class="cell">
-                        {% include "narratives/snippets/dash.html" %}
-                    </div>
-                {% endfor %}
-            </div>
+            {% for narrative in narratives %}
+                {% include "narratives/snippets/dash.html" %}
+            {% endfor %}
         {% else %}
-            <div class="narrative_item">
-                <h2>There are currently no narratives</h2>
-                {% if user in experience.explorers.all %}
-                    <h3 class="option"><img style="vertical-align:middle;" src="{{ STATIC_URL }}img/icons/add.png" /><a href="{% url 'create_narrative' experience.id %}">Create new narrative</a></h3>
-                {% endif %}
-            </div>
+            <h2>There are currently no narratives</h2>
+            {% if user in experience.explorers.all %}
+                <h3 class="option"><img style="vertical-align:middle;" src="{{ STATIC_URL }}img/icons/add.png" /><a href="{% url 'create_narrative' experience.id %}">Create new narrative</a></h3>
+            {% endif %}
         {% endif %}
     </div>
 
@@ -253,18 +219,18 @@
 		{% endif %}
 	{% endif %}
 
-    <hr />
+    <div class="comment_item">
+        {% get_comment_count for experience as comment_count %}
+        <h3>
+            {{ comment_count }} Note{{ comment_count|pluralize }}
+        </h3>
 
-    {% get_comment_count for experience as comment_count %}
-    <h3>
-        {{ comment_count }} Note{{ comment_count|pluralize }}
-    </h3>
+        {% if user.is_authenticated %}
+            {% render_comment_form for experience %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
+        {% endif %}
 
-    {% if user.is_authenticated %}
-        {% render_comment_form for experience %}
-    {% else %}
-        <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
-    {% endif %}
-
-    {% render_comment_list for experience %}
+        {% render_comment_list for experience %}
+    </div>
 {% endblock content %}

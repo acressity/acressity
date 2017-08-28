@@ -1,11 +1,17 @@
 {% extends "photologue/root.html" %}
 
 {% block content %}
-    <h2>Upload photo for {{ gallery.title }}</h2>
-    <div class="option_list">
-        <a href="{% url 'pl-gallery' gallery.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Back to gallery" class="option_icon" /></a>
-        <a href="{% url 'pl-gallery-edit' gallery.id %}"><img class="option_icon" title="Edit this gallery" src="{{ STATIC_URL }}img/icons/pencil.png"></a>
+    <div class="photo_item">
+        <div class="jumbotron">
+            <h1>Upload Photo</h1>
+            <h2>{{ gallery.title }}</h2>
+            <div class="option_list">
+                <a href="{% url 'pl-gallery' gallery.id %}"><img src="{{ STATIC_URL }}img/icons/go-back.png" title="Back to gallery" class="option_icon" /></a>
+                <a href="{% url 'pl-gallery-edit' gallery.id %}"><img class="option_icon" title="Edit this gallery" src="{{ STATIC_URL }}img/icons/pencil.png"></a>
+            </div>
+        </div>
     </div>
+
     <div style="position:relative;">
         <form action="{% url 'ajax_upload' %}" method="POST" id="photo_form" enctype="multipart/form-data">
             {% csrf_token %}
@@ -25,7 +31,7 @@
             </div>
             <div class="formatted_input">
                 <label for="id_caption">
-                        <h3>Caption</h3>
+                    <h3>Caption</h3>
                 </label>
                 {{ form.caption.errors }}
                 {{ form.caption }}

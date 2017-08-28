@@ -1,14 +1,23 @@
 {% extends "explorers/base.html" %}
 
 {% load explorers_extras %}
+{% load acressity_extras %}
 
 {% block content %}
-	{% if user != explorer %}
-		{% include "explorers/snippets/dash.html" %}
-	{% else %}
-		<h1 style="text-align: center;">Your Journey</h1>
-	{% endif %}
-	<div id="experiences_list" class="experience_item">
+    <div class="explorer_item">
+        <div class="jumbotron">
+            {% if user != explorer %}
+                <h1>{{ explorer.get_full_name|possessive }} Journey</h1>
+            {% else %}
+                <h1>Your Journey</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if user != explorer %}
+        {% include "explorers/snippets/dash.html" %}
+    {% endif %}
+	<div class="experience_list">
 		{% for experience in experiences %}
 			{% if forloop.first %}
 				{% if experience == explorer.featured_experience %}
@@ -45,21 +54,24 @@
 			{% endif %}
 		{% endfor %}
 	</div>
+
 	{% if user == explorer %}
-		<div class="experience_item">
-			<h3 class="toggler" onclick="toggle_div('create_experience_div');">
-                {% if experiences %}
-                    Add another experience to your journey
-                {% else %}
-                    Create a new experience for your journey
-                {% endif %}
-                <img src="{{ STATIC_URL }}img/icons/expand-icon.png"
-                class="valign_middle" id="create_experience_div_toggle_icon" />
-            </h3>
-			<div id="create_experience_div" class="toggle_div">
-			    {% url 'create_experience' as url %}
-			    {% include 'experiences/forms/experience_form.html' %}
-			</div>
-		</div>
+        <div class="experience_item">
+            <div class="experience_item">
+                <h3 class="toggler" onclick="toggle_div('create_experience_div');">
+                    {% if experiences %}
+                        Add another experience to your journey
+                    {% else %}
+                        Create a new experience for your journey
+                    {% endif %}
+                    <img src="{{ STATIC_URL }}img/icons/expand-icon.png"
+                    class="valign_middle" id="create_experience_div_toggle_icon" />
+                </h3>
+                <div id="create_experience_div" class="toggle_div">
+                    {% url 'create_experience' as url %}
+                    {% include 'experiences/forms/experience_form.html' %}
+                </div>
+            </div>
+        </div>
 	{% endif %}
 {% endblock content %}

@@ -81,24 +81,27 @@ def comment_to_creator(request):
 @login_required
 def handle_invitation_request(request, invitation_request_id):
     '''This view handles the answering to an invitation, bringing together declining and accepting to one function'''
-    explorer = get_object_or_404(get_user_model(), pk=request.POST.get('to_explorer_id'))
-    assert explorer == request.user
-    invitation_request = InvitationRequest.objects.get(pk=invitation_request_id)  # Ugly way of filtering down
-    if 'accept' in request.POST:
-        invitation_request.experience.explorers.add(explorer)
-        if invitation_request.experience.gallery:
-            invitation_request.experience.gallery.explorers.add(explorer)
-        messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos.'.format(invitation_request.experience))
-        notify.send(sender=explorer,
-                recipient=invitation_request.experience.author,
-                verb='has accepted your request and is now a part your experience',
-                target=invitation_request.experience)
-        invitation_request.delete()
-        return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
-    else:
-        messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
-        invitation_request.delete()
-    return redirect(request.META.get('HTTP_REFERER'))
+    invitation = get_object_or_404(InvitationRequest, pk=invitation_request_id)
+    if request.method == 'POST':
+        explorer = get_object_or_404(get_user_model(), pk=request.POST.get('to_explorer_id'))
+        assert explorer == request.user
+        invitation_request = InvitationRequest.objects.get(pk=invitation_request_id)  # Ugly way of filtering down
+        if 'accept' in request.POST:
+            invitation_request.experience.explorers.add(explorer)
+            if invitation_request.experience.gallery:
+                invitation_request.experience.gallery.explorers.add(explorer)
+            messages.success(request, 'You are now an explorer of {0}. You can edit aspects of the experience, upload narratives, and add your own photos.'.format(invitation_request.experience))
+            notify.send(sender=explorer,
+                    recipient=invitation_request.experience.author,
+                    verb='has accepted your request and is now a part your experience',
+                    target=invitation_request.experience)
+            invitation_request.delete()
+            return redirect(reverse('experiences.views.index', args=(invitation_request.experience.id,)))
+        else:
+            messages.success(request, 'You have declined the invitation to the experience {0}.'.format(invitation_request.experience))
+            invitation_request.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return render(request, 'support/handle_invitation.html', {'invitation': invitation})
 
 
 def experience_invite(request, experience_id):

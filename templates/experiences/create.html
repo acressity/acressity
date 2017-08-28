@@ -1,7 +1,12 @@
 {% extends "experiences/base.html" %}
 
 {% block content %}
-    <h2>New Experience</h2>
+    <div class="experience_item">
+        <div class="jumbotron">
+            <h1>New Experience</h1>
+        </div>
+    </div>
+
     {% url 'create_experience' as url %}
     {% include "experiences/forms/experience_form.html" %}
 {% endblock content %}

@@ -1,0 +1,134 @@
+{% load static %}
+{% load comments %}
+{% load comments_xtd %}
+
+<div class="bounty_item">
+    <h2>
+        {% if request.path != bounty.get_absolute_url %}
+            <a href="{{ bounty.get_absolute_url }}">
+        {% endif %}
+            {{ bounty }}
+        {% if request.path != bounty.get_absolute_url %}
+            </a>
+        {% endif %}
+
+        - {{ bounty.amount }}
+        {% if bounty.is_paid %}
+            <img src="{% static 'img/icons/dollar-icon.png' %}" class="option_icon valign_middle" title="This bounty has been paid" />
+        {% endif %}
+    </h2>
+
+    <div class="option_list">
+        {% if request.user == bounty.creator and bounty.editable %}
+            <a href="{% url 'bounty.edit' bounty.pk %}">
+                <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this bounty" class="option_icon" />
+            </a>
+        {% endif %}
+        {% if request.user == bounty.creator or request.user == bounty.get_recipient %}
+            {% if bounty.deletable %}
+                <a href="{% url 'bounty.delete' bounty.pk %}">
+                    <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this bounty" class="option_icon" />
+                </a>
+            {% endif %}
+        {% endif %}
+        {% if not bounty.is_paid %}
+            {% if bounty.creator == bounty.get_recipient %}
+                {% if request.user != bounty.creator %}
+                    {% if bounty.get_recipient.is_stripe_connected and not bounty.campaign.is_complete %}
+                        <a href="{% url 'stripe_connect.bounty.payment' bounty.pk %}">
+                            <img src="{% static 'img/icons/money.png' %}" class="option_icon" title="Make Payment {{ bounty.amount }}" />
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'bounty.counter' bounty.campaign.pk bounty.pk %}">
+                        <img src="{% static 'img/icons/pencil.png' %}" class="option_icon" title="Counterbid" />
+                    </a>
+                {% endif %}
+            {% else %}
+                {# Bounty creator was a benefactor #}
+                {% if not bounty.is_accepted %}
+                    {% if request.user == bounty.get_recipient %}
+                        <a href="{% url 'bounty.accept' bounty.pk %}">
+                            <img src="{% static 'img/icons/checkmark.png' %}" class="option_icon" title="Accept Bounty {{ bounty.amount }}" />
+                        </a>
+                        <a href="{% url 'bounty.counter' bounty.campaign.pk bounty.pk %}">
+                            <img src="{% static 'img/icons/pencil.png' %}" class="option_icon" title="Counterbid" />
+                        </a>
+                    {% elif request.user != bounty.creator %}
+                        <a href="{% url 'bounty.counter' bounty.campaign.pk bounty.pk %}">
+                            <img src="{% static 'img/icons/pencil.png' %}" class="option_icon" title="Counterbid" />
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {# Bounty has been accepted #}
+                    {% if request.user == bounty.get_recipient %}
+                        <a href="{% url 'bounty.cancel_accept' bounty.pk %}">
+                            <img src="{% static 'img/icons/undo.png' %}" class="option_icon" title="Cancel Acceptance" />
+                        </a>
+                    {% else %}
+                        {% if bounty.get_recipient.is_stripe_connected and not bounty.campaign.is_complete %}
+                            <a href="{% url 'stripe_connect.bounty.payment' bounty.pk %}">
+                                <img src="{% static 'img/icons/money.png' %}" class="option_icon" title="Make Payment {{ bounty.amount }}" />
+                            </a>
+                        {% endif %}
+                        {% if request.user != bounty.creator %}
+                            <a href="{% url 'bounty.counter' bounty.campaign.pk bounty.pk %}">
+                                <img src="{% static 'img/icons/pencil.png' %}" class="option_icon" title="Counterbid" />
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% if bounty.description %}
+        <div class="bounty_item">
+            {{ bounty.description|linebreaks }}
+        </div>
+    {% endif %}
+
+	<div class="explorer_item">
+        <img src="{{ bounty.creator.get_icon_url }}" />
+        Created by {% if request.user == bounty.creator %}you{% else %}<a href="{{ bounty.creator.get_absolute_url }}">{{ bounty.creator }}</a>{% endif %}
+    </div>
+
+    {% if bounty.is_paid %}
+        <div class="success_item">
+            {% if bounty.get_benefactor %}
+                <img src="{{ bounty.get_benefactor.get_icon_url }}" />
+                Paid by {% if request.user == bounty.get_benefactor %}you{% else %}<a href="{{ bounty.get_benefactor.get_absolute_url }}">{{ bounty.get_benefactor }}</a>{% endif %}
+            {% else %}
+                <img src="{% static 'img/icons/dollar-icon.png' %}" class="option_icon valign_middle" title="This bounty has been paid" /> Paid by an anonymous benefactor
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="align_center">
+        {% if not bounty.is_paid %}
+            {% if bounty.creator == bounty.get_recipient %}
+                {% if request.user == bounty.creator %}
+                    You will be notified if someone accepts or counters this bounty.
+                {% endif %}
+            {% else %}
+                {# Bounty creator was a benefactor #}
+                {% if not bounty.is_accepted %}
+                    {% if request.user == bounty.creator %}
+                        You will be notified if {{ bounty.get_recipient }} accepts or counters this bounty, at which point you will be able to make a payment or further counterbid.
+                    {% endif %}
+                {% else %}
+                    {# Bounty has been accepted #}
+                    {% if request.user == bounty.get_recipient %}
+                        You have accepted this bounty and will be notified if {{ bounty.creator }} pays.
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% if request.path != bounty.get_absolute_url %}
+        {% get_comment_count for bounty as comment_count %}
+        {% if comment_count %}
+            <a href="{{ bounty.get_absolute_url }}#comments">{{ comment_count }} note{{ comment_count|pluralize }}</a>
+        {% endif %}
+    {% endif %}
+</div>

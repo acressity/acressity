@@ -1,0 +1,12 @@
+{% load acressity_extras %}
+
+<form action="" method="POST">
+	{% csrf_token %}
+	<div class="helptext">
+		{{ form|help_text }}
+	</div>
+	{{ form.as_ul }}
+	<div class="align_center">
+		<input type="submit" value="Create" />
+	</div>
+</form>

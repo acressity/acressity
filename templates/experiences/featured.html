@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>Featured Experiences</h1>
-	{% for experience in featured_experiences %}
-        {# Following is necessary to supercede the experience/trackexperience relationship #}
-        {% with experience.experience as experience %}
-            {% include "experiences/snippets/dash.html" %}
-        {% endwith %}
-	{% endfor %}
+    <div class="experience_item">
+        <div class="jumbotron">
+            <h1>Featured Experiences</h1>
+        </div>
+    </div>
+
+    <div class="experience_list">
+        {% for experience in featured_experiences %}
+            {% with experience.experience as experience %}
+                {% include "experiences/snippets/dash.html" %}
+            {% endwith %}
+        {% empty %}
+            <div class="object_item">
+                There are currently no featured experiences.
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}

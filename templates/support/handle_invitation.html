@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h1>Invitation Request</h1>
+
+	<p>
+	You have been invited by <a href="{{ invitation.author.get_absolute_url }}">{{ invitation.author }}</a> to be a part of the experience <a href="{{ invitation.experience.get_absolute_url }}">{{ invitation.experience }}</a>.
+	</p>
+
+	<form action="" name="invite_respond" method="POST">
+		{% csrf_token %}
+		<input type="hidden" name="from_explorer_id" value="{{ invitation.author.id }}" />
+		<input type="hidden" name="to_explorer_id" value="{{ invitation.recruit.id }}" />
+		<input type="hidden" name="experience_id" value="{{ invitation.experience.id }}" />
+		<input type="submit" name="accept" value="Accept" />
+		<input type="submit" name="decline" value="Decline" />
+	</form>
+{% endblock content %}

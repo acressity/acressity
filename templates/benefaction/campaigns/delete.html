@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="campaign_item">
+        <div class="jumbotron">
+            <h1>Delete Campaign</h1>
+            <h2>{{ campaign }}</h2>
+
+            <div class="option_list">
+                <a href="{{ campaign.get_absolute_url }}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" class="option_icon" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+	<form action="" method="POST">
+		{% csrf_token %}
+		<p>Are you sure you want to delete this campaign? This will remove all associated bounties and bids. It cannot be undone.</p>
+		<div class="align_center">
+			<input type="submit" value="Confirm" />
+		</div>
+	</form>
+{% endblock content %}

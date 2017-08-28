@@ -1,18 +1,28 @@
 {% extends "explorers/base.html" %}
 
 {% load comments %}
+{% load comments_xtd %}
+{% load explorers_extras %}
 
 {% block content %}
+    <div class="explorer_item">
+        <div class="jumbotron">
+            <h1>Explorer Profile<h1>
+            <h2>{% if user == explorer %}You{% else %}{{ explorer.get_full_trailname }}{% endif %}</h2>
+        </div>
+    </div>
+     
 	{% include "explorers/snippets/dash.html" %}
+
 	<div class="explorer_item">
-		{% if not owner and user.is_authenticated and request.user not in explorer.cheerers %}
+		{% if not request.user == explorer and user.is_authenticated and request.user not in explorer.cheerers %}
 			<form action="/explorers/{{ explorer.id }}/cheer/" method="POST">
 				{% csrf_token %}
 				<input type="hidden" name="explorer" value="{{ explorer.get_full_name }}" />
 				<input type="submit" name="cheer" value="Cheer" title="Subscribe to {{ explorer.get_full_name }}" onclick="var a = verify('Subscribe to {{ explorer.get_full_name }}?'); return a;" />
 			</form>
 		{% endif %}
-		{% if owner %}
+		{% if request.user == explorer %}
 			{% if form.errors %}
 				<p>Problem with saving</p>
 				{% for error in form.errors %}
@@ -92,23 +102,38 @@
                     {{ form.birthdate.errors }}
                     {{ form.birthdate }}
                 </div>
-                <div class="formatted_input">
-                    <h3>Your PayPal email address</h3>
-                    {{ form.paypal_email_addres.errors }}
-                    {{ form.paypal_email_address }}
+				<div class="formatted_input">
+					<h3>Stripe Account</h3>
+					{% if not explorer.is_stripe_connected %}
+                        <div>
+                            <a href="{% url 'stripe_connect.authorize' %}">
+                                <img src="{{ STATIC_URL }}img/stripe/blue-on-light.png" />
+                            </a>
+                        </div>
+					{% else %}
+                        <div>
+                            <a href="{{ request.user.stripe_account.stripe_dashboard_url }}">
+                                Stripe account dashboard
+                            </a>
+                        </div>
+                        <div>
+                            <a href="{% url 'stripe_connect.disconnect' explorer.stripe_account.pk %}">
+                                Disconnect Stripe account
+                            </a>
+                        </div>
+					{% endif %}
                     <div class="about_this">
-                        <span onclick="toggle_div('about_paypal_email_address');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_paypal_email_address_toggle_icon" /></span>
-                        <div id="about_paypal_email_address" class="toggle_div help-text">
-                            {{ form.paypal_email_address.help_text }}
+                        <span onclick="toggle_div('about_stripe');">About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_stripe_toggle_icon" /></span>
+                        <div id="about_stripe" class="toggle_div help-text">
+                            Create or connect Stripe account to accept or make benefaction payments
                         </div>
                     </div>
-                    <div class="help-text">
-                        If you do not yet have a PayPal account, you can create one <a href="https://www.paypal.com/us/signup/account" target="blank">here</a>
-                    </div>
-                </div>
-                <p>
+				</div>
+
+                <div class="formatted_input">
                     <a href="{% url 'change_password' %}">Change your password</a>
-                </p>
+                </div>
+
                 <div class="formatted_input align_center">
                     <input type="submit" value="Save" />
                 </div>
@@ -122,28 +147,12 @@
 			{% if explorer.birthdate %}
 				<p>Birthday: {{ explorer.birthdate }}</p>
 			{% endif %}
-			{% if user.is_authenticated %}
-				{% get_comment_form for explorer as expl_comment_form %}
-				<form action="{% comment_form_target %}" method="POST" class="note_form">
-					<h3>Leave {{ explorer.get_full_name }} a note</h3>
-					{% csrf_token %}
-					{{ expl_comment_form.comment }}
-					{{ expl_comment_form.honeypot }}
-					{{ expl_comment_form.object_pk }}
-					{{ expl_comment_form.content_type }}
-				    {{ expl_comment_form.timestamp }}
-				    {{ expl_comment_form.security_hash }}
-					<br />
-					<input type="hidden" name="next" value="{% url 'story' explorer.id %}">
-					<input type="submit" value="Submit note" />
-				</form>
-			{% endif %}
 		{% endif %}
 		<p>
 			Member since {{ explorer.date_joined|date:'F j, o' }}
 		</p>
 	</div>
-	{% if owner %}
+	{% if request.user == explorer %}
 		<form method="POST" action="{% url 'explorer.delete' request.user.pk %}">
 			{% csrf_token %}
 			<div class="formatted_input align_center">
@@ -151,16 +160,19 @@
 			</div>
 		</form>
 	{% endif %}
-	{% ifequal user explorer %} 
-		{% get_comment_count for explorer as exp_comment_count %}
-		{% if exp_comment_count > 0 %}
-			<h4 title="Click to expand" onclick="toggle_div('exp_comment_list');">{{ exp_comment_count }} Note{{ exp_comment_count|pluralize }} <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="exp_comment_list_toggle_icon" /></h4>
-			<div class="comment_list" id="exp_comment_list">
-				{% get_comment_list for explorer as exp_comment_list %}
-				{% for note in exp_comment_list reversed %}
-					{% include "support/snippets/note.html" %}
-				{% endfor %}
-			</div>
-		{% endif %}
-	{% endifequal %}
+
+    <div class="comment_item">
+        {% get_comment_count for explorer as comment_count %}
+        <h3>
+            {{ comment_count }} Note{{ comment_count|pluralize }}
+        </h3>
+
+        {% if user.is_authenticated %}
+            {% render_comment_form for explorer %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
+        {% endif %}
+
+        {% render_comment_list for explorer %}
+    </div>
 {% endblock content %}

@@ -1,24 +1,28 @@
 {% load narrative_extras %}
 
 <div class="narrative_item">
-    <h1>
-		{{ narrative.title }}
-		{% if not narrative.is_public %}
-			<img src="{{ STATIC_URL }}img/icons/lock.png" class="option_icon" title="This narrative is private" />
-		{% endif %}
-	</h1>
-	{% if narrative.gallery.featured_photo %}
-		<div class="featured_photo">
-			<a href="{% url 'pl-gallery' narrative.gallery.id %}">
-				<img src="{{ narrative.gallery.featured_photo.get_display_url }}" />
-			</a>
-			{% if narrative.gallery.featured_photo.caption %}
-				<div class="caption">
-					{{ narrative.gallery.featured_photo.caption }}
-				</div>
-			{% endif %}
-		</div>
-	{% endif %}
+    <div class="jumbotron">
+        <h1>Narrative</h1>
+        <h2>
+            {{ narrative.title }}
+            {% if not narrative.is_public %}
+                <img src="{{ STATIC_URL }}img/icons/lock.png" class="option_icon" title="This narrative is private" />
+            {% endif %}
+        </h2>
+        {% if narrative.gallery.featured_photo %}
+            <div class="featured_photo">
+                <a href="{% url 'pl-gallery' narrative.gallery.id %}">
+                    <img src="{{ narrative.gallery.featured_photo.get_display_url }}" />
+                </a>
+                {% if narrative.gallery.featured_photo.caption %}
+                    <div class="caption">
+                        {{ narrative.gallery.featured_photo.caption }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
     <div class="option_list">
         {% url 'experience' narrative.experience.id as experience_path %}
         {% if experience_path != request.path %}
@@ -31,7 +35,7 @@
                 <img src="{{ STATIC_URL }}img/icons/images.png" class="option_icon" title="View Photos for {{ narrative }}" />
             </a>
         {% endif %}
-        {% if author %}
+        {% if request.user == narrative.author %}
             <a href="{% url 'narratives.views.edit' narrative.id %}">
                 <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this narrative" class="option_icon" />
             </a>
@@ -43,64 +47,64 @@
             </a>
         {% endif %}
     </div>
-    <div class="narrative_detail">
-        {% if narrative.gallery.photos %}
-            <div class="images_right">
-                {% for photo in narrative.gallery.unfeatured_photos %}
-                    <div class="narrative_photo">
-                        <a href="{{ photo.get_absolute_url }}">
-                            <img src="{{ photo.get_thumbnail_url }}" title="{{ photo.title }}" />
-                        </a>
-                        {% if photo.caption %}
-                            <div class="photo_caption">
-                                {% if photo.caption %}
-                                    {{ photo.caption }}
-                                {% else %}
-                                    {{ photo.title }}
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        <p style="text-align:right;">{{ narrative.date_created|date:"F j, Y" }}</p>
-        <div>
-            {{ narrative.embedded_narrative|safe|linebreaksbr }}
-        </div>
-        <div class="clear_both"> </div>
-    </div>
-    <div class="next_previous">
-        {% if privileged %}
-            {% if narrative.get_previous_narrative %}
-                <a href="{% url 'narratives.views.index' narrative.get_previous_narrative.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/arrow-left.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_narrative }}" />
-                </a>
-            {% endif %}
-            {% if narrative.get_next_narrative %}
-                <a href="{% url 'narratives.views.index' narrative.get_next_narrative.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/arrow-right.png" class="float_right" title="Next narrative - {{ narrative.get_next_narrative }}" />
-                </a>
-            {% endif %}
-        {% else %}
-            {% if narrative.get_previous_public_narrative %}
-                <a href="{% url 'narratives.views.index' narrative.get_previous_public_narrative.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/arrow-left.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_public_narrative }}" />
-                </a>
-            {% endif %}
-            {% if narrative.get_next_public_narrative %}
-                <a href="{% url 'narratives.views.index' narrative.get_next_public_narrative.id %}">
-                    <img src="{{ STATIC_URL }}img/icons/arrow-right.png" class="float_right" title="Next narrative - {{ narrative.get_next_public_narrative }}" />
-                </a>
-            {% endif %}
-        {% endif %}
-    </div>
-    {% if experience_path != request.path %}
-        <div class="experience_item">
-            <p>from experience <a href="{% url 'experience' narrative.experience.id %}">{{ narrative.experience }}</p></a>
+</div>
+<div class="narrative_detail">
+    {% if narrative.gallery.photos %}
+        <div class="images_right">
+            {% for photo in narrative.gallery.unfeatured_photos %}
+                <div class="narrative_photo">
+                    <a href="{{ photo.get_absolute_url }}">
+                        <img src="{{ photo.get_thumbnail_url }}" title="{{ photo.title }}" />
+                    </a>
+                    {% if photo.caption %}
+                        <div class="photo_caption">
+                            {% if photo.caption %}
+                                {{ photo.caption }}
+                            {% else %}
+                                {{ photo.title }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
     {% endif %}
-    <div class="explorer_item"> 
-        <p>by <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a></p>
+    <p style="text-align:right;">{{ narrative.date_created|date:"F j, Y" }}</p>
+    <div class="narrative_item">
+        {{ narrative.embedded_narrative|safe|linebreaksbr }}
     </div>
+    <div class="clear_both"> </div>
+</div>
+<div class="next_previous">
+    {% if privileged %}
+        {% if narrative.get_previous_narrative %}
+            <a href="{% url 'narratives.views.index' narrative.get_previous_narrative.id %}">
+                <img src="{{ STATIC_URL }}img/icons/arrow-left.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_narrative }}" />
+            </a>
+        {% endif %}
+        {% if narrative.get_next_narrative %}
+            <a href="{% url 'narratives.views.index' narrative.get_next_narrative.id %}">
+                <img src="{{ STATIC_URL }}img/icons/arrow-right.png" class="float_right" title="Next narrative - {{ narrative.get_next_narrative }}" />
+            </a>
+        {% endif %}
+    {% else %}
+        {% if narrative.get_previous_public_narrative %}
+            <a href="{% url 'narratives.views.index' narrative.get_previous_public_narrative.id %}">
+                <img src="{{ STATIC_URL }}img/icons/arrow-left.png" class="float_left" title="Previous narrative - {{ narrative.get_previous_public_narrative }}" />
+            </a>
+        {% endif %}
+        {% if narrative.get_next_public_narrative %}
+            <a href="{% url 'narratives.views.index' narrative.get_next_public_narrative.id %}">
+                <img src="{{ STATIC_URL }}img/icons/arrow-right.png" class="float_right" title="Next narrative - {{ narrative.get_next_public_narrative }}" />
+            </a>
+        {% endif %}
+    {% endif %}
+</div>
+{% if experience_path != request.path %}
+    <div class="experience_item">
+        <p>from experience <a href="{% url 'experience' narrative.experience.id %}">{{ narrative.experience }}</p></a>
+    </div>
+{% endif %}
+<div class="explorer_item"> 
+    <p>by <a href="{% url 'journey' narrative.author.id %}">{{ narrative.author.get_full_name }}</a></p>
 </div>

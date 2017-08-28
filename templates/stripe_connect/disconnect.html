@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="stripe_item">
+        <div class="jumbotron">
+            <h1>Disconnect Stripe Account?</h1>
+        </div>
+    </div>
+
+	<form action="" method="POST">
+		{% csrf_token %}
+		<p>Are you sure you want to disconnect your Stripe account? You will not be able to receive payments from benefactors. You can re-authorize at any point.</p>
+		<div class="align_center">
+			<input type="submit" value="Confirm" />
+		</div>
+	</form>
+{% endblock content %}

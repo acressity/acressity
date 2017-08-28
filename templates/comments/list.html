@@ -4,7 +4,7 @@
 
 <dl class="comments">
     {% for comment in comment_list %}
-        <div class="comment-level-{{ comment.level }}">
+        <div class="item-level-{{ comment.level }}">
             {% include 'comments/comment.html' %}
         </div>
   {% endfor %}

@@ -4,12 +4,16 @@
     <a href="{{ domain }}{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
 </p>
   
+{% if notice.target %}
+    <p>
+        <a href="{{ domain }}{{ notice.target.get_absolute_url }}">
+            {{ notice.target }}
+        </a>
+    </p>
+{% endif %}
+
 {% if notice.description %}
     <p>
         {{ notice.description|linebreaksbr }}
     </p>
-{% endif %}
-
-{% if notice.target %}
-    <a href="{{ domain }}{{ notice.target.get_absolute_url }}">{{ notice.target }}</a>
 {% endif %}

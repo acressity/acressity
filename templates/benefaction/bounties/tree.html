@@ -1,0 +1,19 @@
+{% load acressity_extras %}
+
+{# Base level subtracted to keep bounties from floating needlessly #}
+{% if base_level %}
+    <div class="item-level-{{ bounty.get_level|subtract:base_level }}">
+{% else %}
+    <div class="item-level-{{ bounty.get_level }}">
+{% endif %}
+    {% include 'benefaction/bounties/snippets/dash.html' %}
+</div>
+
+{# Recursively build counterbid tree #}
+{% if bounty.get_children %}
+    {% for child_bounty in bounty.get_children %}
+        {% with bounty=child_bounty %}
+            {% include 'benefaction/bounties/tree.html' %}
+        {% endwith %}
+    {% endfor %}
+{% endif %}

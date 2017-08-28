@@ -6,29 +6,49 @@ from django.forms import ModelForm
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.utils.html import format_html
 
+from acressity.forms import ExtendedModelForm
 from experiences.models import Experience
 from photologue.models import Photo
 from explorers.models import Explorer
 
-class ImprovedModelForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        # Remove `:` from suffix display default
-        kwargs.setdefault('label_suffix', '')
-        super(ImprovedModelForm, self).__init__(*args, **kwargs)
 
-class ExperienceForm(ImprovedModelForm):
+class RangeInput(forms.NumberInput):
+    def render(self, name, value, attrs=None):
+        range_attrs = {
+            'type': 'range',
+        }
+        attrs.update(range_attrs)
+        parent_html = super(RangeInput, self).render(name, value, attrs=attrs) 
+        return format_html('<div class="input-range-wrapper">' + parent_html + '</div>')
+
+
+class ExperienceForm(ExtendedModelForm):
     title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'larger'}))
     make_feature = forms.BooleanField(required=False, initial=False, help_text='Featuring an experience attaches the experience to the Dash for easy access and tells others that this is the experience you are actively pursuing.')
     unfeature = forms.BooleanField(required=False, initial=False)
     date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year-110, -1)), required=False)
-    percent_fulfilled = forms.IntegerField(required=False, label='Percent fulfilled', initial=0, widget=forms.NumberInput(attrs={'type': 'range', 'max': 100,
-        'min': 0, 'step': 1, 'oninput':
-        '$("#percent_fulfilled_display").html(this.value);', 'onchange': '$("#percent_fulfilled_display").html(this.value);'}))
+    percent_fulfilled = forms.IntegerField(
+        required=False,
+        label='Percent fulfilled',
+        initial=0,
+        widget=RangeInput(
+            attrs={
+                'max': 100,
+                'min': 0,
+                'step': 1,
+                'oninput': '$("#percent_fulfilled_display").html(this.value);',
+                'onchange': '$("#percent_fulfilled_display").html(this.value);'
+            }))
 
     class Meta:
         model = Experience
-        exclude = ('author', 'gallery', 'make_feature')
+        exclude = (
+            'author',
+            'gallery',
+            'make_feature',
+        )
         labels = {
             'is_public': _('Public?'),
             'status': _('Status (optional)'),

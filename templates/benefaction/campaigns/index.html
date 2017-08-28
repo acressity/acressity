@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load acressity_extras %}
+{% load comments %}
+{% load comments_xtd %}
+
+{% block content %}
+	<div class="campaign_item">
+        <div class="jumbotron">
+            <h1>
+                Benefaction Campaign
+                {% if campaign.are_funds_raised %}
+                    <img src="{% static 'img/icons/dollar-icon.png' %}" class="option_icon valign_middle" title="This campaign has successfully raised its funds" />
+                {% endif %}
+            </h1>
+            <h2>
+                {{ campaign.experience }}
+                {% if not campaign.experience.is_public %}
+                    <img src="{{ STATIC_URL }}img/icons/lock.png"
+                        class="option_icon valign_middle"
+                        title="This campaign's experience is private" />
+                {% endif %}
+            </h2>
+            {% with experience=campaign.experience %}
+                {% include 'experiences/snippets/featured_photo.html' %}
+            {% endwith %}
+            <div class="option_list">
+                <a href="{% url 'experience' campaign.experience.pk %}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go to experience home page" class="option_icon" />
+                </a>
+                {% if request.user == campaign.experience.author %}
+                    <a href="{% url 'campaign.edit' campaign.pk %}">
+                        <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit this campaign" class="option_icon" />
+                    </a>
+                    <a href="{% url 'campaign.delete' campaign.pk %}">
+                        <img src="{{ STATIC_URL }}img/icons/delete.png" title="Delete this campaign" class="option_icon" />
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="campaign_item">
+            <h3>Amount requested: {{ campaign.amount_requested }}</h2>
+            <h3>Amount raised: {{ campaign.get_amount_raised }}</h2>
+            {% if campaign.get_amount_raised %}
+                <a href="{% url 'campaign.paid_bounties' campaign.pk %}">See paid bounties</a>
+            {% endif %}
+            {% if campaign.are_funds_raised %}
+                <div class="success_item">
+                    This campaign has successfully raised its funds!
+                </div>
+            {% else %}
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ campaign.get_percent_raised }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ campaign.get_percent_raised }}%">
+                        <span class="sr-only">{{ campaign.get_percent_raised }}</span>
+                    </div>
+                </div>
+            {% endif %}
+            {% if campaign.brief %}
+                <div class="campaign_item">
+                    {{ campaign.brief }}
+                </div>
+            {% endif %}
+            <a href="{% url 'campaign.fulfilled_bounties' campaign.pk%}">See fulfilled bounties</a>
+        </div>
+
+        {% if not campaign.experience.is_public %}
+            <div class="warning_item">
+                This campaign's experience, <a href="{{ campaign.experience.get_absolute_url }}">{{ campaign.experience }}</a>, is currently private. Only campaigns of public experiences can accept benefaction from the general public. You can edit the experience <a href="{% url 'edit_experience' campaign.experience.pk %}">here</a>.
+            </div>
+        {% endif %}
+
+		{% if request.user == campaign.experience.author %}
+			{% if request.user.is_stripe_connected %}
+				<a href="{{ request.user.stripe_account.stripe_dashboard_url }}">
+					Stripe account dashboard
+				</a>
+            {% else %}
+                <div class="warning_item">
+                    You need to authorize a payment provider to receive payments from benefactors. Authorize Stripe <a href="{% url 'stripe_connect.authorize' %}">here</a>.
+                </div>
+			{% endif %}
+        {% elif not campaign.get_recipient.is_stripe_connected %}
+            <div class="warning_item">
+                <a href="{{ campaign.get_recipient.get_absolute_url }}">{{ campaign.get_recipient }}</a> does not currently have Stripe enabled and will not be able to receive payments until their account has been authorized.
+            </div>
+		{% endif %}
+
+        <div class="about_this">
+            <div onclick="toggle_div('about_campaigns');" class="smaller">
+                About campaigns <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_campaigns_toggle_icon" class="valign_middle" />
+            </div>
+            <div id="about_campaigns" class="toggle_div helptext">
+                {{ campaign|help_text }}
+            </div>
+        </div>
+	</div>
+
+	<div class="bounty_list">
+		<h2>Bounties</h2>
+
+        <div class="align_center">
+            <a href="{% url 'bounty.create' campaign.pk %}">
+                <button>Create New Bounty</button>
+            </a>
+        </div>
+
+		{% for bounty in campaign.get_first_level %}
+            {% include 'benefaction/bounties/tree.html' %}
+        {% empty %}
+            <p>There are currently no bounties set. You could be the first one!</p>
+		{% endfor %}
+	</div>
+
+    <div class="comment_item">
+        {% get_comment_count for campaign as comment_count %}
+        <h3>
+            {{ comment_count }} Note{{ comment_count|pluralize }}
+        </h3>
+
+        {% if user.is_authenticated %}
+            {% render_comment_form for campaign %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
+        {% endif %}
+
+        {% render_comment_list for campaign %}
+    </div>
+{% endblock content %}

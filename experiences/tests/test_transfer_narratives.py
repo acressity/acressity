@@ -13,7 +13,7 @@ from explorers.tests import helpers as explorer_helpers
 
 class ExperienceDeleteTest(ExperienceTestCase):
     def setUp(self):
-        super(self.__class__, self).setUp()
+        super(ExperienceDeleteTest, self).setUp()
         self.experience2 = Experience.objects.create(
             author=self.explorer,
             title='Read Don Quixote in Spanish'

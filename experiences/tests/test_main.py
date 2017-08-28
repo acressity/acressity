@@ -31,6 +31,7 @@ class ExperienceTestCase(TestCase):
             experience = self.experience,
             author=self.explorer,
             is_public=True)
+
         self.narrative_private = Narrative.objects.create(
             title='Fear',
             body='''Truth be told, I'm afraid of even wanting to tell others I

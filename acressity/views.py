@@ -25,9 +25,24 @@ def acressity_index(request):
             request, 'acressity/index.html',
             {
                 'featured_experiences': FeaturedExperience.objects.get_random(3),
-                'explorers': Explorer.objects.get_random(3)
+                'explorers': Explorer.objects.order_by('?')[:3]#get_random(3)
             }
         )
+
+
+def why(request):
+    bike_across_america = Experience.objects.get(search_term='bike_across_america')
+    bike_across_america_link = reverse('experience', args=(bike_across_america.id,))
+    develop_this_website = Experience.objects.get(search_term='acressity')
+    develop_this_website_link = reverse('experience', args=(develop_this_website.id,))
+    return render(
+        request, 
+        'acressity/why.html',
+        {
+            'bike_across_america_link': bike_across_america_link,
+            'develop_this_website_link': develop_this_website_link
+        }
+    )
 
 
 def step_two(request):
@@ -98,16 +113,6 @@ class WelcomeTemplateView(TemplateView):
         context = super(WelcomeTemplateView, self).get_context_data(**kwargs)
         context['form'] = ExperienceForm()
         return context
-
-
-def why(request):
-    bike_across_america = Experience.objects.get(search_term='bike_across_america')
-    bike_across_america_link = reverse('experience', args=(bike_across_america.id,))
-    develop_this_website = Experience.objects.get(search_term='acressity')
-    develop_this_website_link = reverse('experience', args=(develop_this_website.id,))
-    return render(request, 'acressity/why.html', {'bike_across_america_link':
-        bike_across_america_link, 'develop_this_website_link':
-        develop_this_website_link})
 
 
 def example(request):

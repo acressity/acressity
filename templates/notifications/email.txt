@@ -1,4 +1,4 @@
-From your Acressity Journey
+From your Acressity journey
 
 {{ notice.actor }} {{ notice.verb }}
 
@@ -7,9 +7,9 @@ From your Acressity Journey
 {% endif %}
   
 {% if notice.target %}
-    {% if notice.target_content_type.model == 'invitationrequest' %}
-        {{ notice.target.experience }}
-    {% else %}
-        {{ notice.target }}
-    {% endif %}
+	{{ notice.target }}
+{% endif %}
+
+{% if notice.description %}
+    {{ notice.description|linebreaksbr }}
 {% endif %}

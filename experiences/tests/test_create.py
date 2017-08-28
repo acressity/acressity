@@ -27,6 +27,11 @@ class ExperienceCreateTest(ExperienceTestCase):
         self.assertTrue(experience.author == self.explorer)
 
     def test_latest_narratives(self):
+        num_public_narratives_start = self.experience.narratives.filter(is_public=True).count()
+        num_private_narratives_start = self.experience.narratives.filter(is_public=False).count()
+        num_narratives_start = num_public_narratives_start + num_private_narratives_start
+
+        # Add a public narrative
         narr1 = Narrative.objects.create(
             experience=self.experience,
             author=self.explorer,
@@ -34,19 +39,29 @@ class ExperienceCreateTest(ExperienceTestCase):
             body='''There were two astronauts lucky enough to make it into
             space today!''',
             is_public=True)
-        self.assertEqual(self.experience.public_narratives().count(), 2)
-        self.assertEqual(self.experience.narratives.count(), 3)
+
+        self.assertEqual(
+            self.experience.public_narratives().count(),
+            num_public_narratives_start + 1)
+        self.assertEqual(
+            self.experience.narratives.count(), 
+            num_narratives_start + 1)
         self.assertEqual(self.experience.latest_narrative(), narr1)
         self.assertEqual(self.experience.latest_public_narrative(), narr1)
 
+        # Add a private narrative
         narr2 = Narrative.objects.create(
             experience=self.experience,
             author=self.explorer,
             title='Celestial Beauty',
             body='''There was a full moon tonight''',
             is_public=False)
-        self.assertEqual(self.experience.public_narratives().count(), 2)
-        self.assertEqual(self.experience.narratives.count(), 4)
+
+        self.assertEqual(self.experience.public_narratives().count(),
+            num_public_narratives_start + 1)
+        self.assertEqual(
+            self.experience.narratives.count(),
+            num_narratives_start + 2)
         self.assertEqual(self.experience.latest_narrative(), narr2)
         self.assertEqual(self.experience.latest_public_narrative(), narr1)
 

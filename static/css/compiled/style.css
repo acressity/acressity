@@ -3,7 +3,12 @@ html, body, blockquote, code, pre {
   margin: 0;
   padding: 0; }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6 {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  margin: 0px; }
+
+p {
   margin-top: 7px;
   margin-bottom: 7px;
   padding: 0px; }
@@ -38,6 +43,9 @@ button, input[type=button], input[type=image], input[type=reset], input[type=sub
 ul, li {
   list-style: none;
   margin: 0; }
+
+ul {
+  padding-left: 10px; }
 
 strong {
   font-weight: bold; }
@@ -78,11 +86,6 @@ a {
 ul {
   list-style: none; }
 
-div {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px; }
-
 textarea {
   border-radius: 5px; }
 
@@ -104,7 +107,6 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
   border: none; }
 
 input[type="button"], input[type="submit"], button {
-  min-width: 33%;
   background-color: #4A7B8A;
   -webkit-border-top-left-radius: 6px;
   -moz-border-radius-topleft: 6px;
@@ -127,7 +129,8 @@ input[type="button"], input[type="submit"], button {
   font-style: normal;
   line-height: 27px;
   text-decoration: none;
-  text-align: center; }
+  text-align: center;
+  padding: 12px 35px; }
   input[type="button"]:hover, input[type="submit"]:hover, button:hover {
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #1A4B6E), color-stop(1, #4A7B8A));
     background: -moz-linear-gradient(center top, #1A4B6E 5%, #4A7B8A 100%);
@@ -143,6 +146,10 @@ input[type="button"], input[type="submit"], button {
       background: -moz-linear-gradient(center top, #F00 5%, #F22 100%);
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$button_background_danger_darker', endColorstr='$button_background_danger');
       background-color: #F00; }
+
+input[type="range"] {
+  cursor: pointer;
+  background: #555; }
 
 #large_button {
   width: 100%;
@@ -192,7 +199,6 @@ input.invite-button {
     background-color: #fb9e25 url("../../img/favicon.ico") no-repeat left; }
 
 form {
-  background-color: rgba(230, 230, 255, 0.2);
   padding: 3px; }
   form.no_styling {
     border-radius: 0;
@@ -214,12 +220,6 @@ form {
       display: block;
       padding: 5px;
       font-size: 1.1em; }
-
-.helptext {
-  display: block;
-  padding: 5px;
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.5); }
 
 input, textarea {
   box-sizing: border-box; }
@@ -243,7 +243,8 @@ blockquote:after {
   clear: both; }
 
 blockquote .body {
-  font-style: italic; }
+  text-align: center;
+  margin-bottom: 10px; }
 
 blockquote .author {
   text-align: center; }
@@ -256,7 +257,7 @@ blockquote .author {
   background-clip: padding-box;
   /* for IE9+, Firefox 4+, Opera, Chrome */ }
 
-input, button {
+input {
   padding: 5px; }
 
 textarea {
@@ -265,10 +266,10 @@ textarea {
 .full_width {
   width: 100%; }
 
-.background_color, #content, #right_content {
+.background_color, .base-div, #content, #right_content {
   background-color: rgba(230, 230, 255, 0.92); }
 
-.shadow_border, #content, #right_content, #messages, .navbar-default {
+.shadow_border, .base-div, #content, #right_content, #messages, .navbar-default {
   -moz-box-shadow: 0 0 2px 1px #888;
   -webkit-box-shadow: 0 0 2px 1px #888;
   box-shadow: 0 0 2px 1px #888; }
@@ -278,17 +279,18 @@ textarea {
   -webkit-box-shadow: 0 0 0 0 #888;
   box-shadow: 0 0 0 0 #888; }
 
+.base-div, #content, #right_content {
+  overflow: hidden;
+  border-radius: 9px;
+  -moz-border-radius: 9px;
+  -webkit-border-radius: 9px; }
+
+#content {
+  margin-bottom: 15px; }
+
 #right_content {
   max-height: 90%;
   overflow-y: auto; }
-
-.object_item_list {
-  position: relative; }
-
-.object_item, .main_item, #main_index_header, .explorer_item, .bounty_item, .explorer_note, #welcome_quote, .experience_item, .campaign_item, .experience_note, .experience_dash, .narrative_item, .timeline, .bid_item, .narrative_note, .narrative_dash, .narrative_detail, .latest_narrative, .photo_item, .request_dash, .gallery_photo_item, .formatted_input, .register_input {
-  position: relative;
-  padding: 5px;
-  margin: 2px; }
 
 .thirds_table {
   position: relative;
@@ -298,6 +300,10 @@ textarea {
   width: 33%;
   height: 100%;
   display: inline-block; }
+
+.halves_table {
+  position: relative;
+  width: 100%; }
 
 .halves_table .cell {
   width: 48%;
@@ -318,21 +324,37 @@ textarea {
   margin: 5px;
   height: 100%; }
 
+.object_item_list {
+  position: relative; }
+
+.object_item, .main_item, #main_index_header, .explorer_item, .bounty_item, .bounty_list, .explorer_note, .explorer_list, #welcome_quote, .experience_item, .campaign_item, .campaign_list, .experience_note, .experience_dash, .experience_list, .narrative_item, .timeline, .stripe_item, .narrative_note, .narrative_dash, .narrative_list, .latest_narrative, .photo_item, .gallery_item, .photo_list, .comment_item, .success_item, .warning_item, .request_dash, .gallery_photo_item, .formatted_input, .register_input {
+  position: relative;
+  padding: 15px;
+  margin: 0px; }
+
 .main_item, #main_index_header {
-  background-color: #4A7B8A; }
+  background-color: rgba(74, 123, 138, 0.4); }
 
-.explorer_item, .bounty_item, .explorer_note, #welcome_quote {
-  background-color: rgba(74, 123, 138, 0.6); }
+.explorer_background, .explorer_item, .bounty_item, .bounty_list, .explorer_note, .explorer_list, #welcome_quote {
+  background-color: rgba(74, 123, 138, 0.4); }
 
-.experience_item, .campaign_item, .experience_note, .experience_dash {
-  background-color: rgba(127, 95, 142, 0.6); }
+.experience_background, .experience_item, .campaign_item, .campaign_list, .experience_note, .experience_dash, .experience_list, .input-range-wrapper {
+  background-color: rgba(127, 95, 142, 0.4); }
 
-.narrative_item, .timeline, .bid_item, .narrative_note, .narrative_dash, .narrative_detail, .latest_narrative {
-  background-color: rgba(54, 112, 60, 0.7);
+.narrative_background, .narrative_item, .timeline, .stripe_item, .narrative_note, .narrative_dash, .narrative_list, .latest_narrative, .narrative_detail {
+  background-color: rgba(54, 112, 60, 0.5); }
+
+.narrative_item, .timeline, .stripe_item, .narrative_note, .narrative_dash, .narrative_list, .latest_narrative {
   word-wrap: break-word; }
 
-.photo_item {
-  background-color: rgba(120, 120, 120, 0.6); }
+.photo_item, .gallery_item, .photo_list {
+  background-color: rgba(120, 120, 120, 0.4); }
+
+.success_item {
+  background-color: rgba(50, 175, 50, 0.4); }
+
+.warning_item {
+  background-color: rgba(175, 50, 50, 0.4); }
 
 .editable:hover {
   background: url("../../img/icons/edit-icon.png") no-repeat top right; }
@@ -348,7 +370,8 @@ textarea {
 .experience_dash {
   position: relative; }
   .experience_dash .option {
-    margin: 5px; }
+    margin: 5px;
+    font-size: 80%; }
 
 .fulfilled-award {
   position: absolute;
@@ -377,18 +400,17 @@ textarea {
   font-size: x-small; }
 
 .narrative_detail {
-  min-height: 250px; }
-
-.narrative_detail .images_right {
-  float: right;
-  width: 30%;
-  text-align: center;
-  padding: 5px; }
-  .narrative_detail .images_right img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%; }
+  padding: 25px; }
+  .narrative_detail .images_right {
+    float: right;
+    width: 30%;
+    text-align: center;
+    padding: 5px; }
+    .narrative_detail .images_right img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 100%; }
 
 .object_item_interaction {
   position: relative;
@@ -413,13 +435,13 @@ textarea {
     .horizontal_list a:hover {
       color: #1A4B6E; }
 
-.comment-level-1 {
+.item-level-1 {
   margin-left: 100px; }
 
-.comment-level-2 {
+.item-level-2 {
   margin-left: 200px; }
 
-.comment-level-3 {
+.item-level-3 {
   margin-left: 300px; }
 
 .comment_list {
@@ -441,7 +463,7 @@ textarea {
     margin-left: auto;
     margin-right: auto;
     background-color: rgba(200, 200, 200, 0.3);
-    border-radius: 0.45em; }
+    border-radius: 0.2em; }
 
 .gallery_photo_container {
   position: relative;
@@ -494,6 +516,11 @@ textarea {
   text-align: center;
   font-size: smaller; }
 
+.photo-top-right {
+  position: absolute;
+  right: -1px;
+  top: -3px; }
+
 .description {
   border-bottom: 1px dotted; }
 
@@ -512,30 +539,32 @@ textarea {
 /* div for control options regarding an object (e.g. experience: view photos, upload photo */
 .option_list {
   overflow: hidden;
-  display: table;
-  font-size: small; }
+  display: table; }
+
+.object_list .object_item, .explorer_list .object_item, .experience_list .object_item, .narrative_list .object_item, .campaign_list .object_item, .bounty_list .object_item, .photo_list .object_item, .object_list .main_item, .explorer_list .main_item, .experience_list .main_item, .narrative_list .main_item, .campaign_list .main_item, .bounty_list .main_item, .photo_list .main_item, .object_list #main_index_header, .explorer_list #main_index_header, .experience_list #main_index_header, .narrative_list #main_index_header, .campaign_list #main_index_header, .bounty_list #main_index_header, .photo_list #main_index_header, .object_list .explorer_item, .explorer_list .explorer_item, .experience_list .explorer_item, .narrative_list .explorer_item, .campaign_list .explorer_item, .bounty_list .explorer_item, .photo_list .explorer_item, .object_list .bounty_item, .explorer_list .bounty_item, .experience_list .bounty_item, .narrative_list .bounty_item, .campaign_list .bounty_item, .bounty_list .bounty_item, .photo_list .bounty_item, .object_list .bounty_list, .explorer_list .bounty_list, .experience_list .bounty_list, .narrative_list .bounty_list, .campaign_list .bounty_list, .bounty_list .bounty_list, .photo_list .bounty_list, .object_list .explorer_note, .explorer_list .explorer_note, .experience_list .explorer_note, .narrative_list .explorer_note, .campaign_list .explorer_note, .bounty_list .explorer_note, .photo_list .explorer_note, .object_list .explorer_list, .explorer_list .explorer_list, .experience_list .explorer_list, .narrative_list .explorer_list, .campaign_list .explorer_list, .bounty_list .explorer_list, .photo_list .explorer_list, .object_list #welcome_quote, .explorer_list #welcome_quote, .experience_list #welcome_quote, .narrative_list #welcome_quote, .campaign_list #welcome_quote, .bounty_list #welcome_quote, .photo_list #welcome_quote, .object_list .experience_item, .explorer_list .experience_item, .experience_list .experience_item, .narrative_list .experience_item, .campaign_list .experience_item, .bounty_list .experience_item, .photo_list .experience_item, .object_list .campaign_item, .explorer_list .campaign_item, .experience_list .campaign_item, .narrative_list .campaign_item, .campaign_list .campaign_item, .bounty_list .campaign_item, .photo_list .campaign_item, .object_list .campaign_list, .explorer_list .campaign_list, .experience_list .campaign_list, .narrative_list .campaign_list, .campaign_list .campaign_list, .bounty_list .campaign_list, .photo_list .campaign_list, .object_list .experience_note, .explorer_list .experience_note, .experience_list .experience_note, .narrative_list .experience_note, .campaign_list .experience_note, .bounty_list .experience_note, .photo_list .experience_note, .object_list .experience_dash, .explorer_list .experience_dash, .experience_list .experience_dash, .narrative_list .experience_dash, .campaign_list .experience_dash, .bounty_list .experience_dash, .photo_list .experience_dash, .object_list .experience_list, .explorer_list .experience_list, .experience_list .experience_list, .narrative_list .experience_list, .campaign_list .experience_list, .bounty_list .experience_list, .photo_list .experience_list, .object_list .narrative_item, .explorer_list .narrative_item, .experience_list .narrative_item, .narrative_list .narrative_item, .campaign_list .narrative_item, .bounty_list .narrative_item, .photo_list .narrative_item, .object_list .timeline, .explorer_list .timeline, .experience_list .timeline, .narrative_list .timeline, .campaign_list .timeline, .bounty_list .timeline, .photo_list .timeline, .object_list .stripe_item, .explorer_list .stripe_item, .experience_list .stripe_item, .narrative_list .stripe_item, .campaign_list .stripe_item, .bounty_list .stripe_item, .photo_list .stripe_item, .object_list .narrative_note, .explorer_list .narrative_note, .experience_list .narrative_note, .narrative_list .narrative_note, .campaign_list .narrative_note, .bounty_list .narrative_note, .photo_list .narrative_note, .object_list .narrative_dash, .explorer_list .narrative_dash, .experience_list .narrative_dash, .narrative_list .narrative_dash, .campaign_list .narrative_dash, .bounty_list .narrative_dash, .photo_list .narrative_dash, .object_list .narrative_list, .explorer_list .narrative_list, .experience_list .narrative_list, .narrative_list .narrative_list, .campaign_list .narrative_list, .bounty_list .narrative_list, .photo_list .narrative_list, .object_list .latest_narrative, .explorer_list .latest_narrative, .experience_list .latest_narrative, .narrative_list .latest_narrative, .campaign_list .latest_narrative, .bounty_list .latest_narrative, .photo_list .latest_narrative, .object_list .photo_item, .explorer_list .photo_item, .experience_list .photo_item, .narrative_list .photo_item, .campaign_list .photo_item, .bounty_list .photo_item, .photo_list .photo_item, .object_list .gallery_item, .explorer_list .gallery_item, .experience_list .gallery_item, .narrative_list .gallery_item, .campaign_list .gallery_item, .bounty_list .gallery_item, .photo_list .gallery_item, .object_list .photo_list, .explorer_list .photo_list, .experience_list .photo_list, .narrative_list .photo_list, .campaign_list .photo_list, .bounty_list .photo_list, .photo_list .photo_list, .object_list .comment_item, .explorer_list .comment_item, .experience_list .comment_item, .narrative_list .comment_item, .campaign_list .comment_item, .bounty_list .comment_item, .photo_list .comment_item, .object_list .success_item, .explorer_list .success_item, .experience_list .success_item, .narrative_list .success_item, .campaign_list .success_item, .bounty_list .success_item, .photo_list .success_item, .object_list .warning_item, .explorer_list .warning_item, .experience_list .warning_item, .narrative_list .warning_item, .campaign_list .warning_item, .bounty_list .warning_item, .photo_list .warning_item, .object_list .request_dash, .explorer_list .request_dash, .experience_list .request_dash, .narrative_list .request_dash, .campaign_list .request_dash, .bounty_list .request_dash, .photo_list .request_dash, .object_list .gallery_photo_item, .explorer_list .gallery_photo_item, .experience_list .gallery_photo_item, .narrative_list .gallery_photo_item, .campaign_list .gallery_photo_item, .bounty_list .gallery_photo_item, .photo_list .gallery_photo_item, .object_list .formatted_input, .explorer_list .formatted_input, .experience_list .formatted_input, .narrative_list .formatted_input, .campaign_list .formatted_input, .bounty_list .formatted_input, .photo_list .formatted_input, .object_list .register_input, .explorer_list .register_input, .experience_list .register_input, .narrative_list .register_input, .campaign_list .register_input, .bounty_list .register_input, .photo_list .register_input {
+  margin: 10px; }
 
 .option img {
   vertical-align: middle;
-  width: 20px;
+  width: 25px;
   margin: 1px;
   opacity: 0.5; }
 .option:hover img {
-  width: 22px;
+  width: 27px;
   position: relative;
-  margin: 0;
+  margin: 0px;
   opacity: 1; }
 
 .option_icon {
-  padding-right: 7px;
-  width: 20px;
+  padding: 3px;
+  width: 32px;
   margin: 1px;
   opacity: 0.5; }
   .option_icon:hover {
-    width: 22px;
+    width: 34px;
     position: relative;
-    opacity: 1;
-    margin: 0; }
+    margin: 0;
+    opacity: 1; }
 
 .toggler, .wide_toggler {
   cursor: pointer; }
@@ -570,8 +599,16 @@ textarea {
 .hidden {
   display: none; }
 
-.help-text {
+.subtle-text, .about_this, .help-text, .helptext {
+  color: rgba(0, 0, 0, 0.5);
   font-size: smaller;
+  background-color: #666666;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 1px; }
+
+.help-text, .helptext {
   padding: 5px;
   background-color: rgba(250, 250, 250, 0.15); }
 
@@ -580,7 +617,7 @@ textarea {
   margin-right: auto;
   text-align: center;
   width: 30%;
-  background-color: rgba(74, 123, 138, 0.6);
+  background-color: rgba(74, 123, 138, 0.4);
   height: 50px;
   line-height: 50px; }
   .pagination img {
@@ -606,19 +643,14 @@ textarea {
   -ms-transform: scale(1, -1); }
 
 #wrapper {
-  min-height: 100%;
-  height: auto;
-  /* Negative indent footer by its height */
-  margin: 0 auto -50px;
-  /* Pad bottom by footer height */
-  padding: 0 0 50px; }
+  /* Margin on bottom */ }
 
 #messages {
   font-size: smaller;
   position: fixed;
   width: 100%;
   text-align: center;
-  background-color: rgba(200, 200, 200, 0.7);
+  background-color: rgba(200, 200, 200, 0.9);
   z-index: 3;
   top: 30px;
   left: 0; }
@@ -637,8 +669,17 @@ textarea {
 .navbar-default .navbar-nav > li > a {
   color: #DDD; }
 
+.navbar-default .navbar-nav .open .dropdown-menu > li > a, .navbar-default .navbar-nav .open .dropdown-menu {
+  color: #000; }
+
 .navbar-default .navbar-brand {
   color: #DDD; }
+  .navbar-default .navbar-brand img {
+    position: relative;
+    top: -45px;
+    max-width: 110px;
+    -webkit-filter: drop-shadow(2px 2px 2px #222);
+    filter: drop-shadow(2px 2px 2px #222); }
 
 .navbar-default .navbar-nav > li.active > a {
   background-color: #6A9BAA;
@@ -649,8 +690,17 @@ textarea {
   padding-bottom: 0;
   height: 40px; }
 
+.navbar-default .navbar-toggle .icon-bar {
+  height: 1px;
+  background-color: #FFF; }
+
 .navbar {
   min-height: 40px; }
+
+.container .jumbotron {
+  background-color: transparent;
+  border-radius: 0;
+  margin-bottom: 0; }
 
 .footer {
   background-color: rgba(0, 0, 0, 0.6);
@@ -673,41 +723,30 @@ blockquote {
 .explore_button, #explore_main, #explore_what, #explore_why {
   width: 12em;
   height: 12em;
+  margin: 0 auto;
   border-radius: 50%;
-  position: absolute;
   text-align: center;
-  vertical-align: middle;
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  -ms-transition: all 0.2s;
-  -o-transition: all 0.2s;
-  transition: all 0.2s; }
+  vertical-align: middle; }
   .explore_button p:first-child, #explore_main p:first-child, #explore_what p:first-child, #explore_why p:first-child {
     font-size: 2em;
     font-weight: bold; }
   .explore_button p, #explore_main p, #explore_what p, #explore_why p {
     color: initial;
     position: relative;
-    top: 30%; }
+    top: 35%; }
 
 #explore_main {
-  background-color: #7f5f8e;
-  top: 150px;
-  left: 50%; }
+  background-color: #7f5f8e; }
   #explore_main:hover {
     background-color: rgba(127, 95, 142, 0.5); }
 
 #explore_what {
-  background-color: #4a7b8a;
-  top: 333px;
-  left: 36%; }
+  background-color: #4a7b8a; }
   #explore_what:hover {
     background-color: rgba(74, 123, 138, 0.5); }
 
 #explore_why {
-  background-color: #36703c;
-  top: 333px;
-  left: 64%; }
+  background-color: #36703c; }
   #explore_why:hover {
     background-color: rgba(54, 112, 60, 0.5); }
 
@@ -728,8 +767,7 @@ blockquote {
   position: relative;
   clear: both;
   height: 30px;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 0; }
+  background-color: rgba(0, 0, 0, 0.6); }
 
 #welcome_quote {
   padding: 10px; }
@@ -758,6 +796,9 @@ blockquote {
   position: absolute;
   z-index: -1; }
 
+.notification-badge {
+  background-color: #F44; }
+
 #new_narrative_form {
   display: none; }
 
@@ -769,8 +810,7 @@ blockquote {
 
 .formatted_input, .register_input {
   padding: 5px;
-  margin: 10px 5px;
-  background-color: rgba(100, 100, 100, 0.1); }
+  margin: 10px 5px; }
   .formatted_input input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), .register_input input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]) {
     min-height: 1em;
     font-size: 1em;
@@ -785,6 +825,9 @@ blockquote {
 .register-table {
   table-layout: fixed;
   width: 100%; }
+
+.input-range-wrapper {
+  border-radius: 5px; }
 
 #id_honeypot {
   display: none; }

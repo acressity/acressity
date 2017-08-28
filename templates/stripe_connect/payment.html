@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load acressity_extras %}
+
+{% block content %}
+    <div class="stripe_item">
+        <div class="jumbotron">
+            <h1>Make Benefaction Payment</h1>
+            <div class="option_list">
+                <a href="{{ bounty.get_absolute_url }}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go to bounty home page" class="option_icon" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if not user.is_authenticated %}
+        <section class="warning_item">
+            <p>
+                Since you are not logged in, your payment will be considered anonymous. To have payment attributed to you, please <a href="{% url 'login' %}?next={{ request.path }}">login</a> first.
+            </p>
+        </section>
+    {% endif %}
+    
+    <div class="experience_item">
+        <p>
+        Become a benefactor and assist <a href="{{ bounty.get_recipient.get_absolute_url }}">{{ bounty.get_recipient }}</a> {% if bounty.get_experience.explorers.count > 1 %}and their comrades {% endif %}in overcoming the financial obstacles for the experience:
+        </p>
+        <h2><a href="{{ bounty.campaign.experience.get_absolute_url }}">{{ bounty.campaign.experience }}</a></h2>
+    </div>
+    <div class="explorer_item">
+        <p>
+            Making this payment will hold <a href="{{ bounty.get_recipient.get_absolute_url }}">{{ bounty.get_recipient }}</a> accountable for fulfilling:
+        </p>
+        <div class="bounty_item">
+            <h2>{{ bounty.proposition }}</h2>
+
+            {% if bounty.description %}
+                <p>{{ bounty.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="object_item">
+        <p>
+            You will be charged {{ bounty.amount }}, which will notify {{ bounty.get_recipient }} once the payment has been processed by Stripe. See the <a href="{% url 'stripe_connect.about' %}">details page</a> for information about the details of the transaction. Benefactors like yourself are integral to assisting others in fulfilling their dreams. Thank you.
+        </p>
+
+
+        <table>
+            <tr>
+                <td>
+                    <h2>Pay with Card</h2>
+                    <p>
+                        Click this button to be presented with a form in which you can fill out your card information.
+                    </p>
+                    <div class="text-center">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <script
+                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                data-key="{{ stripe_publishable_key }}"
+                                data-amount="{{ bounty.amount|multiply:100 }}" {# Convert to base currency: dollars to cents #}
+                                data-name="Acressity"
+                                data-description="Widget"
+                                data-image="{{ STATIC_URL }}img/logo-circle-small.png"
+                                data-locale="auto"
+                                data-zip-code="true">
+                            </script>
+                        </form>
+                    </div>
+                </td>
+                {% if user.is_stripe_connected and user.stripe_account.fetch_has_source %}
+                    <td>
+                        <h2>Pay with Account</h2>
+                        <p>
+                            Choose this option to pay with your connected Stripe account's default method. Click the button below to process the payment.
+                        </p>
+                        <div class="text-center">
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="stripe-button-el" style="visibility: visible">
+                                    <span style="display: block; min-height: 30px;">Pay with Saved Card</span>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+{% endblock content %}

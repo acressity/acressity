@@ -5,7 +5,7 @@
 	<p>Good luck with {% if explorer.featured_experience %}<em>{{ explorer.featured_experience }}</em>{% else %}your experiences{% endif %}, and here's to looking forward to hearing back from your adventures soon.</p>
 	<div class="align_center">
 		{% if explorer.featured_experience.gallery.featured_photo %}
-			<img style="max-width: 700px;" src="{{ explorer.featured_experience.gallery.featured_photo.image.url }}" />
+			<img style="max-width: 100%;" src="{{ explorer.featured_experience.gallery.featured_photo.image.url }}" />
 		{% else %}
 			<img src="{{ STATIC_URL }}img/farewell.jpg" class="full_width" />
 		{% endif %}

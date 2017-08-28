@@ -38,7 +38,7 @@ def index(request, narrative_id):
             else:
                 # This user simply does not have the privileges
                 raise PermissionDenied
-    return render(request, 'narratives/index.html', {'narrative': narrative, 'privileged': privileged, 'author': narrative.is_author(request.user)})
+    return render(request, 'narratives/index.html', {'narrative': narrative, 'privileged': privileged})
 
 
 @login_required

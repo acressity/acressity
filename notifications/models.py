@@ -195,16 +195,15 @@ def notify_handler(verb, **kwargs):
     newnotify.save()
 
     # Send email to recipient of notification
-    if not settings.DEBUG:
-        if newnotify.recipient.notify:
-            to = newnotify.recipient.email
-            from_email = 'acressity@acressity.com'
-            subject = 'New note on your Acressity journey'
-            text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
-            html_content = render_to_string('notifications/email.html', {'notice': newnotify})
-            message = EmailMultiAlternatives(subject, text_content, from_email, [to])
-            message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
-            message.send()
+    if newnotify.recipient.notify:
+        to = newnotify.recipient.email
+        from_email = 'acressity@acressity.com'
+        subject = 'New note on your Acressity journey'
+        text_content = render_to_string('notifications/email.txt', {'notice': newnotify})
+        html_content = render_to_string('notifications/email.html', {'notice': newnotify})
+        message = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        message.attach_alternative(html_content, 'text/html')  # This will no longer be necessary in Django 1.7. Can be provided to send_mail as function parameter
+        message.send()
 
 # connect the signal
 notify.connect(notify_handler, dispatch_uid='notifications.models.notification')

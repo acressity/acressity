@@ -19,7 +19,6 @@ from experiences.forms import ExperienceForm, ExperienceBriefForm
 from narratives.models import Narrative
 from narratives.forms import NarrativeForm, NarrativeTransferForm, TRANSFER_ACTION_CHOICES
 from notifications import notify
-from paypal.standard.forms import PayPalPaymentsForm
 
 
 def index(request, experience_id):
@@ -51,21 +50,6 @@ def index(request, experience_id):
     experience_brief_form = None
     if not experience.brief:
         experience_brief_form = ExperienceBriefForm(instance=experience)
-    paypal_form = None
-    if experience.accepts_paypal:
-        paypal_dict = {
-            'business': experience.author.email,
-            'amount': "25.00",
-            'item_name': experience,
-            'invoice': 'unique-invoice-id',
-            'cmd': '_donations',
-            'bn': 'Acressity_Donate_WPS_US',
-            'alt': 'Donate',
-            'notify_url': 'https://www.example.com' + reverse('paypal-ipn'),
-            'return_url': 'https://www.example.com/your-return-location/',
-            'cancel_return': 'https://www.example.com/your-cancel-location/',
-        }
-        paypal_form = PayPalPaymentsForm(initial=paypal_dict, button_type='donate')
     context = {
         'experience': experience,
         'narratives': narratives,
@@ -73,7 +57,6 @@ def index(request, experience_id):
         'privileged': privileged,
         'narrative_form': narrative_form,
         'experience_brief_form': experience_brief_form,
-        'paypal_form': paypal_form,
     }
     return render(request, 'experiences/index.html', context)
 
@@ -91,7 +74,7 @@ def create(request):
                 messages.success(
                     request,
                     _('Your featured experience is now {0}'.format(
-                        form.instance.experience))
+                        form.instance))
                 )
             elif form.cleaned_data['unfeature']:
                 request.user.featured_experience = None
@@ -185,7 +168,7 @@ def brief(request, experience_id):
 @login_required
 def delete(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if experience.author == request.user:
+    if request.user == experience.author:
         if request.method == 'POST':
             if 'nominate' in request.POST:
                 new_author = get_object_or_404(
@@ -205,7 +188,7 @@ def delete(request, experience_id):
             elif 'confirm' in request.POST:
                 for comrade in experience.comrades(exclude=request.user):
                     notify.send(sender=request.user, recipient=comrade,
-                                target=experience, verb='has deleted the experience')
+                                verb='has deleted the experience {0}'.format(experience))
                 experience.delete()
                 messages.success(
                     request, 'Experience {0} was deleted'.format(experience))
@@ -226,17 +209,19 @@ def delete(request, experience_id):
 @login_required
 def leave_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
-    if request.user in experience.explorers.all():
-        # They are a comrade. This option is not available to author
-        if 'delete' in request.POST:
-            # Cascade delete all of their presence in experience
-            pass
+    if request.method == 'POST':
+        if request.user in experience.explorers.all():
+            # They are a comrade. This option is not available to author
+            if 'delete' in request.POST:
+                # Cascade delete all of their presence in experience
+                pass
+            else:
+                # Just remove them from experience.explorers
+                pass
         else:
-            # Just remove them from experience.explorers
-            pass
-    else:
-        raise PermissionDenied
-    return redirect(reverse('journey', args=(request.user.id,)))
+            raise PermissionDenied
+        return redirect(reverse('journey', args=(request.user.id,)))
+    return render(request, 'experiences/leave.html', {'experience': experience})
 
 
 def categorize(request, experience_id):
@@ -261,31 +246,6 @@ def categorize(request, experience_id):
         )
     else:
         raise PermissionDenied
-
-
-def donate(request, experience_id):
-    experience = get_object_or_404(Experience, pk=experience_id)
-    paypal_form = None
-    if experience.accepts_paypal:
-        paypal_dict = {
-            'business': experience.author.email,
-            'amount': 25.00,
-            'item_name': experience,
-            'invoice': 'unique-invoice-id',
-            'cmd': '_donations',
-            'bn': 'Acressity_Donate_WPS_US',
-            'alt': 'Donate',
-            'notify_url': reverse('paypal-ipn'),
-            # 'return': reverse('paypal_return'),
-            'cancel_return': reverse('experience', args=(experience.id,)),
-        }
-        paypal_form = PayPalPaymentsForm(initial=paypal_dict, button_type='donate')
-    return render(request, 'experiences/donate.html', {'experience': experience, 'paypal_form': paypal_form})
-
-
-def paypal_return(request, experience_id):
-    experience = get_object_or_404(Experience, pk=experience_id)
-    return redirect(reverse('index'))
 
 
 def featured(request):

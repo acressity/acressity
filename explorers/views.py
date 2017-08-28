@@ -61,12 +61,10 @@ def profile(request, explorer_id):
         else:
             raise PermissionDenied
     if request.user.id == explorer.id:
-        owner = True
         form = ExplorerForm(explorer, instance=explorer)
     else:
         form = None
-        owner = False
-    return render(request, 'explorers/profile.html', {'explorer': explorer, 'owner': owner, 'form': form})
+    return render(request, 'explorers/profile.html', {'explorer': explorer, 'form': form})
 
 
 def story(request, explorer_id):
@@ -189,16 +187,27 @@ def create(request):
             explorer.gallery = gallery
             explorer.save()
             # Welcome and send them on introductory tour
-            messages.success(request, 'Welcome aboard, {0}!'.format(explorer.get_full_name()))
-            notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
+            messages.success(request, 'Welcome aboard, {0}! This is your main journey page, where your experiences will be listed.'.format(explorer.get_full_name()))
+            try:
+                # Exciting! Send Andrew a notification
+                notify.send(sender=explorer, recipient=get_user_model().objects.get(pk=1), verb='is now a fellow explorer')
+            except:
+                pass
             if first_experience:
-                messages.success(request, '''You can get started by developing
-                your experience a little and then making it public when ready, sharing it
-                with others and feeling the power you can draw from support 
-                along this journey.''')
-                return redirect(reverse('experience', args=(first_experience.id,)))
+                messages.success(request,
+                    '''
+                        You can get started by clicking
+                        on your experience {0} below and developing
+                        it a little. Make it public when ready, sharing it
+                        with others and feeling the power you can draw from support 
+                        along this journey. If you need financial resources, you can create
+                        a benefaction campaign to request funding from benefactors.
+                    '''.format(first_experience)
+                )
             else:
-                return redirect(reverse('journey', args=(explorer.id,)))
+                messages.success(request, '''You can get started by creating a list
+                of experiences you want to fulfill.''')
+            return redirect(reverse('journey', args=(explorer.id,)))
     else:
         explorer_form = RegistrationForm()
     return render(request, 'registration/register.html', {
@@ -256,7 +265,7 @@ def change_password(request):
                 request.user.save()
                 messages.success(request, _('You have successfully changed your password'))
             else:
-                messages.success(request, _('Your attempt to change your password failed...'))
+                messages.success(request, _('Your attempt to change your password failed'))
             return redirect(reverse('journey', args=(request.user.id,)))
     else:
         form = PasswordChangeForm
@@ -293,4 +302,4 @@ def site_login(request):
 
 def check_trailname(request):
     trailname = request.GET.get('trailname')
-    return HttpResponse(json.dumps({'found': bool(get_user_model().objects.filter(trailname=trailname))}))
+    return HttpResponse(json.dumps({'found': get_user_model().objects.filter(trailname=trailname).exists()}))

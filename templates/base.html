@@ -7,7 +7,9 @@ anything lacking in efficiency or if you have any suggestions.
 	Thanks,
 	Andrew Gaines
 -->
+{% load acressity_extras %}
 {% load support_extras %}
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	{% if user.is_authenticated %}
 		{% load notifications_tags %}
@@ -16,16 +18,35 @@ anything lacking in efficiency or if you have any suggestions.
 		<title>Acressity {% block title %}{% endblock title %}{% if user.is_authenticated %}{% notifications_unread as unread_count %}{% if unread_count %}({{ unread_count }}){% endif %}{% endif %}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<meta name="og:description" content="{% block meta_description %}This social application is designed to be a tool with which to chart your journey into new experiences{% endblock %}" />
-		<meta name="og:title" content="Acressity - Explore New Experiences" />
+		<meta name="og:title" content="Acressity" />
 		<meta name="og:image" content="{{ STATIC_URL }}img/logo.png" />
 		<meta name="keywords" content="{% block meta_keywords %}new experience, experiences, trials, tribulations, missions{% endblock %}" />
 		<meta name="author" content="Andrew Gaines" />
 		<meta name="google-site-verification" content="3iDs3Jcximcq98UiGgWraWkgspn2xYTbkHiZcC0Asrc" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/compiled/style.css" />
-		<link rel="icon" type="image/ico" href="{{ STATIC_URL }}img/favicon.ico" />
-{#		<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans' rel='stylesheet' type='text/css' />#}
-		{# <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" /> #}
+        
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ STATIC_URL }}img/favicons/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ STATIC_URL }}img/favicons/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/favicons/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ STATIC_URL }}img/favicons/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/favicons/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ STATIC_URL }}img/favicons/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ STATIC_URL }}img/favicons/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ STATIC_URL }}img/favicons/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ STATIC_URL }}img/favicons/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{{ STATIC_URL }}img/favicons/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ STATIC_URL }}img/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ STATIC_URL }}img/favicons/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ STATIC_URL }}img/favicons/favicon-16x16.png">
+        <link rel="manifest" href="{{ STATIC_URL }}img/favicons/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="{{ STATIC_URL }}img/favicons/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
+        {# <link href='http://fonts.googleapis.com/css?family=Merriweather+Sans' rel='stylesheet' type='text/css' /> #}
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin" />
 		{% include 'scripts/google_analytics.html' %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -39,10 +60,12 @@ anything lacking in efficiency or if you have any suggestions.
             <div class="container">
                 <div class="row">
                     {% block main %}
-                        <div id="content" class="col-md-9">
-                            {% block content %}{% endblock content %}
+                        <div class="col-md-9 col-lg-9">
+                            <div id="content">
+                                {% block content %}{% endblock content %}
+                            </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-lg-3">
                             <div id="right_content">
                                 {% block right_content %}
                                     {% if user.is_authenticated %}
@@ -50,14 +73,8 @@ anything lacking in efficiency or if you have any suggestions.
                                             {% include "explorers/snippets/dash.html" %}
                                         {% endwith %}
                                     {% else %}
-                                        <div id="welcome_quote">
-                                            <h2>
-                                                Acressity
-                                            </h2>
-                                            <h3>
-                                                A bucketlist for the exploration of new experiences
-                                            </h3>
-                                            <a href="{% url 'about' %}">learn more</a>
+                                        <div class="main_item align_center">
+                                            <h1>Acressity</h1>
                                         </div>
                                         <div class="narrative_item">
                                             {% random_quote as quote %}
@@ -94,22 +111,5 @@ anything lacking in efficiency or if you have any suggestions.
                 </div>
             </div>
         </div>
-
-        <footer class="footer">
-            <div class="container">
-                <ul class="horizontal_list">
-                    <a href="{% url 'acressity_index' %}"><li>Acressity</li></a>
-                    <a href="{% url 'about' %}"><li>About</li></a>
-                    <a href="{% url 'contact' %}"><li>Contact</li></a>
-                    <a href="{% url 'experiences.views.featured' %}"><li>Experiences</li></a>
-                    <a href="{% url 'all_explorers' %}"><li>Explorers</li></a>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'journey' user.id %}"><li>Your journey</li></a>
-                    {% else %}
-                        <a href="{% url 'register' %}"><li>Sign up</li></a>
-                    {% endif %}
-                </ul>
-            </div>
-        </footer>
 	</body>
 </html>

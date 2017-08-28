@@ -16,12 +16,31 @@ TRANSFER_ACTION_CHOICES = (
 
 
 class NarrativeForm(forms.ModelForm):
-    date_created = forms.DateField(widget=SelectDateWidget(years=range(timezone.now().year, timezone.now().year - 110, -1)), required=False)
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'larger', 'onfocus': 'if($(this).val()==this.defaultValue){$(this).val("")};', 'onblur': 'if($(this).val()==""){$(this).val(this.defaultValue)};'}))  # default value moved to views.py
-
     class Meta:
         model = Narrative
-        exclude = ('gallery', 'author')
+        fields = (
+            'title',
+            'body',
+            'experience',
+            'date_created',
+            'category',
+            'is_public',
+        )
+        widgets = {
+            'date_created': SelectDateWidget(years=range(timezone.now().year, timezone.now().year - 110, -1)),
+            'title': forms.TextInput(
+                attrs={
+                    'onfocus': 'if($(this).val()==this.defaultValue){$(this).val("")};',
+                    'onblur': 'if($(this).val()==""){$(this).val(this.defaultValue)};',
+                }),
+        }
+        labels = {
+            'body': _('Narrative'),
+            'is_public': _('Public?'),
+        }
+        help_texts = {
+            'date_created': _('Leave blank for today'),
+        }
 
     def __init__(self, *args, **kwargs):
         self.author = kwargs.pop('author', None)

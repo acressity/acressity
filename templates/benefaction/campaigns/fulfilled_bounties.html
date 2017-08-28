@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="campaign_item">
+        <div class="jumbotron">
+            <h1>All Fulfilled Bounties</h1>
+            <h2>{{ campaign }}</h2>
+        </div>
+        <p class="subtle-text">
+            A bounty is fulfilled after it has been paid and the explorer claims the proposition is complete to the standards of the benefactor.
+        </p>
+    </div>
+
+    <div class="bounty_list">
+        {% for bounty in bounties %}
+            {% include 'benefaction/bounties/snippets/dash.html' %}
+        {% empty %}
+            There are currently no fulfilled bounties.
+            {% if user in campaign.experience.explorers.all %}
+                Start fulfilling them and see them pile up here!
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock content %}

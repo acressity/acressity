@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="bounty_item">
+        <div class="jumbotron">
+            <h1>Accept This Bounty?</h1>
+
+            <div class="option_list">
+                <a href="{{ bounty.get_absolute_url }}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" class="option_icon" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+	<form action="" method="POST">
+		{% csrf_token %}
+		<p>
+            Are you sure you want to accept this bounty? Doing so will notify the creator, <a href="{{ bounty.creator.get_absolute_url }}">{{ bounty.creator }}</a>, who will then be directed to fill out a payment form, at which point this bounty will be considered paid and you will receive the payment.
+		</p>
+		<p>
+            If payment is made, you will be held accountable for fulfilling the bounty's proposition, <strong>{{ bounty.proposition }}</strong>, while pursuing the experience <strong><a href="{{ bounty.campaign.experience.get_absolute_url }}">{{ bounty.campaign.experience }}</a></strong>.
+		</p>
+		<div class="align_center">
+			<input type="submit" value="Accept" />
+		</div>
+	</form>
+{% endblock content %}

@@ -3,14 +3,15 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.utils.functional import curry
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.hashers import make_password
+from django.core.urlresolvers import reverse
 
 from photologue.models import Gallery
 from acressity.utils import embed_string, build_full_absolute_url
-from paypal.standard.ipn.models import PayPalIPN
 
 
 class ExperienceManager(models.Manager):
@@ -19,45 +20,81 @@ class ExperienceManager(models.Manager):
 
 
 class Experience(models.Model):
-    '''
-    The term signifying a single venture, goal, wish, exploration,
-    (ad infinitum) that an explorer has expressed as being willing
-    of attaining. Think of these as the titles of chapters within
-    a book about a journey.
-    '''
+    help_text=_('''
+        An experience is the term used to refer to a single goal, venture, wish, or expedition
+        desirable of being fulfilled, like items on a bucketlist. Experiences are more 
+        successful if they are specific, exciting, and measurable. Simply writing them down is 
+        taking a huge step towards fullfilling them.
+    ''')
 
-    title = models.CharField(max_length=200, null=False, help_text=_('Title of the experience.'))
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='authored_experiences', help_text=_('Explorer who created the experience. Has the ability of sending requests to other explorers to become comrades in this experience.'))
-    date_created = models.DateTimeField(default=timezone.now, null=False,
-            blank=True, help_text=_('''The day you committed to achieving this
-                experience. Leave blank for today'''))
-    date_modified = models.DateTimeField(auto_now=True, help_text=_('Updated every time object saved'), null=True, blank=True)
-    brief = models.TextField(blank=True, null=True, help_text=_('Central to making this experience more real, write a brief about what this experience entails. What are your hopes and aspirations? This is a way for others to understand your intention and for you to get some clarity.'))
-    status = models.CharField(max_length=200, null=True, blank=True, help_text=_('Optional short state of the experience at the moment.'))
-    gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)  # I think I want to cascade delete into the gallery as well
-    is_public = models.BooleanField(default=False, help_text=_('It is recommended to keep an experience private until you are ready to announce it to the world. Private experiences are only seen by its explorers and those providing a correct password if one is selected, so you can choose to share this experience with just a few people and make it public later if you\'d like.'))
+    title = models.CharField(
+        max_length=255, null=False,
+        help_text=_('Title of the experience.')
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='authored_experiences',
+        help_text=_('''
+            Explorer who created the experience. Has the ability of sending requests to other 
+            explorers to become comrades in this experience.
+        ''')
+    )
+    date_created = models.DateTimeField(
+        default=timezone.now, null=False, blank=True, 
+        help_text=_('''
+            The day you committed to achieving this experience. Leave blank for today
+        ''')
+    )
+    date_modified = models.DateTimeField(
+        auto_now=True, null=True, blank=True,
+        help_text=_('Updated every time object saved')
+    )
+    brief = models.TextField(
+        blank=True, null=True,
+        help_text=_('''
+            Central to making this experience more real, write a brief about what 
+            this experience entails. What are your hopes and aspirations? This 
+            is a way for others to understand your intention and for you to get some clarity.
+        ''')
+    )
+    status = models.CharField(
+        max_length=160, null=True, blank=True,
+        help_text=_('Optional short state of the experience at the moment.')
+    )
+    gallery = models.OneToOneField(Gallery, null=True, blank=True, on_delete=models.SET_NULL)
+    is_public = models.BooleanField(default=False,
+        help_text=_('''
+            It is recommended to keep an experience private until you are ready to 
+            announce it to the world. Private experiences are only seen by its 
+            explorers and those providing a correct password if one is selected, 
+            so you can choose to share this experience with just a few people and 
+            make it public later if you\'d like.
+        ''')
+    )
     percent_fulfilled = models.IntegerField(default=0,
-            validators=[MinValueValidator(0), MaxValueValidator(100)],
-            blank=True,
-            help_text=_('''The fraction complete the experience is, from beginning
-            to end. Rough estimates are fine if there\'s no clear way to
-            determine this percentage'''))
-    password = models.CharField(_('password'), max_length=128, null=True, blank=True, help_text=_('Submitting the correct password provides access to the experience if it is private as well as all of the private narratives.'))
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        blank=True,
+        help_text=_('''The fraction complete the experience is, from beginning
+        to end. Rough estimates are fine if there\'s no clear way to
+        determine this percentage''')
+    )
+    password = models.CharField(_('password'), max_length=128, null=True,
+        blank=True,
+        help_text=_('''
+            Submitting the correct password provides access to the 
+            experience if it is private as well as all of the private narratives.
+        ''')
+    )
     search_term = models.CharField(
         max_length=80, null=True, blank=True, unique=True,
-        help_text=_('Short phrase or word identifying the experience, allows access by typing <code>http://acressity.com/your_search_term_here</code>. Needs to be unique and cannot be the same as another explorer\'s trailname')
-    )
-    accepts_paypal = models.BooleanField(
-        default=False, null=False, blank=True,
-        help_text=_('Check this box if you want to be able to accept PayPal donations from benefactors.')
+        help_text=_('''
+            Short phrase or word identifying the experience, allows access by typing 
+            <code>http://acressity.com/your_search_term_here</code>. Needs to be 
+            unique and cannot be the same as another explorer\'s trailname
+        ''')
     )
     benefactors = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, related_name='benefactors',
         help_text=_('All those who have donated to this experience')
-    )
-    donations = models.ManyToManyField(
-        PayPalIPN, blank=True, related_name='donations',
-        help_text=_('All the donations made to this experience')
     )
     intended_completion_date = models.DateField(blank=True,
             null=True, help_text=_('''Optional date by which you intend to be
@@ -114,11 +151,27 @@ class Experience(models.Model):
     def comrades(self, exclude):
         return self.explorers.exclude(pk=exclude.pk)
 
+    def can_access(self, explorer, cookie):
+        if self.is_public:
+            return True
+        if not explorer.is_authenticated():
+            return False
+        if explorer in self.explorers.all():
+            return True
+        if cookie == str(self.pk):
+            return True
+        return False
+
     def is_fulfilled(self):
         return self.percent_fulfilled == 100
 
     def create_gallery(self):
-        return Gallery.objects.create(title=self.title, content_type=ContentType.objects.get_for_model(Experience), object_pk=self.id, is_public=self.is_public)
+        return Gallery.objects.create(
+            title=self.title,
+            content_type=ContentType.objects.get_for_model(Experience),
+            object_pk=self.id, 
+            is_public=self.is_public
+        )
 
     def get_galleries(self):
         galleries = [narrative.gallery for narrative in self.narratives.all()
@@ -159,6 +212,9 @@ class Experience(models.Model):
 
     def embedded_brief(self):
         return embed_string(self.brief)
+    
+    def has_campaign(self):
+        return hasattr(self, 'campaign')
 
     def donations_total(self):
         return sum([donation.payment_gross for donation in self.donations.all() if donation.payment_status == 'Completed'])

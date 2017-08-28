@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load acressity_extras %}
+
+{% block content %}
+    <div class="stripe_item">
+        <div class="jumbotron">
+            <h1>About Stripe Payments</h1>
+        </div>
+    </div>
+
+	<section>
+		<h2>How it Works</h2>
+		<p>
+			{{ stripe|help_text }}
+		</p>
+	</section>
+	{% if request.user.is_authenticated %}
+		{% if not request.user.has_stripe_profile %}
+			<div class="align_center">
+				<a href="{{ stripe_authorize_url }}">
+					<img src="{{ STATIC_URL }}img/stripe/blue-on-light.png" />
+				</a>
+			</div>
+		{% endif %}
+	{% else %}
+		<p>
+			<a href="{% url 'register' %}">Sign up</a> to become involved in the process.
+		</p>
+	{% endif %}
+{% endblock content %}

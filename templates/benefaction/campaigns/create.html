@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load acressity_extras %}
+
+{% block head_insert %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#id_amount_needed").on("input", function(){
+				// Calculate the amount the explorer should request given what how much they need
+				var amount_needed = $(this).val();
+				var fee_percent = {{ stripe_fee }} + {{ acressity_fee }};
+				var amount_to_request = amount_needed / (1 - (fee_percent / 100));
+				
+				// Round to 2 decimal places
+				amount_to_request = amount_to_request.toFixed(2);
+				
+				// Update the form field to be submitted
+				$("#id_amount_requested").val(amount_to_request);
+			})
+		})
+	</script>
+{% endblock head_insert %}
+
+{% block content %}
+    <div class="campaign_item">
+        <div class="jumbotron">
+            <h1>Create a Benefaction Campaign</h1>
+        </div>
+    </div>
+
+    <div class="main_item">
+        <section>
+            <h2>What is a Benefaction Campaign?</h2>
+            <p>
+                {{ form|help_text }}
+            </p>
+        </section>
+        <section>
+            <h2>Receiving Payments</h2>
+            <p>
+                Payments are processed by <a href="https://stripe.com/about" target="blank">Stripe</a>, a reputable and secure provider. Stripe charges {{ stripe_fee }}% for their service (+30 cents per transaction), while Acressity charges an additional {{ acressity_fee }}%. These fees are deducted from the payments made by your benefactors, not charging them any extra. For this reason, request a total amount which takes these fees into consideration.
+            </p>
+        </section>
+        <p>
+            Either enter the amount you need here, which calculates an amount to be requested, or directly fill in the amount you want to request. The automatic calculation does not take into consideration the 30 cents per transaction. Only the amount requested will be used from this point onwards.
+        </p>
+        <section>
+            <h2>Let's get your experience funded!</h2>
+        </section>
+    </div>
+    <form action="" method="POST">
+        <li>
+            <label for="id_amount_needed">Amount needed:</label>
+            <input id="id_amount_needed" step="0.01" type="number" />
+            <div class="helptext">
+                The amount you need. Entering an amount here automatically calculates how much to request, filling in the text box below.
+            </div>
+        </li>
+        {% csrf_token %}
+        {{ form.as_ul }}
+        <div class="align_center">
+            <input type="submit" value="Create Campaign" />
+        </div>
+    </form>
+{% endblock content %}

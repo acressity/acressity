@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="campaign_item">
+        <div class="jumbotron">
+            <h1>Edit Campaign</h1>
+            <h2>{{ campaign }}</h2>
+
+            <div class="option_list">
+                <a href="{{ campaign.get_absolute_url }}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" class="option_icon" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+	<form action="" method="POST">
+		{% csrf_token %}
+		{{ form.as_ul }}
+		<div class="formatted_input align_center">
+			<input type="submit" value="Update" />
+		</div>
+	</form>
+{% endblock content %}

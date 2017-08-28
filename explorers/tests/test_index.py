@@ -22,7 +22,6 @@ class ExplorerTestIndex(ExplorerTestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context['owner'])
 
     def test_explorer_can_view_other_profile(self):
         self.client.login(
@@ -35,7 +34,6 @@ class ExplorerTestIndex(ExplorerTestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.context['owner'])
 
     def test_non_logged_can_view_profile(self):
         response = self.client.get(
@@ -43,4 +41,3 @@ class ExplorerTestIndex(ExplorerTestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.context['owner'])

@@ -1,23 +1,25 @@
-<div class="featured_photo">
-    <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}">
-        <img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" />
-    </a>
-    {% if photo.title %}
-        <h4>{{ photo.title }}</h4>
-        <span class="caption">
-          <p>
-            {{ photo.caption }}
-          </p>
-        </span>
-    {% endif %}
-</div>
-{% if user.is_authenticated %}
-    {% load comments %}
-    <div class="option_list">
-        {% if user in photo.gallery.explorers.all %}
-            <a href="{% url 'pl-gallery-edit' photo.gallery.id %}#{{ photo.id }}">
-                <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit photo" class="option_icon" />
-            </a>
+<div class="photo_item">
+    <div class="featured_photo">
+        <a href="{{ photo.get_absolute_url }}" title="{{ photo.title }}">
+            <img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}" />
+        </a>
+        {% if photo.title %}
+            <h4>{{ photo.title }}</h4>
+            <span class="caption">
+              <p>
+                {{ photo.caption }}
+              </p>
+            </span>
         {% endif %}
     </div>
-{% endif %}
+    {% if user.is_authenticated %}
+        {% load comments %}
+        <div class="option_list">
+            {% if user in photo.gallery.explorers.all %}
+                <a href="{% url 'pl-gallery-edit' photo.gallery.id %}#{{ photo.id }}">
+                    <img src="{{ STATIC_URL }}img/icons/pencil.png" title="Edit photo" class="option_icon" />
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

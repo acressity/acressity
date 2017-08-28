@@ -1,6 +1,6 @@
 {% extends "experiences/base.html" %}
 
-{% block content %}
+{% block head_insert %}
     <script type="text/javascript">
         $(document).ready(function(){
             e = document.getElementById("id_is_public");
@@ -10,13 +10,21 @@
             }
         })
     </script>
+{% endblock head_insert %}
 
-    <h1>Editing experience {{ experience }}</h3>
-    <div class="option_list">
-        <a href="{% url 'experience' experience.id %}">
-            <img src="{{ STATIC_URL }}img/icons/go-back.png" class="option_icon" title="Back to experience home page" />
-        </a>
+{% block content %}
+    <div class="experience_item">
+        <div class="jumbotron">
+            <h1>Edit Experience</h1>
+            <h2>{{ experience }}</h2>
+            <div class="option_list">
+                <a href="{% url 'experience' experience.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" class="option_icon" title="Back to experience home page" />
+                </a>
+            </div>
+        </div>
     </div>
+
     {% with '' as url %}
         {% include 'experiences/forms/experience_form.html' %}
     {% endwith %}

@@ -1,19 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2><em>What</em> is Acressity?</h2>
+    <div class="main_item">
+        <div class="jumbotron">
+            <h1><img src="{{ STATIC_URL }}img/logo-circle.png" class="valign_middle" style="max-width: 100px;" /> What is Acressity?</h1>
+        </div>
+        <section>
+            <p>
+                Acressity is a platform for publishing a list of dreams, goals, and ambitions&#8212;called experiences&#8212;you yearn to fulfill; experiences which bring you outside your comfort zone to grow and live life with fulfillment. Carpe Diem. It is reminiscent of a bucketlist in this way, with the emphasis being more on the journey than the destination. Create a profile where you can create and publish these experiences you desire to achieve. Each experience can then be thought of as a chapter in your journey, where you can write narratives, upload photos, provide vicarious experience to others, and receive support.
+            </p>
+        </section>
+    </div>
 
-    <p>
-        Acressity is a platform for publishing a list of experiences you yearn to have during your life; experiences which bring you outside your comfort zone to grow and life life more fully. It is reminiscent of a bucketlist in this way, but with the emphasis being more on the journey than the destination as this is more conducive to success. It gives you a profile where you can create and publish these experiences you desire to achieve. Each experience can then be thought of as a chapter in your life story, where you can write narratives, upload photos, and receive monetary donations from benefactors believing in and assisting you along your journey.
-    </p>
-    <p>
-        The site encourages an incremental approach to achievement as this is the nature of any worthy pursuit. You are encouraged to keep the experiences private until ready to pursue at which point you are encouraged to log as much of your progress as possible, even if that means no progress was achieved for quite some time or even if there were setbacks. The first step is composing the list of desired experiences, or transforming the idea into a more tangible written form. Once the idea matures, this app encourages you to publicize them so others may empower you through their assistance. Accountability, encouragement, advice, and financial assistance are all possible means through which a dream of yours can be transformed into the experience.
-    </p>
-    <p>
-        The social nature of this app gives you the ability of networking with others. Draw power from what others are doing with their own experiences. Interact with someone interested in a similar experience or create a joint experience so that you and any other simultaneously aspiring to achieve can draw power from one another.
-    </p>
-    <p>
-        To learn more about <em>why</em> this app exists, read more <a href="{% url 'why' %}">here</a>. See an example profile <a href="{% url 'example' %}">here</a>. If you're ready to create your first experience, do so below.
-    </p>
+    <div class="experience_item"> 
+        <section>
+            <h2><img src="{{ STATIC_URL }}img/icons/crowdfunding.png" class="valign_middle" style="width: 32px;" /> Crowdfundable</h2>
+            <p>
+                Since these experiences can be financially demanding, Acressity facilitates a mutually beneficial relationship between the person setting out to fulfill an experience&#8212;the explorer&#8212;and those who wish to invest in its fulfillment&#8212;your benefactors. Once coming up with the financial figure for fulfilling an experience, create a campaign and break the figure into auctionable bounties which benefactors can bid upon. For example, if you figure it will take $5000 to accomplish your dream of riding your bike across America and lack $2500, create a campaign and auction off bounties for benefactors to bid upon. Perhaps you would be willing to let someone name your bike for $100, let someone pick the starting city for $200, etc. Potential benefactors could counterbid if they feel the requested amount of a bounty to be too high. If someone would love having you pass through their hometown to host you for dinner and hear your tales, they can create their own bounty&#8212;perhaps $300&#8212;to facilitate this. Perhaps someone whose son passed away before having the chance to fulfill their same dream of biking across the country would offer you $500 to carry their son's ashes and memory with you. The power of this exchange lies in the simultaneous funding of your experience and the granting of vicarious experience to those who wish to see you succeed and might not have the same opportunity you do, instead having the financial resources you may be lacking.
+            </p>
+        </section>
+        <section>
+            <h2><img src="{{ STATIC_URL }}img/icons/share.png" class="valign_middle" style="width: 32px;" /> Social Networking</h2>
+            <p>
+                When initially composing your list of desired experiences, you are encouraged to keep sensitive experiences private until ready to pursue one, at which point you are encouraged to make it public. At this point, if you require financial assistance, you can create a benefaction campaign (see Crowdfundable section above) and steer others to this experience's home page. Once you set about fulfilling the experience, log as much of your progress as possible in the form of narratives and photos, even if that means no progress was achieved for quite some time or even if there were setbacks. These are major aspects of the journey. If you received funds during a crowdfunding campaign, be sure to provide evidence of fulfilling the bounties you accepted. Others can empower you through their assistance as they draw vicarious experience through your efforts. Accountability, encouragement, advice, and financial benefaction are all possible means through which a dream of yours can be transformed into a fulfilling experience.
+            </p>
+            <p>
+                The site encourages an incremental approach to fulfilling each experience. Remember, even seemingly-gargantuan undertakings are the accumulation of many small steps. The social nature of this app gives you the ability of networking with others. Draw power from what others are doing with their own experiences. Interact with someone interested in a similar experience or create a joint experience so that you and any other simultaneously aspiring to achieve can draw power from one another and your mutual networks.
+            </p>
+        </section>
+        <h2><img src="{{ STATIC_URL }}img/icons/path.png" class="valign_middle" style="width: 32px;" /> The Journey Begins...</h2>
+        <p>
+            To learn more about <em>why</em> this app exists, read more <a href="{% url 'why' %}">here</a>. See an example profile <a href="{% url 'example' %}">here</a>. If you're ready to create your first experience, do so below.
+        </p>
+    </div>
+
     {% include 'experiences/forms/first_experience_form.html' %}
 {% endblock content %}

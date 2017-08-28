@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load comments %}
+{% load comments_xtd %}
+
+{% block content %}
+    <div class="bounty_item">
+        <div class="jumbotron">
+            <h1>Bounty{% if bounty.is_paid %}<img class="option_icon valign_middle" src="{{ STATIC_URL }}img/icons/dollar-icon.png" title="This bounty has been paid for by a benefactor" />{% endif %}</h1>
+            <h2>{{ bounty.campaign }}</h2>
+
+            <div class="option_list">
+                <a href="{% url 'campaign' bounty.campaign.pk %}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Go to campaign home page" class="option_icon" />
+                </a>
+                {% if bounty.parent %}
+                    <a href="{{ bounty.parent.get_absolute_url }}">
+                        <img src="{{ STATIC_URL }}img/icons/previous-icon.png" title="See bounty this one is countering" class="option_icon" />
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bounty_list">
+        {# Base level subtracted to keep bounties from floating needlessly #}
+        {% with base_level=bounty.get_level %}
+            {% include 'benefaction/bounties/tree.html' %}
+        {% endwith %}
+    </div>
+
+    <div id="comments" class="comment_item">
+        {% get_comment_count for bounty as comment_count %}
+        <h3>
+            {{ comment_count }} Note{{ comment_count|pluralize }}
+        </h3>
+
+        {% if user.is_authenticated %}
+            {% render_comment_form for bounty %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">sign up</a> to leave a note<p>
+        {% endif %}
+
+        {% render_comment_list for bounty %}
+    </div>
+{% endblock content %}

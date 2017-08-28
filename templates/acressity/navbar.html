@@ -1,3 +1,5 @@
+{% load notifications_tags %}
+
 <nav id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -8,7 +10,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">
-                Acressity
+                <img alt="Acressity" title="Acressity" src="{{ STATIC_URL }}img/logo-circle.png" />
             </a>
         </div>
 
@@ -72,7 +74,16 @@
                             </li>
                             <li>
                                 <a href="{% url 'explorers.views.board' request.user.id %}" class="option">
-                                    <img src="{{ STATIC_URL }}img/icons/bulletin-board-icon_grayscale.png" class="option_icon" /> Bulletin Board
+                                    <span class="position_relative">
+                                        <img src="{{ STATIC_URL }}img/icons/bulletin-board-icon_grayscale.png" class="option_icon" />
+                                        {% if user == explorer %}
+                                            {% notifications_unread as unread_count %}
+                                            {% if unread_count %}
+                                                <span class="photo-top-right badge notification-badge">{{ unread_count }}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </span>
+                                    Bulletin Board
                                 </a>
                             </li>
                             <li>
@@ -88,10 +99,11 @@
                         </ul>
                     </li>
                 {% else %}
-                    <li role="presentation" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            Login <span class="caret"></span>
+                    <li role="presentation">
+                        <a href="{% url 'login_page' %}">
+                            Login
                         </a>
+                        {% comment %}
                         <ul class="dropdown-menu">
                             <li id="top_bar_login" class="smaller">
                                 <form action="/explorers/login/?next={{ request.path }}" method="POST" class="full_width">
@@ -115,6 +127,7 @@
                                 </div>
                             </li>
                         </ul>
+                        {% endcomment %}
                     </li>
                 {% endif %}
             </ul>

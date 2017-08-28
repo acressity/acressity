@@ -3,7 +3,13 @@ html,body,blockquote,code,pre {
     padding:0;
 }
 
-h1,h2,h3,h4,h5,h6,p {
+h1,h2,h3,h4,h5,h6 {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin: 0px;
+}
+
+p {
     margin-top: 7px;
     margin-bottom: 7px;
     padding: 0px;
@@ -44,7 +50,10 @@ button,input[type=button],input[type=image],input[type=reset],input[type=submit]
 ul,li {
     list-style:none;
     margin:0;
-    //padding:0;
+}
+
+ul {
+	padding-left:10px;
 }
 
 strong {

@@ -173,25 +173,6 @@
                 </div>
             </div>
         </div>
-        <div class="formatted_input">
-            {% if user.paypal_email_address %}
-                <label for="id_accepts_paypal">
-                    <h3>Accept PayPal donations {{ form.accepts_paypal }}</h3>
-                </label>
-                <div class="about_this">
-                    <p onclick="toggle_div('about_accepts_paypal');" class="smaller">
-                        About this <img src="{{ STATIC_URL }}img/icons/expand-icon.png" id="about_accepts_paypal_toggle_icon" class="valign_middle" />
-                    </p>
-                    <div id="about_accepts_paypal" class="toggle_div help-text">
-                        {{ form.accepts_paypal.help_text|safe }}
-                    </div>
-                </div>
-            {% else %}
-                <p>
-                    To enable receiving PayPal donations, fill out the PayPal email field in your <a href="{% url 'profile' user.id %}">profile.</a>
-                </p>
-            {% endif %}
-        </div>
     </div>
     <div class="formatted_input align_center">
         <input type="submit" value="Save" />

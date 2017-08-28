@@ -3,7 +3,7 @@
 
 {% block title %} - Edit: {{ object.title }}{% endblock %}
 
-{% block content %}
+{% block head_insert %}
     <script type="text/javascript">
         function update_photo(form){
             var photo_data = {
@@ -30,47 +30,54 @@
             return false;
         }
     </script>
-    <div class="object_item">
-        <h1>Edit gallery</h1>
-        <div class="option_list">
-            <a href="{% url 'pl-gallery' object.id %}">
-                <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Back to gallery" class="option_icon" />
-            </a>
-            <a href="{% url 'upload_photo' object.id %}">
-                <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload photo" class="option_icon" />
-            </a>
+{% endblock head_insert %}
+
+{% block content %}
+    <div class="gallery_item">
+        <div class="jumbotron">
+            <h1>Edit Gallery</h1>
+            <div class="option_list">
+                <a href="{% url 'pl-gallery' object.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/go-back.png" title="Back to gallery" class="option_icon" />
+                </a>
+                <a href="{% url 'upload_photo' object.id %}">
+                    <img src="{{ STATIC_URL }}img/icons/camera.png" title="Upload photo" class="option_icon" />
+                </a>
+            </div>
         </div>
-        <form action="" method="POST" class="full_width">
-            {% csrf_token %}
-            <div class="formatted_input">
-                <h2>Album name</h2>
-                {{ form.title.errors }}
-                {{ form.title }}
-            </div>
-            <div class="formatted_input">
-                <h3>Published {{ form.date_added }}</h3>
-            </div>
-            <div class="formatted_input">
-                <label for="id_description">
-                    <h3>Description</h3>
-                </label>
-                {{ form.description.errors }}
-                {{ form.description }}
-            </div>
-            {% if object.photos.count > 0 %}
-                <div class="formatted_input">
-                    <label for="id_featured_photo">
-                        <h3>Select photo to feature</h3>
-                    </label>
-                    {{ form.featured_photo.errors }}
-                    {{ form.featured_photo }}
-                </div>
-            {% endif %}
-            <div class="formatted_input align_center">
-                <input type="submit" value="Update" />
-            </div>
-        </form>
     </div>
+
+    <form action="" method="POST" class="full_width">
+        {% csrf_token %}
+        <div class="formatted_input">
+            <h2>Album name</h2>
+            {{ form.title.errors }}
+            {{ form.title }}
+        </div>
+        <div class="formatted_input">
+            <h3>Published {{ form.date_added }}</h3>
+        </div>
+        <div class="formatted_input">
+            <label for="id_description">
+                <h3>Description</h3>
+            </label>
+            {{ form.description.errors }}
+            {{ form.description }}
+        </div>
+        {% if object.photos.count > 0 %}
+            <div class="formatted_input">
+                <label for="id_featured_photo">
+                    <h3>Select photo to feature</h3>
+                </label>
+                {{ form.featured_photo.errors }}
+                {{ form.featured_photo }}
+            </div>
+        {% endif %}
+        <div class="formatted_input align_center">
+            <input type="submit" value="Update" />
+        </div>
+    </form>
+    
     <div class="photo-gallery">
         {% for photo, form in photos_forms %}
             <div class="gallery_photo_item">

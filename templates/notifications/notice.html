@@ -1,7 +1,14 @@
 <div class="notice alert-block">
     {% if notice.actor %}
         <p>
-            <a href="{% url 'journey' notice.actor.id %}">{{ notice.actor }}</a> {{ notice.verb }}
+			{% if request.user == notice.actor %}
+				You
+			{% else %}
+				<a href="{% url 'journey' notice.actor.id %}">
+					{{ notice.actor }}
+				</a>
+			{% endif %}
+			{{ notice.verb }}
         </p>
     {% endif %}
 
@@ -12,8 +19,10 @@
     {% endif %}
   
     {% if notice.target %}
-        <p>
-            <a href="{{ notice.target.get_absolute_url }}">{{ notice.target }}</a>
+		<p>
+			<a href="{{ notice.target.get_absolute_url }}">
+				{{ notice.target }}
+			</a>
             {% if notice.target_content_type.model == 'photo' %}
                 {% with notice.target as photo %}
                     <div class="object_item">

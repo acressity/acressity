@@ -1,31 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2><em>Why</em> was Acressity built?</h2>
+    <div class="main_item">
+        <div class="jumbotron">
+            <h1><img src="{{ STATIC_URL }}img/logo-circle.png" class="valign_middle" style="max-width: 100px;" /> Why was Acressity Built?</h1>
+        </div>
 
-    <p>
-        Acressity exists to assist in achieving the experiences you truly desire and for which you yearn. It encourages transcending your comfort zone in favor of experiencing the essence of being at the peak of existence. When you allow yourself to become uncomfortable you become limitless.
-    </p>
-    <p>
-        In 2010, the creator of this site, <a href="{% url 'journey' 1 %}" target="_blank">Andrew</a>, had dropped out of college, recently been dumped by a girlfriend, was suffering from crippling social anxiety, and given up aspirations of becoming a pilot professionally after spending 2 years flying after losing an academic scholarship. Lost, angry, confused, and feeling stagnant, the world appeared to be closing in and dreams were being surrendered. In a frenzy&#8212;a rage against the dying of his inner light&#8212;Andrew wrote down a list of experiences he wished to have so as not to lose sight of the life, joy, and fulfillment accompanying adventure, exploration, and growth from new experiences.
-    </p>
-    <p>
-    Something powerful was elucidated in the act of creating this list. Although the aspirations were still just in written form, they took on new life as they were birthed from the realm of the mind's pure potential. They became something real, something identified and embodied. One of the desired experiences was to ride his <a href="{{ bike_across_america_link }}" target="blank" title="See experience">bicycle across America</a>. Another was to learn to write computer code. These two were seen to be interconnected, as Andrew felt <a href="{{ develop_this_website_link }}" target="blank" title="See experience">coding a website</a> in order to make his desire to bike across America public would assist in empowering him even more than elucidating the desire privately.
-    </p>
-    <p>
-        As the website developed, so did plans to bike across America. The idea matured enough for Andrew to make the desire known publicly despite the fear of divulging a very dear and sensitive goal. Yet what happened next was extremely empowering. Others now privy to the desired bike trek goal visited the new website and became involved in assisting the pursuit. Visitors helped Andrew name his bike (Odysseus), pick out music, and supported him through general encouragement. Some even made financial contributions which allowed him to complete the trek without having to stop and work along the way.
-    </p>
-    <p>
-        Andrew began biking from San Francisco eastward in the summer of 2010. Along the way, he composed daily narratives and uploaded photos of his experience so those tracking the trek could experience it vicariously and check in on his status. It also provided time for reflection upon the experience and a means of preserving the daily happenings. The online supporters continued providing added value to the trip while Andrew began noticing something else worthy of being shared with others looking to achieve their aspired experiences. As the miles accumulated, onlookers became increasingly incredulous and amazed. More and more people stating "I could never do anything like that". Yet Andrew saw the journey as the accumulation of many very small simple steps. Eventually reaching Boston after about 2 months, this inaugurating experience came to a close as the desire for the next immediately charged through.
-    </p>
-    <p>
-        He felt a desire to help others see that anything worthy of experiencing was necessarily done in small incremental steps. Yet there seemed no good platform for the development of desired experiences from idea to fruition. The problem was that too few people are provided with the ability to elucidate their desired experiences. It must necessarily be provided a venue where fresh and sensitive ideas can mature in due time. Additionally, the power and motivation from publicizing these aspired experiences when adequately matured is hard to come by. Andrew had experienced the power of his website and wished to share this platform for development, publicizing, and benefaction with others. Soon after returning home from the trek, he began transforming his website into a social platform where anyone would be able to draw from the same power which had provided the impetus for his journey across the country and beyond.
-    </p>
-    <p>
-        Welcome to this website, developed for <em>you</em>. Begin your journey by doing the same which initially activated Andrew&#8212;write them down. This website is designed to be the best venue possible for the development of these aspirations from idea to experience. You are encouraged to keep these experiences private if they are not developed enough for public viewing, as premature exposure can have a harmful effect upon sensitive material. See what power comes for you when you compose this list of your deepest and most intimately desired aspirations for your life. Begin here, and watch what comes as these fresh aspirations mature into having a life of their own.
-    </p>
-    <p>
-        To learn more about exactly <em>what</em> this web app is, read more <a href="{% url 'what' %}">here</a>. See an example profile <a href="{% url 'example' %}">here</a>. Otherwise, begin with your first experience one below.
-    </p>
+        <section>
+            <p>
+            Acressity is a crowdfundable bucketlist application which exists to facilitate fulfilling the experiences of which you dream. It encourages transcending your comfort zone to experience the essence of being at the peak of existence, the aim of <abbr title="Seize the day">Carpe Diem</abbr>. Since these pursuits can sometimes be stifled by financial pressures, Acressity provides a creative way in which an experience can become funded by benefactors who can then enjoy vicarious experience through you, the explorer. See <a href="{% url 'what' %}">what is Acressity</a> for details.
+            </p>
+        </section>
+    </div>
+
+    <div class="experience_item">
+        <section>
+            <h2><img src="{{ STATIC_URL }}img/icons/journey.png" class="valign_middle" style="width: 32px;" /> Origin Story</h2>
+            <p>
+                In 2010, the creator of this site, <a href="{% url 'journey' 1 %}" target="_blank">Andrew</a>, had dropped out of college, recently been dumped by a girlfriend, was suffering from crippling social phobia, and given up aspirations of becoming a pilot professionally after spending 2 years flying and then losing an academic scholarship. Lost, angry, confused, and dying slowly of stagnation, the world transformed into a dungeon with walls closing in, crushing dreams and forcing the loss of opportunity. In a frenzy&#8212;a rage against the dying of his inner light&#8212;Andrew wrote down a list of experiences he wished to pursue&#8212;a bucketlist&#8212;so as not to lose sight of the life, growth, and fulfillment still understood to come from new experiences.
+            </p>
+            <p>
+            Something powerful was elucidated in the simple act of composing this list. Although the aspirations were still only in written form, they took on a new shape as they were birthed forth from the realm of the mind's pure potential. They became real, something nearly physical and embodied. One of the desired experiences was to ride his <a href="{{ bike_across_america_link }}" target="blank" title="See experience">bicycle across America</a>. Another was to learn to write computer code. These two were seen to be interconnected, as Andrew felt <a href="{{ develop_this_website_link }}" target="blank" title="See experience">coding a website</a> in order to make his desire to bike across America public would assist in empowering him even more than elucidating the desire privately on paper.
+            </p>
+            <p>
+                As the website developed, so too did plans to bike across America. The idea matured enough for Andrew to make the desire known publicly despite the fear of divulging a very dear and sensitive goal in case of failure. Yet what happened next was extremely empowering. Others now privy to the desired bike trek goal visited the new website and became involved in assisting the pursuit. Visitors helped Andrew name his bike "Odysseus", pick out music, and supported him through other general encouragement. Some even made financial contributions which allowed him to complete the trek without having to stop and work along the way. In short, the experience took on a new form as it entered into the consciousness of the community.
+            </p>
+            <p>
+                Andrew began biking from San Francisco eastward in the summer of 2010. Along the way, he composed daily narratives and uploaded photos of his experience so those tracking the trek online could check in on the progress and experience it vicariously. Writing the narratives also provided time for reflection upon the experience and a means of preserving the daily happenings. The online supporters continued providing added value to the trip, especially useful at times where the road was particularly testing of fortitude. Andrew began understanding the nature of pursuing any worthy experience and the transcendence&#8212;the essence of being at the peak of existence&#8212;which accompanied such pursuits. As the miles accumulated, onlookers became increasingly incredulous and amazed. More and more people were stating "I could never do anything like that." Yet it is obvious to those who explore that any journey is but the accumulation of many small and simple steps. Eventually reaching Boston after about 2 months, this inaugurating experience came to a close as the desire for the next immediately arose. There was a quality of fulfillment which was often felt when living so far outside his comfort zone during this trek that needed to be shared with others so they could empower themselves to go forth on their own journeys.
+            </p>
+            <p>
+                He felt a desire to help others see that anything worthy of experiencing was necessarily done in incremental steps. Yet there seemed no good platform for the development of desired experiences from idea to fruition which provided the level of support and vicarious experience throug the community. Furthermore, the problem was that too few people are provided with the ability to elucidate their desired experiences, many of these dreams squandered by financial circumstances. It must necessarily be provided a venue where fresh and sensitive ideas can mature in due time. Additionally, the power and motivation from publicizing these aspired experiences when adequately matured is hard to come by. Andrew had experienced the power of his website and wished to share this platform for the development, publicizing, and benefaction of new experiences with others who could then draw the same power. Soon after returning home from the trek, he began transforming his website into a social platform where anyone would be able to draw from the same power which had provided the impetus for his journey across the country and beyond.
+            </p>
+        </section>
+
+        <section>
+            <h2><img src="{{ STATIC_URL }}img/icons/path.png" class="valign_middle" style="width: 32px;" /> Your Journey Begins...</h2>
+            <p>
+                Welcome to this website, developed for <em>you</em>. Begin your journey by doing the same which initially activated Andrew&#8212;write down your dreams, aspirations, goals, and hopes&#8212;called experiences. This website is designed to be the best venue possible for the development of these experiences from idea to fulfillment. You are encouraged to keep these experiences private if they are not developed enough for public viewing, as premature exposure can have a harmful effect upon sensitive material. See what power comes when you compose this list of your deepest and most intimately desired aspirations for your life. Begin here, and watch what comes as these fresh aspirations mature into life of their own. Leave the comfort of the valley for the transcendence in the mountains.
+            </p>
+            <p>
+                To learn more about <em>what</em> Acressity is, read more <a href="{% url 'what' %}">here</a>. See an example profile <a href="{% url 'example' %}">here</a>. Otherwise, begin by composing your first experience below.
+            </p>
+        </section>
+    </div>
+
     {% include 'experiences/forms/first_experience_form.html' %}
 {% endblock content %}

@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Visit a Journey</h2>
-	{% for explorer in random_explorers %}
-        {% include "explorers/snippets/dash.html" %}
-	{% endfor %}
+    <div class="explorer_item">
+        <div class="jumbotron">
+            <h1>Random Journeys</h1>
+        </div>
+    </div>
+
+    <div class="explorer_list">
+        {% for explorer in random_explorers %}
+            {% include "explorers/snippets/dash.html" %}
+        {% empty %}
+            There are currently no explorers
+        {% endfor %}
+    </div>
 {% endblock content %}

@@ -1,35 +1,39 @@
 {% extends "base.html" %}
 
-{% block head_insert %}
-    <style type="text/css">
-        #content {
-            padding: 0px;
-            -moz-box-shadow: 0 0 0px 0px #000;
-            -webkit-box-shadow: 0 0 0px 0px #000;
-            box-shadow: 0 0 0px 0px #000;
-            background-color: rgba(0, 0, 0, 0);
-        }
-    </style>
-{% endblock head_insert %}
-
 {% block content %}
-    <a href="javascript:void();" id="explore_main_wrapper" data-toggle="collapse" data-target="#explore_what,#explore_why" aria-expanded="false" aria-controls="explore_what">
-        <div id="explore_main">
-            <p>Explore</p>
+    <div class="main_item">
+        <div class="jumbotron">
+            <h1>Acressity</h1>
+            <h2>
+                Share your dreams. Overcome obstacles keeping you from having the experiences you want from life.
+            </h2>
         </div>
-    </a>
 
-    <a href="{% url 'what' %}" id="explore_what_wrapper">
-        <div id="explore_what" class="collapse">
-            <p>What</p>
-            <p>is Acressity?</p>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="{% url 'featured_experiences' %}" title="See featured experiences" id="explore_main_wrapper">
+                    <div id="explore_main">
+                        <p>Explore</p>
+                        <p>some experiences</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'what' %}" id="explore_what_wrapper">
+                    <div id="explore_what">
+                        <p>What</p>
+                        <p>is Acressity?</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'why' %}" id="explore_why_wrapper">
+                    <div id="explore_why">
+                        <p>Why</p>
+                        <p>Acressity?</p>
+                    </div>
+                </a>
+            </div>
         </div>
-    </a>
-
-    <a href="{% url 'why' %}" id="explore_why_wrapper">
-        <div id="explore_why" class="collapse">
-            <p>Why</p>
-            <p>Acressity?</p>
-        </div>
-    </a>
+    </div>
 {% endblock content %}

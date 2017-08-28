@@ -1,55 +1,59 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, UserManager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 from itertools import chain
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from photologue.models import Gallery
 from experiences.models import Experience
-from acressity.utils import build_full_absolute_url
+from acressity.utils import build_full_absolute_url, get_site_domain
+from benefaction.models import Campaign
 
 
 class ExplorerManager(BaseUserManager):
-    # Following is currently not being used
-    def create_user(self, first_name, last_name, trailname, password):
-        if not trailname:
-            # Make unique trailname, as close to the user's real name as possible
-            # Will need to be modified to ensure uniqueness...
-            trailname = '{0}_{1}'.format(first_name, last_name)
-        user = self.model(
-            trailname=trailname,
+    def create_user(self, email, first_name, last_name, password=None, **other_fields):
+        if not email:
+            raise ValueError('Email must be set')
+        email = self.normalize_email(email)
+        explorer = self.model(
+            email=email,
             first_name=first_name,
             last_name=last_name,
+            **other_fields
         )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+        explorer.set_password(password)
+        explorer.save(using=self._db)
+        return explorer
 
     def get_random(self, num=1):
         return self.order_by('?')[:num]
 
 
 class Explorer(AbstractBaseUser):
-    '''
+    help_text=_('''
     The term given to describe each logged user of the website.
     Each explorer has a unique trailname. This extends the
     Django User model.
-    '''
+    ''')
     first_name = models.CharField(max_length=50, null=False)
     last_name = models.CharField(max_length=60, null=False)
     trailname = models.CharField(
-        max_length=55,
-        null=True,
-        blank=True,
-        unique=True,
-        help_text=_('A trailname is a short username or nickname given to each explorer of this website, able to be changed at any time. Inspired by the tradition common with Appalachian Trail hikers, you\'re encouraged to create a trailname that describes an aspect of your journey at the moment. It\'ll be displayed as John "<em>trailname</em>" Doe. It also allows others to find you by typing <code>acressity.com/<em>trailname</em></code>.')
+        max_length=55, null=True, blank=True, unique=True,
+        help_text=_('''
+            A trailname is an optional short username or nickname for the 
+            explorers of this website, able to be changed at any time. Inspired 
+            by the tradition common with Appalachian Trail hikers, you\'re 
+            encouraged to create a trailname that describes an aspect of your 
+            journey at the moment.<br />It\'ll be displayed as John "<em>trailname</em>" 
+            Doe.<br />It also allows others to find you by typing 
+            <code>{domain}/<em>trailname</em></code>.
+        '''.format(domain=get_site_domain()))
     )
     gallery = models.OneToOneField(
-        Gallery,
-        null=True,
-        blank=True,
+        Gallery, null=True, blank=True,
         on_delete=models.SET_NULL,
         related_name='story_gallery'
     )
@@ -69,30 +73,19 @@ class Explorer(AbstractBaseUser):
     notify = models.BooleanField(default=True)
     experiences = models.ManyToManyField(Experience, related_name='explorers')
     tracking_experiences = models.ManyToManyField(
-        Experience,
-        related_name='tracking_explorers',
-        blank=True,
+        Experience, related_name='tracking_explorers', blank=True,
         help_text=_('Experiences that the explorer has chosen to track.')
     )
     featured_experience = models.ForeignKey(
-        Experience,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        Experience, null=True, blank=True, on_delete=models.SET_NULL,
         related_name='featured_experience',
         help_text=_('The experience that an explorer is currently featuring. Will be displayed on explorer\'s dash for easy accessibility and will be shown alongside explorer information for others to see.')
-    )
-    paypal_email_address = models.EmailField(
-        null=True,
-        blank=True,
-        unique=True,
-        help_text=_('Email address for your PayPal account. This is the email address to which donations by benefactors are made.')
     )
 
     objects = ExplorerManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'password']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __unicode__(self):
         return self.get_full_name()
@@ -120,6 +113,9 @@ class Explorer(AbstractBaseUser):
     def get_full_name(self):
         return '{0} {1}'.format(self.first_name, self.last_name)
 
+    def get_absolute_url(self):
+        return reverse('journey', args=[self.pk])
+
     def get_full_trailname(self):
         if self.trailname:
             return '{0} "{1}" {2}'.format(self.first_name, self.trailname, self.last_name)
@@ -130,7 +126,6 @@ class Explorer(AbstractBaseUser):
     def username(self):
         return self.get_full_name()
 
-    # Following not used, but I think it's necessary with the extended user model?
     def get_short_name(self):
         return self.first_name
 
@@ -149,14 +144,12 @@ class Explorer(AbstractBaseUser):
     def private_experiences(self):
         return self.experiences.filter(is_public=False)
 
-    # Don't think this is currently being used...phasing it out in favor of returning all experiences in a sorted fashion
     def shelved_experiences(self):
         return sorted(self.experiences.exclude(title=self.featured_experience).exclude(narratives__isnull=True), key=lambda a: a.latest_narrative().date_created, reverse=True) + list(self.experiences.filter(narratives__isnull=True))  # Ugly...
 
     def top_five(self):
         return self.ordered_experiences()[:5]
 
-    # Wanting to have only 3 to keep topbar dropdown less cluttered. Need top_five for backwards compatibility
     def top_three(self):
         return self.ordered_experiences()[:3]
 
@@ -164,8 +157,20 @@ class Explorer(AbstractBaseUser):
         if self.narratives.exists():
             return self.narratives.latest('date_created')
 
+    def get_benefaction_campaigns(self):
+        return Campaign.objects.filter(experience__in=self.experiences.all())
+
+    def has_payment_account(self):
+        # True if explorer has any connected accounts
+        return self.has_stripe_account()
+
+    def has_stripe_account(self):
+        return hasattr(self, 'stripe_account')
+
+    def is_stripe_connected(self):
+        return self.has_stripe_account() and not self.stripe_account.is_deauthorized
+
     def get_absolute_url(self):
-        # Despite the name, returns url relative to root
         return reverse('journey', args=[self.pk])
 
     def get_icon_url(self):
